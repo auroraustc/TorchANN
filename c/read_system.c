@@ -43,7 +43,7 @@ Return code:
 #endif
 /***************MACRO FOR DEBUG END***************/
 
-int read_system(frame_info_struct * frame_info_, int * Nframes_tot_)
+int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 {
 	int compare_NAtoms(char * coord, char * force, char * type);
 	int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_this_frame, frame_info_struct * frame_info);
@@ -161,7 +161,7 @@ int read_system(frame_info_struct * frame_info_, int * Nframes_tot_)
 	/*Count NAtoms for each frame and read in coord, force and type*/
 	fp_type = fopen("./type.raw", "r");
 	fp_coord = fopen("./coord.raw", "r");
-	if (no_force == 0) 
+	if (no_force == 0)
 	{
 		fp_force = fopen("./force.raw", "r");
 	}
@@ -228,7 +228,7 @@ int read_system(frame_info_struct * frame_info_, int * Nframes_tot_)
 	fwrite(frame_info, sizeof(frame_info_struct), Nframes_tot, fp_out);
 	fclose(fp_out);
 	check_bin(Nframes_tot);
-	frame_info_ = frame_info; *Nframes_tot_ = Nframes_tot;
+	* frame_info_ = frame_info; *Nframes_tot_ = Nframes_tot;
 	return 0;
 }
 
@@ -237,20 +237,20 @@ int compare_NAtoms(char * coord, char * force, char * type)
 	char * token_coord, * token_force, * token_type;
 	int NAtoms_coord, NAtoms_force, NAtoms_type;
 	NAtoms_coord=0; NAtoms_force=0; NAtoms_type=0;
-	token_coord = strtok(coord, " \n"); 
-	while (token_coord != NULL) 
+	token_coord = strtok(coord, " \n");
+	while (token_coord != NULL)
 	{
 		NAtoms_coord++;
 		token_coord = strtok(NULL, " \n");
 	}
-	token_force = strtok(force, " \n"); 
-	while (token_force != NULL) 
+	token_force = strtok(force, " \n");
+	while (token_force != NULL)
 	{
 		NAtoms_force++;
 		token_force = strtok(NULL, " \n");
 	}
 	token_type = strtok(type, " \n");
-	while (token_type != NULL) 
+	while (token_type != NULL)
 	{
 		NAtoms_type++;
 		token_type = strtok(NULL, " \n");
@@ -268,7 +268,7 @@ int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_
 	i = 0;
 	token_coord = strtok(coord, " \n");
 	printf_d("Coord check:\n");
-	while (token_coord != NULL) 
+	while (token_coord != NULL)
 	{
 		sscanf(token_coord, "%lf", &(frame_info->coord[i/3][i%3]));
 		printf_d("%lf ", frame_info->coord[i/3][i%3]);
@@ -279,7 +279,7 @@ int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_
 	i = 0;
 	token_force = strtok(force, " \n");
 	printf_d("Force check:\n");
-	while (token_force != NULL) 
+	while (token_force != NULL)
 	{
 		sscanf(token_force, "%lf", &(frame_info->force[i/3][i%3]));
 		printf_d("%lf ", frame_info->force[i/3][i%3]);

@@ -23,16 +23,18 @@ Return code:
 
 int main()
 {
-    int read_system(frame_info_struct * frame_info_, int * Nframes_tot_);
+    int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_);
     int read_parameters(parameters_info_struct * parameters_info);
+    int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info);
 
     int read_system_flag;
     int read_parameters_info_flag;
-    frame_info_struct * frame_info;
+    int build_neighbour_list_flag;
+    frame_info_struct * frame_info = NULL;
     parameters_info_struct * parameters_info = (parameters_info_struct *)calloc(1, sizeof(parameters_info_struct));
     int Nframes_tot;
 
-    read_system_flag = read_system(frame_info, &Nframes_tot);
+    read_system_flag = read_system(&frame_info, &Nframes_tot);
     if (read_system_flag != 0) 
     {
         printf("Error when reading raw data: read_flag = %d\n", read_system_flag);
@@ -47,6 +49,14 @@ int main()
         return 2;
     }
     printf("No error when reading parameters.\n");
+
+    build_neighbour_list_flag = build_neighbour_list(frame_info, Nframes_tot, parameters_info);
+    if (build_neighbour_list_flag != 0)
+    {
+        printf("Error when building neighbour list: build_neighbour_list_flag = %d\n", build_neighbour_list_flag);
+        return 2;
+    }
+    printf("No error when building neighbour list.\n");
 
     return 0;
 }

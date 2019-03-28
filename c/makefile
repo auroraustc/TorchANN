@@ -1,11 +1,14 @@
 CC = icc
 OBJECTS = read_system.o read_parameters.o build_neighbour_list.o main.o
-DEBUG = 
+DEBUG = -g
+CFLAGS = -fopenmp
+LD_DEBUG = $(DEBUG)
+LD_CFLAGS = $(CFLAGS)
 all: $(OBJECTS)
-	$(CC) $(DEBUG) -o a.out $(OBJECTS)
+	$(CC) $(LD_CFLAGS) $(LD_DEBUG) -o a.out $(OBJECTS)
 
 %.o: %.c
-	$(CC) $(DEBUG) -c $<
+	$(CC) $(CFLAGS) $(DEBUG) -c $<
 
 clean:
 	rm -rf *.o *.out

@@ -322,7 +322,7 @@ void check_bin(int Nframes_tot)
 		}
 		printf("\n");
 	}
-	printf("frame_info.nergy: %.6lf\n", frame_info[r].energy);
+	printf("frame_info.energy: %.6lf\n", frame_info[r].energy);
 	printf("frame_info.no_force: %d\n", frame_info[r].no_force);
 	printf("Force:\n");
 	for (i = 0; i <= frame_info[r].N_Atoms - 1; i++)

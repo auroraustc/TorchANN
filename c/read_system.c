@@ -5,6 +5,20 @@ Read (Nframes_tot*)box, (Nframes_tot*)coord, (Nframes_tot*)energy, (Nframes_tot*
 Save box, coord, energy, force and type of each frame in a struct array frame_info[0..Nframes_tot-1] and save this array to a temp binary file in the current directory.
 The format of box.raw, coord.raw, energy.raw and force.raw is the same as DeePMD, containing Nframes_tot lines. The type.raw should also contain Nframes_tot lines for this code.
 
+[Y] = set in this module, [N] = not set in this module:
+typedef struct frame_info_struct_
+{
+[Y]	int index;
+[Y]	int N_Atoms;
+[Y]	double box[3][3];
+[Y]	int * type;//type[0..N_Atoms-1]
+[Y]	double ** coord;//coord[0..N_Atoms-1][0..2]
+[Y]	double energy;
+[Y]	int no_force;
+[Y]	double ** force;//force[0..N_Atoms-1][0..2]
+[N]	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
+}
+
 Return code:
 	0: No errors.
 	1: missing input file(s).
@@ -20,7 +34,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_READ
+//#define DEBUG_READ
 
 #ifdef DEBUG_READ
 #define printf_d printf

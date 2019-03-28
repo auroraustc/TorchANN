@@ -90,7 +90,7 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
             if (dist_ij <= neighbour_list_cur[i].cutoff_max) N_nei++;
         }
         neighbour_list_cur[i].N_neighbours = N_nei;
-        printf_d("Number of neighbours: %d\n", N_nei);
+        printf_d("Number of neighbours of atom %d: %d\n",i,  N_nei);
         if (N_nei >= max_num_N_nei_one_frame) max_num_N_nei_one_frame = N_nei;
     }
     frame_info_cur->max_N_neighbours = max_num_N_nei_one_frame;

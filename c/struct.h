@@ -12,16 +12,17 @@ typedef struct neighbour_list_struct_
 	double cutoff_2;
 	double cutoff_3;
 	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
+	/*For DeePMD, cutoff_max = cutoff_2 = rc, cutoff_1 = rcs*/
 	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
-	double ** coord_neighbours;//coord_neighbour[0..N_neighbours][0..2]
-	double ** force_neighbours;//Just in case; force_neighbours[0..N_neighbours][0..2]
+	double ** coord_neighbours;//coord_neighbour[0..SEL_A_max][0..2]
+	double ** force_neighbours;//Just in case; force_neighbours[0..SEL_A_max][0..2]
 	int * type;//type[0..N_neighbours]
 }neighbour_list_struct;
 
 /*Frame info for one frame*/
 typedef struct frame_info_struct_
 {
-	int index;
+	int index;//frame index
 	int N_Atoms;
 	int N_types;
 	double box[3][3];
@@ -50,12 +51,32 @@ typedef struct system_info_expanded_struct_
 	int * type;//type[0..N_Atoms]
 }system_info_expanded_struct;
 
+/*Store the distance between the current atom and atoms in its neighbour list(Not really. Shoubld be SEL_A_max)*/
+typedef struct dist_info_struct_
+{
+	atom_info_struct * atom_info;
+	double dist;
+}dist_info_struct;
+
+/*input parameters*/
 typedef struct parameters_info_struct_
 {
 	double cutoff_1;
 	double cutoff_2;
 	double cutoff_3;
 	double cutoff_max;
+	int N_types_all_frame;
+	int * type_index_all_frame;
+	int SEL_A_max;
 }parameters_info_struct;
+
+/*converted coordinate of one frame(using DeePMD's method)*/
+typedef struct sym_coord_DeePMD_struct_
+{
+	int N_Atoms;
+	int SEL_A;
+	int * type;//type[0..N_Atoms-1]
+	double ** coord_converted;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
+}sym_coord_DeePMD_struct;
 
 

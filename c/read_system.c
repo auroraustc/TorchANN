@@ -25,6 +25,7 @@ Return code:
 	1: missing input file(s).
 	2: The number of frames provided in box.raw, energy.raw and type.raw are different.
 	3: Coordinates or/and forces in some frames are incorrect.
+	
 */
 
 

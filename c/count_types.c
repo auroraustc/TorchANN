@@ -29,7 +29,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_COUNT
+//#define DEBUG_COUNT
 
 #ifdef DEBUG_COUNT
 #define printf_d printf

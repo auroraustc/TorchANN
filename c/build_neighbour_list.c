@@ -1,7 +1,10 @@
 /*
 2019.03.28 by Aurora. Contact:fanyi@mail.ustc.edu.cn
 
-Build neighbour lists for each frame.
+Build neighbour lists for each frame. 
+step:
+    1: do count only
+    2: build coord (and force) of the neighbour list according to the parameters_info->SEL_A_max
 
 [Y] = set in this module, [N] = not set in this module:
 typedef struct frame_info_struct_
@@ -17,6 +20,33 @@ typedef struct frame_info_struct_
 [N]	double ** force;//force[0..N_Atoms-1][0..2]
 [Y]	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
 }
+at s1:
+typedef struct neighbour_list_struct_
+{
+[Y]	int index;//atom index
+[Y]	double cutoff_1;
+[Y]	double cutoff_2;
+[Y]	double cutoff_3;
+[Y]	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
+[Y]	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
+[N]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max][0..2]
+[N]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max][0..2]
+[N]	int * type;//type[0..N_neighbours]
+}
+
+at s2:
+typedef struct neighbour_list_struct_
+{
+[Y]	int index;//atom index
+[Y]	double cutoff_1;
+[Y]	double cutoff_2;
+[Y]	double cutoff_3;
+[Y]	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
+[Y]	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
+[Y]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max][0..2]
+[Y]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max][0..2]
+[Y]	int * type;//type[0..N_neighbours]
+}
 
 Return code:
     0: No errors.
@@ -29,32 +59,36 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-//#define DEBUG_BUILD
+#define DEBUG_BUILD
 
 #ifdef DEBUG_BUILD
 #define printf_d printf
 #else
 #define printf_d //
 #endif
+
+#define DEBUG_FRAME 5
 /***************MACRO FOR DEBUG END***************/
 
-int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info)
+int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step)
 {
-    int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameters_info_struct * parameters_info);
+    int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameters_info_struct * parameters_info, int step);
 
     int i;
     int error_code = 0;
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
         printf_d("Debug info of frame %d:\n", i + 1);
-        error_code = build_neighbour_list_one_frame(&(frame_info[i]), parameters_info);
+        error_code = build_neighbour_list_one_frame(&(frame_info[i]), parameters_info, step);
     }
+    
     return error_code;
 }
 
-int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameters_info_struct * parameters_info)
+int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameters_info_struct * parameters_info, int step)
 {
     int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
+    int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
 
     int i, j, k;
     int max_num_N_nei_one_frame = -1;
@@ -71,15 +105,18 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     printf_d("Origin:\n");
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
-        if (frame_info_cur->index != 1) break;
+        if (frame_info_cur->index != DEBUG_FRAME) break;
         printf_d("%c %lf %lf %lf\n", frame_info_cur->type[i] + 65, frame_info_cur->coord[i][0], frame_info_cur->coord[i][1], frame_info_cur->coord[i][2]);
     }
 
+    if (step == 2) goto s2;
+s1:
     neighbour_list_cur = (neighbour_list_struct *)calloc(frame_info_cur->N_Atoms, sizeof(neighbour_list_struct));
     #pragma omp parallel for private(j)
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         int N_nei = 0;
+        neighbour_list_cur[i].index = i;
         neighbour_list_cur[i].cutoff_1 = parameters_info->cutoff_1;
         neighbour_list_cur[i].cutoff_2 = parameters_info->cutoff_2;
         neighbour_list_cur[i].cutoff_3 = parameters_info->cutoff_3;
@@ -100,6 +137,16 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     frame_info_cur->neighbour_list = neighbour_list_cur;
     free(system_info_expanded->atom_info);free(system_info_expanded->type);free(system_info_expanded);
     return error_code;
+
+s2:
+    i = 0;
+    double ** dist_ij_cur_frame;
+    for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
+    {
+        build_neighbour_coord_cur_atom(frame_info_cur, &(frame_info_cur->neighbour_list[i]), system_info_expanded, parameters_info);
+    }
+
+    return 0;
 }
 
 int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
@@ -179,5 +226,35 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
         }
     }
 
+    return 0;
+}
+
+int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
+{
+    int i, j, k;
+    int index = neighbour_list_cur_atom->index;
+    dist_info_struct * dist_info;
+
+    /*Calculate all distances of atoms in system_info_expanded and current atom*/
+    dist_info = (dist_info_struct *)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct));
+    #pragma omp parallel for
+    for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
+    {
+        dist_info[i].atom_info = &(system_info_expanded->atom_info[i]);
+        dist_info[i].dist = sqrt(pow(frame_info_cur->coord[index][0] - dist_info[i].atom_info->coord[0] , 2) + pow(frame_info_cur->coord[index][1] - dist_info[i].atom_info->coord[1], 2) + pow(frame_info_cur->coord[index][2] - dist_info[i].atom_info->coord[2], 2));
+    }
+    if ((frame_info_cur->index == DEBUG_FRAME)&&(index == 2))
+    {
+        printf_d("distance from atom 2(3rd) of frame DEBUG_FRAME:\n");
+        for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
+        {
+            printf_d("atom index %d coord %.3lf %.3lf %.3lf dist %.6lf.\n", dist_info[i].atom_info->index, dist_info[i].atom_info->coord[0], dist_info[i].atom_info->coord[1], dist_info[i].atom_info->coord[2], dist_info[i].dist);
+        }
+    }
+
+    /*Sort dist_info_struct using tmp pointer*/
+    dist_info_struct * p_tmp;
+
+    free(dist_info);
     return 0;
 }

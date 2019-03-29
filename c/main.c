@@ -5,7 +5,10 @@ Return code:
     0: No errors.
     1: read_system() error.
     2: read_parameters() error.
-    3: count types() error.
+    3: build_neighbour_list() error at step1.
+    4: count types() error.
+    5: build_neighbour_list() error at step2.
+
 */
 
 #include <stdio.h>
@@ -26,20 +29,24 @@ int main()
 {
     int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_);
     int read_parameters(parameters_info_struct * parameters_info);
-    int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info);
+    int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step);
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
-
+    int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
+    
     int read_system_flag;
     int read_parameters_info_flag;
-    int build_neighbour_list_flag;
+    int build_neighbour_list_flag1, build_neighbour_list_flag2;
     int count_types_flag;
+    int convert_coord_flag;
     frame_info_struct * frame_info = NULL;
     parameters_info_struct * parameters_info = (parameters_info_struct *)calloc(1, sizeof(parameters_info_struct));
+    sym_coord_DeePMD_struct * sym_coord_DeePMD = NULL;
     int Nframes_tot;
     int max_N_neighbours_all_frame = -1;
     int SEL_A_max;
     int N_types_all_frame = 0;
     int * type_index_all_frame = NULL;//type_index_all_frame[0..N_types_all_frame - 1]. For exampe, we have 3 elements, 6(C), 29(Cu), 1(H), then ...[0]=6, ...[1]=29, ...[2]=1.
+    int coord_type = 1;
     int i, j, k;
 
     read_system_flag = read_system(&frame_info, &Nframes_tot);
@@ -58,11 +65,11 @@ int main()
     }
     printf("No error when reading parameters.\n");
 
-    build_neighbour_list_flag = build_neighbour_list(frame_info, Nframes_tot, parameters_info);
-    if (build_neighbour_list_flag != 0)
+    build_neighbour_list_flag1 = build_neighbour_list(frame_info, Nframes_tot, parameters_info, 1);
+    if (build_neighbour_list_flag1 != 0)
     {
-        printf("Error when building neighbour list: build_neighbour_list_flag = %d\n", build_neighbour_list_flag);
-        return 2;
+        printf("Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag1);
+        return 3;
     }
     printf_d("Check neighbour list from main():\n");
     for (i = 0; i <= Nframes_tot - 1; i++)
@@ -79,9 +86,9 @@ int main()
     if (count_types_flag != 0)
     {
         printf("Error when counting types: count_types_flag = %d\n", count_types_flag);
-        return 3;
+        return 4;
     }
-    printf_d("Check types from main:\n");
+    printf_d("Check types from main():\n");
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
         printf_d("N_types of frame %d is %d\n", i + 1, frame_info[i].N_types);
@@ -93,6 +100,23 @@ int main()
         printf_d("%d ", type_index_all_frame[i]);
     }
     printf_d("\n");
+    parameters_info->N_types_all_frame = N_types_all_frame;
+    parameters_info->type_index_all_frame = type_index_all_frame;
+    parameters_info->SEL_A_max = SEL_A_max;
+
+    build_neighbour_list_flag2 = build_neighbour_list(frame_info, Nframes_tot, parameters_info, 2);
+    if (build_neighbour_list_flag2 != 0)
+    {
+        printf("Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag2);
+        return 5;
+    }
+
+    convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, coord_type, (void **)&sym_coord_DeePMD);
+    if (convert_coord_flag != 0)
+    {
+        printf("Error when converting coordinates: convert_coord_flag = %d\n", convert_coord_flag);
+        return 6;
+    }
 
     return 0;
 }

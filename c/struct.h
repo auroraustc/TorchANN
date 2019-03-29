@@ -23,6 +23,7 @@ typedef struct frame_info_struct_
 {
 	int index;
 	int N_Atoms;
+	int N_types;
 	double box[3][3];
 	int * type;//type[0..N_Atoms-1]
 	double ** coord;//coord[0..N_Atoms-1][0..2]
@@ -56,3 +57,5 @@ typedef struct parameters_info_struct_
 	double cutoff_3;
 	double cutoff_max;
 }parameters_info_struct;
+
+

@@ -8,6 +8,7 @@ typedef struct frame_info_struct_
 {
 [N]	int index;
 [N]	int N_Atoms;
+[N] int N_types;
 [N]	double box[3][3];
 [N]	int * type;//type[0..N_Atoms-1]
 [N]	double ** coord;//coord[0..N_Atoms-1][0..2]
@@ -28,7 +29,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_BUILD
+//#define DEBUG_BUILD
 
 #ifdef DEBUG_BUILD
 #define printf_d printf
@@ -45,7 +46,7 @@ int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parame
     int error_code = 0;
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
-        printf("Debug info of frame %d:\n", i + 1);
+        printf_d("Debug info of frame %d:\n", i + 1);
         error_code = build_neighbour_list_one_frame(&(frame_info[i]), parameters_info);
     }
     return error_code;
@@ -56,7 +57,7 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
 
     int i, j, k;
-    int max_num_N_nei_one_frame = 0;
+    int max_num_N_nei_one_frame = -1;
     int error_code = 0;
     system_info_expanded_struct * system_info_expanded = (system_info_expanded_struct *)calloc(1, sizeof(system_info_expanded_struct ));
     neighbour_list_struct * neighbour_list_cur;

@@ -1,5 +1,5 @@
 CC = icc
-OBJECTS = read_system.o read_parameters.o build_neighbour_list.o main.o
+OBJECTS = read_system.o read_parameters.o build_neighbour_list.o count_types.o main.o
 DEBUG = -g
 CFLAGS = -fopenmp
 LD_DEBUG = $(DEBUG)

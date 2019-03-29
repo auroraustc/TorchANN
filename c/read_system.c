@@ -10,6 +10,7 @@ typedef struct frame_info_struct_
 {
 [Y]	int index;
 [Y]	int N_Atoms;
+[N] int N_types;
 [Y]	double box[3][3];
 [Y]	int * type;//type[0..N_Atoms-1]
 [Y]	double ** coord;//coord[0..N_Atoms-1][0..2]

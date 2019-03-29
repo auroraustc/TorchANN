@@ -111,7 +111,7 @@ int main()
         return 5;
     }
     printf_d("Check from main(): neighbour list of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
-    for (i = 0; i <= parameters_info->SEL_A_max; i++)
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
         printf_d("atom type %d coord %3.lf %3.lf %3.lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
     }

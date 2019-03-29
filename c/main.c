@@ -110,6 +110,11 @@ int main()
         printf("Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag2);
         return 5;
     }
+    printf_d("Check from main(): neighbour list of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
+    for (i = 0; i <= parameters_info->SEL_A_max; i++)
+    {
+        printf_d("atom type %d coord %3.lf %3.lf %3.lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
+    }
 
     convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, coord_type, (void **)&sym_coord_DeePMD);
     if (convert_coord_flag != 0)

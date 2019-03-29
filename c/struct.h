@@ -4,6 +4,11 @@
 Define all the struct used in the c code.
 */
 
+/*****************MACRO FOR DEBUG*****************/
+#define DEBUG_FRAME 5
+#define DEBUG_ATOM 2
+/***************MACRO FOR DEBUG END***************/
+
 /*Neighbour list info for one atom in one frame*/
 typedef struct neighbour_list_struct_
 {
@@ -16,6 +21,7 @@ typedef struct neighbour_list_struct_
 	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
 	double ** coord_neighbours;//coord_neighbour[0..SEL_A_max][0..2]
 	double ** force_neighbours;//Just in case; force_neighbours[0..SEL_A_max][0..2]
+	//atom_info_struct * atom_info;
 	int * type;//type[0..N_neighbours]
 }neighbour_list_struct;
 

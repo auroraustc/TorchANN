@@ -223,6 +223,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 		frame_info[i].no_force = no_force;
 		frame_info[i].index = i;
 		frame_info[i].N_Atoms = N_Atoms_this_frame;
+		free(tmp_coord_cpy);free(tmp_force_cpy);free(tmp_type_cpy);
 	}
 	fclose(fp_coord);fclose(fp_force);fclose(fp_type);
 	/*All the data has been read in. Save the frame_into to a binary file all_frame_info.bin.temp*/
@@ -231,6 +232,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	fclose(fp_out);
 	check_bin(Nframes_tot);
 	* frame_info_ = frame_info; *Nframes_tot_ = Nframes_tot;
+	free(tmp_coord);free(tmp_force);free(tmp_type);
 	return 0;
 }
 
@@ -349,4 +351,6 @@ void check_bin(int Nframes_tot)
 		}
 		printf("\n");
 	}
+	free(frame_info);
+	return;
 }

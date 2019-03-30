@@ -154,6 +154,7 @@ s2:
         }
     }
 
+    free(system_info_expanded->atom_info);free(system_info_expanded->type);free(system_info_expanded);
     return 0;
 }
 
@@ -234,6 +235,7 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
         }
     }
 
+    free(expand_a_array);free(expand_b_array);free(expand_c_array);
     return 0;
 }
 

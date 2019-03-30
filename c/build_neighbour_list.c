@@ -76,6 +76,7 @@ int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parame
 
     int i;
     int error_code = 0;
+    #pragma omp parallel for
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
         printf_d("Debug info of frame %d:\n", i + 1);
@@ -112,7 +113,7 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     if (step == 2) goto s2;
 s1:
     neighbour_list_cur = (neighbour_list_struct *)calloc(frame_info_cur->N_Atoms, sizeof(neighbour_list_struct));
-    #pragma omp parallel for private(j)
+    //#pragma omp parallel for private(j)
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         int N_nei = 0;
@@ -141,6 +142,7 @@ s1:
 s2:
     i = 0;
     double ** dist_ij_cur_frame;
+    //#pragma omp parallel for
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         build_neighbour_coord_cur_atom(frame_info_cur, &(frame_info_cur->neighbour_list[i]), system_info_expanded, parameters_info);
@@ -250,7 +252,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
 
     /*Calculate all distances of atoms in system_info_expanded and current atom*/
     dist_info = (dist_info_struct *)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct));
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         dist_info[i].atom_info = &(system_info_expanded->atom_info[i]);
@@ -269,7 +271,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     dist_info_struct ** a_tmp, ** b_tmp;//b is the sorted result
     a_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
     b_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         a_tmp[i] = &(dist_info[i]);

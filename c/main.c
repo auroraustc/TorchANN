@@ -13,6 +13,7 @@ Return code:
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
@@ -33,6 +34,9 @@ int main()
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
     int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
     
+    struct timeval start_main, end_main;
+    double t_main;//Unit: ms
+
     int read_system_flag;
     int read_parameters_info_flag;
     int build_neighbour_list_flag1, build_neighbour_list_flag2;
@@ -46,8 +50,11 @@ int main()
     int SEL_A_max;
     int N_types_all_frame = 0;
     int * type_index_all_frame = NULL;//type_index_all_frame[0..N_types_all_frame - 1]. For exampe, we have 3 elements, 6(C), 29(Cu), 1(H), then ...[0]=6, ...[1]=29, ...[2]=1.
-    int coord_type = 1;
+    int sym_coord_type = 1;
     int i, j, k;
+
+    /*Profiling main start*/
+    gettimeofday(&start_main, NULL);
 
     read_system_flag = read_system(&frame_info, &Nframes_tot);
     if (read_system_flag != 0) 
@@ -56,6 +63,7 @@ int main()
         return 1;
     }
     printf("No error when reading raw data.\n");
+    parameters_info->Nframes_tot = Nframes_tot;
 
     read_parameters_info_flag = read_parameters(parameters_info);
     if (read_parameters_info_flag != 0)
@@ -116,8 +124,9 @@ int main()
         printf_d("atom type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
     }
 
-    coord_type = 1;
-    convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, coord_type, (void **)&sym_coord_DeePMD);
+    sym_coord_type = 1;
+    parameters_info->sym_coord_type = sym_coord_type;
+    convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, sym_coord_type, (void **)&sym_coord_DeePMD);
     if (convert_coord_flag != 0)
     {
         printf("Error when converting coordinates: convert_coord_flag = %d\n", convert_coord_flag);
@@ -136,6 +145,9 @@ int main()
         printf_d("\n");
     }
 
-
+    /*Profiling main end*/
+    gettimeofday(&end_main, NULL);
+    t_main = (end_main.tv_usec - start_main.tv_usec) / 1000.0 + (end_main.tv_sec - start_main.tv_sec) * 1000;
+    printf("Time profiling: main(): %.3lf s\n", t_main / 1000.0);
     return 0;
 }

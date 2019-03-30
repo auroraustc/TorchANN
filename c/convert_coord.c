@@ -7,7 +7,7 @@ coord_type:
 
 Return code:
     0: No errors.
-    1: coord_type error.
+    1: sym_coord_type error.
 
 */
 
@@ -26,14 +26,14 @@ Return code:
 #endif
 /***************MACRO FOR DEBUG END***************/
 
-int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord)
+int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int sym_coord_type, void ** sym_coord)
 {
     int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, void ** sym_coord);
 
     int i, j, k;
     int error_code;
 
-    switch (coord_type)
+    switch (sym_coord_type)
     {
         case 1:
         {
@@ -71,6 +71,7 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
             sym_coord_DeePMD[i].coord_converted[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
         }
     }
+    #pragma omp parallel for private(j, k, l)
     for (i = 0; i <= Nframes_tot - 1; i++)//loop over each frame
     {
         for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)//loop over each atom in one frame

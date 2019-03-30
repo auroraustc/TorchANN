@@ -43,8 +43,8 @@ typedef struct neighbour_list_struct_
 [Y]	double cutoff_3;
 [Y]	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
 [Y]	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
-[Y]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max][0..2]
-[Y]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max][0..2]
+[Y]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max - 1][0..2]
+[Y]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max - 1][0..2]
 [Y]	int * type;//type[0..N_neighbours]
 }
 

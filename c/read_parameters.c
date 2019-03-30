@@ -24,8 +24,8 @@ Return code:
 
 int read_parameters(parameters_info_struct * parameters_info)
 {
-    parameters_info->cutoff_1 = 0.0;
-    parameters_info->cutoff_2 = 0.0;
+    parameters_info->cutoff_1 = 7.7;
+    parameters_info->cutoff_2 = 8.0;
     parameters_info->cutoff_3 = 0.0;
     parameters_info->cutoff_max = 8.0;
     return 0;

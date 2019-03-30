@@ -71,7 +71,7 @@ int main()
         printf("Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag1);
         return 3;
     }
-    printf_d("Check neighbour list from main():\n");
+    printf_d("Check from main(): neighbour list number check:\n");
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
         if (frame_info[i].max_N_neighbours >= max_N_neighbours_all_frame) max_N_neighbours_all_frame = frame_info[i].max_N_neighbours;
@@ -88,7 +88,7 @@ int main()
         printf("Error when counting types: count_types_flag = %d\n", count_types_flag);
         return 4;
     }
-    printf_d("Check types from main():\n");
+    printf_d("Check from main(): types: \n");
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
         printf_d("N_types of frame %d is %d\n", i + 1, frame_info[i].N_types);
@@ -116,12 +116,26 @@ int main()
         printf_d("atom type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
     }
 
+    coord_type = 1;
     convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, coord_type, (void **)&sym_coord_DeePMD);
     if (convert_coord_flag != 0)
     {
         printf("Error when converting coordinates: convert_coord_flag = %d\n", convert_coord_flag);
         return 6;
     }
+    printf("No errors converting coordinates\n");
+    printf_d("Check from main(): sym_coord_DeePMD of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
+    printf_d("%11s %11s %11s %11s\n", "s_rij", "x_hat", "y_hat", "z_hat");
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    {
+        for (j = 0; j <= 3; j++)
+        {
+            int idx = i * 4 + j;
+            printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].coord_converted[DEBUG_ATOM][idx]);
+        }
+        printf_d("\n");
+    }
+
 
     return 0;
 }

@@ -8,6 +8,8 @@ Return code:
     3: build_neighbour_list() error at step1.
     4: count types() error.
     5: build_neighbour_list() error at step2.
+    6: convert_coord() error.
+    7: save_to_file() error.
 
 */
 
@@ -33,6 +35,7 @@ int main()
     int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step);
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
     int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
+    int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord);
     
     struct timeval start_main, end_main;
     double t_main;//Unit: ms
@@ -42,6 +45,7 @@ int main()
     int build_neighbour_list_flag1, build_neighbour_list_flag2;
     int count_types_flag;
     int convert_coord_flag;
+    int save_to_file_flag;
     frame_info_struct * frame_info = NULL;
     parameters_info_struct * parameters_info = (parameters_info_struct *)calloc(1, sizeof(parameters_info_struct));
     sym_coord_DeePMD_struct * sym_coord_DeePMD = NULL;
@@ -134,7 +138,7 @@ int main()
     }
     printf("No errors converting coordinates\n");
     printf_d("Check from main(): sym_coord_DeePMD of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
-    printf_d("%11s %11s %11s %11s\n", "s_rij", "x_hat", "y_hat", "z_hat");
+    printf_d("%-11s %-11s %-11s %-11s\n", "s_rij", "x_hat", "y_hat", "z_hat");
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
         for (j = 0; j <= 3; j++)
@@ -143,6 +147,13 @@ int main()
             printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].coord_converted[DEBUG_ATOM][idx]);
         }
         printf_d("\n");
+    }
+
+    save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_DeePMD);
+    if (save_to_file_flag != 0)
+    {
+        printf("Error when saving to files: save_to_file_flag = %d\n", save_to_file_flag);
+        return 7;
     }
 
     /*Profiling main end*/

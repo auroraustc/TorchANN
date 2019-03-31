@@ -1,6 +1,6 @@
 CC = icc
 OBJECTS = Utilities.o read_system.o read_parameters.o build_neighbour_list.o count_types.o convert_coord.o save_to_file.o main.o
-DEBUG = -g
+DEBUG = 
 CFLAGS = -fopenmp
 LD_DEBUG = $(DEBUG)
 LD_CFLAGS = $(CFLAGS)

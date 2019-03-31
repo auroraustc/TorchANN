@@ -251,7 +251,8 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     dist_info_struct * dist_info;
 
     /*Calculate all distances of atoms in system_info_expanded and current atom*/
-    dist_info = (dist_info_struct *)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct));
+    /*Only those 1e-6 < dist <= rc are need*/
+    /**dist_info = (dist_info_struct *)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct));
     //#pragma omp parallel for
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
@@ -265,13 +266,46 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         {
             printf_d("atom index %d coord %.3lf %.3lf %.3lf dist %.6lf\n", dist_info[i].atom_info->index, dist_info[i].atom_info->coord[0], dist_info[i].atom_info->coord[1], dist_info[i].atom_info->coord[2], dist_info[i].dist);
         }
+    }**/
+    dist_info = (dist_info_struct *)calloc(parameters_info->SEL_A_max, sizeof(dist_info_struct));
+    //#pragma omp parallel for
+    int index_tmp_dist = 0;
+    for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
+    {
+        double dist;
+        dist = sqrt(pow(frame_info_cur->coord[index][0] - system_info_expanded->atom_info[i].coord[0] , 2) + pow(frame_info_cur->coord[index][1] - system_info_expanded->atom_info[i].coord[1], 2) + pow(frame_info_cur->coord[index][2] - system_info_expanded->atom_info[i].coord[2], 2));
+        if ((dist > 1E-6)&&(dist <= parameters_info->cutoff_max))
+        {
+            dist_info[index_tmp_dist].atom_info = &(system_info_expanded->atom_info[i]);
+            dist_info[index_tmp_dist].dist = dist;
+            index_tmp_dist ++;
+        }
+    }
+    dist_info_struct dummy;
+    atom_info_struct dummy_atom;
+    dummy_atom.coord[0] = 9999; dummy_atom.coord[1] = 9999; dummy_atom.coord[2] = 9999;
+    dummy_atom.index = 0;
+    dummy.atom_info = &dummy_atom;
+    dummy.dist = 9999;
+    for (i = index_tmp_dist; i <= parameters_info->SEL_A_max - 1; i ++)
+    {
+        dist_info[i].atom_info = &dummy_atom;
+        dist_info[i].dist = 9999;
+    } 
+    if ((frame_info_cur->index == DEBUG_FRAME)&&(index == DEBUG_ATOM))
+    {
+        printf_d("distance from atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
+        for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+        {
+            printf_d("atom index %d coord %.3lf %.3lf %.3lf dist %.6lf\n", dist_info[i].atom_info->index, dist_info[i].atom_info->coord[0], dist_info[i].atom_info->coord[1], dist_info[i].atom_info->coord[2], dist_info[i].dist);
+        }
     }
 
     /*Sort dist_info_struct using tmp pointer(including self)*/
     dist_info_struct ** a_tmp, ** b_tmp;//b is the sorted result
     dist_info_struct ** a_tmp_, ** b_tmp_;
 
-    dist_info_struct ** c_tmp;//Use an intermediate dist_info array. The dimension of c_tmp is SEL_A_max + 1. if (SEL_A_max + 1) is larger than all the elements with index larger than SEL_A_max-1 will be 9999 
+    /**dist_info_struct ** c_tmp;//Use an intermediate dist_info array. The dimension of c_tmp is SEL_A_max + 1. if (SEL_A_max + 1) is larger than all the elements with index larger than SEL_A_max-1 will be 9999 
     dist_info_struct for_c_tmp;
     atom_info_struct for_c_tmp_atom;
     int index_tmp = 0;
@@ -290,7 +324,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     for (i = index_tmp; i <= parameters_info->SEL_A_max; i++)
     {
         c_tmp[i] = &(for_c_tmp);
-    }
+    }**/
 
     /*a_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
     b_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
@@ -301,7 +335,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         b_tmp[i] = &(dist_info[i]);
     }
     quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, system_info_expanded->N_Atoms - 1, system_info_expanded->N_Atoms);*/
-    a_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
+    /**a_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
     b_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
     //a_tmp_ = &a_tmp[0]; b_tmp_ = &b_tmp[0];
     //#pragma omp parallel for
@@ -310,12 +344,21 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         a_tmp[i] = c_tmp[i];
         b_tmp[i] = c_tmp[i];
     }
-    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, parameters_info->SEL_A_max, parameters_info->SEL_A_max + 1);
+    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, parameters_info->SEL_A_max, parameters_info->SEL_A_max + 1);**/
+    a_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max, sizeof(dist_info_struct *));
+    b_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max, sizeof(dist_info_struct *));
+    //#pragma omp parallel for
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    {
+        a_tmp[i] = &(dist_info[i]);
+        b_tmp[i] = &(dist_info[i]);
+    }
+    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, parameters_info->SEL_A_max - 1, parameters_info->SEL_A_max);
     #ifdef DEBUG_BUILD
     printf_d("Check if sorted.\n");
     int flag_sort = 1;
     /*for (i = 0; i <= system_info_expanded->N_Atoms - 2; i++)*/
-    for (i = 0; i <= parameters_info->SEL_A_max + 1 - 2; i++)
+    for (i = 0; i <= parameters_info->SEL_A_max - 2; i++)
     {
         if ((b_tmp[i + 1]->dist) < (b_tmp[i]->dist))
         {
@@ -331,7 +374,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     {
         printf_d("Sorted distance from atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
         /*for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)*/
-        for (i = 0; i <= parameters_info->SEL_A_max + 1 - 1; i++)
+        for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
         {
             printf_d("atom index %d coord %.3lf %.3lf %.3lf dist %.6lf\n", b_tmp[i]->atom_info->index, b_tmp[i]->atom_info->coord[0], b_tmp[i]->atom_info->coord[1], b_tmp[i]->atom_info->coord[2], b_tmp[i]->dist);
         }
@@ -341,21 +384,26 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     /*Choose the first SEL_A_max atoms to be the neighbour list atoms(excluding self)*/
     neighbour_list_cur_atom->coord_neighbours = (double **)calloc(parameters_info->SEL_A_max, sizeof(double));
     neighbour_list_cur_atom->type = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
+    /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
         neighbour_list_cur_atom->coord_neighbours[i] = (double *)calloc(3, sizeof(double));
-        neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i + 1]->atom_info->index)%(frame_info_cur->N_Atoms)];
+        /*neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i + 1]->atom_info->index)%(frame_info_cur->N_Atoms)];*/
+        neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i]->atom_info->index)%(frame_info_cur->N_Atoms)];
     }
+    /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
-        neighbour_list_cur_atom->coord_neighbours[i][0] = b_tmp[i + 1]->atom_info->coord[0];
+        /*neighbour_list_cur_atom->coord_neighbours[i][0] = b_tmp[i + 1]->atom_info->coord[0];
         neighbour_list_cur_atom->coord_neighbours[i][1] = b_tmp[i + 1]->atom_info->coord[1];
-        neighbour_list_cur_atom->coord_neighbours[i][2] = b_tmp[i + 1]->atom_info->coord[2];
+        neighbour_list_cur_atom->coord_neighbours[i][2] = b_tmp[i + 1]->atom_info->coord[2];*/
+        neighbour_list_cur_atom->coord_neighbours[i][0] = b_tmp[i]->atom_info->coord[0];
+        neighbour_list_cur_atom->coord_neighbours[i][1] = b_tmp[i]->atom_info->coord[1];
+        neighbour_list_cur_atom->coord_neighbours[i][2] = b_tmp[i]->atom_info->coord[2];
     }
-    /*corrupted size vs. prev_size NOT solved
+    //corrupted size vs. prev_size NOT solved
     free(a_tmp);
-    free(b_tmp)*/;
-    free(c_tmp);
+    free(b_tmp);
     free(dist_info);
     return 0;
 }

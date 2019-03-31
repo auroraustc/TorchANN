@@ -1,0 +1,2296 @@
+==7424== Memcheck, a memory error detector
+==7424== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==7424== Using Valgrind-3.13.0 and LibVEX; rerun with -h for copyright info
+==7424== Command: ../c/a.out
+==7424== Parent PID: 5012
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x4020BD: read_system (read_system.c:183)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x4020DA: read_system (read_system.c:184)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x4020F7: read_system (read_system.c:185)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6DB: strtok (strtok.S:145)
+==7424==    by 0x40264A: compare_NAtoms (read_system.c:248)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x40264A: compare_NAtoms (read_system.c:248)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x4026A8: compare_NAtoms (read_system.c:254)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x4026A8: compare_NAtoms (read_system.c:254)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x402706: compare_NAtoms (read_system.c:260)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x402706: compare_NAtoms (read_system.c:260)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x40239C: read_system (read_system.c:219)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x4023B9: read_system (read_system.c:220)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid write of size 1
+==7424==    at 0x4C30B1F: strcpy (vg_replace_strmem.c:510)
+==7424==    by 0x4023D6: read_system (read_system.c:221)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6DB: strtok (strtok.S:145)
+==7424==    by 0x402879: parse_coord_force_type (read_system.c:281)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x402879: parse_coord_force_type (read_system.c:281)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb7efe is 0 bytes after a block of size 1,742 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x402968: parse_coord_force_type (read_system.c:292)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x402968: parse_coord_force_type (read_system.c:292)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb860d is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40204D: read_system (read_system.c:181)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x402A17: parse_coord_force_type (read_system.c:302)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6FC: strtok (strtok.S:163)
+==7424==    by 0x402A17: parse_coord_force_type (read_system.c:302)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fb86c5 is 0 bytes after a block of size 117 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40208F: read_system (read_system.c:182)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x40264A: compare_NAtoms (read_system.c:248)
+==7424==    by 0x40211E: read_system (read_system.c:186)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fbbead is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59BF6D3: strtok (strtok.S:141)
+==7424==    by 0x402879: parse_coord_force_type (read_system.c:281)
+==7424==    by 0x402427: read_system (read_system.c:222)
+==7424==    by 0x40733F: main (main.c:63)
+==7424==  Address 0x5fbbead is 0 bytes after a block of size 1,741 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40200B: read_system (read_system.c:180)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Syscall param sched_setaffinity(mask) points to unaddressable byte(s)
+==7424==    at 0x5A324D9: syscall (syscall.S:38)
+==7424==    by 0x5211F07: __kmp_affinity_determine_capable (z_Linux_util.cpp:185)
+==7424==    by 0x51F2860: __kmp_env_initialize(char const*) (kmp_settings.cpp:5463)
+==7424==    by 0x51DDB2A: _INTERNAL_25_______src_kmp_runtime_cpp_6bf59e22::__kmp_do_serial_initialize() (kmp_runtime.cpp:6804)
+==7424==    by 0x51D29DF: __kmp_get_global_thread_id_reg (kmp_runtime.cpp:290)
+==7424==    by 0x40306D: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x40745C: main (main.c:80)
+==7424==  Address 0x0 is not stack'd, malloc'd or (recently) free'd
+==7424== 
+==7424== Thread 7:
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x4055AE: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f8b38 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x4055B1: quick_sort_dist_cur_atom (build_neighbour_list.c:396)
+==7424==    by 0x4055F6: quick_sort_dist_cur_atom (build_neighbour_list.c:398)
+==7424==    by 0x405624: quick_sort_dist_cur_atom (build_neighbour_list.c:399)
+==7424==    by 0x404F4B: build_neighbour_coord_cur_atom (build_neighbour_list.c:318)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424==  Address 0x62f84a8 is 0 bytes after a block of size 1,608 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Use of uninitialised value of size 8
+==7424==    at 0x4052CE: build_neighbour_coord_cur_atom (build_neighbour_list.c:352)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Thread 1:
+==7424== Invalid read of size 4
+==7424==    at 0x4052CE: build_neighbour_coord_cur_atom (build_neighbour_list.c:352)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424==  Address 0x5fbb670 is 8 bytes after a block of size 24 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4022EA: read_system (read_system.c:216)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== Thread 2:
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597EB83: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Use of uninitialised value of size 8
+==7424==    at 0x597B76B: _itoa_word (_itoa.c:179)
+==7424==    by 0x597F12C: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597B775: _itoa_word (_itoa.c:179)
+==7424==    by 0x597F12C: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597F1AF: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597EC59: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597F41A: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597ECAB: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Conditional jump or move depends on uninitialised value(s)
+==7424==    at 0x597ECE2: vfprintf (vfprintf.c:1631)
+==7424==    by 0x5986898: printf (printf.c:33)
+==7424==    by 0x4051A4: build_neighbour_coord_cur_atom (build_neighbour_list.c:341)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== Thread 1:
+==7424== Invalid write of size 8
+==7424==    at 0x405C16: convert_coord_DeePMD (convert_coord.c:71)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424==  Address 0xdc644c0 is 0 bytes after a block of size 464 alloc'd
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x405B61: convert_coord_DeePMD (convert_coord.c:68)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F6F8: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599F70A: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599F71A: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F72E: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e50 is 224 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599F753: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x599F75A: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F75E: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e54 is 228 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F763: fwrite (iofwrite.c:38)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e30 is 192 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599F7AB: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e48 is 216 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x59AA202: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1293)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x59AA214: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1310)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4da0 is 48 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x59AA218: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1310)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d98 is 40 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x59AA278: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1331)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e48 is 216 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x59AB730: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:808)
+==7424==    by 0x59AA28C: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1331)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid write of size 4
+==7424==    at 0x59AB8DA: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:810)
+==7424==    by 0x59AA28C: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1331)
+==7424==    by 0x599F7BA: fwrite (iofwrite.c:39)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F7C6: _IO_acquire_lock_fct (libioP.h:866)
+==7424==    by 0x599F7C6: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599F7F8: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599F7F8: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F7FF: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599F7FF: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e54 is 228 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x599F805: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599F805: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599F816: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599F816: fwrite (iofwrite.c:37)
+==7424==    by 0x406796: save_to_file_energy_and_force (save_to_file.c:85)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e50 is 224 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E264: fclose@@GLIBC_2.2.5 (iofclose.c:53)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59AB9D0: _IO_un_link (genops.c:60)
+==7424==    by 0x599E374: fclose@@GLIBC_2.2.5 (iofclose.c:54)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E375: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E37C: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E38C: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E3A2: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e50 is 224 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E3C5: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E3CC: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x599E3CE: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E3D2: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e54 is 228 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x59AA840: _IO_file_close_it@@GLIBC_2.2.5 (fileops.c:160)
+==7424==    by 0x599E3EE: fclose@@GLIBC_2.2.5 (iofclose.c:58)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4de0 is 112 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E3EF: fclose@@GLIBC_2.2.5 (iofclose.c:58)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E401: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599E401: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4df8 is 136 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E408: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599E408: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e54 is 228 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid write of size 8
+==7424==    at 0x599E412: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599E412: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e58 is 232 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E423: _IO_acquire_lock_fct (libioP.h:867)
+==7424==    by 0x599E423: fclose@@GLIBC_2.2.5 (iofclose.c:56)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e50 is 224 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E290: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e48 is 216 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x59AA9C1: _IO_file_finish@@GLIBC_2.2.5 (fileops.c:201)
+==7424==    by 0x599E29E: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4de0 is 112 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x59ACC19: _IO_default_finish (genops.c:641)
+==7424==    by 0x599E29E: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4da8 is 56 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x59ACC2B: _IO_default_finish (genops.c:647)
+==7424==    by 0x599E29E: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4dd0 is 96 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== 
+==7424== More than 100 errors detected.  Subsequent errors
+==7424== will still be recorded, but in less detail than before.
+==7424== Invalid read of size 8
+==7424==    at 0x59ACC48: _IO_default_finish (genops.c:650)
+==7424==    by 0x599E29E: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4db8 is 72 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 1
+==7424==    at 0x59ACC5E: _IO_un_link (genops.c:60)
+==7424==    by 0x59ACC5E: _IO_default_finish (genops.c:656)
+==7424==    by 0x599E29E: fclose@@GLIBC_2.2.5 (iofclose.c:62)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 4
+==7424==    at 0x599E29F: fclose@@GLIBC_2.2.5 (iofclose.c:63)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4e30 is 192 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid read of size 8
+==7424==    at 0x599E450: fclose@@GLIBC_2.2.5 (iofclose.c:78)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4db8 is 72 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== Invalid free() / delete / delete[] / realloc()
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x4067A8: save_to_file_energy_and_force (save_to_file.c:88)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Address 0xe4c4d70 is 0 bytes inside a block of size 552 free'd
+==7424==    at 0x4C2ECF0: free (vg_replace_malloc.c:530)
+==7424==    by 0x599E362: fclose@@GLIBC_2.2.5 (iofclose.c:84)
+==7424==    by 0x40669C: save_to_file_energy_and_force (save_to_file.c:78)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424==  Block was alloc'd at
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x406610: save_to_file_energy_and_force (save_to_file.c:73)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== 
+==7424== HEAP SUMMARY:
+==7424==     in use at exit: 80,635,782 bytes in 278,967 blocks
+==7424==   total heap usage: 279,413 allocs, 447 frees, 97,287,347 bytes allocated
+==7424== 
+==7424== 8 bytes in 1 blocks are indirectly lost in loss record 1 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4058EB: count_types (count_types.c:79)
+==7424==    by 0x40764D: main (main.c:97)
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 2 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64EAD9F: ???
+==7424==    by 0x64EADCF: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 3 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64BAD9F: ???
+==7424==    by 0x64BADCF: ???
+==7424==    by 0x64BAD6F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 4 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64E989F: ???
+==7424==    by 0x64E98CF: ???
+==7424==    by 0x64E986F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 5 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64E839F: ???
+==7424==    by 0x64E83CF: ???
+==7424==    by 0x64E836F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 6 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64B989F: ???
+==7424==    by 0x64B98CF: ???
+==7424==    by 0x64B986F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 7 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64B589F: ???
+==7424==    by 0x64B58CF: ???
+==7424==    by 0x64B586F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 8 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64B6D9F: ???
+==7424==    by 0x64B6DCF: ???
+==7424==    by 0x64B6D6F: ???
+==7424== 
+==7424== 21 bytes in 1 blocks are still reachable in loss record 9 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x526589C: __intel_sse2_strdup (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x64B839F: ???
+==7424==    by 0x64B83CF: ???
+==7424==    by 0x64B836F: ???
+==7424== 
+==7424== 24 bytes in 1 blocks are possibly lost in loss record 10 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40524B: build_neighbour_coord_cur_atom (build_neighbour_list.c:351)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 32 bytes in 1 blocks are still reachable in loss record 11 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x5CFC626: _dlerror_run (dlerror.c:141)
+==7424==    by 0x5CFBFA0: dlopen@@GLIBC_2.2.5 (dlopen.c:87)
+==7424==    by 0x52069B4: global_symbols_link (dynamic_link.cpp:477)
+==7424==    by 0x52069B4: __kmp::dynamic_link(char const*, __kmp::dynamic_link_descriptor const*, unsigned long, void**, int) (dynamic_link.cpp:539)
+==7424==    by 0x51DD865: __kmp_init_allocator (kmp_runtime.cpp:648)
+==7424==    by 0x51DD865: _INTERNAL_25_______src_kmp_runtime_cpp_6bf59e22::__kmp_do_serial_initialize() (kmp_runtime.cpp:6630)
+==7424==    by 0x51D29DF: __kmp_get_global_thread_id_reg (kmp_runtime.cpp:290)
+==7424==    by 0x40306D: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x40745C: main (main.c:80)
+==7424== 
+==7424== 72 (64 direct, 8 indirect) bytes in 1 blocks are definitely lost in loss record 12 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4072D5: main (main.c:50)
+==7424== 
+==7424== 118 bytes in 1 blocks are still reachable in loss record 13 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x4010340: _dl_signal_error (dl-error.c:90)
+==7424==    by 0x5A74C82: do_sym (dl-sym.c:139)
+==7424==    by 0x5CFC033: dlsym_doit (dlsym.c:50)
+==7424==    by 0x4010573: _dl_catch_error (dl-error.c:187)
+==7424==    by 0x5CFC570: _dlerror_run (dlerror.c:163)
+==7424==    by 0x5CFC087: dlsym (dlsym.c:70)
+==7424==    by 0x516603F: __kmp_itt_fini_ittlib (ittnotify_static.c:945)
+==7424==    by 0x521070A: __kmp_runtime_destroy (z_Linux_util.cpp:2388)
+==7424==    by 0x51D6361: __kmp_cleanup (kmp_runtime.cpp:7567)
+==7424==    by 0x51DC10F: __kmp_internal_end (kmp_runtime.cpp:6180)
+==7424==    by 0x51DC10F: __kmp_internal_end_library (kmp_runtime.cpp:6277)
+==7424==    by 0x4010E14: _dl_fini (dl-fini.c:240)
+==7424== 
+==7424== 336 bytes in 7 blocks are still reachable in loss record 14 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x5166D1E: __kmp_itt_thread_set_name_init_3_0 (ittnotify_static.c:569)
+==7424==    by 0x5166D1E: _INTERNAL_49_______src_thirdparty_ittnotify_ittnotify_static_c_dd06878f::__kmp_itt_thr_name_set_init_3_0(char const*, int) (ittnotify_static.c:589)
+==7424==    by 0x5208A44: __kmp_itt_thread_name (kmp_itt.inl:999)
+==7424==    by 0x5208A44: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:545)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 552 bytes in 1 blocks are still reachable in loss record 15 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x402A59: check_bin (read_system.c:309)
+==7424==    by 0x40257D: read_system (read_system.c:233)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 552 bytes in 1 blocks are still reachable in loss record 16 of 44
+==7424==    at 0x4C2DBF6: malloc (vg_replace_malloc.c:299)
+==7424==    by 0x599ECDC: __fopen_internal (iofopen.c:69)
+==7424==    by 0x4066B4: save_to_file_energy_and_force (save_to_file.c:80)
+==7424==    by 0x40655A: save_to_file (save_to_file.c:40)
+==7424==    by 0x407C29: main (main.c:152)
+==7424== 
+==7424== 1,608 bytes in 1 blocks are possibly lost in loss record 17 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 5,336 bytes in 23 blocks are indirectly lost in loss record 18 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x402360: read_system (read_system.c:218)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 10,672 bytes in 23 blocks are indirectly lost in loss record 19 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40220B: read_system (read_system.c:211)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 10,672 bytes in 23 blocks are indirectly lost in loss record 20 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x402247: read_system (read_system.c:212)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 10,672 bytes in 23 blocks are indirectly lost in loss record 21 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x405B61: convert_coord_DeePMD (convert_coord.c:68)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424== 
+==7424== 12,528 bytes in 3 blocks are indirectly lost in loss record 22 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x403718: build_neighbour_list_one_frame (build_neighbour_list.c:116)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x40745C: main (main.c:80)
+==7424== 
+==7424== 32,016 bytes in 1,334 blocks are indirectly lost in loss record 23 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4022A2: read_system (read_system.c:215)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 32,016 bytes in 1,334 blocks are indirectly lost in loss record 24 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4022EA: read_system (read_system.c:216)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 83,520 bytes in 20 blocks are indirectly lost in loss record 25 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x403718: build_neighbour_list_one_frame (build_neighbour_list.c:116)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 139,200 bytes in 174 blocks are indirectly lost in loss record 26 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4051FC: build_neighbour_coord_cur_atom (build_neighbour_list.c:348)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 147,200 bytes in 23 blocks are definitely lost in loss record 27 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x405BE2: convert_coord_DeePMD (convert_coord.c:71)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424== 
+==7424== 278,400 bytes in 174 blocks are indirectly lost in loss record 28 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4051CC: build_neighbour_coord_cur_atom (build_neighbour_list.c:347)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 279,792 bytes in 174 blocks are definitely lost in loss record 29 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D43: build_neighbour_coord_cur_atom (build_neighbour_list.c:282)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 279,792 bytes in 174 blocks are definitely lost in loss record 30 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 292,320 bytes in 7 blocks are possibly lost in loss record 31 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404971: build_neighbour_coord_cur_atom (build_neighbour_list.c:255)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 835,200 bytes in 34,800 blocks are indirectly lost in loss record 32 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40524B: build_neighbour_coord_cur_atom (build_neighbour_list.c:351)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 928,000 bytes in 1,160 blocks are indirectly lost in loss record 33 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4051FC: build_neighbour_coord_cur_atom (build_neighbour_list.c:348)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 1,856,000 bytes in 1,160 blocks are indirectly lost in loss record 34 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x4051CC: build_neighbour_coord_cur_atom (build_neighbour_list.c:347)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 1,865,280 bytes in 1,160 blocks are definitely lost in loss record 35 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D43: build_neighbour_coord_cur_atom (build_neighbour_list.c:282)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 1,865,280 bytes in 1,160 blocks are definitely lost in loss record 36 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D9F: build_neighbour_coord_cur_atom (build_neighbour_list.c:284)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 5,567,976 bytes in 231,999 blocks are indirectly lost in loss record 37 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x40524B: build_neighbour_coord_cur_atom (build_neighbour_list.c:351)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 7,266,240 bytes in 174 blocks are indirectly lost in loss record 38 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404971: build_neighbour_coord_cur_atom (build_neighbour_list.c:255)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 7,546,032 (279,792 direct, 7,266,240 indirect) bytes in 174 blocks are definitely lost in loss record 39 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D7B35: __kmp_fork_call (kmp_runtime.cpp:2426)
+==7424==    by 0x519FABB: __kmpc_fork_call (kmp_csupport.cpp:342)
+==7424==    by 0x40319B: build_neighbour_list (build_neighbour_list.c:79)
+==7424==    by 0x407853: main (main.c:119)
+==7424== 
+==7424== 8,537,600 bytes in 1,334 blocks are indirectly lost in loss record 40 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x405BE2: convert_coord_DeePMD (convert_coord.c:71)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424== 
+==7424== 8,548,824 (552 direct, 8,548,272 indirect) bytes in 1 blocks are definitely lost in loss record 41 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x405A51: convert_coord_DeePMD (convert_coord.c:62)
+==7424==    by 0x4059CC: convert_coord (convert_coord.c:40)
+==7424==    by 0x407A43: main (main.c:133)
+==7424== 
+==7424== 9,794,848 (3,312 direct, 9,791,536 indirect) bytes in 1 blocks are definitely lost in loss record 42 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x401BCD: read_system (read_system.c:152)
+==7424==    by 0x40733F: main (main.c:63)
+==7424== 
+==7424== 48,149,280 bytes in 1,153 blocks are indirectly lost in loss record 43 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404971: build_neighbour_coord_cur_atom (build_neighbour_list.c:255)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== 50,012,952 (1,863,672 direct, 48,149,280 indirect) bytes in 1,159 blocks are definitely lost in loss record 44 of 44
+==7424==    at 0x4C2F988: calloc (vg_replace_malloc.c:711)
+==7424==    by 0x404D71: build_neighbour_coord_cur_atom (build_neighbour_list.c:283)
+==7424==    by 0x403B08: build_neighbour_list_one_frame (build_neighbour_list.c:149)
+==7424==    by 0x403445: build_neighbour_list (build_neighbour_list.c:84)
+==7424==    by 0x52087A2: __kmp_invoke_microtask (in /opt/intel/compilers_and_libraries_2018.1.163/linux/compiler/lib/intel64_lin/libiomp5.so)
+==7424==    by 0x51D6539: __kmp_invoke_task_func (kmp_runtime.cpp:7212)
+==7424==    by 0x51D5CC9: __kmp_launch_thread (kmp_runtime.cpp:5810)
+==7424==    by 0x5208BFF: _INTERNAL_26_______src_z_Linux_util_cpp_c3d2e46c::__kmp_launch_worker(void*) (z_Linux_util.cpp:585)
+==7424==    by 0x571B6B9: start_thread (pthread_create.c:333)
+==7424==    by 0x5A3841C: clone (clone.S:109)
+==7424== 
+==7424== LEAK SUMMARY:
+==7424==    definitely lost: 6,584,736 bytes in 4,027 blocks
+==7424==    indirectly lost: 73,755,336 bytes in 274,912 blocks
+==7424==      possibly lost: 293,952 bytes in 9 blocks
+==7424==    still reachable: 1,758 bytes in 19 blocks
+==7424==         suppressed: 0 bytes in 0 blocks
+==7424== 
+==7424== For counts of detected and suppressed errors, rerun with: -v
+==7424== Use --track-origins=yes to see where uninitialised values come from
+==7424== ERROR SUMMARY: 671965 errors from 118 contexts (suppressed: 0 from 0)

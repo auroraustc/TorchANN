@@ -269,7 +269,30 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
 
     /*Sort dist_info_struct using tmp pointer(including self)*/
     dist_info_struct ** a_tmp, ** b_tmp;//b is the sorted result
-    a_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
+    dist_info_struct ** a_tmp_, ** b_tmp_;
+
+    dist_info_struct ** c_tmp;//Use an intermediate dist_info array. The dimension of c_tmp is SEL_A_max + 1. if (SEL_A_max + 1) is larger than all the elements with index larger than SEL_A_max-1 will be 9999 
+    dist_info_struct for_c_tmp;
+    atom_info_struct for_c_tmp_atom;
+    int index_tmp = 0;
+    for_c_tmp.atom_info = &(for_c_tmp_atom);
+    for_c_tmp.atom_info->coord[0] = 9999; for_c_tmp.atom_info->coord[1] = 9999; for_c_tmp.atom_info->coord[2] = 9999;
+    for_c_tmp.dist = 9999;
+    c_tmp = (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
+    for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
+    {
+        if (dist_info[i].dist <= parameters_info->cutoff_max)
+        {
+            c_tmp[index_tmp] = &(dist_info[i]);
+            index_tmp ++;
+        }
+    }
+    for (i = index_tmp; i <= parameters_info->SEL_A_max; i++)
+    {
+        c_tmp[i] = &(for_c_tmp);
+    }
+
+    /*a_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
     b_tmp =  (dist_info_struct **)calloc(system_info_expanded->N_Atoms, sizeof(dist_info_struct *));
     //#pragma omp parallel for
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
@@ -277,11 +300,22 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         a_tmp[i] = &(dist_info[i]);
         b_tmp[i] = &(dist_info[i]);
     }
-    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, system_info_expanded->N_Atoms - 1, system_info_expanded->N_Atoms);
+    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, system_info_expanded->N_Atoms - 1, system_info_expanded->N_Atoms);*/
+    a_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
+    b_tmp =  (dist_info_struct **)calloc(parameters_info->SEL_A_max + 1, sizeof(dist_info_struct *));
+    //a_tmp_ = &a_tmp[0]; b_tmp_ = &b_tmp[0];
+    //#pragma omp parallel for
+    for (i = 0; i <= parameters_info->SEL_A_max; i++)
+    {
+        a_tmp[i] = c_tmp[i];
+        b_tmp[i] = c_tmp[i];
+    }
+    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, parameters_info->SEL_A_max, parameters_info->SEL_A_max + 1);
     #ifdef DEBUG_BUILD
     printf_d("Check if sorted.\n");
     int flag_sort = 1;
-    for (i = 0; i <= system_info_expanded->N_Atoms - 2; i++)
+    /*for (i = 0; i <= system_info_expanded->N_Atoms - 2; i++)*/
+    for (i = 0; i <= parameters_info->SEL_A_max + 1 - 2; i++)
     {
         if ((b_tmp[i + 1]->dist) < (b_tmp[i]->dist))
         {
@@ -296,7 +330,8 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     if ((frame_info_cur->index == DEBUG_FRAME)&&(index == DEBUG_ATOM))
     {
         printf_d("Sorted distance from atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
-        for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
+        /*for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)*/
+        for (i = 0; i <= parameters_info->SEL_A_max + 1 - 1; i++)
         {
             printf_d("atom index %d coord %.3lf %.3lf %.3lf dist %.6lf\n", b_tmp[i]->atom_info->index, b_tmp[i]->atom_info->coord[0], b_tmp[i]->atom_info->coord[1], b_tmp[i]->atom_info->coord[2], b_tmp[i]->dist);
         }
@@ -317,8 +352,10 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         neighbour_list_cur_atom->coord_neighbours[i][1] = b_tmp[i + 1]->atom_info->coord[1];
         neighbour_list_cur_atom->coord_neighbours[i][2] = b_tmp[i + 1]->atom_info->coord[2];
     }
-
-    free(a_tmp);free(b_tmp);
+    /*corrupted size vs. prev_size NOT solved
+    free(a_tmp);
+    free(b_tmp)*/;
+    free(c_tmp);
     free(dist_info);
     return 0;
 }

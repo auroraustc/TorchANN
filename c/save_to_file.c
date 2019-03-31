@@ -209,6 +209,8 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
 
 int check_sym_coord_from_bin(parameters_info_struct * parameters_info)
 {
+    int check_sym_coord_from_bin_DeePMD(parameters_info_struct * parameters_info);
+    
     int error_code;
     int sym_coord_type = parameters_info->sym_coord_type;
 

@@ -96,7 +96,6 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                 }
             }
         }
-        printf_d("Seg check from convert_coord. %d\n", i);
     }
 
     *((sym_coord_DeePMD_struct **)sym_coord) = sym_coord_DeePMD;

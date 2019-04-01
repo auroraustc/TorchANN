@@ -3,6 +3,7 @@
 
 Save energy of each frame & force of each atom of each frame, all parameters, and sym_coord to file.
 Energy , type and N_Atoms of each frame, force and sym_coord of each atom of each frame are saved as binary files.
+Original coordinates are also saved using binary form.
 
 Return code:
     0: No errors.
@@ -11,6 +12,7 @@ Return code:
     21~29: save_to_file_type_and_N_Atoms() error.
     31~39: save_to_file_sym_coord() error.
     41~49: check_sym_coord_from_bin() error.
+    51~59: save_to_file_coord() error.
 
 */
 
@@ -34,8 +36,9 @@ int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parame
     int save_to_file_parameters(parameters_info_struct * parameters_info);
     int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
     int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters_info);
+    int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
 
-    int ef_flag, p_flag, sc_flag, tna_flag;
+    int ef_flag, p_flag, sc_flag, tna_flag, c_flag;
 
     ef_flag = save_to_file_energy_and_force(frame_info, parameters_info);
     if (ef_flag != 0)
@@ -59,6 +62,12 @@ int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parame
     if (sc_flag != 0)
     {
         return sc_flag;
+    }
+
+    c_flag = save_to_file_coord(frame_info, parameters_info);
+    if (c_flag != 0)
+    {
+        return c_flag;
     }
 
     return 0;
@@ -278,3 +287,7 @@ int check_sym_coord_from_bin_DeePMD(parameters_info_struct * parameters_info)
     return 0;
 }
 
+int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
+{
+    return 0;
+}

@@ -11,7 +11,7 @@ if (read_parameters_flag != 0):
     print("Reading parameters error with code %d"%read_parameters_flag)
     exit()
 
-COORD = np.loadtxt("./coord.raw", dtype = np.float64)
+COORD = np.fromfile("./COORD.BIN", dtype = np.float64)
 SYM_COORD = np.fromfile("./SYM_COORD.BIN", dtype = np.float64)
 ENERGY = np.fromfile("./ENERGY.BIN", dtype = np.float64)
 FORCE = np.fromfile("./FORCE.BIN", dtype = np.float64)

@@ -434,7 +434,7 @@ void quick_sort_dist_cur_atom(dist_info_struct *** a_tmp_, dist_info_struct *** 
                        
         }
         b_tmp[left] = a_tmp[start];
-        for (i = 0; i <= tot_num; i++)
+        for (i = 0; i <= tot_num - 1; i++)
         {
             a_tmp[i] = b_tmp[i];
         }

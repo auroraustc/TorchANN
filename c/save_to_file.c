@@ -94,7 +94,7 @@ int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_inf
             fwrite(frame_info[i].force[j], sizeof(double), 3, fp_energy);
         }
     }
-    fclose(fp_energy);
+    fclose(fp_force);
 
     return 0;
 }
@@ -289,5 +289,17 @@ int check_sym_coord_from_bin_DeePMD(parameters_info_struct * parameters_info)
 
 int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
 {
+    FILE * fp_coord;
+    int i, j, k;
+
+    fp_coord = fopen("./COORD.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
+        {
+            fwrite((frame_info[i].coord[j]), sizeof(double), 3, fp_coord);
+        }
+    }
+    fclose(fp_coord);
     return 0;
 }

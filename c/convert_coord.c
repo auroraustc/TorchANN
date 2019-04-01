@@ -66,7 +66,7 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
         sym_coord_DeePMD[i].SEL_A = parameters_info->SEL_A_max;
         sym_coord_DeePMD[i].type = frame_info[i].type;
         sym_coord_DeePMD[i].coord_converted = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
-        for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms; j++)
+        for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
         {
             sym_coord_DeePMD[i].coord_converted[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
         }
@@ -96,6 +96,7 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                 }
             }
         }
+        printf_d("Seg check from convert_coord. %d\n", i);
     }
 
     *((sym_coord_DeePMD_struct **)sym_coord) = sym_coord_DeePMD;

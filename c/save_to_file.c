@@ -91,7 +91,7 @@ int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_inf
     {
         for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
-            fwrite(frame_info[i].force[j], sizeof(double), 3, fp_energy);
+            fwrite(frame_info[i].force[j], sizeof(double), 3, fp_force);
         }
     }
     fclose(fp_force);

@@ -15,7 +15,7 @@ COORD = np.fromfile("./COORD.BIN", dtype = np.float64)
 SYM_COORD = np.fromfile("./SYM_COORD.BIN", dtype = np.float64)
 ENERGY = np.fromfile("./ENERGY.BIN", dtype = np.float64)
 FORCE = np.fromfile("./FORCE.BIN", dtype = np.float64)
-TYPE = np.loadtxt("./type.raw", dtype = np.int32)
+TYPE = np.fromfile("./TYPE.BIN", dtype = np.int32)
 N_ATOMS = np.fromfile("./N_ATOMS.BIN", dtype = np.int32)
 
 """Reshape COORD, FORCE as [Nfrmaes, N_Atoms_this_frame * 3] and SYM_COORD as [Nframes, N_Atoms_this_frame * SELA_max * 4]"""

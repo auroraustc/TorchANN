@@ -177,9 +177,9 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 		fgets(tmp_force, 100000 * 3, fp_force);
 		fgets(tmp_type, 100000, fp_type);
 		/*Check NAtoms from coord.raw, force.raw and type.raw correspond.*/
-		tmp_coord_cpy = (char *)calloc(strlen(tmp_coord), sizeof(char));
-		tmp_force_cpy = (char *)calloc(strlen(tmp_force), sizeof(char));
-		tmp_type_cpy = (char *)calloc(strlen(tmp_type), sizeof(char));
+		tmp_coord_cpy = (char *)calloc(strlen(tmp_coord) + 1, sizeof(char));
+		tmp_force_cpy = (char *)calloc(strlen(tmp_force) + 1, sizeof(char));
+		tmp_type_cpy = (char *)calloc(strlen(tmp_type) + 1, sizeof(char));
 		strcpy(tmp_coord_cpy, tmp_coord);
 		strcpy(tmp_force_cpy, tmp_force);
 		strcpy(tmp_type_cpy, tmp_type);

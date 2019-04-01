@@ -121,6 +121,7 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
     fprintf(fp_parameters, "        %d\n", parameters_info->type_index_all_frame[i]);
     fprintf(fp_parameters, "    ],\n");
 
+    fprintf(fp_parameters, "    \"N_Atoms_max\": %d,\n", parameters_info->N_Atoms_max);
     fprintf(fp_parameters, "    \"SEL_A_max\": %d,\n", parameters_info->SEL_A_max);
     fprintf(fp_parameters, "    \"Nframes_tot\": %d,\n", parameters_info->Nframes_tot);
     fprintf(fp_parameters, "    \"sym_coord_type\": %d\n", parameters_info->sym_coord_type);

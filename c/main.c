@@ -31,7 +31,7 @@ Return code:
 int main()
 {
     int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_);
-    int read_parameters(parameters_info_struct * parameters_info);
+    int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
     int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step);
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
     int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
@@ -69,7 +69,7 @@ int main()
     printf("No error when reading raw data.\n");
     parameters_info->Nframes_tot = Nframes_tot;
 
-    read_parameters_info_flag = read_parameters(parameters_info);
+    read_parameters_info_flag = read_parameters(frame_info, parameters_info);
     if (read_parameters_info_flag != 0)
     {
         printf("Error when reading input parameters: read_parameters_info_flag = %d\n", read_parameters_info_flag);

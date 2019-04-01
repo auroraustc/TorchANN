@@ -73,6 +73,7 @@ typedef struct parameters_info_struct_
 	double cutoff_max;
 	int N_types_all_frame;
 	int * type_index_all_frame;//type_index_all_frame[0..N_types_all_frame - 1]
+	int N_Atoms_max;
 	int SEL_A_max;
 	int Nframes_tot;
 	int sym_coord_type;

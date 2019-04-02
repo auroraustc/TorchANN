@@ -24,7 +24,8 @@ Return code:
 	0: No errors.
 	1: missing input file(s).
 	2: The number of frames provided in box.raw, energy.raw and type.raw are different.
-	3: Coordinates or/and forces in some frames are incorrect.
+	3: The number of frames provided in coord.raw and force.raw are not the same as box/energy/type.raw.
+	4: Coordinates or/and forces in some frames are incorrect.
 	
 */
 
@@ -142,7 +143,8 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	}
 	else
 	{
-		printf("The number of frames provided in coord.raw or force.raw is incorrect: %d %d\n", tot_lines_coord, tot_lines_force);
+		printf("The number of frames provided in coord.raw or force.raw is incorrect: %d %d Nframes_tot: %d\n", tot_lines_coord, tot_lines_force, Nframes_tot);
+		return 3;
 	}
 	fclose(fp_coord);if (no_force == 0) fclose(fp_force);
 
@@ -189,17 +191,17 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 			case -1:
 			{
 				printf("Frame %d: Number of atoms of from coord.raw and force.raw are different.\n", i + 1);
-				return 3;
+				return 4;
 			}
 			case -2:
 			{
 				printf("Frame %d: coord or force information of this frame is incomplete.\n", i + 1);
-				return 3;
+				return 4;
 			}
 			case -3:
 			{
 				printf("Frame %d: Number of atoms of coord.raw or force.raw is different from NAtoms of type.raw.\n", i + 1);
-				return 3;
+				return 4;
 			}
 			default:
 			{

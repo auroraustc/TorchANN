@@ -30,3 +30,8 @@ double s_r(double r_ij, parameters_info_struct * parameters_info)
     result = (r_ij >= rc) ? 0 : ((r_ij >= rcs) ? 1 / r_ij * (0.5 * cos((r_ij - rcs) / (rc - rcs) * PI) + 0.5) : 1 / r_ij);
     return result;
 }
+
+double fastpow2(double number, int dummy)
+{
+    return number * number;
+}

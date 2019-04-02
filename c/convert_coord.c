@@ -55,6 +55,7 @@ int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_in
 int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, void ** sym_coord)
 {
     double s_r(double r_ij, parameters_info_struct * parameters_info);
+    double fastpow2(double number, int dummy);
 
     int i, j, k, l;
     sym_coord_DeePMD_struct * sym_coord_DeePMD;
@@ -86,7 +87,7 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                 atom_coord[0] = frame_info[i].coord[j][0]; atom_coord[1] = frame_info[i].coord[j][1]; atom_coord[2] = frame_info[i].coord[j][2];
                 nei_coord[0] = frame_info[i].neighbour_list[j].coord_neighbours[k][0]; nei_coord[1] = frame_info[i].neighbour_list[j].coord_neighbours[k][1]; nei_coord[2] = frame_info[i].neighbour_list[j].coord_neighbours[k][2];
                 r_ji_coord[0] = nei_coord[0] - atom_coord[0]; r_ji_coord[1] = nei_coord[1] - atom_coord[1]; r_ji_coord[2] = nei_coord[2] - atom_coord[2];
-                r_ij = sqrt(pow(atom_coord[0] - nei_coord[0], 2) + pow(atom_coord[1] - nei_coord[1], 2) + pow(atom_coord[2] - nei_coord[2], 2));
+                r_ij = sqrt(fastpow2(atom_coord[0] - nei_coord[0], 2) + fastpow2(atom_coord[1] - nei_coord[1], 2) + fastpow2(atom_coord[2] - nei_coord[2], 2));
                 four_coord[0] = s_r(r_ij, parameters_info);
                 four_coord[1] = four_coord[0] * r_ji_coord[0] / r_ij; four_coord[2] = four_coord[0] * r_ji_coord[1] / r_ij; four_coord[3] = four_coord[0] * r_ji_coord[2] / r_ij; 
                 for (l = 0; l <= 4-1; l++)

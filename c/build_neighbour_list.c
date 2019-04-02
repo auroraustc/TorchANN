@@ -90,6 +90,7 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
 {
     int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
     int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
+    double fastpow2(double number, int dummy);
 
     int i, j, k;
     int max_num_N_nei_one_frame = -1;
@@ -125,7 +126,7 @@ s1:
         for (j = 0; j <= system_info_expanded->N_Atoms - 1; j++)
         {
             double dist_ij;
-            dist_ij = sqrt(pow(frame_info_cur->coord[i][0] - system_info_expanded->atom_info[j].coord[0], 2) + pow(frame_info_cur->coord[i][1] - system_info_expanded->atom_info[j].coord[1], 2) + pow(frame_info_cur->coord[i][2] - system_info_expanded->atom_info[j].coord[2], 2));
+            dist_ij = sqrt(fastpow2(frame_info_cur->coord[i][0] - system_info_expanded->atom_info[j].coord[0], 2) + fastpow2(frame_info_cur->coord[i][1] - system_info_expanded->atom_info[j].coord[1], 2) + fastpow2(frame_info_cur->coord[i][2] - system_info_expanded->atom_info[j].coord[2], 2));
             if (dist_ij <= neighbour_list_cur[i].cutoff_max) N_nei++;
         }
         neighbour_list_cur[i].N_neighbours = N_nei;
@@ -162,6 +163,8 @@ s2:
 
 int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
 {
+    double fastpow2(double number, int dummy);
+    
     int i, j, k, l;
     int tmpi1;
     double cutoff_max;
@@ -176,9 +179,9 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
 
     
     cutoff_max = parameters_info->cutoff_max;
-    box_vec_a = sqrt(pow(frame_info_cur->box[0][0], 2) + pow(frame_info_cur->box[0][1], 2) + pow(frame_info_cur->box[0][2], 2));
-    box_vec_b = sqrt(pow(frame_info_cur->box[1][0], 2) + pow(frame_info_cur->box[1][1], 2) + pow(frame_info_cur->box[1][2], 2));
-    box_vec_c = sqrt(pow(frame_info_cur->box[2][0], 2) + pow(frame_info_cur->box[2][1], 2) + pow(frame_info_cur->box[2][2], 2));
+    box_vec_a = sqrt(fastpow2(frame_info_cur->box[0][0], 2) + fastpow2(frame_info_cur->box[0][1], 2) + fastpow2(frame_info_cur->box[0][2], 2));
+    box_vec_b = sqrt(fastpow2(frame_info_cur->box[1][0], 2) + fastpow2(frame_info_cur->box[1][1], 2) + fastpow2(frame_info_cur->box[1][2], 2));
+    box_vec_c = sqrt(fastpow2(frame_info_cur->box[2][0], 2) + fastpow2(frame_info_cur->box[2][1], 2) + fastpow2(frame_info_cur->box[2][2], 2));
 
     expand_a_period = ceil(cutoff_max / box_vec_a);
     expand_b_period = ceil(cutoff_max / box_vec_b);
@@ -244,6 +247,7 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
 int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
 {
     void quick_sort_dist_cur_atom(dist_info_struct *** a_tmp_, dist_info_struct *** b_tmp_, int start, int end, int tot_num);
+    double fastpow2(double number, int dummy);
 
     int i, j, k;
     int index = neighbour_list_cur_atom->index;
@@ -273,7 +277,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         double dist;
-        dist = sqrt(pow(frame_info_cur->coord[index][0] - system_info_expanded->atom_info[i].coord[0] , 2) + pow(frame_info_cur->coord[index][1] - system_info_expanded->atom_info[i].coord[1], 2) + pow(frame_info_cur->coord[index][2] - system_info_expanded->atom_info[i].coord[2], 2));
+        dist = sqrt(fastpow2(frame_info_cur->coord[index][0] - system_info_expanded->atom_info[i].coord[0] , 2) + fastpow2(frame_info_cur->coord[index][1] - system_info_expanded->atom_info[i].coord[1], 2) + fastpow2(frame_info_cur->coord[index][2] - system_info_expanded->atom_info[i].coord[2], 2));
         if ((dist > 1E-6)&&(dist <= parameters_info->cutoff_max))
         {
             dist_info[index_tmp_dist].atom_info = &(system_info_expanded->atom_info[i]);

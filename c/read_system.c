@@ -353,5 +353,6 @@ void check_bin(int Nframes_tot)
 		printf("\n");
 	}
 	free(frame_info);
+	fclose(fp_in);
 	return;
 }

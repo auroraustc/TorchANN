@@ -99,12 +99,13 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     neighbour_list_struct * neighbour_list_cur;
     
     expand_system_one_frame(frame_info_cur, system_info_expanded, parameters_info);
+    if (frame_info_cur->index == DEBUG_FRAME) printf_d("Expanded:\n");
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
-        if (frame_info_cur->index != 1) break;
+        if (frame_info_cur->index != DEBUG_FRAME) break;
         printf_d("%c %lf %lf %lf\n", system_info_expanded->type[i] + 65, system_info_expanded->atom_info[i].coord[0], system_info_expanded->atom_info[i].coord[1],system_info_expanded->atom_info[i].coord[2]);
     }
-    printf_d("Origin:\n");
+    if (frame_info_cur->index == DEBUG_FRAME) printf_d("Origin:\n");
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         if (frame_info_cur->index != DEBUG_FRAME) break;

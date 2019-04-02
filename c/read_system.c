@@ -311,7 +311,6 @@ void check_bin(int Nframes_tot)
 	int i, j, k;
 	frame_info_struct * frame_info = (frame_info_struct *)calloc(Nframes_tot, sizeof(frame_info_struct));
 	fread(frame_info, sizeof(frame_info_struct), Nframes_tot, fp_in);
-	srand(time(NULL));
 	r = rand() % Nframes_tot;
 	printf("Check saved frames. Randomly select one frame: %d (No.%d)\n", r, r + 1);
 	printf("frame_info.index: %d\n", frame_info[r].index);

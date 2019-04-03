@@ -1,5 +1,6 @@
 import numpy as np
 import torch as tf
+import os
 
 from class_and_function import *
 
@@ -17,16 +18,26 @@ ENERGY = np.fromfile("./ENERGY.BIN", dtype = np.float64)
 FORCE = np.fromfile("./FORCE.BIN", dtype = np.float64)
 TYPE = np.fromfile("./TYPE.BIN", dtype = np.int32)
 N_ATOMS = np.fromfile("./N_ATOMS.BIN", dtype = np.int32)
-
+print(N_ATOMS)
+print(np.dtype(np.float64).itemsize)
 """Reshape COORD, FORCE as [Nfrmaes, N_Atoms_this_frame * 3] and SYM_COORD as [Nframes, N_Atoms_this_frame * SELA_max * 4]"""
 """DO NOT use np.reshape because it cannot deal with frames with different number of atoms."""
-start_atom = 0
-end_atom = N_ATOMS[0] - 1
-FORCE_Reshape = np.array([np.append([], [FORCE[j] for j in range(start_atom * 3, (end_atom + 1) * 3)])], dtype = np.float64)
-for i in range(1, parameters.Nframes_tot):
-    start_atom = end_atom+ 1
-    end_atom = end_atom + N_ATOMS[i]
-    #print(np.append([], [FORCE[j] for j in range(start_atom * 3, (end_atom + 1) * 3)]))
-    FORCE_Reshape = np.append(FORCE_Reshape, [np.append([], [FORCE[j] for j in range(start_atom * 3, (end_atom + 1) * 3)])], axis = 0)
+COORD_Reshape = reshape_to_frame_wise(COORD, N_ATOMS, parameters, 1)
+print("COORD_Reshape: \n", COORD_Reshape)
+FORCE_Reshape = reshape_to_frame_wise(FORCE, N_ATOMS, parameters, 1)
+print("FORCE_Reshape: \n", FORCE_Reshape)
+#SYM_COORD_Reshape = reshape_to_frame_wise(SYM_COORD, N_ATOMS, parameters, 2)
+#print("SYM_COORD_Reshape: \n", SYM_COORD_Reshape)
 
-print(FORCE_Reshape)
+###not complete_test
+fp = open("./SYM_COORD.BIN", "rb")
+interval = parameters.SEL_A_max * 4 * 1 * np.dtype(np.float64).itemsize
+fp.seek(interval * (N_ATOMS[0] * 5 + 2), os.SEEK_SET)
+tmp = fp.read(parameters.SEL_A_max * 4 * 1 * np.dtype(np.float64).itemsize)
+fp_out = open("./tmp", "wb")
+fp_out.write(tmp)
+tmp = np.fromfile("./tmp", dtype = np.float64)
+tmp1 = np.array([np.append([], tmp)])
+print(tmp1)
+fp_out.close()
+fp.close()

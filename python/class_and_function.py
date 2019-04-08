@@ -16,6 +16,12 @@ class Parameters():
         Nframes_tot = 0
         sym_coord_type = 1
 
+        batch_size = 1
+        epoch = 1
+        filter_neuron = []
+        axis_neuron = 1
+        fitting_neuron = []
+
 
 def press_any_key_exit(msg):
     # 获取标准输入的描述符
@@ -55,8 +61,15 @@ def read_parameters(parameters):
     parameters.SEL_A_max = 200
     parameters.Nframes_tot = 120
     parameters.sym_coord_type = 1
+
+    parameters.batch_size = 8
+    parameters.epoch = 10
+    parameters.filter_neuron = [25, 50, 100]
+    parameters.axis_neuron = 4
+    parameters.fitting_neuron = [240, 120, 60]
     return 0
 
+"""Not used. Too slow."""
 def reshape_to_frame_wise(source, n_atoms, parameters, flag):
     if (type(parameters).__name__ != "Parameters"):
         print("type error in reshape:", type(parameters).__name__," is NOT a correct Parameters class")
@@ -79,7 +92,7 @@ def reshape_to_frame_wise(source, n_atoms, parameters, flag):
             break"""
     return source_Reshape
 
-###Allso slow. Not used
+"""Also slow. Not used"""
 def read_reshape_DeepMD(n_atoms, parameters):
     if (type(parameters).__name__ != "Parameters"):
         print("type error in reshape:", type(parameters).__name__," is NOT a correct Parameters class")

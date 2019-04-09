@@ -4,11 +4,13 @@
 import numpy as np
 import torch as tf
 import torch.utils.data
+import torch.optim as optim
 import os
 import gc
 import time
 from class_and_function import *
 
+tf.set_default_dtype(tf.float64)
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 ###parameters incomplete
 parameters = Parameters()
@@ -40,14 +42,19 @@ FORCE_Reshape = np.reshape(FORCE, (parameters.Nframes_tot, -1))
 print("FORCE_Reshape: shape = ", FORCE_Reshape.shape)#, "\n", FORCE_Reshape)
 #SYM_COORD_Reshape = reshape_to_frame_wise(SYM_COORD, N_ATOMS, parameters, 2)
 SYM_COORD_Reshape = np.reshape(SYM_COORD, (parameters.Nframes_tot, -1))
+print("SYM_COORD_Reshape: shape = ", SYM_COORD_Reshape.shape)#, "\n", SYM_COORD_Reshape)
+TYPE_Reshape = np.reshape(TYPE, (parameters.Nframes_tot, -1))
+print("TYPE_Reshape: shape = ", TYPE_Reshape.shape)
+
 
 COORD_Reshape_tf = tf.from_numpy(COORD_Reshape)
 SYM_COORD_Reshape_tf = tf.from_numpy(SYM_COORD_Reshape)
 ENERGY_tf = tf.from_numpy(ENERGY)
 FORCE_Reshape_tf = tf.from_numpy(FORCE_Reshape)
 N_ATOMS_tf = tf.from_numpy(N_ATOMS)
+TYPE_Reshape_tf = tf.from_numpy(TYPE_Reshape)
 
-print("SYM_COORD_Reshape: shape = ", SYM_COORD_Reshape.shape)#, "\n", SYM_COORD_Reshape)
+
 
 """SYM_COORD_Reshape_2 = read_reshape_DeepMD(N_ATOMS, parameters)
 print("2:")
@@ -65,8 +72,13 @@ press_any_key_exit("Memory free complete.\n")
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
 print("Data pre-processing complete. Building net work.\n")
+FILTER_NET = filter_net(parameters)
+print("FILTER_NET structure: \n", FILTER_NET)
+FITTING_NET = fitting_net(parameters)
+print("FITTING_NET structure:\n", FITTING_NET)
 
-DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf)
+DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf,
+                                       ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf)
 """#Seems that no need to free memory...
 press_any_key_exit("Press any key to free memory.\n")
 del COORD_Reshape
@@ -79,10 +91,11 @@ START_TRAIN_TIMER = time.time()
 for epoch in range(parameters.epoch):
     for batch_idx, data_cur in enumerate(TRAIN_LOADER):
         START_BATCH_TIMER = time.time()
-        COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur = data_cur
+        COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
+            FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
 
         END_BATCH_TIMER = time.time()
-        print("Epoch %-10d Batch %-10d: %10.3f s"%(epoch, batch_idx, END_BATCH_TIMER - START_BATCH_TIMER))
+        #print("Epoch %-10d Batch %-10d: %10.3f s"%(epoch, batch_idx, END_BATCH_TIMER - START_BATCH_TIMER))
         #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER

@@ -1,5 +1,7 @@
 import numpy as np
 import torch as tf
+import torch.nn as nn
+import torch.nn.functional as F
 import os
 import sys
 import termios
@@ -61,7 +63,7 @@ def read_parameters(parameters):
     parameters.SEL_A_max = 200
     parameters.Nframes_tot = 120
     parameters.sym_coord_type = 1
-
+###New add parameters
     parameters.batch_size = 8
     parameters.epoch = 10
     parameters.filter_neuron = [25, 50, 100]
@@ -124,3 +126,44 @@ def read_reshape_DeepMD(n_atoms, parameters):
             break"""
     fp.close()
     return source_Reshape
+
+class filter_net(nn.Module):
+    def __init__(self, parameters):
+        super(filter_net, self).__init__()
+        self.input = nn.Linear(1, parameters. filter_neuron[0])
+        self.hidden = nn.ModuleList()
+        for hidden_idx in range(len(parameters.filter_neuron) - 1):
+            self.hidden.append(nn.Linear(parameters.filter_neuron[hidden_idx],
+                                         parameters.filter_neuron[hidden_idx + 1]))
+        #self.out = nn.Linear(parameters.filter_neuron[len(parameters.filter_neuron) - 1],
+        #                     parameters.axis_neuron)
+    """The input for this net should be R_sliced of which shape = (SEL_A_max, 1)"""
+    def forward(self, R_sliced):
+        R_sliced = F.relu(self.input(R_sliced))
+        for i, layer in enumerate(self.hidden):
+            R_sliced = F.relu(self.hidden[i](R_sliced))
+        #R_sliced = self.out(R_sliced)
+        return R_sliced
+    """Out put shape = (parameters.SEL_A_max, parameters.filter_neuron[len(parameters.filter_neuron) - 1])"""
+
+class fitting_net(nn.Module):
+    def __init__(self, parameters):
+        super(fitting_net, self).__init__()
+        self.input = nn.Linear(parameters.axis_neuron * parameters.filter_neuron[len(parameters.filter_neuron) - 1],
+                               parameters.fitting_neuron[0])
+        self.hidden = nn.ModuleList()
+        for hidden_idx in range(len(parameters.fitting_neuron) - 1):
+            self.hidden.append(nn.Linear(parameters.fitting_neuron[hidden_idx],
+                                         parameters.fitting_neuron[hidden_idx + 1]))
+        self.out = nn.Linear(parameters.filter_neuron[len(parameters.fitting_neuron) - 1],
+                             1)
+    """The input for this net should be GRRG of which shape = (1, 
+    parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron)"""
+    def forward(self, GRRG):
+        GRRG = F.relu(self.input(GRRG))
+        for i, layer in enumerate(self.hidden):
+            GRRG = F.relu(self.hidden[i](GRRG))
+        GRRG = F.relu(self.out(GRRG))
+        return GRRG
+    """Out put shape = (parameters.)"""
+

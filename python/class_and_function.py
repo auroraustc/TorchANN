@@ -23,6 +23,8 @@ class Parameters():
         filter_neuron = []
         axis_neuron = 1
         fitting_neuron = []
+        decay_steps = 100
+        decay_rate = 0.95
 
 
 def press_any_key_exit(msg):
@@ -65,10 +67,12 @@ def read_parameters(parameters):
     parameters.sym_coord_type = 1
 ###New add parameters
     parameters.batch_size = 8
-    parameters.epoch = 10
-    parameters.filter_neuron = [25, 50, 100]
+    parameters.epoch = 1
+    parameters.filter_neuron = [25, 50]
     parameters.axis_neuron = 4
-    parameters.fitting_neuron = [240, 120, 60]
+    parameters.fitting_neuron = [120, 60]
+    parameters.decay_steps = 10000
+    parameters.decay_rate = 0.95
     return 0
 
 """Not used. Too slow."""
@@ -155,7 +159,7 @@ class fitting_net(nn.Module):
         for hidden_idx in range(len(parameters.fitting_neuron) - 1):
             self.hidden.append(nn.Linear(parameters.fitting_neuron[hidden_idx],
                                          parameters.fitting_neuron[hidden_idx + 1]))
-        self.out = nn.Linear(parameters.filter_neuron[len(parameters.fitting_neuron) - 1],
+        self.out = nn.Linear(parameters.fitting_neuron[len(parameters.fitting_neuron) - 1],
                              1)
     """The input for this net should be GRRG of which shape = (1, 
     parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron)"""
@@ -166,4 +170,6 @@ class fitting_net(nn.Module):
         GRRG = F.relu(self.out(GRRG))
         return GRRG
     """Out put shape = (parameters.)"""
+
+#def
 

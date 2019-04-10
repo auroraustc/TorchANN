@@ -69,9 +69,9 @@ def read_parameters(parameters):
 ###New add parameters
     parameters.batch_size = 8
     parameters.epoch = 10
-    parameters.filter_neuron = [25, 25]
+    parameters.filter_neuron = [25, 50, 100]
     parameters.axis_neuron = 4
-    parameters.fitting_neuron = [60, 60]
+    parameters.fitting_neuron = [240, 120, 60]
     parameters.start_lr = 0.0005
     parameters.decay_steps = 10000
     parameters.decay_rate = 0.95

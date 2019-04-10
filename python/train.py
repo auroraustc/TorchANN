@@ -14,7 +14,7 @@ from class_and_function import *
 
 tf.set_default_dtype(tf.float64)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-device = torch.device('cpu')
+#device = torch.device('cpu')
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 ###parameters incomplete
 parameters = Parameters()
@@ -113,7 +113,9 @@ CRITERION = nn.MSELoss()
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
+print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
 for epoch in range(parameters.epoch):
+    START_EPOCH_TIMER = time.time()
     for batch_idx, data_cur in enumerate(TRAIN_LOADER):
         START_BATCH_TIMER = time.time()
 
@@ -128,11 +130,11 @@ for epoch in range(parameters.epoch):
         #print(SYM_COORD_Reshape_tf_cur_Reshape_slice)
         #G_cur_list = []
         #E_cur_batch_list = []
-        E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur))
+        E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur)).to(device)
         for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
             #G_cur_frame_list = []
             G_cur_frame = tf.zeros(N_ATOMS[0], parameters.SEL_A_max,
-                                   parameters.filter_neuron[len(parameters.filter_neuron) - 1])
+                                   parameters.filter_neuron[len(parameters.filter_neuron) - 1]).to(device)
             for atom_idx in range(N_ATOMS[0]):
                 type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
                 #G_cur_frame_list.append(FILTER_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
@@ -177,11 +179,13 @@ for epoch in range(parameters.epoch):
         print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s"%(epoch, batch_idx, loss_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
         #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
         STEP_CUR += 1
+    END_EPOCH_TIMER = time.time()
+    print("Epoch: %-8d, loss: %10.6f eV, time: %6.3f"%(epoch, loss_cur_batch, END_EPOCH_TIMER - START_EPOCH_TIMER))
 
-        if (STEP_CUR >= 1):
-            break
-    if (epoch >= 0):
-        break
+        #if (STEP_CUR >= 1):
+        #    break
+    #if (epoch >= 0):
+    #    break
 
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER

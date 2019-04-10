@@ -67,7 +67,7 @@ def read_parameters(parameters):
     parameters.sym_coord_type = 1
 ###New add parameters
     parameters.batch_size = 8
-    parameters.epoch = 1
+    parameters.epoch = 10
     parameters.filter_neuron = [25, 50]
     parameters.axis_neuron = 4
     parameters.fitting_neuron = [120, 60]

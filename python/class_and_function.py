@@ -71,7 +71,7 @@ def read_parameters(parameters):
     parameters.epoch = 10
     parameters.filter_neuron = [25, 50, 100]
     parameters.axis_neuron = 4
-    parameters.fitting_neuron = [240, 120, 60]
+    parameters.fitting_neuron = [240, 240, 240]
     parameters.start_lr = 0.0005
     parameters.decay_steps = 10000
     parameters.decay_rate = 0.95
@@ -173,5 +173,37 @@ class fitting_net(nn.Module):
         return GRRG
     """Out put shape = (parameters.)"""
 
-#def
+class one_atom_net(nn.Module):
+    def __init__(self, parameters):
+        super(one_atom_net, self).__init__()
+        self.filter_input = nn.Linear(1, parameters.filter_neuron[0])
+        self.filter_hidden = nn.ModuleList()
+        for hidden_idx in range(len(parameters.filter_neuron) - 1):
+            self.filter_hidden.append(nn.Linear(parameters.filter_neuron[hidden_idx],
+                                         parameters.filter_neuron[hidden_idx + 1]))
+        self.fitting_input = nn.Linear(parameters.axis_neuron * parameters.filter_neuron[len(parameters.filter_neuron) - 1],
+                               parameters.fitting_neuron[0])
+        self.fitting_hidden = nn.ModuleList()
+        for hidden_idx in range(len(parameters.fitting_neuron) - 1):
+            self.fitting_hidden.append(nn.Linear(parameters.fitting_neuron[hidden_idx],
+                                         parameters.fitting_neuron[hidden_idx + 1]))
+        self.fitting_out = nn.Linear(parameters.fitting_neuron[len(parameters.fitting_neuron) - 1],
+                             1)
+    def forward(self, SYM_COORD_cur_atom, SYM_COORD_cur_atom_slice, parameters):
+        G_cur_atom = F.relu(self.filter_input(SYM_COORD_cur_atom_slice))
+        for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden):
+            G_cur_atom = F.relu(filter_hidden_layer(G_cur_atom))
+        RG_cur_atom = tf.mm(SYM_COORD_cur_atom.transpose(0, 1), G_cur_atom)
+        GRRG_cur_atom = tf.mm(RG_cur_atom.transpose(0, 1), RG_cur_atom.narrow(1, 0, parameters.axis_neuron))
+        GRRG_cur_atom = tf.reshape(GRRG_cur_atom, (parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron, ))
+        E_cur_atom = F.relu(self.fitting_input(GRRG_cur_atom))
+        for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden):
+            E_cur_atom = F.relu(fitting_hidden_layer(E_cur_atom))
+        E_cur_atom = F.relu(self.fitting_out(E_cur_atom))
+        return E_cur_atom
+
+
+
+
+
 

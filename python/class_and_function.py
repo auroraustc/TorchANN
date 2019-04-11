@@ -5,6 +5,11 @@ import torch.nn.functional as F
 import os
 import sys
 import termios
+from torch.autograd import Variable
+from torch.autograd import Variable
+import torchvision.models as models
+from graphviz import Digraph
+import re
 
 class Parameters():
     def __init__(self):
@@ -72,7 +77,7 @@ def read_parameters(parameters):
     parameters.filter_neuron = [25, 50, 100]
     parameters.axis_neuron = 4
     parameters.fitting_neuron = [240, 240, 240]
-    parameters.start_lr = 0.0005
+    parameters.start_lr = 0.005
     parameters.decay_steps = 10000
     parameters.decay_rate = 0.95
     return 0
@@ -190,18 +195,87 @@ class one_atom_net(nn.Module):
         self.fitting_out = nn.Linear(parameters.fitting_neuron[len(parameters.fitting_neuron) - 1],
                              1)
     def forward(self, SYM_COORD_cur_atom, SYM_COORD_cur_atom_slice, parameters):
-        G_cur_atom = F.relu(self.filter_input(SYM_COORD_cur_atom_slice))
+        G_cur_atom = F.tanh(self.filter_input(SYM_COORD_cur_atom_slice))
         for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden):
-            G_cur_atom = F.relu(filter_hidden_layer(G_cur_atom))
+            G_cur_atom = F.tanh(filter_hidden_layer(G_cur_atom))
         RG_cur_atom = tf.mm(SYM_COORD_cur_atom.transpose(0, 1), G_cur_atom)
         GRRG_cur_atom = tf.mm(RG_cur_atom.transpose(0, 1), RG_cur_atom.narrow(1, 0, parameters.axis_neuron))
         GRRG_cur_atom = tf.reshape(GRRG_cur_atom, (parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron, ))
-        E_cur_atom = F.relu(self.fitting_input(GRRG_cur_atom))
+        E_cur_atom = F.tanh(self.fitting_input(GRRG_cur_atom))
         for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden):
-            E_cur_atom = F.relu(fitting_hidden_layer(E_cur_atom))
-        E_cur_atom = F.relu(self.fitting_out(E_cur_atom))
+            E_cur_atom = F.tanh(fitting_hidden_layer(E_cur_atom))
+        E_cur_atom = F.tanh(self.fitting_out(E_cur_atom))
         return E_cur_atom
 
+    """def forward(self, SYM_COORD_cur_atom, SYM_COORD_cur_atom_slice, parameters):
+        SYM_COORD_cur_atom_slice = F.relu(self.filter_input(SYM_COORD_cur_atom_slice))
+        for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden):
+            SYM_COORD_cur_atom_slice = F.relu(filter_hidden_layer(SYM_COORD_cur_atom_slice))
+        SYM_COORD_cur_atom_slice = tf.mm(SYM_COORD_cur_atom.transpose(0, 1), SYM_COORD_cur_atom_slice)
+        SYM_COORD_cur_atom_slice = tf.mm(SYM_COORD_cur_atom_slice.transpose(0, 1), SYM_COORD_cur_atom_slice.narrow(1, 0, parameters.axis_neuron))
+        SYM_COORD_cur_atom_slice = tf.reshape(SYM_COORD_cur_atom_slice, (
+        parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron,))
+        SYM_COORD_cur_atom_slice = F.relu(self.fitting_input(SYM_COORD_cur_atom_slice))
+        for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden):
+            SYM_COORD_cur_atom_slice = F.relu(fitting_hidden_layer(SYM_COORD_cur_atom_slice))
+        SYM_COORD_cur_atom_slice = F.relu(self.fitting_out(SYM_COORD_cur_atom_slice))
+        return SYM_COORD_cur_atom_slice"""
+
+
+#class one_frame_graph(nn.Module):
+
+
+
+
+def make_dot(var, params):
+    """ Produces Graphviz representation of PyTorch autograd graph
+
+    Blue nodes are the Variables that require grad, orange are Tensors
+    saved for backward in torch.autograd.Function
+
+    Args:
+        var: output Variable
+        params: dict of (name, Variable) to add names to node that
+            require grad (TODO: make optional)
+    """
+    param_map = {id(v): k for k, v in params.items()}
+    print(param_map)
+
+    node_attr = dict(style='filled',
+                     shape='box',
+                     align='left',
+                     fontsize='12',
+                     ranksep='0.1',
+                     height='0.2')
+    dot = Digraph(node_attr=node_attr, graph_attr=dict(size="12,12"))
+    seen = set()
+
+    def size_to_str(size):
+        return '(' + (', ').join(['%d' % v for v in size]) + ')'
+
+    def add_nodes(var):
+        if var not in seen:
+            if tf.is_tensor(var):
+                dot.node(str(id(var)), size_to_str(var.size()), fillcolor='orange')
+            elif hasattr(var, 'variable'):
+                u = var.variable
+                node_name = '%s\n %s' % (param_map.get(id(u)), size_to_str(u.size()))
+                dot.node(str(id(var)), node_name, fillcolor='lightblue')
+            else:
+                dot.node(str(id(var)), str(type(var).__name__))
+            seen.add(var)
+            if hasattr(var, 'next_functions'):
+                for u in var.next_functions:
+                    if u[0] is not None:
+                        dot.edge(str(id(u[0])), str(id(var)))
+                        add_nodes(u[0])
+            if hasattr(var, 'saved_tensors'):
+                for t in var.saved_tensors:
+                    dot.edge(str(id(t)), str(id(var)))
+                    add_nodes(t)
+
+    add_nodes(var.grad_fn)
+    return dot
 
 
 

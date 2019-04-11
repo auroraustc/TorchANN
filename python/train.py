@@ -16,8 +16,8 @@ from class_and_function import *
 tf.set_default_dtype(tf.float64)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = torch.device('cpu')
-hvd.init()
-tf.cuda.set_device(hvd.local_rank())
+#hvd.init()
+#tf.cuda.set_device(hvd.local_rank())
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 ###parameters incomplete
 parameters = Parameters()
@@ -101,6 +101,12 @@ ONE_ATOM_NET_PARAMS = []
 for type_idx in range(len(parameters.type_index_all_frame)):
     ONE_ATOM_NET_PARAMS += list(ONE_ATOM_NET[type_idx].parameters())
 
+ONE_BATCH_NET = one_batch_net(parameters)
+ONE_BATCH_NET = ONE_BATCH_NET.to(device)
+if (tf.cuda.device_count() > 1):
+    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
+print(ONE_BATCH_NET)
+
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf,  FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf \
     = \
 COORD_Reshape_tf.to(device), SYM_COORD_Reshape_tf.to(device), ENERGY_tf.to(device), \
@@ -114,9 +120,9 @@ del SYM_COORD_Reshape
 del FORCE_Reshape
 press_any_key_exit("Memory free complete.\n")
 """
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = False)
 OPTIMIZER2 = optim.Adam(ONE_ATOM_NET_PARAMS, lr = parameters.start_lr)
-OPTIMIZER = optim.LBFGS(ONE_ATOM_NET_PARAMS, lr = parameters.start_lr)
+OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 CRITERION = nn.MSELoss()
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
@@ -129,6 +135,7 @@ if (True):
         START_EPOCH_TIMER = time.time()
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             START_BATCH_TIMER = time.time()
+            #print(ONE_BATCH_NET(data_cur))
 
             COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
             FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
@@ -191,7 +198,7 @@ if (True):
             ###Adams end"""
 
             ###LBFGS
-            def closure():
+            """def closure():
                 OPTIMIZER.zero_grad()
                 SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, (
                     len(SYM_COORD_Reshape_tf_cur), N_ATOMS[0], parameters.SEL_A_max, 4))
@@ -212,9 +219,17 @@ if (True):
                     E_cur_batch[frame_idx] = E_cur_frame
                 loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
                 loss_cur_batch.backward()
+                return loss_cur_batch"""
+            def closure():
+                OPTIMIZER.zero_grad()
+                E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
+                loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
+                loss_cur_batch.backward()
                 return loss_cur_batch
             OPTIMIZER.step(closure)
             ###LBFGS end
+
+
             if ((STEP_CUR % parameters.decay_steps == 0) and (STEP_CUR > 0)):
                 LR_SCHEDULER.step()
 

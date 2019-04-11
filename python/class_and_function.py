@@ -11,6 +11,8 @@ import torchvision.models as models
 from graphviz import Digraph
 import re
 
+tf.set_default_dtype(tf.float64)
+
 class Parameters():
     def __init__(self):
         cutoff_1 = 0.0
@@ -76,7 +78,7 @@ def read_parameters(parameters):
     parameters.epoch = 10
     parameters.filter_neuron = [25, 50, 100]
     parameters.axis_neuron = 4
-    parameters.fitting_neuron = [240, 240, 240]
+    parameters.fitting_neuron = [240, 120, 60]
     parameters.start_lr = 0.001
     parameters.decay_steps = 10000
     parameters.decay_rate = 0.95
@@ -222,7 +224,57 @@ class one_atom_net(nn.Module):
         return SYM_COORD_cur_atom_slice"""
 
 
-#class one_batch_graph(nn.Module):
+class one_batch_net(nn.Module):
+    def __init__(self, parameters):
+        super(one_batch_net, self).__init__()
+        self.filter_input = nn.ModuleList()
+        self.filter_hidden = nn.ModuleList()
+        self.fitting_input = nn.ModuleList()
+        self.fitting_hidden = nn.ModuleList()
+        self.fitting_out = nn.ModuleList()
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            self.filter_input.append(nn.Linear(1, parameters.filter_neuron[0]))
+            self.fitting_input.append(nn.Linear(parameters.axis_neuron * parameters.filter_neuron[len(parameters.filter_neuron) - 1],
+                               parameters.fitting_neuron[0]))
+            self.fitting_out.append(nn.Linear(parameters.fitting_neuron[len(parameters.fitting_neuron) - 1], 1))
+            self.filter_hidden.append(nn.ModuleList())
+            self.fitting_hidden.append(nn.ModuleList())
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            for hidden_idx in range(len(parameters.filter_neuron) - 1):
+                self.filter_hidden[type_idx].append(nn.Linear(parameters.filter_neuron[hidden_idx],
+                                         parameters.filter_neuron[hidden_idx + 1]))
+            for hidden_idx in range(len(parameters.fitting_neuron) - 1):
+                self.fitting_hidden[type_idx].append(nn.Linear(parameters.fitting_neuron[hidden_idx],
+                                         parameters.fitting_neuron[hidden_idx + 1]))
+
+    def forward(self, data_cur, parameters, device): #cur mean current batch
+        COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
+        FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
+        SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, \
+                                                      (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
+                                                       parameters.SEL_A_max, 4))
+        SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
+        E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
+        for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
+            E_cur_frame = tf.zeros(1, device = device)
+            E_cur_frame_atom_wise = tf.zeros(N_ATOMS_tf_cur[0], device = device)
+            for atom_idx in range(N_ATOMS_tf_cur[0]):
+                type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
+                G_cur_atom = F.tanh(self.filter_input[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
+                for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx_cur_atom]):
+                    G_cur_atom = F.tanh(filter_hidden_layer(G_cur_atom))
+                RG_cur_atom = tf.mm(SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx].transpose(0, 1), G_cur_atom)
+                GRRG_cur_atom = tf.mm(RG_cur_atom.transpose(0, 1), RG_cur_atom.narrow(1, 0, parameters.axis_neuron))
+                GRRG_cur_atom = tf.reshape(GRRG_cur_atom, (parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron, ))
+                E_cur_atom = F.tanh(self.fitting_input[type_idx_cur_atom](GRRG_cur_atom))
+                for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx_cur_atom]):
+                    E_cur_atom = F.tanh(fitting_hidden_layer(E_cur_atom))
+                E_cur_atom = F.tanh(self.fitting_out[type_idx_cur_atom](E_cur_atom))
+                E_cur_frame_atom_wise[atom_idx] = E_cur_atom
+            E_cur_frame = tf.sum(E_cur_frame_atom_wise)
+            E_cur_batch[frame_idx] = E_cur_frame
+        return E_cur_batch
+        return 0
 
 
 

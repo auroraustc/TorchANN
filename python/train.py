@@ -7,6 +7,7 @@ import torch as tf
 import torch.utils.data
 import torch.nn as nn
 import torch.optim as optim
+import horovod.torch as hvd
 import os
 import gc
 import time
@@ -14,7 +15,9 @@ from class_and_function import *
 
 tf.set_default_dtype(tf.float64)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-device = torch.device('cpu')
+#device = torch.device('cpu')
+hvd.init()
+tf.cuda.set_device(hvd.local_rank())
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 ###parameters incomplete
 parameters = Parameters()
@@ -120,6 +123,7 @@ START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
+#hvd.broadcast_parameters(state_dict_, root_rank = 0)
 if (True):
     for epoch in range(parameters.epoch):
         START_EPOCH_TIMER = time.time()

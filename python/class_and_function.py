@@ -77,7 +77,7 @@ def read_parameters(parameters):
     parameters.filter_neuron = [25, 50, 100]
     parameters.axis_neuron = 4
     parameters.fitting_neuron = [240, 240, 240]
-    parameters.start_lr = 0.005
+    parameters.start_lr = 0.001
     parameters.decay_steps = 10000
     parameters.decay_rate = 0.95
     return 0
@@ -222,7 +222,7 @@ class one_atom_net(nn.Module):
         return SYM_COORD_cur_atom_slice"""
 
 
-#class one_frame_graph(nn.Module):
+#class one_batch_graph(nn.Module):
 
 
 

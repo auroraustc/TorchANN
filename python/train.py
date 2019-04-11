@@ -120,8 +120,8 @@ del SYM_COORD_Reshape
 del FORCE_Reshape
 press_any_key_exit("Memory free complete.\n")
 """
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = False)
-OPTIMIZER2 = optim.Adam(ONE_ATOM_NET_PARAMS, lr = parameters.start_lr)
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 CRITERION = nn.MSELoss()
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER, parameters.decay_rate)
@@ -139,8 +139,8 @@ if (True):
 
             COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
             FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
-            """###Adams
-            OPTIMIZER.zero_grad()
+            ###Adams
+            """OPTIMIZER.zero_grad()
             SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, (
             len(SYM_COORD_Reshape_tf_cur), N_ATOMS[0], parameters.SEL_A_max, 4))
             SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
@@ -194,8 +194,13 @@ if (True):
 
             loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
             loss_cur_batch.backward()
-            OPTIMIZER.step()
-            ###Adams end"""
+            OPTIMIZER.step()"""
+            OPTIMIZER2.zero_grad()
+            E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
+            loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
+            loss_cur_batch.backward()
+            OPTIMIZER2.step()
+            ###Adams end
 
             ###LBFGS
             """def closure():
@@ -220,13 +225,13 @@ if (True):
                 loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
                 loss_cur_batch.backward()
                 return loss_cur_batch"""
-            def closure():
+            """def closure():
                 OPTIMIZER.zero_grad()
                 E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
                 loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
                 loss_cur_batch.backward()
                 return loss_cur_batch
-            OPTIMIZER.step(closure)
+            OPTIMIZER.step(closure)"""
             ###LBFGS end
 
 
@@ -234,15 +239,15 @@ if (True):
                 LR_SCHEDULER.step()
 
             END_BATCH_TIMER = time.time()
-            """###Adams
+            ###Adams
             print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s" % (
             epoch, batch_idx, loss_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
-            ###Adams end"""
+            ###Adams end
 
-            ###LBFGS
+            """"###LBFGS
             print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s" % (
                 epoch, batch_idx, closure(), END_BATCH_TIMER - START_BATCH_TIMER))
-            ###LBFGS end
+            ###LBFGS end"""
 
             #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
             STEP_CUR += 1

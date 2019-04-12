@@ -73,15 +73,6 @@ press_any_key_exit("Memory free complete.\n")
    ENERGY and FORCE_Reshape array."""
 print("Data pre-processing complete. Building net work.\n")
 
-ONE_ATOM_NET = []
-for type_idx in range(len(parameters.type_index_all_frame)):
-    ONE_ATOM_NET.append(one_atom_net(parameters))
-for type_idx in range(len(parameters.type_index_all_frame)):
-    ONE_ATOM_NET[type_idx].to(device)
-ONE_ATOM_NET_PARAMS = []
-for type_idx in range(len(parameters.type_index_all_frame)):
-    ONE_ATOM_NET_PARAMS += list(ONE_ATOM_NET[type_idx].parameters())
-
 ONE_BATCH_NET = one_batch_net(parameters)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 if (tf.cuda.device_count() > 1):
@@ -119,16 +110,16 @@ if (True):
             print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             START_BATCH_TIMER = time.time()
-            #print(ONE_BATCH_NET(data_cur))
+            """data_cur[1].requires_grad = True"""
 
-            """COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
-            FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur"""
-            """for i in range(len(data_cur)):
-                data_cur[i] = data_cur[i].to(device)"""
             ###Adams
             #correct
             OPTIMIZER2.zero_grad()
+            if (data_cur[1].grad):
+                data_cur[1].grad.data.zero_()
             E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
+            """for i in range(len(data_cur[1])):
+                SYM_COORD_Reshape_tf_cur_frame0_grad = tf.autograd.grad(E_cur_batch[i], data_cur[1], create_graph = True, allow_unused = True)"""
             loss_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
             loss_cur_batch.backward()
             OPTIMIZER2.step()

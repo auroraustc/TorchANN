@@ -114,6 +114,9 @@ print("Start training using device: ", device, ", count: ", tf.cuda.device_count
 if (True):
     for epoch in range(parameters.epoch):
         START_EPOCH_TIMER = time.time()
+        if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
+            LR_SCHEDULER.step()
+            print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             START_BATCH_TIMER = time.time()
             #print(ONE_BATCH_NET(data_cur))
@@ -145,9 +148,7 @@ if (True):
             ###LBFGS end
 
 
-            if ((STEP_CUR % parameters.decay_steps == 0)):# and (STEP_CUR > 0)):
-                LR_SCHEDULER.step()
-                print("LR update: lr = %f"%OPTIMIZER2.param_groups[0].get("lr"))
+
 
             END_BATCH_TIMER = time.time()
             ###Adams

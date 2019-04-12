@@ -74,13 +74,13 @@ def read_parameters(parameters):
     parameters.Nframes_tot = 120
     parameters.sym_coord_type = 1
 ###New add parameters
-    parameters.batch_size = 8
-    parameters.epoch = 10
-    parameters.filter_neuron = [25, 50, 100]
-    parameters.axis_neuron = 4
-    parameters.fitting_neuron = [240, 120, 60]
-    parameters.start_lr = 0.001
-    parameters.decay_steps = 10000
+    parameters.batch_size = 16
+    parameters.epoch = 100
+    parameters.filter_neuron = [32, 96, 192]
+    parameters.axis_neuron = 8
+    parameters.fitting_neuron = [480, 480, 480, 240, 240]
+    parameters.start_lr = 0.0005
+    parameters.decay_steps = 20
     parameters.decay_rate = 0.95
     return 0
 
@@ -269,7 +269,7 @@ class one_batch_net(nn.Module):
                 E_cur_atom = F.tanh(self.fitting_input[type_idx_cur_atom](GRRG_cur_atom))
                 for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx_cur_atom]):
                     E_cur_atom = F.tanh(fitting_hidden_layer(E_cur_atom))
-                E_cur_atom = F.tanh(self.fitting_out[type_idx_cur_atom](E_cur_atom))
+                E_cur_atom = (self.fitting_out[type_idx_cur_atom](E_cur_atom))#Final layer do not use activation function
                 E_cur_frame_atom_wise[atom_idx] = E_cur_atom
             E_cur_frame = tf.sum(E_cur_frame_atom_wise)
             E_cur_batch[frame_idx] = E_cur_frame

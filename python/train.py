@@ -53,19 +53,12 @@ print("SYM_COORD_Reshape: shape = ", SYM_COORD_Reshape.shape)#, "\n", SYM_COORD_
 TYPE_Reshape = np.reshape(TYPE, (parameters.Nframes_tot, -1))
 print("TYPE_Reshape: shape = ", TYPE_Reshape.shape)
 
-
 COORD_Reshape_tf = tf.from_numpy(COORD_Reshape)
 SYM_COORD_Reshape_tf = tf.from_numpy(SYM_COORD_Reshape)
 ENERGY_tf = tf.from_numpy(ENERGY)
 FORCE_Reshape_tf = tf.from_numpy(FORCE_Reshape)
 N_ATOMS_tf = tf.from_numpy(N_ATOMS)
 TYPE_Reshape_tf = tf.from_numpy(TYPE_Reshape)
-
-
-
-"""SYM_COORD_Reshape_2 = read_reshape_DeepMD(N_ATOMS, parameters)
-print("2:")
-print(SYM_COORD_Reshape_2)"""
 
 """#No need to free memory now because the reshape_to_frame_wise function is not used
 press_any_key_exit("Press any key to free memory.\n")
@@ -79,19 +72,7 @@ press_any_key_exit("Memory free complete.\n")
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
 print("Data pre-processing complete. Building net work.\n")
-"""FILTER_NET = []
-for type_idx in range(len(parameters.type_index_all_frame)):
-    FILTER_NET.append(filter_net(parameters).to(device))
-print("FILTER_NET structure: \n", FILTER_NET)
-FITTING_NET = []
-for type_idx in range(len(parameters.type_index_all_frame)):
-    FITTING_NET.append(fitting_net(parameters).to(device))
-print("FITTING_NET structure:\n", FITTING_NET)
-NET_PARAMS_LIST = []
-for type_idx in range(len(parameters.type_index_all_frame)):
-    NET_PARAMS_LIST += list(FILTER_NET[type_idx].parameters())
-    NET_PARAMS_LIST += list(FITTING_NET[type_idx].parameters())"""
-#print("NET_PARAMS_LIST:\n", NET_PARAMS_LIST)
+
 ONE_ATOM_NET = []
 for type_idx in range(len(parameters.type_index_all_frame)):
     ONE_ATOM_NET.append(one_atom_net(parameters))
@@ -113,7 +94,7 @@ COORD_Reshape_tf.to(device), SYM_COORD_Reshape_tf.to(device), ENERGY_tf.to(devic
 FORCE_Reshape_tf.to(device), N_ATOMS_tf.to(device), TYPE_Reshape_tf.to(device)
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf,
                                        ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf)
-"""#Seems that no need to free memory...
+"""Seems that no need to free memory...
 press_any_key_exit("Press any key to free memory.\n")
 del COORD_Reshape
 del SYM_COORD_Reshape
@@ -124,7 +105,7 @@ TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_
 OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 CRITERION = nn.MSELoss()
-LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER, parameters.decay_rate)
+LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
@@ -137,217 +118,60 @@ if (True):
             START_BATCH_TIMER = time.time()
             #print(ONE_BATCH_NET(data_cur))
 
-            COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
-            FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
+            """COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
+            FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur"""
+            """for i in range(len(data_cur)):
+                data_cur[i] = data_cur[i].to(device)"""
             ###Adams
-            """OPTIMIZER.zero_grad()
-            SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, (
-            len(SYM_COORD_Reshape_tf_cur), N_ATOMS[0], parameters.SEL_A_max, 4))
-            SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
-            E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur)).to(device)"""
-            """for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
-                #G_cur_frame_list = []
-                G_cur_frame = tf.zeros(N_ATOMS[0], parameters.SEL_A_max,
-                                       parameters.filter_neuron[len(parameters.filter_neuron) - 1]).to(device)
-                for atom_idx in range(N_ATOMS[0]):
-                    type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                    #G_cur_frame_list.append(FILTER_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
-                    G_cur_frame[atom_idx] = FILTER_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])
-                #G_cur_frame = tf.cat(G_cur_frame_list, dim = 0)
-                #G_cur_frame = G_cur_frame.view(N_ATOMS[0], parameters.SEL_A_max,
-                #                               parameters.filter_neuron[len(parameters.filter_neuron) - 1])
-
-                #print(G_cur_frame_list)
-                #print(G_cur_frame)
-                RG_cur_frame = tf.bmm(SYM_COORD_Reshape_tf_cur_Reshape[frame_idx].transpose(1, 2), G_cur_frame)
-                GRRG_cur_frame = tf.bmm(RG_cur_frame.transpose(1, 2), RG_cur_frame.narrow(2, 0, parameters.axis_neuron))
-                GRRG_cur_frame = tf.reshape(GRRG_cur_frame, (-1, parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron))
-                #E_cur_frame_list = []
-                E_cur_frame = tf.zeros(N_ATOMS[0])
-                for atom_idx in range(N_ATOMS[0]):
-                    type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                    #E_cur_frame_list.append(FITTING_NET[type_idx_cur_atom](GRRG_cur_frame[atom_idx]))
-                    E_cur_frame[atom_idx] = FITTING_NET[type_idx_cur_atom](GRRG_cur_frame[atom_idx])
-                #E_cur_frame = tf.cat(E_cur_frame_list)
-                #E_cur_frame = tf.sum(E_cur_frame)
-                #print(E_cur_frame)
-                #E_cur_batch_list.append(E_cur_frame)
-                E_cur_batch[frame_idx] = sum(E_cur_frame)"""
-
-            """for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
-                E_cur_frame = tf.zeros(1).to(device)
-                for atom_idx in range(N_ATOMS[0]):
-                    type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                    E_cur_atom = ONE_ATOM_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx],
-                                                                 SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][
-                                                                     atom_idx], parameters)
-
-                    E_cur_frame += E_cur_atom
-
-                E_cur_batch[frame_idx] = E_cur_frame
-
-                #state_dict_ = {}
-                #for type_idx in range(len(parameters.type_index_all_frame)):
-                #    state_dict_.update(ONE_ATOM_NET[type_idx_cur_atom].state_dict())
-                #graph1_75 = make_dot(E_cur_batch, state_dict_)
-                #graph1_75.view()
-
-            loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
-            loss_cur_batch.backward()
-            OPTIMIZER.step()"""
+            #correct
             OPTIMIZER2.zero_grad()
             E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
-            loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
+            loss_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
             loss_cur_batch.backward()
             OPTIMIZER2.step()
+            #correct end
             ###Adams end
 
             ###LBFGS
-            """def closure():
-                OPTIMIZER.zero_grad()
-                SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, (
-                    len(SYM_COORD_Reshape_tf_cur), N_ATOMS[0], parameters.SEL_A_max, 4))
-                SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
-                E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur)).to(device)
-                for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
-                    E_cur_frame = tf.zeros(1).to(device)
-                    for atom_idx in range(N_ATOMS[0]):
-                        type_idx_cur_atom = parameters.type_index_all_frame.index(
-                            TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                        E_cur_atom = ONE_ATOM_NET[type_idx_cur_atom](
-                            SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx],
-                            SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][
-                                atom_idx], parameters)
-
-                        E_cur_frame += E_cur_atom
-
-                    E_cur_batch[frame_idx] = E_cur_frame
-                loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
-                loss_cur_batch.backward()
-                return loss_cur_batch"""
+            #correct
             """def closure():
                 OPTIMIZER.zero_grad()
                 E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
-                loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
+                loss_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
                 loss_cur_batch.backward()
                 return loss_cur_batch
             OPTIMIZER.step(closure)"""
+            #correct end
             ###LBFGS end
 
 
-            if ((STEP_CUR % parameters.decay_steps == 0) and (STEP_CUR > 0)):
+            if ((STEP_CUR % parameters.decay_steps == 0)):# and (STEP_CUR > 0)):
                 LR_SCHEDULER.step()
+                print("LR update: lr = %f"%OPTIMIZER2.param_groups[0].get("lr"))
 
             END_BATCH_TIMER = time.time()
             ###Adams
-            print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s" % (
-            epoch, batch_idx, loss_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
+            print("Epoch: %-10d, Batch: %-10d, loss: %10.3f eV/atom, time: %10.3f s" % (
+            epoch, batch_idx, loss_cur_batch / N_ATOMS[0], END_BATCH_TIMER - START_BATCH_TIMER))
             ###Adams end
 
-            """"###LBFGS
-            print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s" % (
-                epoch, batch_idx, closure(), END_BATCH_TIMER - START_BATCH_TIMER))
-            ###LBFGS end"""
+            ###LBFGS
+            """print("Epoch: %-10d, Batch: %-10d, loss: %10.3f eV/atom, time: %10.3f s" % (
+                epoch, batch_idx, closure() / N_ATOMS[0], END_BATCH_TIMER - START_BATCH_TIMER))"""
+            ###LBFGS end
 
             #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
             STEP_CUR += 1
 
+
             """if (STEP_CUR >= 2):
                 break"""
         END_EPOCH_TIMER = time.time()
-        """###Adams
-        print("Epoch: %-8d, loss: %10.6f eV, time: %6.3f" % (
-        epoch, loss_cur_batch, END_EPOCH_TIMER - START_EPOCH_TIMER))
-        ###Adams end"""
 
-        ###LBFGS
-
-        ###LBFGS end
 
         if (False):
             break
 
-"""for epoch in range(parameters.epoch):
-    START_EPOCH_TIMER = time.time()
-    for batch_idx, data_cur in enumerate(TRAIN_LOADER):
-        START_BATCH_TIMER = time.time()
-
-        COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
-            FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
-        ###Adams
-        OPTIMIZER.zero_grad()
-        #print(SYM_COORD_Reshape_tf_cur.view(parameters.batch_size, N_ATOMS[0], -1))
-        SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, (len(SYM_COORD_Reshape_tf_cur), N_ATOMS[0], parameters.SEL_A_max, 4))
-        SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
-        #print(SYM_COORD_Reshape_tf_cur_Reshape.shape)
-        #print(SYM_COORD_Reshape_tf_cur_Reshape_slice)
-        #G_cur_list = []
-        #E_cur_batch_list = []
-        E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur)).to(device)
-        #E_cur_frame = tf.zeros(1).to(device)
-        ""for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
-            #G_cur_frame_list = []
-            G_cur_frame = tf.zeros(N_ATOMS[0], parameters.SEL_A_max,
-                                   parameters.filter_neuron[len(parameters.filter_neuron) - 1]).to(device)
-            for atom_idx in range(N_ATOMS[0]):
-                type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                #G_cur_frame_list.append(FILTER_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
-                G_cur_frame[atom_idx] = FILTER_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])
-            #G_cur_frame = tf.cat(G_cur_frame_list, dim = 0)
-            #G_cur_frame = G_cur_frame.view(N_ATOMS[0], parameters.SEL_A_max,
-            #                               parameters.filter_neuron[len(parameters.filter_neuron) - 1])
-
-            #print(G_cur_frame_list)
-            #print(G_cur_frame)
-            RG_cur_frame = tf.bmm(SYM_COORD_Reshape_tf_cur_Reshape[frame_idx].transpose(1, 2), G_cur_frame)
-            GRRG_cur_frame = tf.bmm(RG_cur_frame.transpose(1, 2), RG_cur_frame.narrow(2, 0, parameters.axis_neuron))
-            GRRG_cur_frame = tf.reshape(GRRG_cur_frame, (-1, parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron))
-            #E_cur_frame_list = []
-            E_cur_frame = tf.zeros(N_ATOMS[0])
-            for atom_idx in range(N_ATOMS[0]):
-                type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                #E_cur_frame_list.append(FITTING_NET[type_idx_cur_atom](GRRG_cur_frame[atom_idx]))
-                E_cur_frame[atom_idx] = FITTING_NET[type_idx_cur_atom](GRRG_cur_frame[atom_idx])
-            #E_cur_frame = tf.cat(E_cur_frame_list)
-            #E_cur_frame = tf.sum(E_cur_frame)
-            #print(E_cur_frame)
-            #E_cur_batch_list.append(E_cur_frame)
-            E_cur_batch[frame_idx] = sum(E_cur_frame)""
-        for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
-            E_cur_frame = tf.zeros(1).to(device)
-            for atom_idx in range(N_ATOMS[0]):
-                type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                E_cur_atom = ONE_ATOM_NET[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx], SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx], parameters)
-                E_cur_frame += E_cur_atom
-            E_cur_batch[frame_idx] = E_cur_frame
-        #print(E_cur_batch_list)
-        #E_cur_batch = tf.stack(E_cur_batch_list)
-        #print(E_cur_batch)
-        #print(ENERGY_tf_cur)
-
-        loss_cur_batch = CRITERION(E_cur_batch, ENERGY_tf_cur) / math.sqrt(len(SYM_COORD_Reshape_tf_cur))
-        loss_cur_batch.to(device)
-        loss_cur_batch.backward()
-        OPTIMIZER.step()
-        ###Adams end
-
-        if ((STEP_CUR % parameters.decay_steps == 0) and (STEP_CUR > 0)):
-            LR_SCHEDULER.step()
-
-        END_BATCH_TIMER = time.time()
-        print("Epoch: %-10d, Batch: %-10d, loss: %10.6feV, time: %10.3f s"%(epoch, batch_idx, loss_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
-        #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
-        STEP_CUR += 1
-
-        if (STEP_CUR >= 2):
-            break
-    END_EPOCH_TIMER = time.time()
-    print("Epoch: %-8d, loss: %10.6f eV, time: %6.3f"%(epoch, loss_cur_batch, END_EPOCH_TIMER - START_EPOCH_TIMER))
-
-
-    if (epoch >= 0):
-        break
-"""
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER
 print("Training complete. Time elapsed: %10.3f s\n"%ELAPSED_TRAIN)

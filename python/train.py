@@ -32,6 +32,8 @@ ENERGY = np.fromfile("./ENERGY.BIN", dtype = np.float64)
 FORCE = np.fromfile("./FORCE.BIN", dtype = np.float64)
 TYPE = np.fromfile("./TYPE.BIN", dtype = np.int32)
 N_ATOMS = np.fromfile("./N_ATOMS.BIN", dtype = np.int32)
+NEI_IDX = np.fromfile("./NEI_IDX.BIN", dtype = np.int32)
+NEI_COORD = np.fromfile("./NEI_COORD.BIN", dtype = np.float64)
 print(N_ATOMS)
 print(np.dtype(np.float64).itemsize)
 parameters.Nframes_tot = len(N_ATOMS)
@@ -52,6 +54,10 @@ SYM_COORD_Reshape = np.reshape(SYM_COORD, (parameters.Nframes_tot, -1))
 print("SYM_COORD_Reshape: shape = ", SYM_COORD_Reshape.shape)#, "\n", SYM_COORD_Reshape)
 TYPE_Reshape = np.reshape(TYPE, (parameters.Nframes_tot, -1))
 print("TYPE_Reshape: shape = ", TYPE_Reshape.shape)
+NEI_IDX_Reshape = np.reshape(NEI_IDX, (parameters.Nframes_tot, -1))
+print("NEI_IDX_Reshape: shape = ", NEI_IDX_Reshape.shape)
+NEI_COORD_Reshape = np.reshape(NEI_COORD, (parameters.Nframes_tot, -1))
+print("NEI_COORD_Reshape: shape = ", NEI_COORD_Reshape.shape)
 
 COORD_Reshape_tf = tf.from_numpy(COORD_Reshape)
 SYM_COORD_Reshape_tf = tf.from_numpy(SYM_COORD_Reshape)
@@ -59,6 +65,11 @@ ENERGY_tf = tf.from_numpy(ENERGY)
 FORCE_Reshape_tf = tf.from_numpy(FORCE_Reshape)
 N_ATOMS_tf = tf.from_numpy(N_ATOMS)
 TYPE_Reshape_tf = tf.from_numpy(TYPE_Reshape)
+NEI_IDX_Reshape_tf = tf.from_numpy(NEI_IDX_Reshape)
+NEI_COORD_Reshape_tf = tf.from_numpy(NEI_COORD_Reshape)
+FRAME_IDX_tf = tf.ones(len(COORD_Reshape_tf), dtype = tf.int32)
+for i in range(len(FRAME_IDX_tf)):
+    FRAME_IDX_tf[i] = i
 
 """#No need to free memory now because the reshape_to_frame_wise function is not used
 press_any_key_exit("Press any key to free memory.\n")
@@ -75,16 +86,23 @@ print("Data pre-processing complete. Building net work.\n")
 
 ONE_BATCH_NET = one_batch_net(parameters)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
+TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
 if (tf.cuda.device_count() > 1):
     ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
 print(ONE_BATCH_NET)
+print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
 
-COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf,  FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf \
+
+COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf,  FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
+NEI_COORD_Reshape_tf, FRAME_IDX_tf \
     = \
-COORD_Reshape_tf.to(device), SYM_COORD_Reshape_tf.to(device), ENERGY_tf.to(device), \
-FORCE_Reshape_tf.to(device), N_ATOMS_tf.to(device), TYPE_Reshape_tf.to(device)
-DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf,
-                                       ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf)
+COORD_Reshape_tf.to(device), SYM_COORD_Reshape_tf.to(device), ENERGY_tf.to(device), FORCE_Reshape_tf.to(device), \
+N_ATOMS_tf.to(device), TYPE_Reshape_tf.to(device), NEI_IDX_Reshape_tf.to(device), NEI_COORD_Reshape_tf.to(device), \
+FRAME_IDX_tf.to(device)
+
+DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, \
+                                       ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
+                                       NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf)
 """Seems that no need to free memory...
 press_any_key_exit("Press any key to free memory.\n")
 del COORD_Reshape
@@ -110,7 +128,13 @@ if (True):
             print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             START_BATCH_TIMER = time.time()
-            """data_cur[1].requires_grad = True"""
+            data_cur[1].requires_grad = True
+            NEI_IDX_Reshape_tf_cur = data_cur[6]
+            NEI_IDX_Reshape_tf_cur = tf.reshape(NEI_IDX_Reshape_tf_cur, (len(NEI_IDX_Reshape_tf_cur), data_cur[4][0], parameters.SEL_A_max))
+            FORCE_Reshape_tf_cur = data_cur[3]
+            FORCE_Reshape_tf_cur_Reshape = tf.reshape(FORCE_Reshape_tf_cur, (len(FORCE_Reshape_tf_cur), data_cur[4][0], 3))
+            NEI_COORD_Reshape_tf_cur = data_cur[7]
+
 
             ###Adams
             #correct
@@ -118,9 +142,13 @@ if (True):
             if (data_cur[1].grad):
                 data_cur[1].grad.data.zero_()
             E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
-            """for i in range(len(data_cur[1])):
-                SYM_COORD_Reshape_tf_cur_frame0_grad = tf.autograd.grad(E_cur_batch[i], data_cur[1], create_graph = True, allow_unused = True)"""
-            loss_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
+            #Energy loss part
+            loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
+            #Force loss part
+            SYM_COORD_Reshape_tf_cur_grad = tf.autograd.grad(tf.sum(E_cur_batch), data_cur[1], create_graph = True)
+            #force_cur_batch = calc_force(SYM_COORD_Reshape_tf_cur_grad[0], NEI_IDX_Reshape_tf_cur, data_cur[0], NEI_COORD_Reshape_tf_cur, parameters, data_cur[4][0], device)
+            loss_F_cur_batch = tf.zeros(1).to(device)
+            loss_cur_batch = loss_E_cur_batch + loss_F_cur_batch
             loss_cur_batch.backward()
             OPTIMIZER2.step()
             #correct end
@@ -164,6 +192,12 @@ if (True):
         if (False):
             break
 
+if (tf.cuda.device_count() > 1):
+    torch.save(ONE_BATCH_NET.module.state_dict(), "./freeze_model_DataParallal.pytorch")
+    print("Model saved to ./freeze_model_DataParallal.pytorch")
+else:
+    torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
+    print("Model saved to ./freeze_model.pytorch")
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER
 print("Training complete. Time elapsed: %10.3f s\n"%ELAPSED_TRAIN)

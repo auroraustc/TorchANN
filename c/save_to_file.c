@@ -13,6 +13,7 @@ Return code:
     31~39: save_to_file_sym_coord() error.
     41~49: check_sym_coord_from_bin() error.
     51~59: save_to_file_coord() error.
+    61~69: save_to_file_nei() error.
 
 */
 
@@ -37,8 +38,9 @@ int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parame
     int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
     int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters_info);
     int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
 
-    int ef_flag, p_flag, sc_flag, tna_flag, c_flag;
+    int ef_flag, p_flag, sc_flag, tna_flag, c_flag, nei_flag;
 
     ef_flag = save_to_file_energy_and_force(frame_info, parameters_info);
     if (ef_flag != 0)
@@ -68,6 +70,12 @@ int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parame
     if (c_flag != 0)
     {
         return c_flag;
+    }
+
+    nei_flag = save_to_file_nei(frame_info, parameters_info);
+    if (nei_flag != 0)
+    {
+        return nei_flag;
     }
 
     return 0;
@@ -302,5 +310,35 @@ int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * 
         }
     }
     fclose(fp_coord);
+    return 0;
+}
+
+/*Save the indexes and coordinates of neighbour atoms of the atoms in frames*/
+int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
+{
+    FILE * fp_nei;
+    FILE * fp_nei_coord;
+    int i, j, k;
+
+    fp_nei = fopen("./NEI_IDX.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
+        {
+            fwrite(frame_info[i].neighbour_list[j].index_neighbours, sizeof(int), parameters_info->SEL_A_max, fp_nei);
+        }
+    }
+    fclose(fp_nei);
+    fp_nei_coord = fopen("./NEI_COORD.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
+        {
+            for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
+            {
+                fwrite(frame_info[i].neighbour_list[j].coord_neighbours[k], sizeof(double), 3, fp_nei_coord);
+            }
+        }
+    }
     return 0;
 }

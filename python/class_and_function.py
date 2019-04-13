@@ -68,6 +68,7 @@ def read_parameters(parameters):
         return 1
     parameters.cutoff_1 = 7.7
     parameters.cutoff_2 = 8.0
+    parameters.cutoff_3 = 0.0
     parameters.cutoff_max = 8.0
     parameters.N_types_all_frame = 2
     parameters.type_index_all_frame = [0, 1]
@@ -79,7 +80,7 @@ def read_parameters(parameters):
     parameters.epoch = 100
     parameters.filter_neuron = [32, 96, 192]
     parameters.axis_neuron = 8
-    parameters.fitting_neuron = [960, 480, 480, 480, 240]
+    parameters.fitting_neuron = [1024, 512, 512, 256, 128]
     parameters.start_lr = 0.0005
     parameters.decay_steps = 20 #abandoned
     parameters.decay_epoch = 2
@@ -250,8 +251,12 @@ class one_batch_net(nn.Module):
                                          parameters.fitting_neuron[hidden_idx + 1]))
 
     def forward(self, data_cur, parameters, device): #cur mean current batch
-        COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, \
-        FORCE_Reshape_tf_cur, N_ATOMS_tf_cur, TYPE_Reshape_tf_cur = data_cur
+        COORD_Reshape_tf_cur = data_cur[0]
+        SYM_COORD_Reshape_tf_cur = data_cur[1]
+        ENERGY_tf_cur = data_cur[2]
+        FORCE_Reshape_tf_cur = data_cur[3]
+        N_ATOMS_tf_cur = data_cur[4]
+        TYPE_Reshape_tf_cur = data_cur[5]
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur, \
                                                       (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
                                                        parameters.SEL_A_max, 4))
@@ -279,6 +284,8 @@ class one_batch_net(nn.Module):
             E_cur_batch[frame_idx] = E_cur_frame
         return E_cur_batch
 
+"""
+#Not used
 class one_batch_net_2(nn.Module):
     def __init__(self, parameters):
         super(one_batch_net_2, self).__init__()
@@ -301,6 +308,7 @@ class one_batch_net_2(nn.Module):
             E_cur_batch[frame_idx] = E_cur_frame
         return E_cur_batch
 
+#Not used
 class one_frame_net(nn.Module):
     def __init__(self, parameters):
         super(one_batch_net, self).__init__()
@@ -351,6 +359,52 @@ class one_frame_net(nn.Module):
                 E_cur_frame_atom_wise[atom_idx] = E_cur_atom
             #gg = tf.autograd.grad(E_cur_frame, SYM_COORD_Reshape_tf_cur_Reshape[frame_idx])
         return E_cur_frame_atom_wise
+"""
+
+def calc_force(SYM_COORD_Reshape_tf_cur_grad, NEI_IDX_Reshape_tf_cur, COORD_Reshape_tf_cur, NEI_COORD_Reshape_tf_cur, parameters, N_Atoms, device):
+    force_cur_batch = tf.zeros((len(SYM_COORD_Reshape_tf_cur_grad), N_Atoms, 3))
+    SYM_COORD_Reshape_tf_cur_grad_Reshape = tf.reshape(SYM_COORD_Reshape_tf_cur_grad, \
+                                                       (len(SYM_COORD_Reshape_tf_cur_grad), N_Atoms, \
+                                                        parameters.SEL_A_max, 4))
+    NEI_COORD_Reshape_tf_Reshape = tf.reshape(NEI_COORD_Reshape_tf_cur, \
+                                          (len(NEI_COORD_Reshape_tf_cur), N_Atoms, parameters.SEL_A_max, 3))
+    COORD_Reshape_tf_cur_Reshape = tf.reshape(COORD_Reshape_tf_cur, (len(COORD_Reshape_tf_cur), N_Atoms, 3))
+    rc = parameters.cutoff_2
+    rcs = parameters.cutoff_1
+    for frame_idx in range(len(SYM_COORD_Reshape_tf_cur_grad)):
+        for atom_idx in range(N_Atoms):
+            force_x_tmp = 0.0
+            force_y_tmp = 0.0
+            force_z_tmp = 0.0
+            r_cur_atom = COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx].to("cpu")
+            r_cur_atom.requires_grad = True
+            for nei_idx in range(parameters.SEL_A_max):
+                if (NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx][nei_idx] == -1):
+                    continue
+                #Current Atom: COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx][0..2]
+                #Grad Target: SYM_COORD_Reshape_tf_cur_grad[frame_idx][atom_idx][nei_idx][0..3]
+                #COORD Target: COORD_Reshape_tf_cur_Reshape[frame_idx][ NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx][nei_idx] ][0..2]
+                #COORD Target 2: NEI_COORD_Reshape_tf_Reshape[frame_idx][atom_idx][nei_idx]
+                diff_coord = NEI_COORD_Reshape_tf_Reshape[frame_idx][atom_idx][nei_idx].to("cpu") - r_cur_atom
+                r_ij = tf.sqrt(tf.sum(diff_coord ** 2))
+                s_ij = tf.zeros(1)
+                four_coord = tf.zeros(4)
+                if (r_ij >= rc):
+                    s_ij = 0
+                elif (r_ij >= rcs):
+                    s_ij = 1.0 / r_ij *(0.5 * tf.cos(3.141592653589793238462643383279 * (r_ij - rcs) / (rc - rcs)) + 0.5)
+                else:
+                    s_ij = 1.0 / r_ij
+                four_coord[0] = s_ij
+                four_coord[1] = s_ij * diff_coord[0] / r_ij
+                four_coord[2] = s_ij * diff_coord[1] / r_ij
+                four_coord[3] = s_ij * diff_coord[2] / r_ij
+                tmp = tf.sum(four_coord)
+                #gg = tf.autograd.grad(tmp, r_cur_atom, retain_graph = True)
+                tmp.backward()
+            force_cur_batch[frame_idx][atom_idx] = r_cur_atom.grad
+
+    return force_cur_batch.to(device)
 
 
 def make_dot(var, params):

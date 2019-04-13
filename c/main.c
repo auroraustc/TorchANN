@@ -204,6 +204,7 @@ int main()
             }
             free(frame_info[i].neighbour_list[j].coord_neighbours);
             free(frame_info[i].neighbour_list[j].type);
+            free(frame_info[i].neighbour_list[j].index_neighbours);
         }
         free(frame_info[i].coord);
         free(frame_info[i].force);

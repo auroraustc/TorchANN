@@ -32,7 +32,7 @@ Pressure| Bar
  7.667900  0.000000  0.000000 -11.501850 19.921789  0.000000  0.000000  0.000000 21.260799
  ...
 ```
-Each line contains nine numbers: a1, a2, a3; b1, b2, b3; c1, c2, c3
+Each line contains nine numbers: a1, a2, a3; b1, b2, b3; c1, c2, c3.
 Take the first line as an exampe:
 ```bash
  7.710900  0.000000  0.000000  0.000000  8.904000  0.000000  0.000000  0.000000 26.296000

@@ -5,7 +5,9 @@ CFLAGS = -fopenmp
 LD_DEBUG = $(DEBUG)
 LD_CFLAGS = $(CFLAGS)
 LIB = -fPIC -shared -o libNNMD.so
-all: $(OBJECTS)
+all: exec lib
+
+exec: $(OBJECTS)
 	$(CC) $(LD_CFLAGS) $(LD_DEBUG) -o a.out $(OBJECTS)
 
 %.o: %.c

@@ -34,6 +34,11 @@ class Parameters():
         decay_steps = 100
         decay_epoch = 1
         decay_rate = 0.95
+        start_pref_e = 1
+        limit_pref_e = 400
+        start_pref_f = 1000
+        limit_pref_f = 1
+
 
 
 def press_any_key_exit(msg):
@@ -76,7 +81,7 @@ def read_parameters(parameters):
     parameters.Nframes_tot = 120
     parameters.sym_coord_type = 1
 ###New add parameters
-    parameters.batch_size = 16
+    parameters.batch_size = 2
     parameters.epoch = 100
     parameters.filter_neuron = [32, 96, 192]
     parameters.axis_neuron = 8
@@ -85,6 +90,10 @@ def read_parameters(parameters):
     parameters.decay_steps = 20 #abandoned
     parameters.decay_epoch = 2
     parameters.decay_rate = 0.95
+    parameters.start_pref_e = 1.0
+    parameters.limit_pref_e = 400.0
+    parameters.start_pref_f = 1000.0
+    parameters.limit_pref_f = 1.0
     return 0
 
 """Not used. Too slow."""

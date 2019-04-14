@@ -6,13 +6,14 @@ Args: Nframes_tot, frame_idx, SEL_A_max, N_Atoms
 Read in the COORD.BIN, NEI_COORD.BIN, NEI_IDX.BIN; Save the D_SYM_D_COORD.BIN (an array of shape = [N_Atoms * SEL_A_max * 4])
 
 Return code:
-	0: No errors.
-    1: Read input files error.
+	double *: No errors.
+    NULL: Read input files error.
 	
 */
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "Utilities.c"
 
 /*****************MACRO FOR DEBUG*****************/
@@ -28,14 +29,18 @@ Return code:
 
 int main()
 {
-    int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
+    double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs);
+    double * derivative_cur_frame;
 
-    compute_derivative_sym_coord_to_coord_one_frame(55, DEBUG_FRAME_IDX, 200, 93);
+    derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(55, DEBUG_FRAME_IDX, 200, 93, 8.0, 7.7);
+    free(derivative_cur_frame);
     return 0;
 }
 
-int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
+double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs)
 {
+    double fastpow2(double number, int dummy);
+
     FILE * fp_coord;
     FILE * fp_nei_coord;
     FILE * fp_nei_idx;
@@ -60,7 +65,7 @@ int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_i
     if ((fp_coord == NULL)||(fp_nei_coord == NULL)||(fp_nei_idx == NULL))
     {
         printf("Read in error. Do COORD.BIN, NEI_COORD.BIN and NEI_IDX.BIN exist?\n");
-        return 1;
+        return NULL;
     }
     else
     {
@@ -98,7 +103,6 @@ int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_i
                         double coord_l[3] = {coord_cur_frame[l * 3 + 0], coord_cur_frame[l * 3 + 1], coord_cur_frame[l * 3 + 2]};
                         double coord_nei_ori[3] = {idx_nei == -1 ? 9999 : coord_cur_frame[idx_nei * 3 + 0], idx_nei == -1 ? 9999 : coord_cur_frame[idx_nei * 3 + 1], idx_nei == -1 ? 9999 : coord_cur_frame[idx_nei * 3 + 2]};
                         
-
                         /*if ((i == 4) && (l == 3))
                         {
                             printf_d("Coord check:\n");
@@ -108,14 +112,411 @@ int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_i
                             printf_d("coord_l: %.6lf %.6lf %.6lf\n", coord_l[0], coord_l[1], coord_l[2]);
                         }*/
 
-                        if ((l != i) && (l != nei_idx_cur_frame[i * SEL_A_max + j]))
+                        if ((l != i) && (l != idx_nei))
                         {
                             derivative_cur_frame[index] = 0;
                         }
-                        else
+                        else if (l == i)//atom_l is atom_i; coord_diff = atom_[idx_nei] - atom_l
                         {
-
+                            /*coord_l is coord_i; coord_nei is coord_j*/
+                            double coord_i[3] = {coord_l[0], coord_l[1], coord_l[2]};
+                            double coord_j[3] = {coord_nei[0], coord_nei[1], coord_nei[2]};
+                            double coord_diff[3] = {coord_j[0] - coord_i[0], coord_j[1] - coord_i[1], coord_j[2] - coord_i[2]};
+                            double r_ji = sqrt(fastpow2(coord_diff[0], 2) + fastpow2(coord_diff[1], 2) + fastpow2(coord_diff[2], 2));
+                            if ((k == 0) && (m == 0))//\partial s_ji / \partial x_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[0] + coord_j[0]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[0] + coord_j[0]) / (r_ji * r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 0) && (m == 1))//\partial s_ji / \partial y_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 0) && (m == 2))//\partial s_ji / \partial z_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[2] + coord_j[2]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 1) && (m == 0))//\partial s_ji * x_ji / r_ji / \partial x_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 1) && (m == 1))//\partial s_ji * x_ji / r_ji / \partial y_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 1) && (m == 2))//\partial s_ji * x_ji / r_ji/ \partial z_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 2) && (m == 0))//\partial s_ji * y_ji / r_ji / \partial x_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 2) && (m == 1))//\partial s_ji * y_ji / r_ji / \partial y_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 2) && (m == 2))//\partial s_ji * y_ji / r_ji/ \partial z_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 3) && (m == 0))//\partial s_ji * z_ji / r_ji / \partial x_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 3) && (m == 1))//\partial s_ji * z_ji / r_ji / \partial y_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
+                            else if ((k == 3) && (m == 2))//\partial s_ji * z_ji / r_ji/ \partial z_i
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                }
+                            }
                         }
+                        else if (l == idx_nei)//atom_l is atom_j; coord_diff = atom_l - atom_i
+                        {
+                            /*coord_l is coord_j; coord_nei is coord_i*/
+                            double coord_i[3] = {coord_nei[0], coord_nei[1], coord_nei[2]};
+                            double coord_j[3] = {coord_l[0], coord_l[1], coord_l[2]};
+                            double coord_diff[3] = {coord_j[0] - coord_i[0], coord_j[1] - coord_i[1], coord_j[2] - coord_i[2]};
+                            double r_ji = sqrt(fastpow2(coord_diff[0], 2) + fastpow2(coord_diff[1], 2) + fastpow2(coord_diff[2], 2));
+                            if ((k == 0) && (m == 0))//\partial s_ji / \partial x_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[0] + coord_j[0]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[0] + coord_j[0]) / (r_ji * r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 0) && (m == 1))//\partial s_ji / \partial y_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 0) && (m == 2))//\partial s_ji / \partial z_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji) + PI * (0 - coord_i[2] + coord_j[2]) / (2.0 * (rc - rcs) * r_ji * r_ji) * sin(PI / (rc - rcs) * (0 - rcs + r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 1) && (m == 0))//\partial s_ji * x_ji / r_ji / \partial x_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[0] + coord_j[0]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 1) && (m == 1))//\partial s_ji * x_ji / r_ji / \partial y_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 1) && (m == 2))//\partial s_ji * x_ji / r_ji/ \partial z_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 2) && (m == 0))//\partial s_ji * y_ji / r_ji / \partial x_j
+                            {
+                               if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 2) && (m == 1))//\partial s_ji * y_ji / r_ji / \partial y_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[1] + coord_j[1]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 2) && (m == 2))//\partial s_ji * y_ji / r_ji/ \partial z_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 3) && (m == 0))//\partial s_ji * z_ji / r_ji / \partial x_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[0] + coord_j[0]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 3) && (m == 1))//\partial s_ji * z_ji / r_ji / \partial y_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) + PI * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[1] + coord_j[1]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                            else if ((k == 3) && (m == 2))//\partial s_ji * z_ji / r_ji/ \partial z_j
+                            {
+                                if (r_ji >= rc)
+                                {
+                                    derivative_cur_frame[index] = 0;
+                                }
+                                else if (r_ji >= rcs)
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) * (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji * r_ji * r_ji) - (0.5 + 0.5 * cos(PI / (rc - rcs) * (0 - rcs + r_ji))) / (r_ji * r_ji) + PI * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) * sin(PI / (rc - rcs) * (0 - rcs + r_ji)) / (2.0 * (rc - rcs) * (r_ji * r_ji * r_ji));
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                                else
+                                {
+                                    derivative_cur_frame[index] = 2 * (0 - coord_i[2] + coord_j[2]) * (0 - coord_i[2] + coord_j[2]) / (r_ji * r_ji * r_ji * r_ji) - 1.0 / (r_ji * r_ji);
+                                    derivative_cur_frame[index] *= (-1.0);
+                                }
+                            }
+                        }
+                        //if (index >= 20000000) printf_d("%d\n", index);
                     }
                 }
             }
@@ -123,10 +524,11 @@ int compute_derivative_sym_coord_to_coord_one_frame(int Nframes_tot, int frame_i
     }
 
     fp_derivative = fopen("./DERIVATIVE.BIN", "wb");
+    printf_d("save:%d\n",save_size);
     fwrite(derivative_cur_frame, sizeof(double), save_size, fp_derivative);
     fclose(fp_derivative);
 
     free(coord_cur_frame); free(nei_coord_cur_frame); free(nei_idx_cur_frame);
-    free(derivative_cur_frame);
-    return 0;
+    //free(derivative_cur_frame);
+    return derivative_cur_frame;
 }

@@ -16,11 +16,21 @@ from class_and_function import *
 
 tf.set_default_dtype(tf.float64)
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+#device = torch.device('cpu')
 MYDLL = CDLL("../c/libNNMD.so")
-MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD.argtypes = [c_int, c_int, c_int, c_int, c_double, c_double]
+MYDLL.init_read_coord.argtypes = [c_int, c_int, c_int, c_int]
+MYDLL.init_read_coord.restype = POINTER(c_double)
+MYDLL.init_read_nei_coord.argtypes = [c_int, c_int, c_int, c_int]
+MYDLL.init_read_nei_coord.restype = POINTER(c_double)
+MYDLL.init_read_nei_idx.argtypes = [c_int, c_int, c_int, c_int]
+MYDLL.init_read_nei_idx.restype = POINTER(c_int)
+
+MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD.argtypes = [c_int, c_int, c_int, c_int, c_double, c_double, POINTER(c_double), POINTER(c_double), POINTER(c_int)]
 MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD.restype = c_void_p
 MYDLL.freeme.argtypes = [c_void_p]
 MYDLL.freeme.restypes = []
+f_out = open("./LOSS.OUT", "w")
+f_out.close()
 #device = torch.device('cpu')
 #hvd.init()
 #tf.cuda.set_device(hvd.local_rank())
@@ -99,12 +109,12 @@ print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
 
 
-COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf,  FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
+"""COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf,  FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf \
     = \
 COORD_Reshape_tf.to(device), SYM_COORD_Reshape_tf.to(device), ENERGY_tf.to(device), FORCE_Reshape_tf.to(device), \
 N_ATOMS_tf.to(device), TYPE_Reshape_tf.to(device), NEI_IDX_Reshape_tf.to(device), NEI_COORD_Reshape_tf.to(device), \
-FRAME_IDX_tf.to(device)
+FRAME_IDX_tf.to(device)"""
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, \
                                        ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
@@ -123,6 +133,9 @@ CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
+read_coord_res = MYDLL.init_read_coord(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
+read_nei_coord_res = MYDLL.init_read_nei_coord(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
+read_nei_idx_res = MYDLL.init_read_nei_idx(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
 #hvd.broadcast_parameters(state_dict_, root_rank = 0)
@@ -130,12 +143,18 @@ print("Start training using device: ", device, ", count: ", tf.cuda.device_count
 if (True):
     for epoch in range(parameters.epoch):
         START_EPOCH_TIMER = time.time()
-        pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_e
-        pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_f
+        if (parameters.epoch != 1 ):
+            pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_e
+            pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_f
+        else:
+            pref_e = parameters.start_pref_e
+            pref_f = parameters.start_pref_f
         if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
             LR_SCHEDULER.step()
             print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
+            for i in range(len(data_cur)):
+                data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
             data_cur[1].requires_grad = True
             NEI_IDX_Reshape_tf_cur = data_cur[6]
@@ -160,7 +179,7 @@ if (True):
             for i in range(len(data_cur[1])):
                 size = data_cur[4][0] * parameters.SEL_A_max * 4 * data_cur[4][0] * 3
                 size = size.item()
-                res_from_c = MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD(parameters.Nframes_tot, data_cur[8][i], parameters.SEL_A_max, data_cur[4][0], parameters.cutoff_2, parameters.cutoff_1)
+                res_from_c = MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD(parameters.Nframes_tot, data_cur[8][i], parameters.SEL_A_max, data_cur[4][0], parameters.cutoff_2, parameters.cutoff_1, read_coord_res, read_nei_coord_res, read_nei_idx_res)
                 res_from_c_copy = np.frombuffer((c_double * size).from_address(res_from_c), np.float64)
                 res_from_c_copy = res_from_c_copy.reshape(data_cur[4][0] * parameters.SEL_A_max * 4, data_cur[4][0] * 3)
                 res_from_c_copy = tf.from_numpy(res_from_c_copy).to(device)
@@ -191,9 +210,13 @@ if (True):
 
 
             END_BATCH_TIMER = time.time()
+            f_out = open("./LOSS.OUT","a")
             ###Adams
             print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.3f eV/A, time: %10.3f s" % (
             epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
+            print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.3f eV/A, time: %10.3f s" % (\
+                epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER),\
+                  file = f_out)
             ###Adams end
 
             ###LBFGS
@@ -202,6 +225,7 @@ if (True):
             ###LBFGS end
 
             #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
+            f_out.close()
             STEP_CUR += 1
 
 
@@ -219,6 +243,9 @@ if (tf.cuda.device_count() > 1):
 else:
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
     print("Model saved to ./freeze_model.pytorch")
+MYDLL.freeme(read_coord_res)
+MYDLL.freeme(read_nei_coord_res)
+MYDLL.freeme(read_nei_idx_res)
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER
 print("Training complete. Time elapsed: %10.3f s\n"%ELAPSED_TRAIN)

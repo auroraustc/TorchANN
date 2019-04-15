@@ -31,21 +31,55 @@ Return code:
 
 /*int main()
 {
-    double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs);
+    double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs, double * coord_start, double * nei_coord_start, int * nei_idx_start);
+    double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
+    double * init_read_nei_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
+    int * init_read_nei_idx(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
+
     double * derivative_cur_frame;
 
-    derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(55, DEBUG_FRAME_IDX, 200, 93, 8.0, 7.7);
+    derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(55, DEBUG_FRAME_IDX, 200, 93, 8.0, 7.7, init_read_coord(55, DEBUG_FRAME_IDX, 200, 93), init_read_nei_coord(55, DEBUG_FRAME_IDX, 200, 93), init_read_nei_idx(55, DEBUG_FRAME_IDX, 200, 93));
     free(derivative_cur_frame);
     return 0;
 }*/
 
-double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs)
+double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
+{
+    FILE * fp_coord;
+    fp_coord = fopen("COORD.BIN", "rb");
+    double * coord_start = (double *)calloc(Nframes_tot * N_Atoms * 3, sizeof(double));
+    fread(coord_start, sizeof(double), Nframes_tot * N_Atoms * 3, fp_coord);
+    fclose(fp_coord);
+    return coord_start;
+}
+
+double * init_read_nei_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
+{
+    FILE * fp_nei_coord;
+    fp_nei_coord = fopen("COORD.BIN", "rb");
+    double * coord_start = (double *)calloc(Nframes_tot * N_Atoms * SEL_A_max * 3, sizeof(double));
+    fread(coord_start, sizeof(double), Nframes_tot * N_Atoms * SEL_A_max * 3, fp_nei_coord);
+    fclose(fp_nei_coord);
+    return coord_start;
+}
+
+int * init_read_nei_idx(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
+{
+    FILE * fp_nei_idx;
+    fp_nei_idx = fopen("COORD.BIN", "rb");
+    int * coord_start = (int *)calloc(Nframes_tot * N_Atoms * SEL_A_max, sizeof(int));
+    fread(coord_start, sizeof(int), Nframes_tot * N_Atoms * SEL_A_max, fp_nei_idx);
+    fclose(fp_nei_idx);
+    return coord_start;
+}
+
+double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs, double * coord_start, double * nei_coord_start, int * nei_idx_start)
 {
     double fastpow2(double number, int dummy);
 
-    FILE * fp_coord;
+    /*FILE * fp_coord;
     FILE * fp_nei_coord;
-    FILE * fp_nei_idx;
+    FILE * fp_nei_idx;*/
     FILE * fp_derivative;
     int i, j, k, l, m;
     int offset_coord = frame_idx * N_Atoms * 3;// * sizeof(double);
@@ -62,16 +96,16 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
     int not_nei_count = 0;
     int zero_count = 0;//This should always be zero
 
-    fp_coord = fopen("COORD.BIN", "rb");
+    /*fp_coord = fopen("COORD.BIN", "rb");
     fp_nei_coord = fopen("NEI_COORD.BIN", "rb");
-    fp_nei_idx = fopen("NEI_IDX.BIN", "rb");
+    fp_nei_idx = fopen("NEI_IDX.BIN", "rb");*/
     
-    if ((fp_coord == NULL)||(fp_nei_coord == NULL)||(fp_nei_idx == NULL))
+    /*if ((fp_coord == NULL)||(fp_nei_coord == NULL)||(fp_nei_idx == NULL))
     {
         printf("Read in error. Do COORD.BIN, NEI_COORD.BIN and NEI_IDX.BIN exist?\n");
         return NULL;
-    }
-    else
+    }*/
+    /*else
     {
         fseek(fp_coord, offset_coord * sizeof(double), SEEK_SET);
         fseek(fp_nei_coord, offset_nei_coord * sizeof(double), SEEK_SET);
@@ -81,7 +115,10 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
         fread(nei_idx_cur_frame, read_nei_idx, sizeof(int), fp_nei_idx);
         fclose(fp_coord); fclose(fp_nei_coord); fclose(fp_nei_idx);
         //printf("Read in complete.\n");
-    }
+    }*/
+    coord_cur_frame = coord_start + offset_coord;
+    nei_coord_cur_frame = nei_coord_start + offset_nei_coord;
+    nei_idx_cur_frame = nei_idx_start + offset_nei_idx;
     /*printf_d("DEBUG TEST frame_idx = %d\n", DEBUG_FRAME_IDX);
     for (i = 0; i <= 5; i++)
     {
@@ -120,7 +157,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
                         if ((l != idx_nei) || (l != i))
                         {
                             derivative_cur_frame[index] = 0;
-                            not_nei_count ++;
+                            //not_nei_count ++;
                         }
                         else if ((l == i))//atom_l is atom_i; coord_diff = atom_[idx_nei] - atom_l
                         {
@@ -130,7 +167,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
                             double coord_diff[3] = {coord_j[0] - coord_i[0], coord_j[1] - coord_i[1], coord_j[2] - coord_i[2]};
                             double r_ji = sqrt(fastpow2(coord_diff[0], 2) + fastpow2(coord_diff[1], 2) + fastpow2(coord_diff[2], 2));
                             r_ji_check = r_ji;
-                            if (r_ji >= rc) zero_count++;
+                            //if (r_ji >= rc) zero_count++;
                             if ((k == 0) && (m == 0))//\partial s_ji / \partial x_i
                             {
                                 if (r_ji >= rc)
@@ -320,7 +357,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
                             double coord_diff[3] = {coord_j[0] - coord_i[0], coord_j[1] - coord_i[1], coord_j[2] - coord_i[2]};
                             double r_ji = sqrt(fastpow2(coord_diff[0], 2) + fastpow2(coord_diff[1], 2) + fastpow2(coord_diff[2], 2));
                             r_ji_check = r_ji;
-                            if (r_ji >= rc) zero_count++;
+                            //if (r_ji >= rc) zero_count++;
                             if ((k == 0) && (m == 0))//\partial s_ji / \partial x_j
                             {
                                 if (r_ji >= rc)
@@ -539,7 +576,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
     //fwrite(derivative_cur_frame, sizeof(double), save_size, fp_derivative);
     //fclose(fp_derivative);
 
-    free(coord_cur_frame); free(nei_coord_cur_frame); free(nei_idx_cur_frame);
+    //free(coord_cur_frame); free(nei_coord_cur_frame); free(nei_idx_cur_frame);
     //printf_d("%d %d\n", not_nei_count, zero_count);
     //free(derivative_cur_frame);
     return derivative_cur_frame;

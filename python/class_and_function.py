@@ -82,7 +82,7 @@ def read_parameters(parameters):
     parameters.sym_coord_type = 1
 ###New add parameters
     parameters.batch_size = 2
-    parameters.epoch = 100
+    parameters.epoch = 1000
     parameters.filter_neuron = [32, 96, 192]
     parameters.axis_neuron = 8
     parameters.fitting_neuron = [1024, 512, 512, 256, 128]
@@ -90,8 +90,8 @@ def read_parameters(parameters):
     parameters.decay_steps = 20 #abandoned
     parameters.decay_epoch = 2
     parameters.decay_rate = 0.95
-    parameters.start_pref_e = 1.0
-    parameters.limit_pref_e = 400.0
+    parameters.start_pref_e = 0.1
+    parameters.limit_pref_e = 100.0
     parameters.start_pref_f = 1000.0
     parameters.limit_pref_f = 1.0
     return 0

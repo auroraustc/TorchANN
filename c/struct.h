@@ -5,7 +5,7 @@ Define all the struct used in the c code.
 */
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_FRAME 5
+#define DEBUG_FRAME 0
 #define DEBUG_ATOM 2
 /***************MACRO FOR DEBUG END***************/
 

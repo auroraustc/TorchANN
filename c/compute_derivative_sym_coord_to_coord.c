@@ -18,7 +18,9 @@ Return code:
 
 /*****************MACRO FOR DEBUG*****************/
 #define DEBUG_DERI
-#define DEBUG_FRAME_IDX 5
+#define DEBUG_FRAME_IDX 0
+#define FRAME_TOT 2
+#define N_ATOMS_ 57
 
 #ifdef DEBUG_DERI
 #define printf_d printf
@@ -38,7 +40,7 @@ Return code:
 
     double * derivative_cur_frame;
 
-    derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(55, DEBUG_FRAME_IDX, 200, 93, 8.0, 7.7, init_read_coord(55, DEBUG_FRAME_IDX, 200, 93), init_read_nei_coord(55, DEBUG_FRAME_IDX, 200, 93), init_read_nei_idx(55, DEBUG_FRAME_IDX, 200, 93));
+    derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_, 8.0, 7.7, init_read_coord(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_), init_read_nei_coord(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_), init_read_nei_idx(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_));
     free(derivative_cur_frame);
     return 0;
 }*/
@@ -56,7 +58,7 @@ double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_At
 double * init_read_nei_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
 {
     FILE * fp_nei_coord;
-    fp_nei_coord = fopen("COORD.BIN", "rb");
+    fp_nei_coord = fopen("NEI_COORD.BIN", "rb");
     double * coord_start = (double *)calloc(Nframes_tot * N_Atoms * SEL_A_max * 3, sizeof(double));
     fread(coord_start, sizeof(double), Nframes_tot * N_Atoms * SEL_A_max * 3, fp_nei_coord);
     fclose(fp_nei_coord);
@@ -66,7 +68,7 @@ double * init_read_nei_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int 
 int * init_read_nei_idx(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
 {
     FILE * fp_nei_idx;
-    fp_nei_idx = fopen("COORD.BIN", "rb");
+    fp_nei_idx = fopen("NEI_IDX.BIN", "rb");
     int * coord_start = (int *)calloc(Nframes_tot * N_Atoms * SEL_A_max, sizeof(int));
     fread(coord_start, sizeof(int), Nframes_tot * N_Atoms * SEL_A_max, fp_nei_idx);
     fclose(fp_nei_idx);
@@ -156,7 +158,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
 
                         if ((l != idx_nei) || (l != i))
                         {
-                            derivative_cur_frame[index] = 0;
+                            //derivative_cur_frame[index] = 0;
                             //not_nei_count ++;
                         }
                         else if ((l == i))//atom_l is atom_i; coord_diff = atom_[idx_nei] - atom_l

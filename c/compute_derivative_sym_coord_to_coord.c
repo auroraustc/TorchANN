@@ -31,19 +31,46 @@ Return code:
 
 #define PI 3.141592653589793238462643383279
 
-/*int main()
+int main()
 {
     double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs, double * coord_start, double * nei_coord_start, int * nei_idx_start);
     double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
     double * init_read_nei_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
     int * init_read_nei_idx(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms);
+    int i, j, k, l, m;
+    int zero_count = 0;
 
     double * derivative_cur_frame;
 
     derivative_cur_frame = compute_derivative_sym_coord_to_coord_one_frame_DeePMD(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_, 8.0, 7.7, init_read_coord(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_), init_read_nei_coord(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_), init_read_nei_idx(FRAME_TOT, DEBUG_FRAME_IDX, 200, N_ATOMS_));
+    for (i = 0; i <= N_ATOMS_ - 1; i++)//loop over atoms
+    {
+        for (j = 0; j <= 200 - 1; j++)
+        {
+            for (k = 0; k <= 3; k++)
+            {
+                for (l = 0; l <= N_ATOMS_ - 1; l++)
+                {
+                    for (m = 0; m <= 2; m++)
+                    {
+                        int index = ((((i * 200) + j) * 4 + k) * N_ATOMS_ + l) * 3 + m;
+                        if (derivative_cur_frame[index] == 0) zero_count ++;
+
+                        if ((k != 0)||(m != 0)||(j != 0))
+                        {
+                            //continue;
+                        }
+                        //printf("Partial atom_%d col %d sym_coord %d / Partial atom_%d coord %d: %.6lf\n", i, j, k, l, m, derivative_cur_frame[index]);
+                        if (fabs(derivative_cur_frame[index])>=1) printf("%.6lf\n", derivative_cur_frame[index]);
+                    }
+                }
+            }
+        }
+    }
+    printf("zeros:%d\n", zero_count);
     free(derivative_cur_frame);
     return 0;
-}*/
+}
 
 double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
 {
@@ -156,7 +183,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
                             printf_d("coord_l: %.6lf %.6lf %.6lf\n", coord_l[0], coord_l[1], coord_l[2]);
                         }*/
 
-                        if ((l != idx_nei) || (l != i))
+                        if (((l != idx_nei) && (l != i)) && (idx_nei == -1))
                         {
                             //derivative_cur_frame[index] = 0;
                             //not_nei_count ++;
@@ -169,7 +196,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
                             double coord_diff[3] = {coord_j[0] - coord_i[0], coord_j[1] - coord_i[1], coord_j[2] - coord_i[2]};
                             double r_ji = sqrt(fastpow2(coord_diff[0], 2) + fastpow2(coord_diff[1], 2) + fastpow2(coord_diff[2], 2));
                             r_ji_check = r_ji;
-                            //if (r_ji >= rc) zero_count++;
+                            //if (r_ji >= rc) {zero_count++; printf("%lf\n", r_ji);};
                             if ((k == 0) && (m == 0))//\partial s_ji / \partial x_i
                             {
                                 if (r_ji >= rc)
@@ -579,7 +606,7 @@ double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot,
     //fclose(fp_derivative);
 
     //free(coord_cur_frame); free(nei_coord_cur_frame); free(nei_idx_cur_frame);
-    //printf_d("%d %d\n", not_nei_count, zero_count);
+    //printf_d("Not nei or self: %d, zero_count: %d\n", not_nei_count, zero_count);
     //free(derivative_cur_frame);
     return derivative_cur_frame;
 }

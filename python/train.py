@@ -7,7 +7,7 @@ import torch as tf
 import torch.utils.data
 import torch.nn as nn
 import torch.optim as optim
-import horovod.torch as hvd
+#import horovod.torch as hvd
 import os
 import gc
 import time
@@ -15,7 +15,10 @@ from ctypes import *
 from class_and_function import *
 
 tf.set_default_dtype(tf.float64)
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
+#hvd.init()
+#tf.cuda.set_device(0)
+#print("hvd.size():", hvd.size())
 #device = torch.device('cpu')
 MYDLL = CDLL("../c/libNNMD.so")
 MYDLL.init_read_coord.argtypes = [c_int, c_int, c_int, c_int]
@@ -31,9 +34,6 @@ MYDLL.freeme.argtypes = [c_void_p]
 MYDLL.freeme.restypes = []
 f_out = open("./LOSS.OUT", "w")
 f_out.close()
-#device = torch.device('cpu')
-#hvd.init()
-#tf.cuda.set_device(hvd.local_rank())
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 ###parameters incomplete
 parameters = Parameters()
@@ -77,7 +77,6 @@ print("NEI_COORD_Reshape: shape = ", NEI_COORD_Reshape.shape)
 
 COORD_Reshape_tf = tf.from_numpy(COORD_Reshape)
 SYM_COORD_Reshape_tf = tf.from_numpy(SYM_COORD_Reshape)
-SYM_COORD_Reshape_tf.requires_grad = True
 ENERGY_tf = tf.from_numpy(ENERGY)
 FORCE_Reshape_tf = tf.from_numpy(FORCE_Reshape)
 N_ATOMS_tf = tf.from_numpy(N_ATOMS)
@@ -104,8 +103,8 @@ print("Data pre-processing complete. Building net work.\n")
 ONE_BATCH_NET = one_batch_net(parameters)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
-if (tf.cuda.device_count() > 1):
-    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
+"""if (tf.cuda.device_count() > 1):
+    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)"""
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
 
@@ -120,6 +119,7 @@ FRAME_IDX_tf.to(device)"""
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, \
                                        ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
                                        NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf)
+#TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=2, rank=hvd.rank())
 """Seems that no need to free memory...
 press_any_key_exit("Press any key to free memory.\n")
 del COORD_Reshape
@@ -127,9 +127,13 @@ del SYM_COORD_Reshape
 del FORCE_Reshape
 press_any_key_exit("Memory free complete.\n")
 """
+#TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
 OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+#OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+
+#hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
 CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
@@ -157,7 +161,7 @@ if (True):
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
-            #data_cur[1].requires_grad = True
+            data_cur[1].requires_grad = True
             NEI_IDX_Reshape_tf_cur = data_cur[6]
             NEI_IDX_Reshape_tf_cur = tf.reshape(NEI_IDX_Reshape_tf_cur, (len(NEI_IDX_Reshape_tf_cur), data_cur[4][0], parameters.SEL_A_max))
             FORCE_Reshape_tf_cur = data_cur[3]
@@ -166,20 +170,34 @@ if (True):
             NEI_COORD_Reshape_tf_cur = data_cur[7]
 
 
-            ###Adams
+            ###Adam
             #correct
             if (data_cur[1].grad):
                 data_cur[1].grad.data.zero_()
+            #Energy
             E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
             #Energy loss part
             loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
-            #Force loss part
-            loss_cur_batch = pref_e * loss_E_cur_batch # + pref_f * loss_F_cur_batch
+            #Force
+            loss_F_cur_batch = tf.zeros(1).to(device)
+            """D_E_D_SYM_COORD_cur_batch = tf.autograd.grad(tf.sum(E_cur_batch), data_cur[1], create_graph = True)[0]
+            for frame_idx in range(len(data_cur[1])):
+                col = N_ATOMS[0] * 3
+                row = parameters.SEL_A_max * N_ATOMS[0] * 4
+                size = col * row
+                D_SYM_COORD_D_COORD_cur_frame = MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD(parameters.Nframes_tot, frame_idx, parameters.SEL_A_max, N_ATOMS[0], parameters.cutoff_2, parameters.cutoff_1, read_coord_res, read_nei_coord_res, read_nei_idx_res)
+                D_SYM_COORD_D_COORD_cur_frame_copy = np.frombuffer((c_double * size).from_address(D_SYM_COORD_D_COORD_cur_frame), np.float64)
+                D_SYM_COORD_D_COORD_cur_frame_copy = np.reshape(D_SYM_COORD_D_COORD_cur_frame_copy, (row, col))
+                D_SYM_COORD_D_COORD_cur_frame_copy = (tf.from_numpy(D_SYM_COORD_D_COORD_cur_frame_copy).to(device))*(-1)
+                FORCE_net_tf_cur[frame_idx] = tf.mm(D_E_D_SYM_COORD_cur_batch[frame_idx].reshape(1, len(D_E_D_SYM_COORD_cur_batch[frame_idx])), D_SYM_COORD_D_COORD_cur_frame_copy)
+                MYDLL.freeme(D_SYM_COORD_D_COORD_cur_frame)
+            loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])"""
+            loss_cur_batch = pref_e * loss_E_cur_batch   + pref_f * loss_F_cur_batch
             OPTIMIZER2.zero_grad()
             loss_cur_batch.backward()
             OPTIMIZER2.step()
             #correct end
-            ###Adams end
+            ###Adam end
 
             ###LBFGS
             #correct
@@ -198,13 +216,13 @@ if (True):
 
             END_BATCH_TIMER = time.time()
             f_out = open("./LOSS.OUT","a")
-            ###Adams
+            ###Adam
             print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-            epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], 999, END_BATCH_TIMER - START_BATCH_TIMER))
+            epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
             print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.3f eV/A, time: %10.3f s" % (\
-                epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], 999, END_BATCH_TIMER - START_BATCH_TIMER),\
+                epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER),\
                   file = f_out)
-            ###Adams end
+            ###Adam end
 
             ###LBFGS
             """print("Epoch: %-10d, Batch: %-10d, loss: %10.3f eV/atom, time: %10.3f s" % (

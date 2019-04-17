@@ -7,8 +7,8 @@ import sys
 import termios
 from torch.autograd import Variable
 from torch.autograd import Variable
-import torchvision.models as models
-from graphviz import Digraph
+#import torchvision.models as models
+#from graphviz import Digraph
 import re
 
 tf.set_default_dtype(tf.float64)
@@ -81,12 +81,12 @@ def read_parameters(parameters):
     parameters.Nframes_tot = 2
     parameters.sym_coord_type = 1
 ###New add parameters
-    parameters.batch_size = 16
+    parameters.batch_size = 4
     parameters.epoch = 1000
     parameters.filter_neuron = [32, 96, 192]
     parameters.axis_neuron = 4
     parameters.fitting_neuron = [1024, 512, 512, 256, 128]
-    parameters.start_lr = 0.005
+    parameters.start_lr = 0.0005
     parameters.decay_steps = 20 #abandoned
     parameters.decay_epoch = 10
     parameters.decay_rate = 0.95
@@ -133,16 +133,43 @@ class one_batch_net(nn.Module):
                                                        parameters.SEL_A_max, 4))
         print(SYM_COORD_Reshape_tf_cur.shape)
         SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
+        SYM_COORD_Reshape_tf_cur_Reshape_slice_3 = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 1, 3)
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
         for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
             E_cur_frame = tf.zeros(1, device = device)
             E_cur_frame_atom_wise = tf.zeros(N_ATOMS_tf_cur[0], device = device)
             for atom_idx in range(N_ATOMS_tf_cur[0]):
                 type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
+
+                std_cur_atom = tf.zeros(4).to(device)
+                std_cur_atom[0] = tf.sqrt(
+                    tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx] ** 2) / len(
+                        SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) - (
+                                tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) / len(
+                            SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])) ** 2)
+
+                std_cur_atom[1] = tf.sqrt(
+                    tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice_3[frame_idx][atom_idx] ** 2) / 3.0 / len(
+                        SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) - (
+                                tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice_3[frame_idx][atom_idx]) / 3.0 / len(
+                            SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])) ** 2)
+                std_cur_atom[2] = std_cur_atom[1]
+                std_cur_atom[3] = std_cur_atom[1]
+
+                std_cur_atom = std_cur_atom.repeat(1, len(
+                    SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])).reshape(
+                    len(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]), 4)
+
+                std_cur_atom = std_cur_atom.detach()
+                std_cur_atom_slice = std_cur_atom.narrow(1, 0, 1)
+
+                SYM_COORD_Reshape_tf_cur_Reshape_ = SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_cur_atom / std_cur_atom
+                SYM_COORD_Reshape_tf_cur_Reshape_slice_ = SYM_COORD_Reshape_tf_cur_Reshape_.narrow(1, 0, 1)
+
                 G_cur_atom = tf.tanh(self.filter_input[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
                 for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx_cur_atom]):
                     G_cur_atom = tf.tanh(filter_hidden_layer(G_cur_atom))
-                RG_cur_atom = tf.mm(SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx].transpose(0, 1), G_cur_atom)
+                RG_cur_atom = tf.mm((SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx]).transpose(0, 1), G_cur_atom)
                 GRRG_cur_atom = tf.mm(RG_cur_atom.transpose(0, 1), RG_cur_atom.narrow(1, 0, parameters.axis_neuron))
                 GRRG_cur_atom = tf.reshape(GRRG_cur_atom, (parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron, ))
                 E_cur_atom = tf.tanh(self.fitting_input[type_idx_cur_atom](GRRG_cur_atom))

@@ -19,7 +19,7 @@ device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #hvd.init()
 #tf.cuda.set_device(0)
 #print("hvd.size():", hvd.size())
-device = torch.device('cpu')
+#device = torch.device('cpu')
 
 MYDLL = CDLL("../c/libNNMD.so")
 MYDLL.init_read_coord.argtypes = [c_int, c_int, c_int, c_int]

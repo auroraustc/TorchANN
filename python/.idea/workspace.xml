@@ -2,15 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/9c97df22012f5d3a/build_neighbour_list.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/9c97df22012f5d3a/build_neighbour_list.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/adba7ee151b52f87/extend_max_atoms.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/adba7ee151b52f87/extend_max_atoms.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/compute_derivative_sym_coord_to_coord.c" beforeDir="false" afterPath="$PROJECT_DIR$/../c/compute_derivative_sym_coord_to_coord.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/extend_max_atoms.c" beforeDir="false" afterPath="$PROJECT_DIR$/../c/extend_max_atoms.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../c/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/box.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/box.raw" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/coord.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/coord.raw" afterDir="false" />
@@ -35,7 +26,7 @@
             <entry file="file://$PROJECT_DIR$/train.py">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="180">
-                  <caret line="21" selection-start-line="21" selection-end-line="21" />
+                  <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
                   <folding>
                     <element signature="e#46#64#0" expanded="true" />
                   </folding>
@@ -291,12 +282,12 @@
       <workItem from="1555391197544" duration="3038000" />
       <workItem from="1555395925230" duration="4953000" />
       <workItem from="1555503592539" duration="3295000" />
-      <workItem from="1555508651842" duration="1368000" />
+      <workItem from="1555508651842" duration="1503000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129460000" />
+    <option name="totallyTimeSpent" value="129595000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
@@ -497,7 +488,7 @@
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
-          <caret line="21" selection-start-line="21" selection-end-line="21" />
+          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
           <folding>
             <element signature="e#46#64#0" expanded="true" />
           </folding>

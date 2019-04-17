@@ -78,22 +78,22 @@ def read_parameters(parameters):
     parameters.N_types_all_frame = 2
     parameters.type_index_all_frame = [0, 1]
     parameters.SEL_A_max = 200
-    parameters.Nframes_tot = 2
+    parameters.Nframes_tot = 1
     parameters.sym_coord_type = 1
 ###New add parameters
     parameters.batch_size = 4
-    parameters.epoch = 1000
+    parameters.epoch = 10000
     parameters.filter_neuron = [32, 96, 192]
     parameters.axis_neuron = 4
-    parameters.fitting_neuron = [1024, 512, 512, 256, 128]
-    parameters.start_lr = 0.0005
+    parameters.fitting_neuron = [1024, 512, 512, 256]
+    parameters.start_lr = 0.00005
     parameters.decay_steps = 20 #abandoned
-    parameters.decay_epoch = 10
+    parameters.decay_epoch = 500
     parameters.decay_rate = 0.95
     parameters.start_pref_e = 0.1
     parameters.limit_pref_e = 100.0
-    parameters.start_pref_f = 1000.0
-    parameters.limit_pref_f = 1.0
+    parameters.start_pref_f = 1000000.0
+    parameters.limit_pref_f = 100.0
     return 0
 
 
@@ -141,7 +141,10 @@ class one_batch_net(nn.Module):
             for atom_idx in range(N_ATOMS_tf_cur[0]):
                 type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
 
+                #
                 std_cur_atom = tf.zeros(4).to(device)
+
+
                 std_cur_atom[0] = tf.sqrt(
                     tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx] ** 2) / len(
                         SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) - (
@@ -165,6 +168,7 @@ class one_batch_net(nn.Module):
 
                 SYM_COORD_Reshape_tf_cur_Reshape_ = SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_cur_atom / std_cur_atom
                 SYM_COORD_Reshape_tf_cur_Reshape_slice_ = SYM_COORD_Reshape_tf_cur_Reshape_.narrow(1, 0, 1)
+                #
 
                 G_cur_atom = tf.tanh(self.filter_input[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
                 for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx_cur_atom]):

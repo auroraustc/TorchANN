@@ -19,7 +19,8 @@ device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #hvd.init()
 #tf.cuda.set_device(0)
 #print("hvd.size():", hvd.size())
-#device = torch.device('cpu')
+device = torch.device('cpu')
+
 MYDLL = CDLL("../c/libNNMD.so")
 MYDLL.init_read_coord.argtypes = [c_int, c_int, c_int, c_int]
 MYDLL.init_read_coord.restype = POINTER(c_double)
@@ -32,6 +33,7 @@ MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD.argtypes = [c_int, 
 MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD.restype = c_void_p
 MYDLL.freeme.argtypes = [c_void_p]
 MYDLL.freeme.restypes = []
+
 f_out = open("./LOSS.OUT", "w")
 f_out.close()
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
@@ -138,9 +140,11 @@ CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
+
 read_coord_res = MYDLL.init_read_coord(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
 read_nei_coord_res = MYDLL.init_read_nei_coord(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
 read_nei_idx_res = MYDLL.init_read_nei_idx(parameters.Nframes_tot, 0, parameters.SEL_A_max, N_ATOMS[0])
+
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
 #hvd.broadcast_parameters(state_dict_, root_rank = 0)
@@ -180,7 +184,8 @@ if (True):
             loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
             #Force
             loss_F_cur_batch = tf.zeros(1).to(device)
-            """D_E_D_SYM_COORD_cur_batch = tf.autograd.grad(tf.sum(E_cur_batch), data_cur[1], create_graph = True)[0]
+
+            D_E_D_SYM_COORD_cur_batch = tf.autograd.grad(tf.sum(E_cur_batch), data_cur[1], create_graph = True)[0]
             for frame_idx in range(len(data_cur[1])):
                 col = N_ATOMS[0] * 3
                 row = parameters.SEL_A_max * N_ATOMS[0] * 4
@@ -189,9 +194,12 @@ if (True):
                 D_SYM_COORD_D_COORD_cur_frame_copy = np.frombuffer((c_double * size).from_address(D_SYM_COORD_D_COORD_cur_frame), np.float64)
                 D_SYM_COORD_D_COORD_cur_frame_copy = np.reshape(D_SYM_COORD_D_COORD_cur_frame_copy, (row, col))
                 D_SYM_COORD_D_COORD_cur_frame_copy = (tf.from_numpy(D_SYM_COORD_D_COORD_cur_frame_copy).to(device))*(-1)
-                FORCE_net_tf_cur[frame_idx] = tf.mm(D_E_D_SYM_COORD_cur_batch[frame_idx].reshape(1, len(D_E_D_SYM_COORD_cur_batch[frame_idx])), D_SYM_COORD_D_COORD_cur_frame_copy)
+                FORCE_net_tf_cur[frame_idx] = (-1) * tf.mm(D_E_D_SYM_COORD_cur_batch[frame_idx].reshape(1, len(D_E_D_SYM_COORD_cur_batch[frame_idx])), D_SYM_COORD_D_COORD_cur_frame_copy)
                 MYDLL.freeme(D_SYM_COORD_D_COORD_cur_frame)
-            loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])"""
+            if (epoch % 50 == 0):
+                print(FORCE_net_tf_cur)
+            loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])
+
             loss_cur_batch = pref_e * loss_E_cur_batch   + pref_f * loss_F_cur_batch
             OPTIMIZER2.zero_grad()
             loss_cur_batch.backward()
@@ -248,9 +256,11 @@ if (tf.cuda.device_count() > 1):
 else:
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
     print("Model saved to ./freeze_model.pytorch")
+"""
 MYDLL.freeme(read_coord_res)
 MYDLL.freeme(read_nei_coord_res)
 MYDLL.freeme(read_nei_idx_res)
+"""
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER
 print("Training complete. Time elapsed: %10.3f s\n"%ELAPSED_TRAIN)

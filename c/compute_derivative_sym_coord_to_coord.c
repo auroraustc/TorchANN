@@ -30,7 +30,7 @@ Return code:
 /***************MACRO FOR DEBUG END***************/
 
 #define PI 3.141592653589793238462643383279
-
+/*
 int main()
 {
     double * compute_derivative_sym_coord_to_coord_one_frame_DeePMD(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms, double rc, double rcs, double * coord_start, double * nei_coord_start, int * nei_idx_start);
@@ -70,7 +70,7 @@ int main()
     printf("zeros:%d\n", zero_count);
     free(derivative_cur_frame);
     return 0;
-}
+}*/
 
 double * init_read_coord(int Nframes_tot, int frame_idx, int SEL_A_max, int N_Atoms)
 {

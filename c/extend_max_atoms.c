@@ -47,8 +47,8 @@ int extend_max_atoms_cur_frame(frame_info_struct * frame_info_cur, parameters_in
     double ** coord_ext = (double **)calloc(N_Atoms_max, sizeof(double *));
     double ** force_ext = (double **)calloc(N_Atoms_max, sizeof(double *));
     int * type_ext = (int *)calloc(N_Atoms_max, sizeof(int));
-    double interval = (double)(int)(parameters_info->cutoff_max + 1);
-    double radius = (N_Atoms_max - N_Atoms_cur) * interval + 1000;
+    double interval = (double)(int)(parameters_info->cutoff_max + 1) * 100;
+    double radius = (N_Atoms_max - N_Atoms_cur) * interval + 100000;
 
     for (i = 0; i <= N_Atoms_max - 1; i++)
     {

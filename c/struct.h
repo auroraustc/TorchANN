@@ -6,7 +6,8 @@ Define all the struct used in the c code.
 
 /*****************MACRO FOR DEBUG*****************/
 #define DEBUG_FRAME 0
-#define DEBUG_ATOM 2
+#define DEBUG_ATOM 0
+#define EXTEND_FLAG 32767
 /***************MACRO FOR DEBUG END***************/
 
 /*Neighbour list info for one atom in one frame*/

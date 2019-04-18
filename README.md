@@ -104,7 +104,7 @@ The C code will convert the raw data into symmetry coordinates needed by trainin
 ```bash
 ALL_PARAMS.json,COORD.BIN, ENERGY.BIN, FORCE.BIN, N_ATOMS.BIN, SYM_COORD.BIN, TYPE.BIN, ...
 ```
-The first file: `all_frame_info.bin.temp` could be deleted and should not affect the training process in the current version.
+The file `all_frame_info.bin.temp` could be deleted and should not affect the training process in the current version.
 
 ### STEP 3: Run python script to train
 ```bash

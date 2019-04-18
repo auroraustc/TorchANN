@@ -131,6 +131,10 @@ s1:
             if (dist_ij <= neighbour_list_cur[i].cutoff_max) N_nei++;
         }
         neighbour_list_cur[i].N_neighbours = N_nei;
+        if (frame_info_cur->type[i] == -1)
+        {
+            N_nei = 0;
+        }
         printf_d("Number of neighbours of atom %d: %d\n", i + 1,  N_nei);
         if (N_nei >= max_num_N_nei_one_frame) max_num_N_nei_one_frame = N_nei;
     }
@@ -275,28 +279,31 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     dist_info = (dist_info_struct *)calloc(parameters_info->SEL_A_max, sizeof(dist_info_struct));
     //#pragma omp parallel for
     int index_tmp_dist = 0;
+    dist_info_struct dummy;
+    atom_info_struct dummy_atom;
+    dummy_atom.coord[0] = 9999; dummy_atom.coord[1] = 9999; dummy_atom.coord[2] = 9999;
+    dummy_atom.index = 0;
+    dummy.atom_info = &dummy_atom;
+    dummy.dist = 9999;
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         double dist;
         dist = sqrt(fastpow2(frame_info_cur->coord[index][0] - system_info_expanded->atom_info[i].coord[0] , 2) + fastpow2(frame_info_cur->coord[index][1] - system_info_expanded->atom_info[i].coord[1], 2) + fastpow2(frame_info_cur->coord[index][2] - system_info_expanded->atom_info[i].coord[2], 2));
-        if ((dist > 1E-6)&&(dist <= parameters_info->cutoff_max))
+        if ((dist > 1E-6)&&(dist <= parameters_info->cutoff_max)&&(frame_info_cur->type[index] != -1))
         {
             dist_info[index_tmp_dist].atom_info = &(system_info_expanded->atom_info[i]);
             dist_info[index_tmp_dist].dist = dist;
             index_tmp_dist ++;
         }
     }
-    dist_info_struct dummy;
-    atom_info_struct dummy_atom;
-    dummy_atom.coord[0] = 9999; dummy_atom.coord[1] = 9999; dummy_atom.coord[2] = 9999;
-    dummy_atom.index = -1;
-    dummy.atom_info = &dummy_atom;
-    dummy.dist = 9999;
+    
     for (i = index_tmp_dist; i <= parameters_info->SEL_A_max - 1; i ++)
     {
         dist_info[i].atom_info = &dummy_atom;
         dist_info[i].dist = 9999;
     } 
+
+
     if ((frame_info_cur->index == DEBUG_FRAME)&&(index == DEBUG_ATOM))
     {
         printf_d("distance from atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);

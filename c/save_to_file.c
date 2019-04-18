@@ -132,7 +132,40 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
     fprintf(fp_parameters, "    \"N_Atoms_max\": %d,\n", parameters_info->N_Atoms_max);
     fprintf(fp_parameters, "    \"SEL_A_max\": %d,\n", parameters_info->SEL_A_max);
     fprintf(fp_parameters, "    \"Nframes_tot\": %d,\n", parameters_info->Nframes_tot);
-    fprintf(fp_parameters, "    \"sym_coord_type\": %d\n", parameters_info->sym_coord_type);
+    fprintf(fp_parameters, "    \"sym_coord_type\": %d,\n", parameters_info->sym_coord_type);
+
+    fprintf(fp_parameters, "    \"batch_size\": %d,\n", parameters_info->batch_size);
+    fprintf(fp_parameters, "    \"epoch\": %d,\n", parameters_info->epoch);
+    fprintf(fp_parameters, "    \"num_filter_layer\": %d,\n", parameters_info->num_filter_layer);
+
+    fprintf(fp_parameters, "    \"filter_neuron\": [\n");
+    for (i = 0; i <= parameters_info->num_filter_layer - 2; i++)
+    {
+        fprintf(fp_parameters, "        %d,\n", parameters_info->filter_neuron[i]);
+    }
+    fprintf(fp_parameters, "        %d\n", parameters_info->filter_neuron[i]);
+    fprintf(fp_parameters, "    ],\n");
+
+    fprintf(fp_parameters, "    \"axis_neuron\": %d,\n", parameters_info->axis_neuron);
+    fprintf(fp_parameters, "    \"num_fitting_layer\": %d,\n", parameters_info->num_fitting_layer);
+
+    fprintf(fp_parameters, "    \"fitting_neuron\": [\n");
+    for (i = 0; i <= parameters_info->num_fitting_layer - 2; i++)
+    {
+        fprintf(fp_parameters, "        %d,\n", parameters_info->fitting_neuron[i]);
+    }
+    fprintf(fp_parameters, "        %d\n", parameters_info->fitting_neuron[i]);
+    fprintf(fp_parameters, "    ],\n");
+
+    fprintf(fp_parameters, "    \"start_lr\": %.10e,\n", parameters_info->start_lr);
+    fprintf(fp_parameters, "    \"decay_steps\": %d,\n", parameters_info->decay_steps);
+    fprintf(fp_parameters, "    \"decay_epoch\": %d,\n", parameters_info->decay_epoch);
+    fprintf(fp_parameters, "    \"decay_rate\": %.10e,\n", parameters_info->decay_rate);
+    fprintf(fp_parameters, "    \"start_pref_e\": %.10e,\n", parameters_info->start_pref_e);
+    fprintf(fp_parameters, "    \"limit_pref_e\": %.10e,\n", parameters_info->limit_pref_e);
+    fprintf(fp_parameters, "    \"start_pref_f\": %.10e,\n", parameters_info->start_pref_f);
+    fprintf(fp_parameters, "    \"limit_pref_f\": %.10e\n", parameters_info->limit_pref_f);
+
 
     fprintf(fp_parameters, "}\n");//tail. The last line before tail should NOT end with a coma
     fclose(fp_parameters);

@@ -79,6 +79,22 @@ typedef struct parameters_info_struct_
 	int SEL_A_max;
 	int Nframes_tot;
 	int sym_coord_type;
+	
+	int batch_size;
+	int epoch;
+	int num_filter_layer;
+	int * filter_neuron;
+	int axis_neuron;
+	int num_fitting_layer;
+	int * fitting_neuron;
+	double start_lr;
+	int decay_steps;
+	int decay_epoch;
+	double decay_rate;
+	double start_pref_e;
+	double limit_pref_e;
+	double start_pref_f;
+	double limit_pref_f;
 }parameters_info_struct;
 
 /*converted coordinate of one frame(using DeePMD's method)*/

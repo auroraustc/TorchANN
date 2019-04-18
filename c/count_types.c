@@ -57,6 +57,7 @@ int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_a
         int N_types_cur_frame = 0;
         for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
+            if (frame_info[i].type[j] == -1) continue;
             type_cur_frame[frame_info[i].type[j]] = 1;
             type_all_frame[frame_info[i].type[j]] = 1;
         }

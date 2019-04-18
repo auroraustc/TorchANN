@@ -5,8 +5,9 @@ import torch.nn.functional as F
 import os
 import sys
 import termios
-from torch.autograd import Variable
-from torch.autograd import Variable
+#from torch.autograd import Variable
+#from torch.autograd import Variable
+import json
 #import torchvision.models as models
 #from graphviz import Digraph
 import re
@@ -27,8 +28,10 @@ class Parameters():
 
         batch_size = 1
         epoch = 1
+        num_filter_layer = 1
         filter_neuron = []
         axis_neuron = 1
+        num_fitting_layer = 1
         fitting_neuron = []
         start_lr = 0.0005
         decay_steps = 100
@@ -71,35 +74,42 @@ def read_parameters(parameters):
     if (type(parameters).__name__ != "Parameters"):
         print("type error in read_parameters:", type(parameters).__name__," is NOT a correct Parameters class")
         return 1
-    parameters.cutoff_1 = 7.7
-    parameters.cutoff_2 = 8.0
-    parameters.cutoff_3 = 0.0
-    parameters.cutoff_max = 8.0
-    parameters.N_types_all_frame = 2
-    parameters.type_index_all_frame = [0, 1]
-    parameters.SEL_A_max = 200
-    parameters.Nframes_tot = 1
-    parameters.sym_coord_type = 1
+    INPUT_FILE = open('ALL_PARAMS.json')
+    INPUT_DATA = json.load(INPUT_FILE)
+    parameters.cutoff_1 = INPUT_DATA['cutoff_1']
+    parameters.cutoff_2 = INPUT_DATA['cutoff_2']
+    parameters.cutoff_3 = INPUT_DATA['cutoff_3']
+    parameters.cutoff_max = INPUT_DATA['cutoff_max']
+    parameters.N_types_all_frame = INPUT_DATA['N_types_all_frame']
+    parameters.type_index_all_frame = INPUT_DATA['type_index_all_frame']
+    parameters.SEL_A_max = INPUT_DATA['SEL_A_max']
+    parameters.Nframes_tot = INPUT_DATA['Nframes_tot']
+    parameters.sym_coord_type = INPUT_DATA['sym_coord_type']
 ###New add parameters
-    parameters.batch_size = 4
-    parameters.epoch = 10000
-    parameters.filter_neuron = [32, 96, 192]
-    parameters.axis_neuron = 4
-    parameters.fitting_neuron = [1024, 512, 512, 256]
-    parameters.start_lr = 0.00005
-    parameters.decay_steps = 20 #abandoned
-    parameters.decay_epoch = 500
-    parameters.decay_rate = 0.95
-    parameters.start_pref_e = 0.1
-    parameters.limit_pref_e = 100.0
-    parameters.start_pref_f = 1000000.0
-    parameters.limit_pref_f = 100.0
+    parameters.batch_size = INPUT_DATA['batch_size']
+    parameters.epoch = INPUT_DATA['epoch']
+    parameters.num_filter_layer = INPUT_DATA['num_filter_layer']
+    parameters.filter_neuron = INPUT_DATA['filter_neuron']
+    parameters.axis_neuron = INPUT_DATA['axis_neuron']
+    parameters.num_fitting_layer = INPUT_DATA['num_fitting_layer']
+    parameters.fitting_neuron = INPUT_DATA['fitting_neuron']
+    parameters.start_lr = INPUT_DATA['start_lr']
+    parameters.decay_steps = INPUT_DATA['decay_steps'] #abandoned
+    parameters.decay_epoch = INPUT_DATA['decay_epoch']
+    parameters.decay_rate = INPUT_DATA['decay_rate']
+    parameters.start_pref_e = INPUT_DATA['start_pref_e']
+    parameters.limit_pref_e = INPUT_DATA['limit_pref_e']
+    parameters.start_pref_f = INPUT_DATA['start_pref_f']
+    parameters.limit_pref_f = INPUT_DATA['limit_pref_f']
+
+    INPUT_FILE.close()
     return 0
 
 
 class one_batch_net(nn.Module):
     def __init__(self, parameters):
         super(one_batch_net, self).__init__()
+        #self.batch_norm = nn.BatchNorm1d(1)
         self.filter_input = nn.ModuleList()
         self.filter_hidden = nn.ModuleList()
         self.fitting_input = nn.ModuleList()
@@ -131,7 +141,7 @@ class one_batch_net(nn.Module):
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
                                                       (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
                                                        parameters.SEL_A_max, 4))
-        print(SYM_COORD_Reshape_tf_cur.shape)
+        print("Size check of input data:", SYM_COORD_Reshape_tf_cur.shape)
         SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
         SYM_COORD_Reshape_tf_cur_Reshape_slice_3 = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 1, 3)
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
@@ -139,36 +149,10 @@ class one_batch_net(nn.Module):
             E_cur_frame = tf.zeros(1, device = device)
             E_cur_frame_atom_wise = tf.zeros(N_ATOMS_tf_cur[0], device = device)
             for atom_idx in range(N_ATOMS_tf_cur[0]):
-                type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-
-                #
-                std_cur_atom = tf.zeros(4).to(device)
-
-
-                std_cur_atom[0] = tf.sqrt(
-                    tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx] ** 2) / len(
-                        SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) - (
-                                tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) / len(
-                            SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])) ** 2)
-
-                std_cur_atom[1] = tf.sqrt(
-                    tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice_3[frame_idx][atom_idx] ** 2) / 3.0 / len(
-                        SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]) - (
-                                tf.sum(SYM_COORD_Reshape_tf_cur_Reshape_slice_3[frame_idx][atom_idx]) / 3.0 / len(
-                            SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])) ** 2)
-                std_cur_atom[2] = std_cur_atom[1]
-                std_cur_atom[3] = std_cur_atom[1]
-
-                std_cur_atom = std_cur_atom.repeat(1, len(
-                    SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx])).reshape(
-                    len(SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]), 4)
-
-                std_cur_atom = std_cur_atom.detach()
-                std_cur_atom_slice = std_cur_atom.narrow(1, 0, 1)
-
-                SYM_COORD_Reshape_tf_cur_Reshape_ = SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_cur_atom / std_cur_atom
-                SYM_COORD_Reshape_tf_cur_Reshape_slice_ = SYM_COORD_Reshape_tf_cur_Reshape_.narrow(1, 0, 1)
-                #
+                if(TYPE_Reshape_tf_cur[frame_idx][atom_idx] == -1):
+                    type_idx_cur_atom = parameters.type_index_all_frame[0]
+                else:
+                    type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
 
                 G_cur_atom = tf.tanh(self.filter_input[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_slice[frame_idx][atom_idx]))
                 for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx_cur_atom]):
@@ -183,12 +167,14 @@ class one_batch_net(nn.Module):
                 E_cur_frame_atom_wise[atom_idx] = E_cur_atom
                 #SYM_COORD_Reshape_tf_cur_grad[0][frame_idx] = tf.autograd.grad(E_cur_atom, data_cur[1], create_graph = True)[0][frame_idx]
             E_cur_frame = tf.sum(E_cur_frame_atom_wise)
+            #print("EATOM",E_cur_frame_atom_wise)
             #gg = tf.autograd.grad(E_cur_frame, SYM_COORD_Reshape_tf_cur_Reshape[frame_idx])
             E_cur_batch[frame_idx] = E_cur_frame
         return E_cur_batch
 
 
 def make_dot(var, params):
+    #To use this method, you need to uncomment the import torchvision & graphviz lines
     """ Produces Graphviz representation of PyTorch autograd graph
 
     Blue nodes are the Variables that require grad, orange are Tensors

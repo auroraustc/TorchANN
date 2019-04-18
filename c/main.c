@@ -228,5 +228,6 @@ int main()
     free(parameters_info->type_index_all_frame);
     free(parameters_info);
 
+    printf("***Modify the ALL_PARAMS.json before training!***\n");
     return 0;
 }

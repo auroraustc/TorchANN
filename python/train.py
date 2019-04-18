@@ -40,6 +40,8 @@ f_out.close()
 ###parameters incomplete
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
+print("All parameters:")
+print(parameters)#incomplete, add __str__ method
 if (read_parameters_flag != 0):
     print("Reading parameters error with code %d\n"%read_parameters_flag)
     exit()
@@ -100,13 +102,33 @@ press_any_key_exit("Memory free complete.\n")
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
+
+"""Input normalization"""
+avg_ = tf.ones(len(SYM_COORD_Reshape_tf), 4)
+std_ = tf.ones(len(SYM_COORD_Reshape_tf), 4)
+for frame_idx in range(len(SYM_COORD_Reshape_tf)):
+    SYM_COORD_Reshape_tf_cur_frame = tf.reshape(SYM_COORD_Reshape_tf[frame_idx], (N_ATOMS_tf[frame_idx], parameters.SEL_A_max, 4))
+    avg_sr = tf.sum(SYM_COORD_Reshape_tf_cur_frame.narrow(2, 0, 1)) /  N_ATOMS_tf[frame_idx] / parameters.SEL_A_max
+    avg_sr2 = tf.sum((SYM_COORD_Reshape_tf_cur_frame.narrow(2, 0, 1))**2) /  N_ATOMS_tf[frame_idx] / parameters.SEL_A_max
+    std_sr = tf.sqrt(avg_sr2 - avg_sr**2)
+    avg_xyz = tf.sum(SYM_COORD_Reshape_tf_cur_frame.narrow(2, 1, 3)) /  N_ATOMS_tf[frame_idx] / parameters.SEL_A_max / 3
+    avg_xyz2 = tf.sum((SYM_COORD_Reshape_tf_cur_frame.narrow(2, 1, 3))**2) / N_ATOMS_tf[frame_idx] / parameters.SEL_A_max / 3
+    std_xyz = tf.sqrt(avg_xyz2 - avg_xyz**2)
+    avg_[frame_idx][0] = avg_sr
+    avg_[frame_idx][1:] = avg_xyz
+    std_[frame_idx][0] = std_sr
+    std_[frame_idx][1:] = std_xyz
+    SYM_COORD_Reshape_tf_cur_frame = (SYM_COORD_Reshape_tf_cur_frame - avg_[frame_idx]) / std_[frame_idx]
+    SYM_COORD_Reshape_tf_cur_frame = tf.reshape(SYM_COORD_Reshape_tf_cur_frame, (-1,))
+    SYM_COORD_Reshape_tf[frame_idx] = SYM_COORD_Reshape_tf_cur_frame
+
 print("Data pre-processing complete. Building net work.\n")
 
 ONE_BATCH_NET = one_batch_net(parameters)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
-"""if (tf.cuda.device_count() > 1):
-    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)"""
+if (tf.cuda.device_count() > 1):
+    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
 
@@ -120,7 +142,7 @@ FRAME_IDX_tf.to(device)"""
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, \
                                        ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
-                                       NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf)
+                                       NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, avg_, std_)
 #TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=2, rank=hvd.rank())
 """Seems that no need to free memory...
 press_any_key_exit("Press any key to free memory.\n")
@@ -131,9 +153,13 @@ press_any_key_exit("Memory free complete.\n")
 """
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 #OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
+"""
+###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
+###Adam work also horribly. So it is better to use Adadelta
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+"""
 
 #hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
 CRITERION = nn.MSELoss(reduction = "mean")
@@ -194,9 +220,11 @@ if (True):
                 D_SYM_COORD_D_COORD_cur_frame_copy = np.frombuffer((c_double * size).from_address(D_SYM_COORD_D_COORD_cur_frame), np.float64)
                 D_SYM_COORD_D_COORD_cur_frame_copy = np.reshape(D_SYM_COORD_D_COORD_cur_frame_copy, (row, col))
                 D_SYM_COORD_D_COORD_cur_frame_copy = (tf.from_numpy(D_SYM_COORD_D_COORD_cur_frame_copy).to(device))*(-1)
+                D_SYM_COORD_D_COORD_cur_frame_copy = D_SYM_COORD_D_COORD_cur_frame_copy.transpose(0,1)
+                D_SYM_COORD_D_COORD_cur_frame_copy = tf.reshape((tf.reshape(D_SYM_COORD_D_COORD_cur_frame_copy, (col, N_ATOMS_tf[0], parameters.SEL_A_max, 4))) / data_cur[10][frame_idx], (col, row)).transpose(0, 1)
                 FORCE_net_tf_cur[frame_idx] = (-1) * tf.mm(D_E_D_SYM_COORD_cur_batch[frame_idx].reshape(1, len(D_E_D_SYM_COORD_cur_batch[frame_idx])), D_SYM_COORD_D_COORD_cur_frame_copy)
                 MYDLL.freeme(D_SYM_COORD_D_COORD_cur_frame)
-            if (epoch % 50 == 0):
+            if ((STEP_CUR % 50 == 0)):
                 print(FORCE_net_tf_cur)
             loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])
 
@@ -207,38 +235,90 @@ if (True):
             #correct end
             ###Adam end
 
+
+            """
             ###LBFGS
             #correct
-            """def closure():
-                OPTIMIZER.zero_grad()
+            # correct
+            def closure():
+                #if (data_cur[1].grad):
+                #    data_cur[1].grad.data.zero_()
+                # Energy
                 E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
-                loss_cur_batch = CRITERION(E_cur_batch, data_cur[2]) / math.sqrt(len(data_cur[1]))
+                # Energy loss part
+                loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
+                # Force
+                loss_F_cur_batch = tf.zeros(1).to(device)
+
+                D_E_D_SYM_COORD_cur_batch = tf.autograd.grad(tf.sum(E_cur_batch), data_cur[1], retain_graph=True)[0]
+                for frame_idx in range(len(data_cur[1])):
+                    col = N_ATOMS[0] * 3
+                    row = parameters.SEL_A_max * N_ATOMS[0] * 4
+                    size = col * row
+                    D_SYM_COORD_D_COORD_cur_frame = MYDLL.compute_derivative_sym_coord_to_coord_one_frame_DeePMD(
+                        parameters.Nframes_tot, frame_idx, parameters.SEL_A_max, N_ATOMS[0], parameters.cutoff_2,
+                        parameters.cutoff_1, read_coord_res, read_nei_coord_res, read_nei_idx_res)
+                    D_SYM_COORD_D_COORD_cur_frame_copy = np.frombuffer(
+                        (c_double * size).from_address(D_SYM_COORD_D_COORD_cur_frame), np.float64)
+                    D_SYM_COORD_D_COORD_cur_frame_copy = np.reshape(D_SYM_COORD_D_COORD_cur_frame_copy, (row, col))
+                    D_SYM_COORD_D_COORD_cur_frame_copy = (tf.from_numpy(D_SYM_COORD_D_COORD_cur_frame_copy).to(
+                        device)) * (
+                                                             -1)
+                    D_SYM_COORD_D_COORD_cur_frame_copy = D_SYM_COORD_D_COORD_cur_frame_copy.transpose(0, 1)
+                    D_SYM_COORD_D_COORD_cur_frame_copy = tf.reshape(
+                        (tf.reshape(D_SYM_COORD_D_COORD_cur_frame_copy,
+                                    (col, N_ATOMS_tf[0], parameters.SEL_A_max, 4))) /
+                        data_cur[10][frame_idx], (col, row)).transpose(0, 1)
+                    FORCE_net_tf_cur[frame_idx] = (-1) * tf.mm(
+                        D_E_D_SYM_COORD_cur_batch[frame_idx].reshape(1, len(D_E_D_SYM_COORD_cur_batch[frame_idx])),
+                        D_SYM_COORD_D_COORD_cur_frame_copy)
+                    MYDLL.freeme(D_SYM_COORD_D_COORD_cur_frame)
+                if ((STEP_CUR % 50 == 0)):
+                    print(FORCE_net_tf_cur)
+                loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])
+
+                loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
+                OPTIMIZER.zero_grad()
                 loss_cur_batch.backward()
                 return loss_cur_batch
-            OPTIMIZER.step(closure)"""
+            OPTIMIZER.step(closure)
+            # correct end
             #correct end
             ###LBFGS end
+            """
 
 
 
 
             END_BATCH_TIMER = time.time()
-            f_out = open("./LOSS.OUT","a")
+
+
             ###Adam
+            f_out = open("./LOSS.OUT","a")
             print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
             epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER))
             print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.3f eV/A, time: %10.3f s" % (\
                 epoch, batch_idx, loss_E_cur_batch / N_ATOMS[0], loss_F_cur_batch, END_BATCH_TIMER - START_BATCH_TIMER),\
                   file = f_out)
+            f_out.close()
             ###Adam end
 
+
+            """
             ###LBFGS
-            """print("Epoch: %-10d, Batch: %-10d, loss: %10.3f eV/atom, time: %10.3f s" % (
-                epoch, batch_idx, closure() / N_ATOMS[0], END_BATCH_TIMER - START_BATCH_TIMER))"""
+            f_out = open("./LOSS.OUT", "a")
+            print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+            epoch, batch_idx, closure() / N_ATOMS[0], closure() / N_ATOMS[0], END_BATCH_TIMER - START_BATCH_TIMER))
+            print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.3f eV/A, time: %10.3f s" % (\
+                epoch, batch_idx, closure() / N_ATOMS[0], closure() / N_ATOMS[0], END_BATCH_TIMER - START_BATCH_TIMER),\
+                  file = f_out)
+            f_out.close()
             ###LBFGS end
+            """
+
 
             #print(COORD_Reshape_tf_cur, SYM_COORD_Reshape_tf_cur, ENERGY_tf_cur, FORCE_Reshape_tf_cur, N_ATOMS_tf_cur)
-            f_out.close()
+
             STEP_CUR += 1
 
 
@@ -257,6 +337,7 @@ else:
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
     print("Model saved to ./freeze_model.pytorch")
 """
+###No need to free because here is nearly the end of the program
 MYDLL.freeme(read_coord_res)
 MYDLL.freeme(read_nei_coord_res)
 MYDLL.freeme(read_nei_idx_res)

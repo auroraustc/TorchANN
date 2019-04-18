@@ -98,23 +98,25 @@ make
 ```bash
 cd ../test_2 #The input data for test is under this directory
 ../c/a.out > log
+#Modify the ALL_PARAMS.json for your dataset
 ```
-The C code will convert the raw data into symmetry coordinates needed by training and eight files will be stored in the ./ directory:
+The C code will convert the raw data into symmetry coordinates needed by training and some bin files will be stored in the `./` directory:
 ```bash
-all_frame_info.bin.temp, ALL_PARAMS.json,COORD.BIN, ENERGY.BIN, FORCE.BIN, N_ATOMS.BIN, SYM_COORD.BIN, TYPE.BIN
+ALL_PARAMS.json,COORD.BIN, ENERGY.BIN, FORCE.BIN, N_ATOMS.BIN, SYM_COORD.BIN, TYPE.BIN, ...
 ```
-The first two files: `all_frame_info.bin.temp` and `ALL_PARAMS.json`, could be deleted and should not affect the training process in the current version.
+The first file: `all_frame_info.bin.temp` could be deleted and should not affect the training process in the current version.
 
 ### STEP 3: Run python script to train
 ```bash
-python ../python/train.py
+python3 ../python/train.py
 ```
-## Parameters
-**In the current version the read_parameters() function has not been fully completed. All the parameters need to be modified through the source code. Remember to rebuild the C code after modifying a .c file**
+## Parameters in ALL_PARAMS.json
+**In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying a .c file**
 - `cutoff_1`, `cutoff_2`, `cutoff_3`, `cutoff_max`
   - For [DeePMD](https://github.com/deepmodeling/deepmd-kit)-type symmetry coordinates, `cutoff_1` and `cutoff_2` (or `cutoff_max`) correspond to rcs and rc in [its paper](https://arxiv.org/abs/1805.09003).
   - Editing the **read_parameters.c** to change their values.
 - `filter_neuron`, `fitting_neuron`, `axis_neuron`
   - `filter_neuron` and `fitting_neuron` are two arrays describing the filter network and fitting network in [DeePMD's paper](https://arxiv.org/abs/1805.09003)
   - `axis_neuron` is the number of columns of the G^(i2) matrix in DeePMD's paper.
-  - Editing the **read_parameters()** in **class_and_function.py** to change their values.
+- `start_pref_e`, `limit_pref_e`, `start_pref_f`, `limit_pref_f`
+  - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`

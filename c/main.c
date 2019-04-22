@@ -175,6 +175,16 @@ int main()
         }
         printf_d("\n");
     }
+    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rij", "dx_hat", "dy_hat", "dz_hat");
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    {
+        for (j = 0; j <= 3; j++)
+        {
+            int idx = i * 4 + j;
+            printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].d_to_center_x[DEBUG_ATOM][idx]);
+        }
+        printf_d("\n");
+    }
 
     save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_DeePMD);
     if (save_to_file_flag != 0)

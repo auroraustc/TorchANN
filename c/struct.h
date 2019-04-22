@@ -104,6 +104,9 @@ typedef struct sym_coord_DeePMD_struct_
 	int SEL_A;
 	int * type;//type[0..N_Atoms-1]
 	double ** coord_converted;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
+	double ** d_to_center_x;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
+	double ** d_to_center_y;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
+	double ** d_to_center_z;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
 }sym_coord_DeePMD_struct;
 
 

@@ -26,6 +26,8 @@ Return code:
 #endif
 /***************MACRO FOR DEBUG END***************/
 
+#define PI 3.141592653589793238462643383279
+
 int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int sym_coord_type, void ** sym_coord)
 {
     int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, void ** sym_coord);
@@ -67,9 +69,15 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
         sym_coord_DeePMD[i].SEL_A = parameters_info->SEL_A_max;
         sym_coord_DeePMD[i].type = frame_info[i].type;
         sym_coord_DeePMD[i].coord_converted = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
+        sym_coord_DeePMD[i].d_to_center_x = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
+        sym_coord_DeePMD[i].d_to_center_y = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
+        sym_coord_DeePMD[i].d_to_center_z = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
         for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
         {
             sym_coord_DeePMD[i].coord_converted[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
+            sym_coord_DeePMD[i].d_to_center_x[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
+            sym_coord_DeePMD[i].d_to_center_y[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
+            sym_coord_DeePMD[i].d_to_center_z[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
         }
     }
     #pragma omp parallel for private(j, k, l)
@@ -94,6 +102,54 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                 {
                     int idx_sym = k * 4 + l;
                     sym_coord_DeePMD[i].coord_converted[j][idx_sym] = four_coord[l];
+                }
+                /*Calculate d sym_coord / d center_atom*/
+                double rcs = parameters_info->cutoff_1;
+                double rc = parameters_info->cutoff_2;
+                if (r_ij >= rc)
+                {
+                    sym_coord_DeePMD[i].d_to_center_x[j][0] = 0;
+                    sym_coord_DeePMD[i].d_to_center_x[j][1] = 0;
+                    sym_coord_DeePMD[i].d_to_center_x[j][2] = 0;
+                    sym_coord_DeePMD[i].d_to_center_x[j][3] = 0;
+                    sym_coord_DeePMD[i].d_to_center_y[j][0] = 0;
+                    sym_coord_DeePMD[i].d_to_center_y[j][1] = 0;
+                    sym_coord_DeePMD[i].d_to_center_y[j][2] = 0;
+                    sym_coord_DeePMD[i].d_to_center_y[j][3] = 0;
+                    sym_coord_DeePMD[i].d_to_center_z[j][0] = 0;
+                    sym_coord_DeePMD[i].d_to_center_z[j][1] = 0;
+                    sym_coord_DeePMD[i].d_to_center_z[j][2] = 0;
+                    sym_coord_DeePMD[i].d_to_center_z[j][3] = 0;
+                }
+                else if (r_ij >= rcs)
+                {
+                    sym_coord_DeePMD[i].d_to_center_x[j][0] = r_ji_coord[0] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij) + PI * r_ji_coord[0] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[0] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) - (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij) + PI * r_ji_coord[0] * r_ji_coord[0] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][2] = 2.0 * r_ji_coord[0] * r_ji_coord[1] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[0] * r_ji_coord[1] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][3] = 2.0 * r_ji_coord[0] * r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[0] * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][0] = r_ji_coord[1] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij) + PI * r_ji_coord[1] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[1] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[0] * r_ji_coord[1] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][2] = 2.0 * r_ji_coord[1] * r_ji_coord[1] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) - (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij) + PI * r_ji_coord[1] * r_ji_coord[1] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][3] = 2.0 * r_ji_coord[1] * r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[1] * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][0] = r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij) + PI * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[0] * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][2] = 2.0 * r_ji_coord[1] * r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) + PI * r_ji_coord[1] * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][3] = 2.0 * r_ji_coord[2] * r_ji_coord[2] * (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij * r_ij * r_ij) - (0.5 + 0.5 * cos(PI * (r_ij - rcs) / (rc - rcs))) / (r_ij * r_ij) + PI * r_ji_coord[2] * r_ji_coord[2] * sin(PI * (r_ij - rcs) / (rc - rcs)) / 2.0 / (rc - rcs) / (r_ij * r_ij * r_ij);
+                }
+                else
+                {
+                    sym_coord_DeePMD[i].d_to_center_x[j][0] = r_ji_coord[0] / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[0] / (r_ij * r_ij * r_ij * r_ij) - 1.0 / (r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][2] = 2.0 * r_ji_coord[0] * r_ji_coord[1] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_x[j][3] = 2.0 * r_ji_coord[0] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][0] = r_ji_coord[1] / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[1] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][2] = 2.0 * r_ji_coord[1] * r_ji_coord[1] / (r_ij * r_ij * r_ij * r_ij) - 1.0 / (r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_y[j][3] = 2.0 * r_ji_coord[1] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][0] = r_ji_coord[2] / (r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][1] = 2.0 * r_ji_coord[0] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][2] = 2.0 * r_ji_coord[1] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij);
+                    sym_coord_DeePMD[i].d_to_center_z[j][3] = 2.0 * r_ji_coord[2] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij) - 1.0 / (r_ij * r_ij);
                 }
             }
         }

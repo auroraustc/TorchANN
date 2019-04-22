@@ -137,7 +137,6 @@ class one_batch_net(nn.Module):
         FORCE_Reshape_tf_cur = data_cur[3]
         N_ATOMS_tf_cur = data_cur[4]
         TYPE_Reshape_tf_cur = data_cur[5]
-        SYM_COORD_Reshape_tf_cur_grad = tf.zeros((1, len(data_cur[1]), len(data_cur[1][0])))
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
                                                       (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
                                                        parameters.SEL_A_max, 4))

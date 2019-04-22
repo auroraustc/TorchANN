@@ -219,9 +219,15 @@ int main()
         for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
         {
             free(sym_coord_DeePMD[i].coord_converted[j]);
+            free(sym_coord_DeePMD[i].d_to_center_x[j]);
+            free(sym_coord_DeePMD[i].d_to_center_y[j]);
+            free(sym_coord_DeePMD[i].d_to_center_z[j]);
         }
 
         free(sym_coord_DeePMD[i].coord_converted);
+        free(sym_coord_DeePMD[i].d_to_center_x);
+        free(sym_coord_DeePMD[i].d_to_center_y);
+        free(sym_coord_DeePMD[i].d_to_center_z);
     }
     free(sym_coord_DeePMD);
         /*parameters_info*/

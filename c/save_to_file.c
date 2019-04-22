@@ -251,6 +251,35 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
         }
     }
     fclose(fp_sym_coord);
+
+    fp_sym_coord = fopen("./SYM_COORD_DX.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_DeePMD[i].d_to_center_x[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+    fp_sym_coord = fopen("./SYM_COORD_DY.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_DeePMD[i].d_to_center_y[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+    fp_sym_coord = fopen("./SYM_COORD_DZ.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_DeePMD[i].d_to_center_z[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+
     free(N_Atoms_array);
     
     check_sym_coord_from_bin(parameters_info);

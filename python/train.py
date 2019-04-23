@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
 import numpy as np
@@ -7,7 +7,7 @@ import torch as tf
 import torch.utils.data
 import torch.nn as nn
 import torch.optim as optim
-#import horovod.torch as hvd
+import horovod.torch as hvd
 import os
 import gc
 import time
@@ -19,13 +19,16 @@ default_dtype = tf.float64
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("cuDNN version: ", tf.backends.cudnn.version())
 tf.backends.cudnn.enable = False
-#hvd.init()
-#tf.cuda.set_device(0)
-#print("hvd.size():", hvd.size())
-#device = torch.device('cpu')
-
+hvd.init()
+tf.cuda.set_device(hvd.local_rank() % tf.cuda.device_count())
 f_out = open("./LOSS.OUT", "w")
 f_out.close()
+
+print("hvd.size():", hvd.size())
+
+#device = torch.device('cpu')
+
+
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
@@ -47,19 +50,19 @@ print("Data pre-processing complete. Building net work.\n")
 ONE_BATCH_NET = one_batch_net(parameters)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
-if (tf.cuda.device_count() > 1):
-    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
+"""if (tf.cuda.device_count() > 1):
+    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)"""
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf)
-#TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=2, rank=hvd.rank())
-#TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
+TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
+#TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
 OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
-#OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
+OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
@@ -67,14 +70,15 @@ OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 
-#hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
+
 CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
 
+hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
+
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
-#hvd.broadcast_parameters(state_dict_, root_rank = 0)
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
 
 if (True):

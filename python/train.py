@@ -18,7 +18,7 @@ tf.set_default_dtype(tf.float64)
 default_dtype = tf.float64
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 print("cuDNN version: ", tf.backends.cudnn.version())
-#tf.backends.cudnn.benchmark = True
+tf.backends.cudnn.enable = False
 #hvd.init()
 #tf.cuda.set_device(0)
 #print("hvd.size():", hvd.size())
@@ -94,7 +94,8 @@ if (True):
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
-            PROF_FLAG = (STEP_CUR == 0)
+            START_BATCH_USER_TIMER = time.time()
+            PROF_FLAG = (STEP_CUR == -1)
             with tf.autograd.profiler.profile(enabled=PROF_FLAG, use_cuda=True) as prof:
             #if (True):
                 #data_cur[1].requires_grad = True
@@ -102,25 +103,25 @@ if (True):
                 NEI_IDX_Reshape_tf_cur = tf.reshape(NEI_IDX_Reshape_tf_cur,
                                                     (len(NEI_IDX_Reshape_tf_cur), data_cur[4][0], parameters.SEL_A_max))
                 FORCE_Reshape_tf_cur = data_cur[3]
-                FORCE_Reshape_tf_cur_Reshape = tf.reshape(FORCE_Reshape_tf_cur,
-                                                          (len(FORCE_Reshape_tf_cur), data_cur[4][0] * 3))
-                FORCE_net_tf_cur = tf.zeros((len(FORCE_Reshape_tf_cur), data_cur[4][0] * 3), device = device)
+                #FORCE_Reshape_tf_cur_Reshape = tf.reshape(FORCE_Reshape_tf_cur,
+                #                                          (len(FORCE_Reshape_tf_cur), data_cur[4][0], 3))
+                #FORCE_net_tf_cur = tf.zeros((len(FORCE_Reshape_tf_cur), data_cur[4][0] * 3), device = device)
                 NEI_COORD_Reshape_tf_cur = data_cur[7]
 
                 ###Adam
                 # correct
                 if (data_cur[1].grad):
                     data_cur[1].grad.data.zero_()
-                # Energy
-                E_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
+                E_cur_batch, F_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force
+                F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1,device = device)
 
                 if ((STEP_CUR % 50 == 0)):
-                    print(FORCE_net_tf_cur)
-                loss_F_cur_batch = CRITERION(FORCE_net_tf_cur, data_cur[3])
+                    print(F_cur_batch.data)
+                loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
                 loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
                 OPTIMIZER2.zero_grad()
@@ -139,15 +140,17 @@ if (True):
                 END_BATCH_TIMER = time.time()
 
                 ###Adam
-                f_out = open("./LOSS.OUT", "a")
-                print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                    epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
-                    END_BATCH_TIMER - START_BATCH_TIMER))
-                print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
-                    epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
-                    END_BATCH_TIMER - START_BATCH_TIMER), \
-                      file = f_out)
-                f_out.close()
+                if (batch_idx % 1 == 0):
+                    f_out = open("./LOSS.OUT", "a")
+                    END_BATCH_USER_TIMER = time.time()
+                    print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+                        epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
+                    END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
+                    print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
+                        epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
+                    END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
+                    file = f_out)
+                    f_out.close()
                 ###Adam end
 
                 """
@@ -168,7 +171,7 @@ if (True):
 
                 """if (STEP_CUR >= 2):
                     break"""
-            if (STEP_CUR == 1):
+            if (PROF_FLAG):
                 f_prof = open("./PROF.OUT", "w")
                 print("profiling info saved in ./PROF.OUT")
                 print(prof.table(sort_by="cpu_time"), file = f_prof)

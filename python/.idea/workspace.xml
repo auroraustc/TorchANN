@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/9550c6f0efacdde5/save_to_file.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/9550c6f0efacdde5/save_to_file.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/bd66efaa32935d32/convert_coord.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/bd66efaa32935d32/convert_coord.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/convert_coord.c" beforeDir="false" afterPath="$PROJECT_DIR$/../c/convert_coord.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../c/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/box.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/box.raw" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/coord.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/coord.raw" afterDir="false" />
@@ -26,14 +21,14 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.6986715">
+    <splitter split-orientation="horizontal" split-proportion="0.47009063">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/train.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1616">
-                  <caret line="149" column="36" lean-forward="true" selection-start-line="149" selection-start-column="36" selection-end-line="149" selection-end-column="36" />
+                <state relative-caret-position="165">
+                  <caret line="80" column="60" lean-forward="true" selection-start-line="80" selection-start-column="60" selection-end-line="80" selection-end-column="60" />
                   <folding>
                     <element signature="e#46#64#0" expanded="true" />
                   </folding>
@@ -42,46 +37,10 @@
             </entry>
           </file>
           <file pinned="false" current-in-tab="false">
-            <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+            <entry file="file:///usr/lib/python3.5/ctypes/__init__.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="17" selection-start-line="17" selection-end-line="17" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/numpy/core/fromnumeric.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3675">
-                  <caret line="256" selection-start-line="256" selection-end-line="256" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/tensor.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="6030">
-                  <caret line="410" selection-start-line="410" selection-end-line="410" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1215">
-                  <caret line="89" selection-start-line="89" selection-end-line="89" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="7215">
-                  <caret line="488" selection-start-line="488" selection-end-line="488" />
+                <state relative-caret-position="5340">
+                  <caret line="356" column="32" selection-start-line="356" selection-start-column="32" selection-end-line="356" selection-end-column="32" />
                 </state>
               </provider>
             </entry>
@@ -93,8 +52,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="206">
-                  <caret line="77" selection-start-line="77" selection-end-line="77" />
+                <state relative-caret-position="1425">
+                  <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -120,6 +79,7 @@
       <find>size</find>
       <find>requri</find>
       <find>item</find>
+      <find>n_atoms</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -155,7 +115,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,6 +126,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -303,17 +263,19 @@
       <workItem from="1555900116284" duration="756000" />
       <workItem from="1555900914659" duration="178000" />
       <workItem from="1555904788588" duration="1274000" />
+      <workItem from="1555923056801" duration="784000" />
+      <workItem from="1555987437428" duration="3362000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="151701000" />
+    <option name="totallyTimeSpent" value="155847000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08457711" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.0856827" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -344,46 +306,58 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>194</line>
+          <line>82</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>139</line>
+          <line>46</line>
           <option name="timeStamp" value="43" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>181</line>
+          <line>73</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/train.py</url>
-          <line>20</line>
+          <line>22</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/train.py</url>
-          <line>232</line>
-          <option name="timeStamp" value="83" />
+          <url>file://$PROJECT_DIR$/class_and_function.py</url>
+          <line>230</line>
+          <option name="timeStamp" value="84" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/class_and_function.py</url>
+          <line>242</line>
+          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
         <watch expression="(data_cur[1][1].reshape(-1,200,4))[92]" language="Python" />
-        <watch expression="data_cur[8]" language="Python" />
-        <watch expression="SYM_COORD_Reshape_tf[frame_idx].shape" language="Python" />
-        <watch expression="data_cur[10][frame_idx]" language="Python" />
-        <watch expression="tf.nonzero(SYM_COORD_DX_Reshape_tf)" language="Python" />
+        <watch expression="SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx]" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555906762868" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
+    <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555990776741" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx]</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>torch.backends.cudnn.benchmark</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>tf.nonzero(SYM_COORD_DX_Reshape_tf)</expression-string>
         <language-id>Python</language-id>
@@ -424,16 +398,6 @@
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
-      <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_frame.narrow(2, 0, 1)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_frame.narrow(2, 0, 1)[0]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
@@ -451,13 +415,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="20025">
           <caret line="1351" selection-start-line="1351" selection-end-line="1351" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" selection-start-line="17" selection-end-line="17" />
         </state>
       </provider>
     </entry>
@@ -489,10 +446,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/lib/python3.5/ctypes/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5340">
+          <caret line="356" column="32" selection-start-line="356" selection-start-column="32" selection-end-line="356" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
+        <state relative-caret-position="1425">
+          <caret line="224" column="37" selection-start-line="224" selection-start-column="37" selection-end-line="224" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -501,8 +472,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/train.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1616">
-          <caret line="149" column="36" lean-forward="true" selection-start-line="149" selection-start-column="36" selection-end-line="149" selection-end-column="36" />
+        <state relative-caret-position="165">
+          <caret line="80" column="60" lean-forward="true" selection-start-line="80" selection-start-column="60" selection-end-line="80" selection-end-column="60" />
           <folding>
             <element signature="e#46#64#0" expanded="true" />
           </folding>

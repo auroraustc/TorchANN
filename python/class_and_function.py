@@ -218,9 +218,44 @@ class one_batch_net(nn.Module):
         for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
             E_cur_frame = tf.zeros(1, device = device)
             E_cur_frame_atom_wise = tf.zeros(N_ATOMS_tf_cur[0], device = device)
+            for type_idx in range(parameters.N_types_all_frame):
+                type_index_cur_type = tf.reshape(
+                    (data_cur[5][frame_idx] == parameters.type_index_all_frame[type_idx]).nonzero(), (-1,))
+                SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(SYM_COORD_Reshape_tf_cur_Reshape[frame_idx],
+                                                                            0, type_index_cur_type)
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                    SYM_COORD_DX_Reshape_tf_cur_Reshape[frame_idx], 0, type_index_cur_type)
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                    SYM_COORD_DY_Reshape_tf_cur_Reshape[frame_idx], 0, type_index_cur_type)
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                    SYM_COORD_DZ_Reshape_tf_cur_Reshape[frame_idx], 0, type_index_cur_type)
+                #batch - norm
+                with tf.no_grad():
+                    avg_cur_type = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_cur_type, dim = 1, keepdim = True)
+                    avg2_cur_type = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_cur_type ** 2, dim=1, keepdim=True)
+                    std_cur_type = tf.sqrt(avg2_cur_type - avg_cur_type ** 2) + 1E-8
+                SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type) / std_cur_type
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std_cur_type
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std_cur_type
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / std_cur_type
+
+                SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 0, 1)
+                G_cur_type  = tf.tanh(self.filter_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice))
+                for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx]):
+                    G_cur_type = tf.tanh(filter_hidden_layer(G_cur_type))
+                RG_cur_type = tf.bmm((SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2), G_cur_type)
+                GRRG_cur_type = tf.bmm( RG_cur_type.transpose(1,2), RG_cur_type.narrow(2, 0, parameters.axis_neuron) )
+                GRRG_cur_type = tf.reshape(GRRG_cur_type, ((GRRG_cur_type.shape)[0], parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron,))
+                E_cur_type = tf.tanh(self.fitting_input[type_idx](GRRG_cur_type))
+                for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx]):
+                    E_cur_type = tf.tanh(fitting_hidden_layer(E_cur_type))
+                E_cur_type = (self.fitting_out[type_idx](E_cur_type))  # Final layer do not use activation function
+                E_cur_frame_atom_wise.scatter_(0, type_index_cur_type, tf.reshape(E_cur_type, (-1, )))
+
+            """
             for atom_idx in range(data_cur[12][frame_idx]):
                 if(TYPE_Reshape_tf_cur[frame_idx][atom_idx] == -1):
-                    type_idx_cur_atom = parameters.type_index_all_frame[0]
+                    type_idx_cur_atom = 0
                 else:
                     type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
                 #SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx].requires_grad = True
@@ -262,8 +297,8 @@ class one_batch_net(nn.Module):
                     D_E_D_SYM_normed_curatom * SYM_COORD_DZ_Reshape_tf_cur_Reshape_curatom)
                 ##Neighbour atom
                 #index_tensor = tf.zeros(parameters.SEL_A_max, device=device, requires_grad = False)
-                """for nei_idx in range(parameters.SEL_A_max):
-                    index_tensor[nei_idx] = NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx][nei_idx]"""
+                ###for nei_idx in range(parameters.SEL_A_max):
+                ###    index_tensor[nei_idx] = NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx][nei_idx]
                 D_E_D_SYM_normed_neiatom = tf.index_select(D_E_D_SYM_normed_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
                 SYM_COORD_DX_Reshape_tf_cur_Reshape_neiatom = tf.index_select(
                     SYM_COORD_DX_Reshape_tf_cur_Reshape_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
@@ -289,6 +324,7 @@ class one_batch_net(nn.Module):
                 F_cur_batch_nei_atom = F_cur_batch_nei_atom.narrow(0, 0, data_cur[4][0])
                 F_cur_batch[frame_idx] += F_cur_batch_nei_atom
                 #SYM_COORD_Reshape_tf_cur_grad[0][frame_idx] = tf.autograd.grad(E_cur_atom, data_cur[1], create_graph = True)[0][frame_idx]
+                """
             E_cur_frame = tf.sum(E_cur_frame_atom_wise)
             #print("EATOM",E_cur_frame_atom_wise)
             #gg = tf.autograd.grad(E_cur_frame, SYM_COORD_Reshape_tf_cur_Reshape[frame_idx])
@@ -303,8 +339,8 @@ def init_weights_and_biases(m):
     # for every Linear layer in a model
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
-        tf.nn.init.xavier_normal_(m.weight)#, gain = 0.707106781186547524400844362104849039284835937688)
-        m.bias.data.normal_(1.0)
+        tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
+        m.bias.data.normal_(mean = 0, std = 1.0)
 
 
 def make_dot(var, params):

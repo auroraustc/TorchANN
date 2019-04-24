@@ -194,6 +194,15 @@ int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_inf
     printf_d("\n");
     fclose(fp_N_Atoms);
 
+    fp_N_Atoms = fopen("./N_ATOMS_ORI.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        fwrite(&(frame_info[i].N_Atoms_ori), sizeof(int), 1, fp_N_Atoms);
+        printf_d("%d ", frame_info[i].N_Atoms_ori);
+    }
+    printf_d("\n");
+    fclose(fp_N_Atoms);
+
     return 0;
 }
 

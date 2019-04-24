@@ -225,6 +225,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 		frame_info[i].no_force = no_force;
 		frame_info[i].index = i;
 		frame_info[i].N_Atoms = N_Atoms_this_frame;
+		frame_info[i].N_Atoms_ori = N_Atoms_this_frame;
 		free(tmp_coord_cpy);free(tmp_force_cpy);free(tmp_type_cpy);
 	}
 	fclose(fp_coord);fclose(fp_force);fclose(fp_type);

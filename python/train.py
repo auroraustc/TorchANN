@@ -21,10 +21,15 @@ print("cuDNN version: ", tf.backends.cudnn.version())
 tf.backends.cudnn.enable = False
 hvd.init()
 tf.cuda.set_device(hvd.local_rank() % tf.cuda.device_count())
-f_out = open("./LOSS.OUT", "w")
-f_out.close()
+if (hvd.rank() == 0):
+    f_out = open("./LOSS.OUT", "w")
+    f_out.close()
 
 print("hvd.size():", hvd.size())
+if (hvd.rank() == 0):
+    f_out = open("./LOSS.OUT", "a")
+    print("hvd.size():", hvd.size(), file=f_out)
+    f_out.close()
 
 #device = torch.device('cpu')
 
@@ -39,8 +44,8 @@ if (read_parameters_flag != 0):
     exit()
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
-NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf \
-    = read_and_init_bin_file(parameters, default_dtype=default_dtype)
+NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
+N_ATOMS_ORI_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
@@ -48,25 +53,34 @@ NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshap
 print("Data pre-processing complete. Building net work.\n")
 
 ONE_BATCH_NET = one_batch_net(parameters)
+###init_weights using xavier with gain = sqrt(0.5) is necessary. Now the damn adam works good with this initialization
+ONE_BATCH_NET.apply(init_weights_and_biases)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
 """if (tf.cuda.device_count() > 1):
     ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)"""
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
+if (hvd.rank() == 0):
+    f_out = open("./LOSS.OUT", "a")
+    print(ONE_BATCH_NET, file=f_out)
+    print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
+    f_out.close()
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
-                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf)
+                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
+                                       N_ATOMS_ORI_tf)#0..12
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
-###Adam work also horribly. So it is better to use Adadelta
+###Adam works also horribly. So it is better to use Adadelta
+###Now adam works OK if applied init_weights_and_biases
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 
@@ -94,6 +108,10 @@ if (True):
         if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
             LR_SCHEDULER.step()
             print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
+            if (hvd.rank() == 0):
+                f_out = open("./LOSS.OUT", "a")
+                print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
+                f_out.close()
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
@@ -124,7 +142,11 @@ if (True):
                 loss_F_cur_batch = tf.zeros(1,device = device)
 
                 if ((STEP_CUR % 50 == 0)):
-                    print(F_cur_batch.data)
+                    print("Force check:\n", F_cur_batch.data)
+                    if (hvd.rank() == 0):
+                        f_out = open("./LOSS.OUT", "a")
+                        print("Force check:\n", F_cur_batch.data, file=f_out)
+                        f_out.close()
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
                 loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
@@ -147,10 +169,12 @@ if (True):
                 if (batch_idx % 1 == 0):
                     f_out = open("./LOSS.OUT", "a")
                     END_BATCH_USER_TIMER = time.time()
-                    print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+                    #print("Rank ", hvd.rank(), "Select frame:", data_cur[8])
+                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                         epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
-                    print("Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
+                    #print("Rank ", hvd.rank(), "Select frame:", data_cur[8], file=f_out)
+                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
                         epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                     file = f_out)

@@ -117,6 +117,7 @@ def read_and_init_bin_file(parameters, default_dtype):
     SYM_COORD_DX = np.fromfile("./SYM_COORD_DX.BIN", dtype=np.float64)
     SYM_COORD_DY = np.fromfile("./SYM_COORD_DY.BIN", dtype=np.float64)
     SYM_COORD_DZ = np.fromfile("./SYM_COORD_DZ.BIN", dtype=np.float64)
+    N_ATOMS_ORI = np.fromfile("./N_ATOMS_ORI.BIN", dtype=np.int32)
     # print("Number of atoms aligned: ", N_ATOMS)
     # print(np.dtype(np.float64).itemsize)
     parameters.Nframes_tot = len(N_ATOMS)
@@ -162,10 +163,11 @@ def read_and_init_bin_file(parameters, default_dtype):
     SYM_COORD_DX_Reshape_tf = tf.from_numpy(SYM_COORD_DX_Reshape).type(default_dtype)
     SYM_COORD_DY_Reshape_tf = tf.from_numpy(SYM_COORD_DY_Reshape).type(default_dtype)
     SYM_COORD_DZ_Reshape_tf = tf.from_numpy(SYM_COORD_DZ_Reshape).type(default_dtype)
+    N_ATOMS_ORI_tf = tf.from_numpy(N_ATOMS_ORI)
 
     return COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
            NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, \
-           SYM_COORD_DZ_Reshape_tf
+           SYM_COORD_DZ_Reshape_tf, N_ATOMS_ORI_tf
 
 
 class one_batch_net(nn.Module):
@@ -207,7 +209,7 @@ class one_batch_net(nn.Module):
         SYM_COORD_DZ_Reshape_tf_cur_Reshape = tf.reshape(data_cur[11], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
         NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max, 3))
-        print("Size check of input data:", SYM_COORD_Reshape_tf_cur.shape)
+        #print("Size check of input data:", SYM_COORD_Reshape_tf_cur.shape)
         #SYM_COORD_Reshape_tf_cur_Reshape_slice = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 0, 1)
         #SYM_COORD_Reshape_tf_cur_Reshape_slice_3 = SYM_COORD_Reshape_tf_cur_Reshape.narrow(3, 1, 3)
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
@@ -216,7 +218,7 @@ class one_batch_net(nn.Module):
         for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
             E_cur_frame = tf.zeros(1, device = device)
             E_cur_frame_atom_wise = tf.zeros(N_ATOMS_tf_cur[0], device = device)
-            for atom_idx in range(N_ATOMS_tf_cur[0]):
+            for atom_idx in range(data_cur[12][frame_idx]):
                 if(TYPE_Reshape_tf_cur[frame_idx][atom_idx] == -1):
                     type_idx_cur_atom = parameters.type_index_all_frame[0]
                 else:
@@ -292,6 +294,17 @@ class one_batch_net(nn.Module):
             #gg = tf.autograd.grad(E_cur_frame, SYM_COORD_Reshape_tf_cur_Reshape[frame_idx])
             E_cur_batch[frame_idx] = E_cur_frame
         return E_cur_batch, F_cur_batch
+
+def init_weights_and_biases(m):
+    '''Takes in a module and initializes all linear layers with weight
+               values taken from a normal distribution.'''
+
+    classname = m.__class__.__name__
+    # for every Linear layer in a model
+    if isinstance(m, nn.Linear):
+        #print("m.bias:", m.bias.data)
+        tf.nn.init.xavier_normal_(m.weight)#, gain = 0.707106781186547524400844362104849039284835937688)
+        m.bias.data.normal_(1.0)
 
 
 def make_dot(var, params):

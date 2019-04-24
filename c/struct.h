@@ -32,6 +32,7 @@ typedef struct frame_info_struct_
 {
 	int index;//frame index
 	int N_Atoms;
+	int N_Atoms_ori;
 	int N_types;
 	double box[3][3];
 	int * type;//type[0..N_Atoms-1]

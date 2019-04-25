@@ -74,7 +74,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
@@ -144,7 +144,7 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1,device = device)
 
-                if ((STEP_CUR % 50 == 0)):
+                if ((STEP_CUR % 100 == 0)):
                     print("Force check:\n", F_cur_batch.data)
                     if (hvd.rank() == 0):
                         f_out = open("./LOSS.OUT", "a")
@@ -169,7 +169,7 @@ if (True):
                 END_BATCH_TIMER = time.time()
 
                 ###Adam
-                if (batch_idx  == 0):
+                if (batch_idx  == 0 and epoch % 10 == 0):
                     print(data_cur[8])
                     f_out = open("./LOSS.OUT", "a")
                     END_BATCH_USER_TIMER = time.time()

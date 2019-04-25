@@ -235,8 +235,12 @@ class one_batch_net(nn.Module):
                 #batch - norm
                 with tf.no_grad():
                     avg_cur_type = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_cur_type, dim = 1, keepdim = True)
+                    avg_cur_type = tf.cat( (avg_cur_type.narrow(2,0,1), avg_cur_type.narrow(2,1,3).mean(dim=2).expand((avg_cur_type.shape)[0],3).reshape((avg_cur_type.shape)[0],1,3)), dim = 2 )
                     avg2_cur_type = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_cur_type ** 2, dim=1, keepdim=True)
+                    avg2_cur_type = tf.cat((avg2_cur_type.narrow(2, 0, 1),avg2_cur_type.narrow(2, 1, 3).mean(dim=2).expand((avg2_cur_type.shape)[0], 3).reshape((avg2_cur_type.shape)[0],1,3)), dim = 2)
                     std_cur_type = tf.sqrt(avg2_cur_type - avg_cur_type ** 2) + 1E-8
+                    avg_cur_type = tf.cat((avg_cur_type.narrow(2,0,1),tf.zeros((1,3), device = device).expand((avg_cur_type.shape)[0], 3).reshape((avg_cur_type.shape)[0],1,3)), dim = 2)
+
                 SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type) / std_cur_type
                 SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std_cur_type
                 SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std_cur_type

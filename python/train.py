@@ -14,13 +14,18 @@ import time
 from ctypes import *
 from class_and_function import *
 
-tf.set_default_dtype(tf.float64)
+
 default_dtype = tf.float64
+tf.set_default_dtype(default_dtype)
+tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
+#device = tf.device('cpu')
 print("cuDNN version: ", tf.backends.cudnn.version())
-tf.backends.cudnn.enable = False
+#tf.backends.cudnn.enabled = False
+#tf.backends.cudnn.benchmark = True
 hvd.init()
-tf.cuda.set_device(hvd.local_rank() % tf.cuda.device_count())
+if (device != tf.device('cpu')):
+    tf.cuda.set_device(hvd.local_rank() % tf.cuda.device_count())
 if (hvd.rank() == 0):
     f_out = open("./LOSS.OUT", "w")
     f_out.close()
@@ -52,9 +57,18 @@ N_ATOMS_ORI_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
 
 print("Data pre-processing complete. Building net work.\n")
 
-ONE_BATCH_NET = one_batch_net(parameters)
+mean_init=np.zeros(parameters.N_types_all_frame)
+A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot)
+for type_idx in range(parameters.N_types_all_frame):
+    A[type_idx] = tf.sum(TYPE_Reshape_tf == parameters.type_index_all_frame[type_idx], dim=1)
+A = A.transpose(0,1).numpy()
+B = ENERGY_tf.numpy()
+mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
+
+
+ONE_BATCH_NET = one_batch_net(parameters, mean_init)
 ###init_weights using xavier with gain = sqrt(0.5) is necessary. Now the damn adam works good with this initialization
-ONE_BATCH_NET.apply(init_weights_and_biases)
+#ONE_BATCH_NET.apply(init_weights)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
 """if (tf.cuda.device_count() > 1):
@@ -74,13 +88,13 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True, weight_decay = 1e-3)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
 ###Adam works also horribly. So it is better to use Adadelta
-###Now adam works OK if applied init_weights_and_biases
+###Now adam works OK if applied init_weights
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 
@@ -174,12 +188,12 @@ if (True):
                     f_out = open("./LOSS.OUT", "a")
                     END_BATCH_USER_TIMER = time.time()
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8])
-                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                        epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
+                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0], tf.sqrt(loss_F_cur_batch),
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8], file=f_out)
-                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.3f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
-                        epoch, batch_idx, loss_E_cur_batch / data_cur[4][0], loss_F_cur_batch,
+                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
+                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0], tf.sqrt(loss_F_cur_batch),
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                     file = f_out)
                     f_out.close()

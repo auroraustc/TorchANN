@@ -175,13 +175,33 @@ int main()
         }
         printf_d("\n");
     }
-    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rij", "dx_hat", "dy_hat", "dz_hat");
+    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijx", "dx_hatx", "dy_hatx", "dz_hatx");
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
         for (j = 0; j <= 3; j++)
         {
             int idx = i * 4 + j;
             printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].d_to_center_x[DEBUG_ATOM][idx]);
+        }
+        printf_d("\n");
+    }
+    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijy", "dx_haty", "dy_haty", "dz_haty");
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    {
+        for (j = 0; j <= 3; j++)
+        {
+            int idx = i * 4 + j;
+            printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].d_to_center_y[DEBUG_ATOM][idx]);
+        }
+        printf_d("\n");
+    }
+    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijz", "dx_hatz", "dy_hatz", "dz_hatz");
+    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    {
+        for (j = 0; j <= 3; j++)
+        {
+            int idx = i * 4 + j;
+            printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].d_to_center_z[DEBUG_ATOM][idx]);
         }
         printf_d("\n");
     }

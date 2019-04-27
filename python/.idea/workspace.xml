@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/3aeedec9316672ce/read_parameters.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/3aeedec9316672ce/read_parameters.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/8878e259a7f8e26/main.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/9550c6f0efacdde5/save_to_file.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/9550c6f0efacdde5/save_to_file.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/9c97df22012f5d3a/build_neighbour_list.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/9c97df22012f5d3a/build_neighbour_list.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/adba7ee151b52f87/extend_max_atoms.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/adba7ee151b52f87/extend_max_atoms.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/b2707b29bcc5822/compute_derivative_sym_coord_to_coord.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/b2707b29bcc5822/compute_derivative_sym_coord_to_coord.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/bd66efaa32935d32/convert_coord.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/bd66efaa32935d32/convert_coord.ipch" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/../c/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../c/makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/200ffb1d9d81ef63/read_system.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/200ffb1d9d81ef63/read_system.ipch" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/.vscode/ipch/4daa612d66b11547/Utilities.ipch" beforeDir="false" afterPath="$PROJECT_DIR$/../c/.vscode/ipch/4daa612d66b11547/Utilities.ipch" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/train.py" afterDir="false" />
@@ -31,14 +23,14 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.4420789">
+    <splitter split-orientation="horizontal" split-proportion="0.6110381">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/train.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="271">
-                  <caret line="80" column="54" selection-start-line="80" selection-start-column="54" selection-end-line="80" selection-end-column="54" />
+                <state relative-caret-position="210">
+                  <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -49,7 +41,7 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="216">
+                <state relative-caret-position="2040">
                   <caret line="144" selection-start-line="144" selection-end-line="144" />
                 </state>
               </provider>
@@ -71,20 +63,11 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="266">
-                  <caret line="440" column="38" lean-forward="true" selection-start-line="440" selection-start-column="38" selection-end-line="440" selection-end-column="38" />
+                <state relative-caret-position="405">
+                  <caret line="204" column="16" selection-start-line="204" selection-start-column="16" selection-end-line="204" selection-end-column="16" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1158">
-                  <caret line="488" selection-start-line="488" selection-end-line="488" />
                 </state>
               </provider>
             </entry>
@@ -111,6 +94,7 @@
       <find>200</find>
       <find>-1</find>
       <find>initw</find>
+      <find>SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,8 +103,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/train.py" />
         <option value="$PROJECT_DIR$/class_and_function.py" />
+        <option value="$PROJECT_DIR$/train.py" />
       </list>
     </option>
   </component>
@@ -146,6 +130,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -157,13 +142,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test_1g" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../test_very_small" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -201,7 +185,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="$USER_HOME$/PycharmProjects/deepmd_analysis/venv/bin/python" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../test_1g" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../test_very_small" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -326,17 +310,46 @@
       <workItem from="1556261077213" duration="57000" />
       <workItem from="1556261418784" duration="1012000" />
       <workItem from="1556263527078" duration="6352000" />
+      <workItem from="1556270204675" duration="2050000" />
+      <workItem from="1556280224418" duration="122000" />
+      <workItem from="1556280776328" duration="45000" />
+      <workItem from="1556281188662" duration="567000" />
+      <workItem from="1556283091259" duration="102000" />
+      <workItem from="1556283429485" duration="69000" />
+      <workItem from="1556283594189" duration="187000" />
+      <workItem from="1556283821668" duration="74000" />
+      <workItem from="1556283947217" duration="118000" />
+      <workItem from="1556284090082" duration="140000" />
+      <workItem from="1556284366392" duration="59000" />
+      <workItem from="1556284536136" duration="138000" />
+      <workItem from="1556284691169" duration="56000" />
+      <workItem from="1556284810692" duration="16000" />
+      <workItem from="1556284859487" duration="104000" />
+      <workItem from="1556284990971" duration="147000" />
+      <workItem from="1556285325747" duration="1013000" />
+      <workItem from="1556350473841" duration="152000" />
+      <workItem from="1556353160574" duration="3146000" />
+      <workItem from="1556368310103" duration="386000" />
+      <workItem from="1556368727220" duration="599000" />
+      <workItem from="1556370574315" duration="30000" />
+      <workItem from="1556370807892" duration="638000" />
+      <workItem from="1556371477103" duration="161000" />
+      <workItem from="1556371665914" duration="1015000" />
+      <workItem from="1556372823062" duration="146000" />
+      <workItem from="1556372985804" duration="206000" />
+      <workItem from="1556374435066" duration="2646000" />
+      <workItem from="1556377202525" duration="343000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="212008000" />
+    <option name="totallyTimeSpent" value="226483000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.11719182" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15865119" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -352,6 +365,7 @@
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3282365" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.32638165" />
+      <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32925585" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -392,7 +406,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/class_and_function.py</url>
-          <line>308</line>
+          <line>309</line>
           <option name="timeStamp" value="125" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -402,7 +416,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/class_and_function.py</url>
-          <line>307</line>
+          <line>308</line>
           <option name="timeStamp" value="130" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -410,78 +424,84 @@
           <line>289</line>
           <option name="timeStamp" value="131" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/class_and_function.py</url>
+          <line>467</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/class_and_function.py</url>
+          <line>347</line>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="F_cur_batch[0]" language="Python" />
-        <watch expression="tf.sum(TYPE_Reshape_tf==0,dim=1)" language="Python" />
-        <watch expression="np.linalg.lstsq(A,B,rcond=-1)" language="Python" />
-        <watch expression="ONE_BATCH_NET.filter_input[0].bias" language="Python" />
-        <watch expression="self.filter_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice)" language="Python" />
-        <watch expression="G_cur_type" language="Python" />
-        <watch expression="RG_cur_type" language="Python" />
-        <watch expression="GRRG_cur_type" language="Python" />
-        <watch expression="avg_GRRG" language="Python" />
-        <watch expression="avg_GRRG2" language="Python" />
-        <watch expression="std_GRRG" language="Python" />
-        <watch expression="E_cur_type" language="Python" />
-        <watch expression="self.fitting_input[type_idx](GRRG_cur_type)" language="Python" />
+        <watch expression="NEI_IDX_Reshape_tf_cur_cur_type[0]" language="Python" />
+        <watch expression="D_E_D_SYM_cur_type[0][17]" language="Python" />
+        <watch expression="SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[0][1]" language="Python" />
+        <watch expression="SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type[0][1]" language="Python" />
+        <watch expression="SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type[0][1]" language="Python" />
+        <watch expression="D_E_D_SYM_cur_type_nei" language="Python" />
+        <watch expression="SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei" language="Python" />
+        <watch expression="SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type_nei" language="Python" />
+        <watch expression="SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type_nei" language="Python" />
       </configuration>
     </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1556269817055" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
+    <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1556377488906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>std_GRRG</expression-string>
+        <expression-string>SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type_nei</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>avg_GRRG2</expression-string>
+        <expression-string>SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type_nei</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>avg_GRRG</expression-string>
+        <expression-string>SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>RG_cur_type</expression-string>
+        <expression-string>D_E_D_SYM_cur_type_nei</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.fitting_input[type_idx](GRRG_cur_type)</expression-string>
+        <expression-string>SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type[0][1]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>E_cur_type</expression-string>
+        <expression-string>SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type[0][1]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>tf.bmm( RG_cur_type.transpose(1,2), RG_cur_type.narrow(2, 0, parameters.axis_neuron) )</expression-string>
+        <expression-string>SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[0][1]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>GRRG_cur_type</expression-string>
+        <expression-string>D_E_D_SYM_cur_type[0][17]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>G_cur_type</expression-string>
+        <expression-string>SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type[0][0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>self.filter_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice)</expression-string>
+        <expression-string>SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type[0][0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -540,6 +560,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2040">
+          <caret line="144" selection-start-line="144" selection-end-line="144" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file:///usr/lib/python3.5/ctypes/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5340">
@@ -547,36 +574,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="144" selection-start-line="144" selection-end-line="144" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1158">
+        <state relative-caret-position="7215">
           <caret line="488" selection-start-line="488" selection-end-line="488" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/train.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="80" column="54" selection-start-line="80" selection-start-column="54" selection-end-line="80" selection-end-column="54" />
-          <folding>
-            <element signature="e#47#65#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="440" column="38" lean-forward="true" selection-start-line="440" selection-start-column="38" selection-end-line="440" selection-end-column="38" />
+        <state relative-caret-position="405">
+          <caret line="204" column="16" selection-start-line="204" selection-start-column="16" selection-end-line="204" selection-end-column="16" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/train.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+          <folding>
+            <element signature="e#47#65#0" expanded="true" />
           </folding>
         </state>
       </provider>

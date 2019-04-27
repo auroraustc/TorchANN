@@ -19,7 +19,7 @@ default_dtype = tf.float64
 tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
-#device = tf.device('cpu')
+device = tf.device('cpu')
 print("cuDNN version: ", tf.backends.cudnn.version())
 #tf.backends.cudnn.enabled = False
 #tf.backends.cudnn.benchmark = True
@@ -68,7 +68,7 @@ mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
 ONE_BATCH_NET = one_batch_net(parameters, mean_init)
 ###init_weights using xavier with gain = sqrt(0.5) is necessary. Now the damn adam works good with this initialization
-#ONE_BATCH_NET.apply(init_weights)
+ONE_BATCH_NET.apply(init_weights)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
 """if (tf.cuda.device_count() > 1):

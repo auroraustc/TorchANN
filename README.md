@@ -119,10 +119,10 @@ mpirun -n 2 ../python/train.py #or train_noclassfy.py
   - For [DeePMD](https://github.com/deepmodeling/deepmd-kit)-type symmetry coordinates, `cutoff_1` and `cutoff_2` (or `cutoff_max`) correspond to rcs and rc in [its paper](https://arxiv.org/abs/1805.09003).
   - Editing the **read_parameters.c** to change their values.
 - `filter_neuron`, `fitting_neuron`, `axis_neuron`
-  - `filter_neuron` and `fitting_neuron` are two arrays describing the filter network and fitting network in [DeePMD's paper](https://arxiv.org/abs/1805.09003)
+  - `filter_neuron` and `fitting_neuron` are two arrays describing the filter network and fitting network in [DeePMD's paper](https://arxiv.org/abs/1805.09003).
   - `axis_neuron` is the number of columns of the G^(i2) matrix in DeePMD's paper.
 - `start_pref_e`, `limit_pref_e`, `start_pref_f`, `limit_pref_f`
-  - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`
+  - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`.
 - `stop_epoch`, `batch_size`
-  - `stop_epoch` determines how many epoch of optimization it will run.
+  - `stop_epoch` determines how many epoches of optimization it will run.
   - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different number of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be a good choice for training using this script. However, large `batch_size` can also lead to terrible convergence. You should do your own tests.

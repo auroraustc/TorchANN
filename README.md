@@ -125,4 +125,4 @@ mpirun -n 2 ../python/train.py #or train_noclassfy.py
   - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`
 - `stop_epoch`, `batch_size`
   - `stop_epoch` determines how many epoch of optimization it will run.
-  - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different number of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be a good choice for this script. However, large `batch_size` can also lead to terrible convergenc. You should do your own tests.
+  - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different number of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be a good choice for training using this script. However, large `batch_size` can also lead to terrible convergence. You should do your own tests.

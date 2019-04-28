@@ -9,7 +9,8 @@ Use torch to train NN potential
 1. python version >= 3
 2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v0.4.1 or v1.0; optional: Torchvision)
 3. [horovod](https://github.com/horovod/horovod)
-4. C compiler (icc 2018 tested)
+4. An MPI library (Intel MPI 2018 tested)
+5. C compiler (icc 2018 tested)
 
 ## Prepare training data:
 ```bash
@@ -109,7 +110,8 @@ The file `all_frame_info.bin.temp` could be deleted and should not affect the tr
 
 ### STEP 3: Run python script to train
 ```bash
-python3 ../python/train.py
+mpirun -n 2 ../python/train.py #or train_noclassfy.py
+#You can also run using ../python/train.py if you would like to run only one process.
 ```
 ## Parameters in ALL_PARAMS.json
 **In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying a .c file**

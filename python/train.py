@@ -178,7 +178,7 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1,device = device)
 
-                if ((STEP_CUR % 1000 < hvd.size()) and hvd.rank() == 0):
+                if ((STEP_CUR % (1000 // hvd.size()) == 0) and hvd.rank() == 0):
                     print("Force check:\n", F_cur_batch[0].data)
                     f_out = open("./LOSS.OUT", "a")
                     print("Force check:\n", F_cur_batch.data[0], file=f_out)

@@ -1,4 +1,4 @@
-# Torch-NNMD
+# TorchANN
 Use torch to train NN potential
 
 ## Features

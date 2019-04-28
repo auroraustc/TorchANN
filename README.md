@@ -7,8 +7,9 @@ Use torch to train NN potential
 
 ## Request:
 1. python version >= 3
-2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch; optional: Torchvision)
-3. C compiler (icc 2018 tested)
+2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v0.4.1 or v1.0; optional: Torchvision)
+3. [horovod](https://github.com/horovod/horovod)
+4. C compiler (icc 2018 tested)
 
 ## Prepare training data:
 ```bash

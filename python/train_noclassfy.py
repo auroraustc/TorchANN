@@ -87,35 +87,28 @@ if (hvd.rank() == 0):
     print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
     f_out.close()
 
-###All the frames should be classified according to the number of atoms.
-###If two frame with different number of atoms are in the same batch then the training will be extremely slow
-N_ATOMS_ORI_unique = np.unique(N_ATOMS_ORI_tf.numpy())
-
-
-DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf,
-                                       TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf,
-                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf,
+DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
+                                       TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
+                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf)#0..12
-
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True, weight_decay = 0)
-#OPTIMIZER2 = optim.RMSprop(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True, weight_decay = 1e-3)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
-
+"""
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
 ###Adam works also horribly. So it is better to use Adadelta
 ###Now adam works OK if applied init_weights
-#OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
-
+OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+"""
 
 
 CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
-STEP_CUR = 0 #This STEP_CUR means the number of batches(or the number of optimizer2.step())
+STEP_CUR = 0
 
 hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
 
@@ -135,53 +128,27 @@ if (parameters.decay_rate > 1):
         print("-----------------------------------------------", file=f_out)
         f_out.close()
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
-START_BATCH_USER_TIMER = time.time()
-for epoch in range(parameters.epoch):
 
-    START_EPOCH_TIMER = time.time()
-    if (parameters.epoch != 1):
-        pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (
-                    parameters.epoch - 1.0) * epoch + parameters.start_pref_e
-        pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (
-                    parameters.epoch - 1.0) * epoch + parameters.start_pref_f
-    else:
-        pref_e = parameters.start_pref_e
-        pref_f = parameters.start_pref_f
-
-    if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
-        LR_SCHEDULER.step()
-        print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
-        if (hvd.rank() == 0):
-            f_out = open("./LOSS.OUT", "a")
-            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
-            f_out.close()
-    #START_BATCH_USER_TIMER = time.time()
-    for epoch_in in range(len(N_ATOMS_ORI_unique)):
-        N_ATOMS_ORI_unique_idx = (N_ATOMS_ORI_tf == N_ATOMS_ORI_unique[epoch_in]).nonzero().reshape(-1, )
-        COORD_Reshape_tf_select = tf.index_select(COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_Reshape_tf_select = tf.index_select(SYM_COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        ENERGY_tf_select = tf.index_select(ENERGY_tf, 0, N_ATOMS_ORI_unique_idx)
-        FORCE_Reshape_tf_select = tf.index_select(FORCE_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        N_ATOMS_tf_select = tf.index_select(N_ATOMS_tf, 0, N_ATOMS_ORI_unique_idx)
-        TYPE_Reshape_tf_select = tf.index_select(TYPE_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        NEI_IDX_Reshape_tf_select = tf.index_select(NEI_IDX_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        NEI_COORD_Reshape_tf_select = tf.index_select(NEI_COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        FRAME_IDX_tf_select = tf.index_select(FRAME_IDX_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DX_Reshape_tf_select = tf.index_select(SYM_COORD_DX_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DY_Reshape_tf_select = tf.index_select(SYM_COORD_DY_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DZ_Reshape_tf_select = tf.index_select(SYM_COORD_DZ_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        N_ATOMS_ORI_tf_select = tf.index_select(N_ATOMS_ORI_tf, 0, N_ATOMS_ORI_unique_idx)
-        DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf_select, SYM_COORD_Reshape_tf_select, ENERGY_tf_select,
-                                                   FORCE_Reshape_tf_select, N_ATOMS_tf_select, TYPE_Reshape_tf_select,
-                                                   NEI_IDX_Reshape_tf_select, NEI_COORD_Reshape_tf_select, FRAME_IDX_tf_select,
-                                                   SYM_COORD_DX_Reshape_tf_select, SYM_COORD_DY_Reshape_tf_select,
-                                                   SYM_COORD_DZ_Reshape_tf_select, N_ATOMS_ORI_tf_select)
-        TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
-        batch_size_ = parameters.batch_size
-        if (batch_size_ * hvd.size() > len(N_ATOMS_ORI_unique_idx) ):
-            batch_size_ = np.floor((len(N_ATOMS_ORI_unique_idx) + 0.0) / hvd.size() + 1).astype(np.int32)
-        TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size=parameters.batch_size, sampler=TRAIN_SAMPLER)
+if (True):
+#with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
+    START_BATCH_USER_TIMER = time.time()
+    for epoch in range(parameters.epoch):
         TRAIN_SAMPLER.set_epoch(epoch)
+        START_EPOCH_TIMER = time.time()
+        if (parameters.epoch != 1 ):
+            pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_e
+            pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_f
+        else:
+            pref_e = parameters.start_pref_e
+            pref_f = parameters.start_pref_f
+        if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
+            LR_SCHEDULER.step()
+            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
+            if (hvd.rank() == 0):
+                f_out = open("./LOSS.OUT", "a")
+                print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
+                f_out.close()
+
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
@@ -235,7 +202,7 @@ for epoch in range(parameters.epoch):
                 END_BATCH_TIMER = time.time()
 
                 ###Adam
-                if (epoch_in == 0 and batch_idx == 0 and epoch % 10 == 0):
+                if (batch_idx  == 0 and epoch % 10 == 0):
                     #print(data_cur[8])
                     END_BATCH_USER_TIMER = time.time()
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8])

@@ -87,8 +87,9 @@ if (hvd.rank() == 0):
     print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
     f_out.close()
 
-###All the frames should be classified according to the number of atoms.
-###If two frame with different number of atoms are in the same batch then the training will be extremely slow
+###All the frames are classified according to the number of atoms.
+###If two frame with different number of atoms are in the same batch then the training may be extremely slow
+###(Not sure. May be caused by large batch_size. Need more tests.)
 N_ATOMS_ORI_unique = np.unique(N_ATOMS_ORI_tf.numpy())
 
 

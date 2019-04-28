@@ -41,6 +41,62 @@ class Parameters():
         limit_pref_e = 400
         start_pref_f = 1000
         limit_pref_f = 1
+    def __str__(self):
+        """
+        print(">>> cutoff_1: %.6e" % self.cutoff_1)
+        print(">>> cutoff_2: %.6e" % self.cutoff_2)
+        print(">>> cutoff_3: %.6e" % self.cutoff_3)
+        print(">>> cutoff_max: %.6e" % self.cutoff_max)
+        print(">>> N_types_all_frame: %2d" % self.N_types_all_frame)
+        print(">>> type_index_all_frame: ", self.type_index_all_frame)
+        print(">>> SEL_A_max: %2d" % self.SEL_A_max)
+        print(">>> Nframes_tot: %2d" % self.Nframes_tot)
+        print(">>> sym_coord_type: %2d" % self.sym_coord_type)
+        print(">>> batch_size: %2d" % self.batch_size)
+        print(">>> epoch: %2d" % self.epoch)
+        print(">>> num_filter_layer: %2d" % self.num_filter_layer)
+        print(">>> filter_neuron: ", self.filter_neuron)
+        print(">>> axis_neuron: %2d" % self.axis_neuron)
+        print(">>> num_fitting_layer: %2d" % self.num_fitting_layer)
+        print(">>> fitting_neuron: ", self.fitting_neuron)
+        print(">>> start_lr: %.6e" % self.start_lr)
+        print(">>> (Not used)decay_steps: %2d" % self.decay_steps)
+        print(">>> decay_epoch: %2d" % self.decay_epoch)
+        print(">>> decay_rate: %.6e" % self.decay_rate)
+        print(">>> start_pref_e: %.6e" % self.start_pref_e)
+        print(">>> limit_pref_e: %.6e" % self.limit_pref_e)
+        print(">>> start_pref_f: %.6e" % self.start_pref_f)
+        print(">>> limit_pref_f: %.6e" % self.limit_pref_f)
+        """
+        str_ = []
+        str_ += (">>> cutoff_1: %.6e\n" % self.cutoff_1)
+        str_ += (">>> cutoff_2: %.6e\n" % self.cutoff_2)
+        str_ += (">>> cutoff_3: %.6e\n" % self.cutoff_3)
+        str_ += (">>> cutoff_max: %.6e\n" % self.cutoff_max)
+        str_ += (">>> N_types_all_frame: %2d\n" % self.N_types_all_frame)
+        str_ += (">>> type_index_all_frame: ", self.type_index_all_frame, "\n")
+        str_ += (">>> SEL_A_max: %2d\n" % self.SEL_A_max)
+        str_ += (">>> Nframes_tot: %2d\n" % self.Nframes_tot)
+        str_ += (">>> sym_coord_type: %2d\n" % self.sym_coord_type)
+        str_ += (">>> batch_size: %2d\n" % self.batch_size)
+        str_ += (">>> epoch: %2d\n" % self.epoch)
+        str_ += (">>> num_filter_layer: %2d\n" % self.num_filter_layer)
+        str_ += (">>> filter_neuron: ", self.filter_neuron, "\n")
+        str_ += (">>> axis_neuron: %2d\n" % self.axis_neuron)
+        str_ += (">>> num_fitting_layer: %2d\n" % self.num_fitting_layer)
+        str_ += (">>> fitting_neuron: ", self.fitting_neuron, "\n")
+        str_ += (">>> start_lr: %.6e\n" % self.start_lr)
+        str_ += (">>> (Not used)decay_steps: %2d\n" % self.decay_steps)
+        str_ += (">>> decay_epoch: %2d\n" % self.decay_epoch)
+        str_ += (">>> decay_rate: %.6e\n" % self.decay_rate)
+        str_ += (">>> start_pref_e: %.6e\n" % self.start_pref_e)
+        str_ += (">>> limit_pref_e: %.6e\n" % self.limit_pref_e)
+        str_ += (">>> start_pref_f: %.6e\n" % self.start_pref_f)
+        str_ += (">>> limit_pref_f: %.6e\n" % self.limit_pref_f)
+        str_ = ''.join(str(element) for element in str_)
+
+
+        return str_
 
 
 
@@ -336,15 +392,9 @@ class one_batch_net(nn.Module):
                     D_E_D_SYM_cur_type.reshape((D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
                                                (D_E_D_SYM_cur_type.shape)[2]), 0,
                     NEI_IDX_Reshape_tf_cur_cur_type_new).reshape(D_E_D_SYM_cur_type.shape)
-                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type.reshape(
-                    (D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
-                    (D_E_D_SYM_cur_type.shape)[2]).reshape(D_E_D_SYM_cur_type.shape)
-                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type.reshape(
-                    (D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
-                    (D_E_D_SYM_cur_type.shape)[2]).reshape(D_E_D_SYM_cur_type.shape)
-                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type.reshape(
-                    (D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
-                    (D_E_D_SYM_cur_type.shape)[2]).reshape(D_E_D_SYM_cur_type.shape)
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type.reshape(D_E_D_SYM_cur_type.shape)
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type.reshape(D_E_D_SYM_cur_type.shape)
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type.reshape(D_E_D_SYM_cur_type.shape)
                 F_as_nei_atom_curtype_x = (-1.0) * tf.sum(
                     D_E_D_SYM_cur_type_nei * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei, dim=2)
                 F_as_nei_atom_curtype_y = (-1.0) * tf.sum(
@@ -387,84 +437,10 @@ class one_batch_net(nn.Module):
 
                 F_cur_frame_dummy_nei = F_cur_frame_dummy_nei.narrow(0, 0, data_cur[4][0])#data_cur[12][frame_idx])
 
-
                 ##add to F_cur_batch[frame_idx]
                 F_cur_batch[frame_idx] += F_cur_frame_dummy
                 F_cur_batch[frame_idx] += F_cur_frame_dummy_nei
 
-            """
-            for atom_idx in range(data_cur[12][frame_idx]):
-                if(TYPE_Reshape_tf_cur[frame_idx][atom_idx] == -1):
-                    type_idx_cur_atom = 0
-                else:
-                    type_idx_cur_atom = parameters.type_index_all_frame.index(TYPE_Reshape_tf_cur[frame_idx][atom_idx])
-                #SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx].requires_grad = True
-                SYM_COORD_Reshape_tf_cur_Reshape_curatom = SYM_COORD_Reshape_tf_cur_Reshape[frame_idx][atom_idx]
-                #batch-norm for SYM_COORD_Reshape_tf_cur_Reshape_curatom
-                with tf.no_grad():
-                    #avg = tf.zeros(4)
-                    #std = tf.zeros(4)
-                    avg_curatom = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_curatom, dim = 0, keepdim = True)
-                    avg2 = tf.mean(SYM_COORD_Reshape_tf_cur_Reshape_curatom ** 2, dim = 0, keepdim = True)
-                    std_curatom = tf.sqrt(avg2 - avg_curatom ** 2) + 1E-8
-
-                SYM_COORD_Reshape_tf_cur_Reshape_curatom = (SYM_COORD_Reshape_tf_cur_Reshape_curatom - avg_curatom) / std_curatom
-                SYM_COORD_DX_Reshape_tf_cur_Reshape_curatom = SYM_COORD_DX_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_curatom
-                SYM_COORD_DY_Reshape_tf_cur_Reshape_curatom = SYM_COORD_DY_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_curatom
-                SYM_COORD_DZ_Reshape_tf_cur_Reshape_curatom = SYM_COORD_DZ_Reshape_tf_cur_Reshape[frame_idx][atom_idx] / std_curatom
-
-                SYM_COORD_Reshape_tf_cur_Reshape_curatom.requires_grad = True
-                SYM_COORD_Reshape_tf_cur_Reshape_curatom_slice = SYM_COORD_Reshape_tf_cur_Reshape_curatom.narrow(1, 0, 1)
-                G_cur_atom = tf.tanh(self.filter_input[type_idx_cur_atom](SYM_COORD_Reshape_tf_cur_Reshape_curatom_slice))
-                for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx_cur_atom]):
-                    G_cur_atom = tf.tanh(filter_hidden_layer(G_cur_atom))
-                RG_cur_atom = tf.mm((SYM_COORD_Reshape_tf_cur_Reshape_curatom).transpose(0, 1), G_cur_atom)
-                GRRG_cur_atom = tf.mm(RG_cur_atom.transpose(0, 1), RG_cur_atom.narrow(1, 0, parameters.axis_neuron))
-                GRRG_cur_atom = tf.reshape(GRRG_cur_atom, (parameters.filter_neuron[len(parameters.filter_neuron) - 1] * parameters.axis_neuron, ))
-                E_cur_atom = tf.tanh(self.fitting_input[type_idx_cur_atom](GRRG_cur_atom))
-                for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx_cur_atom]):
-                    E_cur_atom = tf.tanh(fitting_hidden_layer(E_cur_atom))
-                E_cur_atom = (self.fitting_out[type_idx_cur_atom](E_cur_atom))#Final layer do not use activation function
-                E_cur_frame_atom_wise[atom_idx] = E_cur_atom
-                #Calculate Force
-                D_E_D_SYM_normed_curatom = tf.autograd.grad(E_cur_atom, SYM_COORD_Reshape_tf_cur_Reshape_curatom, create_graph = True)[0] # shape = (200, 4)
-                ##Center atom
-                F_cur_batch[frame_idx][atom_idx][0] += tf.sum(
-                    D_E_D_SYM_normed_curatom * SYM_COORD_DX_Reshape_tf_cur_Reshape_curatom)
-                F_cur_batch[frame_idx][atom_idx][1] += tf.sum(
-                    D_E_D_SYM_normed_curatom * SYM_COORD_DY_Reshape_tf_cur_Reshape_curatom)
-                F_cur_batch[frame_idx][atom_idx][2] += tf.sum(
-                    D_E_D_SYM_normed_curatom * SYM_COORD_DZ_Reshape_tf_cur_Reshape_curatom)
-                ##Neighbour atom
-                #index_tensor = tf.zeros(parameters.SEL_A_max, device=device, requires_grad = False)
-                ###for nei_idx in range(parameters.SEL_A_max):
-                ###    index_tensor[nei_idx] = NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx][nei_idx]
-                D_E_D_SYM_normed_neiatom = tf.index_select(D_E_D_SYM_normed_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
-                SYM_COORD_DX_Reshape_tf_cur_Reshape_neiatom = tf.index_select(
-                    SYM_COORD_DX_Reshape_tf_cur_Reshape_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
-                SYM_COORD_DY_Reshape_tf_cur_Reshape_neiatom = tf.index_select(
-                    SYM_COORD_DY_Reshape_tf_cur_Reshape_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
-                SYM_COORD_DZ_Reshape_tf_cur_Reshape_neiatom = tf.index_select(
-                    SYM_COORD_DZ_Reshape_tf_cur_Reshape_curatom, 0, NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx])
-                SYM_COORD_DXYZ_neiatom = tf.cat((SYM_COORD_DX_Reshape_tf_cur_Reshape_neiatom,
-                                                 SYM_COORD_DY_Reshape_tf_cur_Reshape_neiatom,
-                                                 SYM_COORD_DZ_Reshape_tf_cur_Reshape_neiatom))
-                D_E_D_SYM_normed_neiatom = tf.cat((D_E_D_SYM_normed_neiatom, D_E_D_SYM_normed_neiatom, D_E_D_SYM_normed_neiatom))
-                FORCE_neiatom_xyz = tf.sum(SYM_COORD_DXYZ_neiatom * D_E_D_SYM_normed_neiatom, dim = 1)
-                FORCE_idx_x = tf.arange(0, parameters.SEL_A_max, device = device).long() * 3
-                FORCE_idx_y = FORCE_idx_x + 1
-                FORCE_idx_z = FORCE_idx_x + 2
-                FORCE_idx_xyz = tf.cat((FORCE_idx_x, FORCE_idx_y, FORCE_idx_z))
-                FORCE_neixyzatom = tf.zeros(parameters.SEL_A_max * 3, device = device)
-                FORCE_neixyzatom.scatter_(0, FORCE_idx_xyz, FORCE_neiatom_xyz)
-                FORCE_neixyzatom = tf.reshape(FORCE_neixyzatom, (parameters.SEL_A_max, 3))
-                F_cur_batch_nei_atom = tf.zeros((parameters.SEL_A_max, 3), device=device)
-                idx_tmp = (NEI_IDX_Reshape_tf_cur[frame_idx][atom_idx].expand(3, parameters.SEL_A_max)).transpose(0,1)
-                F_cur_batch_nei_atom.scatter_(0, idx_tmp, FORCE_neixyzatom)
-                F_cur_batch_nei_atom = F_cur_batch_nei_atom.narrow(0, 0, data_cur[4][0])
-                F_cur_batch[frame_idx] += F_cur_batch_nei_atom
-                #SYM_COORD_Reshape_tf_cur_grad[0][frame_idx] = tf.autograd.grad(E_cur_atom, data_cur[1], create_graph = True)[0][frame_idx]
-                """
             E_cur_frame = tf.sum(E_cur_frame_atom_wise)
             #print("EATOM",E_cur_frame_atom_wise)
             #gg = tf.autograd.grad(E_cur_frame, SYM_COORD_Reshape_tf_cur_Reshape[frame_idx])

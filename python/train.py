@@ -20,11 +20,12 @@ tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = tf.device('cpu')
-print("cuDNN version: ", tf.backends.cudnn.version())
-#tf.backends.cudnn.enabled = False
-#tf.backends.cudnn.benchmark = True
+
 hvd.init()
 if (device != tf.device('cpu')):
+    print("cuDNN version: ", tf.backends.cudnn.version())
+    # tf.backends.cudnn.enabled = False
+    #tf.backends.cudnn.benchmark = True
     tf.cuda.set_device(hvd.local_rank() % tf.cuda.device_count())
 if (hvd.rank() == 0):
     f_out = open("./LOSS.OUT", "w")
@@ -43,7 +44,12 @@ if (hvd.rank() == 0):
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
 print("All parameters:")
-print(parameters)#incomplete, add __str__ method
+print(parameters)
+if (hvd.rank() == 0):
+    f_out = open("./LOSS.OUT", "a")
+    print("All parameters:", file = f_out)
+    print(parameters, file = f_out)
+    f_out.close()
 if (read_parameters_flag != 0):
     print("Reading parameters error with code %d\n"%read_parameters_flag)
     exit()
@@ -107,6 +113,20 @@ STEP_CUR = 0
 hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
 
 print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
+if (parameters.decay_rate > 1):
+    print("-----------------------------------------------")
+    print("|*******************WARNING*******************|")
+    print("|YOUR SETTING FOR decay_rate IS LARGER THAN 1!|")
+    print("|     HOPE YOU KNOW WHAT YOU ARE DOING!       |")
+    print("-----------------------------------------------")
+    if (hvd.rank() == 0):
+        f_out = open("./LOSS.OUT", "a")
+        print("-----------------------------------------------", file=f_out)
+        print("|*******************WARNING*******************|", file=f_out)
+        print("|YOUR SETTING FOR decay_rate IS LARGER THAN 1!|", file=f_out)
+        print("|     HOPE YOU KNOW WHAT YOU ARE DOING!       |", file=f_out)
+        print("-----------------------------------------------", file=f_out)
+        f_out.close()
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
 
 if (True):
@@ -123,10 +143,10 @@ if (True):
             pref_f = parameters.start_pref_f
         if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
             LR_SCHEDULER.step()
-            print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"))
+            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
             if (hvd.rank() == 0):
                 f_out = open("./LOSS.OUT", "a")
-                print("LR update: lr = %f" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
+                print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
                 f_out.close()
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
@@ -158,11 +178,11 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1,device = device)
 
-                if ((STEP_CUR % 100 == 0)):
-                    print("Force check:\n", F_cur_batch.data)
+                if ((STEP_CUR % 1000 == 0)):
+                    print("Force check:\n", F_cur_batch[0].data)
                     if (hvd.rank() == 0):
                         f_out = open("./LOSS.OUT", "a")
-                        print("Force check:\n", F_cur_batch.data, file=f_out)
+                        print("Force check:\n", F_cur_batch.data[0], file=f_out)
                         f_out.close()
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
@@ -184,19 +204,20 @@ if (True):
 
                 ###Adam
                 if (batch_idx  == 0 and epoch % 10 == 0):
-                    print(data_cur[8])
-                    f_out = open("./LOSS.OUT", "a")
+                    #print(data_cur[8])
                     END_BATCH_USER_TIMER = time.time()
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8])
                     print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                         epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0], tf.sqrt(loss_F_cur_batch),
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8], file=f_out)
-                    print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0], tf.sqrt(loss_F_cur_batch),
-                    END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
-                    file = f_out)
-                    f_out.close()
+                    if (hvd.rank() == 0):
+                        f_out = open("./LOSS.OUT", "a")
+                        print("Rank ", hvd.rank(), "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
+                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0], tf.sqrt(loss_F_cur_batch),
+                        END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
+                        file = f_out)
+                        f_out.close()
                     START_BATCH_USER_TIMER = time.time()
                 ###Adam end
 
@@ -218,7 +239,7 @@ if (True):
 
                 """if (STEP_CUR >= 2):
                     break"""
-            if (PROF_FLAG):
+            if (PROF_FLAG and hvd.rank() == 0):
                 f_prof = open("./PROF.OUT", "w")
                 print("profiling info saved in ./PROF.OUT")
                 print(prof.table(sort_by="cpu_time"), file = f_prof)
@@ -232,6 +253,9 @@ if (True):
 if (hvd.rank() == 0):
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
     print("Rank 0: Model saved to ./freeze_model.pytorch")
+    f_out = open("./LOSS.OUT", "a")
+    print("Rank 0: Model saved to ./freeze_model.pytorch", file = f_out)
+    f_out.close()
 
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER

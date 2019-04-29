@@ -92,6 +92,29 @@ if (hvd.rank() == 0):
 ###(Not sure. May be caused by large batch_size. Need more tests.)
 N_ATOMS_ORI_unique = np.unique(N_ATOMS_ORI_tf.numpy())
 
+##all data norm
+std = tf.zeros((parameters.N_types_all_frame, 4), device = device)
+avg = tf.zeros((parameters.N_types_all_frame, 4), device = device)
+"""for type_idx in range(parameters.N_types_all_frame):
+    type_idx_cur_type = (TYPE_Reshape_tf == parameters.type_index_all_frame[type_idx]).nonzero()
+    type_idx_cur_type = (type_idx_cur_type.narrow(1, 0, 1) * N_ATOMS_tf[0] + type_idx_cur_type.narrow(1, 1, 1)).reshape(-1, )
+    SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(SYM_COORD_Reshape_tf.reshape(len(SYM_COORD_Reshape_tf) * N_ATOMS_tf[0], parameters.SEL_A_max, 4), 0, type_idx_cur_type)
+    with tf.no_grad():
+        sji = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 0, 1)
+        xyz_hat = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 1, 3)
+        sji_avg = tf.mean(sji)
+        xyz_hat_avg = tf.mean(xyz_hat)
+        avg_unit = tf.cat((sji_avg.reshape(1, 1), xyz_hat_avg.expand(1, 3)), dim=1)
+        sji_avg2 = tf.mean(sji ** 2)
+        xyz_hat_avg2 = tf.mean(xyz_hat ** 2)
+        avg_unit2 = tf.cat((sji_avg2.reshape(1, 1), xyz_hat_avg2.expand(1, 3)), dim=1)
+        std_unit = tf.sqrt(avg_unit2 - avg_unit ** 2)
+        avg[type_idx] = tf.cat((avg_unit[0][0].reshape(1, 1).to(device), tf.zeros((1, 3), device=device)), dim=1)
+        std[type_idx] = std_unit + 1E-8"""
+
+
+
+
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf,
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf,
@@ -205,7 +228,7 @@ for epoch in range(parameters.epoch):
                 # correct
                 if (data_cur[1].grad):
                     data_cur[1].grad.data.zero_()
-                E_cur_batch, F_cur_batch = ONE_BATCH_NET(data_cur, parameters, device)
+                E_cur_batch, F_cur_batch = ONE_BATCH_NET(data_cur, parameters, std, avg, device)
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force

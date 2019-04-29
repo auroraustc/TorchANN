@@ -260,7 +260,7 @@ class one_batch_net(nn.Module):
 
                 self.fitting_hidden[type_idx][hidden_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
 
-    def forward(self, data_cur, parameters, std, avg, device) : #cur mean current batch
+    def forward(self, data_cur, parameters, std, avg, use_std_avg, device) : #cur mean current batch
         SYM_COORD_Reshape_tf_cur = data_cur[1]
         N_ATOMS_tf_cur = data_cur[4]
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
@@ -275,6 +275,8 @@ class one_batch_net(nn.Module):
         E_cur_batch_atom_wise = tf.zeros((len(data_cur[1]), data_cur[4][0]), device=device).reshape(-1, )
         ###DO NOT forget to multiply -1 for F!!!
         F_cur_batch = tf.zeros((len(SYM_COORD_Reshape_tf_cur), data_cur[4][0], 3), device=device)
+        std_ = tf.zeros((parameters.N_types_all_frame, 4), device = device)
+        avg_ = tf.zeros((parameters.N_types_all_frame, 4), device = device)
         for type_idx in range(parameters.N_types_all_frame):
             F_cur_batch_as_center_atom = tf.zeros((len(data_cur[1]) * data_cur[4][0], 3), device = device)
             F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * parameters.SEL_A_max, 3), device=device)
@@ -302,35 +304,44 @@ class one_batch_net(nn.Module):
                 0,
                 type_idx_cur_type)
             #batch-norm
-            with tf.no_grad():
-                sji = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 0, 1)
-                xyz_hat = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 1, 3)
-                sji_avg = tf.mean(sji)
-                xyz_hat_avg = tf.mean(xyz_hat)
-                avg_unit = tf.cat((sji_avg.reshape(1, 1), xyz_hat_avg.expand(1, 3)), dim=1)
-                sji_avg2 = tf.mean(sji ** 2)
-                xyz_hat_avg2 = tf.mean(xyz_hat ** 2)
-                avg_unit2 = tf.cat((sji_avg2.reshape(1, 1), xyz_hat_avg2.expand(1, 3)), dim=1)
-                std_unit = tf.sqrt(avg_unit2 - avg_unit ** 2)
-                avg_cur_type = tf.cat((avg_unit[0][0].reshape(1, 1), tf.zeros((1, 3), device=device)), dim=1)
-                std_cur_type = std_unit + 1E-8
-            """if (type_idx == 0):
-                std_cur_type = tf.Tensor([0.10697990656555198, 0.09491633897716276, 0.09491633897716276, 0.09491633897716276 ]).to(device)
-                avg_cur_type = tf.Tensor([0.1254715456, 0.0000000000, 0.0000000000, 0.0000000000 ]).to(device)
+            if (use_std_avg == True):
+                """SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg[
+                    type_idx]) / std[type_idx]
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]"""
+                std_ = std
+                avg_ = avg
+                std_cur_type = std_[type_idx]
+                avg_cur_type = avg_[type_idx]
             else:
-                std_cur_type = tf.Tensor(
-                    [0.12258749694382731, 0.0998134591186123, 0.0998134591186123, 0.0998134591186123]).to(device)
-                avg_cur_type = tf.Tensor([0.1235056020, 0.0000000000, 0.0000000000, 0.0000000000]).to(device)"""
+                with tf.no_grad():
+                    sji = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 0, 1)
+                    xyz_hat = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 1, 3)
+                    sji_avg = tf.mean(sji)
+                    xyz_hat_avg = tf.mean(xyz_hat)
+                    avg_unit = tf.cat((sji_avg.reshape(1, 1), xyz_hat_avg.expand(1, 3)), dim=1)
+                    sji_avg2 = tf.mean(sji ** 2)
+                    xyz_hat_avg2 = tf.mean(xyz_hat ** 2)
+                    avg_unit2 = tf.cat((sji_avg2.reshape(1, 1), xyz_hat_avg2.expand(1, 3)), dim=1)
+                    std_unit = tf.sqrt(avg_unit2 - avg_unit ** 2)
+                    avg_cur_type = tf.cat((avg_unit[0][0].reshape(1, 1), tf.zeros((1, 3), device=device)), dim=1)
+                    #avg_cur_type = avg_unit
+                    std_cur_type = std_unit + 1E-8
+                    std_[type_idx] = std_cur_type
+                    avg_[type_idx] = avg_cur_type
 
-            """SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg[type_idx]) / std[type_idx]
-            SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std[type_idx]
-            SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std[type_idx]
-            SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / std[type_idx]"""
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type) / \
                                                         std_cur_type
             SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std_cur_type
             SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std_cur_type
             SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / std_cur_type
+
+
+
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.requires_grad_()
 
             #Calculate energy of these atoms in all frames
@@ -526,7 +537,8 @@ class one_batch_net(nn.Module):
             """
         F_cur_batch *= -1.0
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
-        return E_cur_batch, F_cur_batch
+        use_std_avg = True
+        return E_cur_batch, F_cur_batch, std_, avg_
 
 def init_weights(m):
     '''Takes in a module and initializes all linear layers with weight

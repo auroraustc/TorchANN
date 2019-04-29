@@ -90,6 +90,7 @@ if (hvd.rank() == 0):
 ##all data norm
 std = tf.zeros((parameters.N_types_all_frame, 4), device = device)
 avg = tf.zeros((parameters.N_types_all_frame, 4), device = device)
+use_std_avg = False
 """for type_idx in range(parameters.N_types_all_frame):
     type_idx_cur_type = (TYPE_Reshape_tf == parameters.type_index_all_frame[type_idx]).nonzero()
     type_idx_cur_type = (type_idx_cur_type.narrow(1, 0, 1) * N_ATOMS_tf[0] + type_idx_cur_type.narrow(1, 1, 1)).reshape(-1, )
@@ -189,9 +190,7 @@ if (True):
 
                 ###Adam
                 # correct
-                if (data_cur[1].grad):
-                    data_cur[1].grad.data.zero_()
-                E_cur_batch, F_cur_batch = ONE_BATCH_NET(data_cur, parameters, std, avg, device)
+                E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force

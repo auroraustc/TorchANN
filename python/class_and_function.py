@@ -330,7 +330,7 @@ class one_batch_net(nn.Module):
                     std_unit = tf.sqrt(avg_unit2 - avg_unit ** 2)
                     avg_cur_type = tf.cat((avg_unit[0][0].reshape(1, 1), tf.zeros((1, 3), device=device)), dim=1)
                     #avg_cur_type = avg_unit
-                    std_cur_type = std_unit + 1E-8
+                    std_cur_type = std_unit + 1E-16
                     std_[type_idx] = std_cur_type
                     avg_[type_idx] = avg_cur_type
 

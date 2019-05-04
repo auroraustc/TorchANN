@@ -169,7 +169,7 @@ def read_and_init_bin_file(parameters, default_dtype):
     TYPE = np.fromfile("./TYPE.BIN", dtype=np.int32)
     N_ATOMS = np.fromfile("./N_ATOMS.BIN", dtype=np.int32)
     NEI_IDX = np.fromfile("./NEI_IDX.BIN", dtype=np.int32)
-    NEI_COORD = np.fromfile("./NEI_COORD.BIN", dtype=np.float64)
+    #NEI_COORD = np.fromfile("./NEI_COORD.BIN", dtype=np.float64)
     SYM_COORD_DX = np.fromfile("./SYM_COORD_DX.BIN", dtype=np.float64)
     SYM_COORD_DY = np.fromfile("./SYM_COORD_DY.BIN", dtype=np.float64)
     SYM_COORD_DZ = np.fromfile("./SYM_COORD_DZ.BIN", dtype=np.float64)
@@ -196,8 +196,8 @@ def read_and_init_bin_file(parameters, default_dtype):
     print("TYPE_Reshape: shape = ", TYPE_Reshape.shape)
     NEI_IDX_Reshape = np.reshape(NEI_IDX, (parameters.Nframes_tot, -1))
     print("NEI_IDX_Reshape: shape = ", NEI_IDX_Reshape.shape)
-    NEI_COORD_Reshape = np.reshape(NEI_COORD, (parameters.Nframes_tot, -1))
-    print("NEI_COORD_Reshape: shape = ", NEI_COORD_Reshape.shape)
+    #NEI_COORD_Reshape = np.reshape(NEI_COORD, (parameters.Nframes_tot, -1))
+    #print("NEI_COORD_Reshape: shape = ", NEI_COORD_Reshape.shape)
     SYM_COORD_DX_Reshape = np.reshape(SYM_COORD_DX, (parameters.Nframes_tot, -1))
     SYM_COORD_DY_Reshape = np.reshape(SYM_COORD_DY, (parameters.Nframes_tot, -1))
     SYM_COORD_DZ_Reshape = np.reshape(SYM_COORD_DZ, (parameters.Nframes_tot, -1))
@@ -212,7 +212,8 @@ def read_and_init_bin_file(parameters, default_dtype):
     N_ATOMS_tf = tf.from_numpy(N_ATOMS)
     TYPE_Reshape_tf = tf.from_numpy(TYPE_Reshape)
     NEI_IDX_Reshape_tf = tf.from_numpy(NEI_IDX_Reshape).long()
-    NEI_COORD_Reshape_tf = tf.from_numpy(NEI_COORD_Reshape).type(default_dtype)
+    #NEI_COORD_Reshape_tf = tf.from_numpy(NEI_COORD_Reshape).type(default_dtype)
+    NEI_COORD_Reshape_tf = tf.zeros(len(SYM_COORD_Reshape_tf))
     FRAME_IDX_tf = tf.ones(len(COORD_Reshape_tf), dtype=tf.int32)
     for i in range(len(FRAME_IDX_tf)):
         FRAME_IDX_tf[i] = i
@@ -270,7 +271,7 @@ class one_batch_net(nn.Module):
         SYM_COORD_DY_Reshape_tf_cur_Reshape = tf.reshape(data_cur[10], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         SYM_COORD_DZ_Reshape_tf_cur_Reshape = tf.reshape(data_cur[11], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
-        NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max, 3))
+        #NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max, 3))
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
         E_cur_batch_atom_wise = tf.zeros((len(data_cur[1]), data_cur[4][0]), device=device).reshape(-1, )
         ###DO NOT forget to multiply -1 for F!!!

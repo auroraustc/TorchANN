@@ -115,7 +115,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr, eps = 1E-16)#, amsgrad = True, weight_decay = 1e-3)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(hvd.size()), eps = 1E-16)#, betas = (0.9, 0.999))#, amsgrad = True, weight_decay = 1e-3)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
@@ -270,6 +270,8 @@ if (True):
 
 if (hvd.rank() == 0):
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
+    torch.save(std, "./std.pytorch")
+    torch.save(avg, "./avg.pytorch")
     print("Rank 0: Model saved to ./freeze_model.pytorch")
     f_out = open("./LOSS.OUT", "a")
     print("Rank 0: Model saved to ./freeze_model.pytorch", file = f_out)

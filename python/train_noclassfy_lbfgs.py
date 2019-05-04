@@ -116,7 +116,7 @@ TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_repli
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
 OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True, weight_decay = 1e-3)
-OPTIMIZER2 = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr, history_size = 20)
+OPTIMIZER2 = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(hvd.size()), history_size = 20)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
 """
@@ -279,6 +279,8 @@ if (True):
 
 if (hvd.rank() == 0):
     torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
+    torch.save(std, "./std.pytorch")
+    torch.save(avg, "./avg.pytorch")
     print("Rank 0: Model saved to ./freeze_model.pytorch")
     f_out = open("./LOSS.OUT", "a")
     print("Rank 0: Model saved to ./freeze_model.pytorch", file = f_out)

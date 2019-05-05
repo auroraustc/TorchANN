@@ -20,12 +20,15 @@ tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = tf.device('cpu')
+hvd.init()
+assert hvd.size() == MPI.COMM_WORLD.Get_size()
+
 if (hvd.size() > 1):
     DEBUG_RANK = 1
 else:
     DEBUG_RANK = 0
 
-hvd.init()
+
 if (device != tf.device('cpu')):
     print("cuDNN version: ", tf.backends.cudnn.version())
     # tf.backends.cudnn.enabled = False
@@ -35,7 +38,7 @@ if (hvd.rank() == DEBUG_RANK):
     f_out = open("./LOSS.OUT", "w")
     f_out.close()
 
-assert hvd.size() == MPI.COMM_WORLD.Get_size()
+
 print("hvd.size():", hvd.size())
 if (hvd.rank() == DEBUG_RANK):
     f_out = open("./LOSS.OUT", "a")

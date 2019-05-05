@@ -165,8 +165,8 @@ if (True):
                 # correct
                 E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
                 shape_tmp = std.shape
-                std = std[0].reshape(-1, 1).expand(-1, MULTIPLIER).reshape(shape_tmp)
-                avg = avg[0].reshape(-1, 1).expand(-1, MULTIPLIER).reshape(shape_tmp)
+                std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
+                avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force

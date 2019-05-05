@@ -167,6 +167,7 @@ if (True):
                 shape_tmp = std.shape
                 std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
+                use_std_avg = True
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force
@@ -175,10 +176,10 @@ if (True):
 
                 if ((STEP_CUR % (1000 // MULTIPLIER) == 0)):
                     print("Force check:\n", F_cur_batch[0].data)
-                    print("Additional parameters check:\n", "std:\n",  std, "avg:\n", avg)
+                    print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg)
                     f_out = open("./LOSS.OUT", "a")
                     print("Force check:\n", F_cur_batch.data[0], file=f_out)
-                    print("Additional parameters check:\n", "std:\n",  std, "avg:\n", avg, file=f_out)
+                    print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg, file=f_out)
                     f_out.close()
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 

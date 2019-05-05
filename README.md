@@ -131,4 +131,4 @@ mpirun -n 2 ../python/mpi4py/train_noclassfy.py
   - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
 - `start_lr`, `decay_epoch`, `decay_rate`
   - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
-  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)`.
+  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training.

@@ -87,11 +87,6 @@ if (hvd.rank() == 0):
     print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
     f_out.close()
 
-###All the frames are classified according to the number of atoms.
-###If two frame with different number of atoms are in the same batch then the training may be extremely slow
-###(Not sure. May be caused by large batch_size. Need more tests.)
-N_ATOMS_ORI_unique = np.unique(N_ATOMS_ORI_tf.numpy())
-
 ##all data norm
 std = tf.zeros((parameters.N_types_all_frame, 4), device = device)
 avg = tf.zeros((parameters.N_types_all_frame, 4), device = device)
@@ -113,34 +108,29 @@ use_std_avg = False
         avg[type_idx] = tf.cat((avg_unit[0][0].reshape(1, 1).to(device), tf.zeros((1, 3), device=device)), dim=1)
         std[type_idx] = std_unit + 1E-8"""
 
-
-
-
-
-DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf,
-                                       TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf,
-                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf,
+DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
+                                       TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
+                                       SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf)#0..12
-
 TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, sampler = TRAIN_SAMPLER)
 #TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size, shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(hvd.size()))#, amsgrad = True, weight_decay = 0)
-#OPTIMIZER2 = optim.RMSprop(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)#, amsgrad = True, weight_decay = 1e-3)
+OPTIMIZER2 = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(hvd.size()), history_size = 20)
 OPTIMIZER2 = hvd.DistributedOptimizer(OPTIMIZER2, named_parameters=ONE_BATCH_NET.named_parameters())
 
-
+"""
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
 ###Adam works also horribly. So it is better to use Adadelta
 ###Now adam works OK if applied init_weights
-#OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
-
+OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
+"""
 
 
 CRITERION = nn.MSELoss(reduction = "mean")
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
-STEP_CUR = 0 #This STEP_CUR means the number of batches(or the number of optimizer2.step())
+STEP_CUR = 0
 
 hvd.broadcast_parameters(ONE_BATCH_NET.state_dict(), root_rank=0)
 
@@ -160,53 +150,27 @@ if (parameters.decay_rate > 1):
         print("-----------------------------------------------", file=f_out)
         f_out.close()
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
-START_BATCH_USER_TIMER = time.time()
-for epoch in range(parameters.epoch):
 
-    START_EPOCH_TIMER = time.time()
-    if (parameters.epoch != 1):
-        pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (
-                    parameters.epoch - 1.0) * epoch + parameters.start_pref_e
-        pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (
-                    parameters.epoch - 1.0) * epoch + parameters.start_pref_f
-    else:
-        pref_e = parameters.start_pref_e
-        pref_f = parameters.start_pref_f
-
-    if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
-        LR_SCHEDULER.step()
-        print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
-        if (hvd.rank() == 0):
-            f_out = open("./LOSS.OUT", "a")
-            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
-            f_out.close()
-    #START_BATCH_USER_TIMER = time.time()
-    for epoch_in in range(len(N_ATOMS_ORI_unique)):
-        N_ATOMS_ORI_unique_idx = (N_ATOMS_ORI_tf == N_ATOMS_ORI_unique[epoch_in]).nonzero().reshape(-1, )
-        COORD_Reshape_tf_select = tf.index_select(COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_Reshape_tf_select = tf.index_select(SYM_COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        ENERGY_tf_select = tf.index_select(ENERGY_tf, 0, N_ATOMS_ORI_unique_idx)
-        FORCE_Reshape_tf_select = tf.index_select(FORCE_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        N_ATOMS_tf_select = tf.index_select(N_ATOMS_tf, 0, N_ATOMS_ORI_unique_idx)
-        TYPE_Reshape_tf_select = tf.index_select(TYPE_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        NEI_IDX_Reshape_tf_select = tf.index_select(NEI_IDX_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        NEI_COORD_Reshape_tf_select = tf.index_select(NEI_COORD_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        FRAME_IDX_tf_select = tf.index_select(FRAME_IDX_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DX_Reshape_tf_select = tf.index_select(SYM_COORD_DX_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DY_Reshape_tf_select = tf.index_select(SYM_COORD_DY_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        SYM_COORD_DZ_Reshape_tf_select = tf.index_select(SYM_COORD_DZ_Reshape_tf, 0, N_ATOMS_ORI_unique_idx)
-        N_ATOMS_ORI_tf_select = tf.index_select(N_ATOMS_ORI_tf, 0, N_ATOMS_ORI_unique_idx)
-        DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf_select, SYM_COORD_Reshape_tf_select, ENERGY_tf_select,
-                                                   FORCE_Reshape_tf_select, N_ATOMS_tf_select, TYPE_Reshape_tf_select,
-                                                   NEI_IDX_Reshape_tf_select, NEI_COORD_Reshape_tf_select, FRAME_IDX_tf_select,
-                                                   SYM_COORD_DX_Reshape_tf_select, SYM_COORD_DY_Reshape_tf_select,
-                                                   SYM_COORD_DZ_Reshape_tf_select, N_ATOMS_ORI_tf_select)
-        TRAIN_SAMPLER = tf.utils.data.distributed.DistributedSampler(DATA_SET, num_replicas=hvd.size(), rank=hvd.rank())
-        batch_size_ = parameters.batch_size
-        if (batch_size_ * hvd.size() > len(N_ATOMS_ORI_unique_idx) ):
-            batch_size_ = np.floor((len(N_ATOMS_ORI_unique_idx) + 0.0) / hvd.size() + 1).astype(np.int32)
-        TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size=parameters.batch_size, sampler=TRAIN_SAMPLER)
+if (True):
+#with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
+    START_BATCH_USER_TIMER = time.time()
+    for epoch in range(parameters.epoch):
         TRAIN_SAMPLER.set_epoch(epoch)
+        START_EPOCH_TIMER = time.time()
+        if (parameters.epoch != 1 ):
+            pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_e
+            pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_f
+        else:
+            pref_e = parameters.start_pref_e
+            pref_f = parameters.start_pref_f
+        if ((epoch % parameters.decay_epoch == 0)):  # and (STEP_CUR > 0)):
+            LR_SCHEDULER.step()
+            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
+            if (hvd.rank() == 0):
+                f_out = open("./LOSS.OUT", "a")
+                print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
+                f_out.close()
+
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
@@ -227,40 +191,49 @@ for epoch in range(parameters.epoch):
 
                 ###Adam
                 # correct
-                if (data_cur[1].grad):
-                    data_cur[1].grad.data.zero_()
-                E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
-                # Energy loss part
-                loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
-                # Force
-                F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
-                loss_F_cur_batch = tf.zeros(1,device = device)
+                # correct end
+                ###Adam end
 
-                if ((STEP_CUR % (1000 // hvd.size()) == 0) and hvd.rank() == 0):
+
+                ###LBFGS
+                #correct
+                loss_E_cur_batch = tf.zeros(0, device = device)
+                loss_F_cur_batch = tf.zeros(0, device=device)
+                def closure():
+                    global std
+                    global avg
+                    global use_std_avg
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
+                    loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
+                    F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
+                    loss_F_cur_batch = tf.zeros(1, device=device)
+                    loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
+                    loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
+                    OPTIMIZER2.zero_grad()
+                    loss_cur_batch.backward()
+                    return loss_cur_batch
+                OPTIMIZER2.step(closure)
+                if (True):
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
+                    loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
+                    F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
+                    loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
+                if ((STEP_CUR % (10 // hvd.size()) == 0) and hvd.rank() == 0):
                     print("Force check:\n", F_cur_batch[0].data)
                     f_out = open("./LOSS.OUT", "a")
                     print("Force check:\n", F_cur_batch.data[0], file=f_out)
                     f_out.close()
-                loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
-
-                loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
-                OPTIMIZER2.zero_grad()
-                loss_cur_batch.backward()
-                OPTIMIZER2.step()
-                # correct end
-                ###Adam end
-
-                """
-                ###LBFGS
-                #correct
                 #correct end
                 ###LBFGS end
-                """
+                if (STEP_CUR == 2):
+                    std = hvd.broadcast(std, 0)
+                    avg = hvd.broadcast(avg, 0)
+
 
                 END_BATCH_TIMER = time.time()
 
                 ###Adam
-                if (epoch_in == 0 and batch_idx == 0 and epoch % 10 == 0):
+                if (batch_idx  == 0 and epoch % 10 == 0):
                     #print(data_cur[8])
                     END_BATCH_USER_TIMER = time.time()
                     #print("Rank ", hvd.rank(), "Select frame:", data_cur[8])

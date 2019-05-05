@@ -191,6 +191,9 @@ if (True):
                 ###Adam
                 # correct
                 E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
+                if (STEP_CUR == 2):
+                    std = hvd.broadcast(std, 0)
+                    avg = hvd.broadcast(avg, 0)
                 # Energy loss part
                 loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
                 # Force

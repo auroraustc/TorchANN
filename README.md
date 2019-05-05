@@ -9,8 +9,9 @@ Use torch to train NN potential
 1. python version >= 3
 2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v0.4.1 or v1.0; optional: Torchvision)
 3. [horovod](https://github.com/horovod/horovod)
-4. An MPI library (Intel MPI 2018 tested)
-5. C compiler (icc 2018 tested)
+4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)
+5. An MPI library (Intel MPI 2018 tested)
+6. C compiler (icc 2018 tested)
 
 ## Prepare training data:
 ```bash
@@ -92,7 +93,8 @@ The format of `force.raw` is the same as `coord.raw`.
 ### STEP 1: Make C executable for data pre-processing
 ```bash
 cd ./Torch-NNMD/c
-#(Adapt the makefile for your computer)
+#Adapt the makefile for your computer
+#For example, change the -g flag to -O2
 make
 ```
 
@@ -110,11 +112,12 @@ The file `all_frame_info.bin.temp` could be deleted and should not affect the tr
 
 ### STEP 3: Run python script to train
 ```bash
-mpirun -n 2 ../python/train.py #or train_noclassfy.py
-#You can also run using ../python/train.py if you would like to run only one process.
+mpirun -n 2 ../python/mpi4py/train_noclassfy.py
+#The scripts in ../python/algo_test/ are for test purpose. Those scripts can also run
+#using more than one processes by mpirun, but it is not recommended.
 ```
 ## Parameters in ALL_PARAMS.json
-**In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying a .c file**
+**In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying any .c file**
 - `cutoff_1`, `cutoff_2`, `cutoff_3`, `cutoff_max`
   - For [DeePMD](https://github.com/deepmodeling/deepmd-kit)-type symmetry coordinates, `cutoff_1` and `cutoff_2` (or `cutoff_max`) correspond to rcs and rc in [its paper](https://arxiv.org/abs/1805.09003).
   - Editing the **read_parameters.c** to change their values.
@@ -125,4 +128,7 @@ mpirun -n 2 ../python/train.py #or train_noclassfy.py
   - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`.
 - `stop_epoch`, `batch_size`
   - `stop_epoch` determines how many epoches of optimization it will run.
-  - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different number of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be a good choice for training using this script. However, large `batch_size` can also lead to terrible convergence. You should do your own tests.
+  - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
+- `start_lr`, `decay_epoch`, `decay_rate`
+  - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
+  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)`.

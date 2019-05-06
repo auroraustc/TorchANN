@@ -97,7 +97,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf)#0..12
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(MULTIPLIER + 0.0), eps = 1E-16)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
@@ -174,7 +174,7 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1, device = device)
 
-                if ((STEP_CUR % (1000 // MULTIPLIER) == 0)):
+                if ((STEP_CUR % (2000 // MULTIPLIER) == 0)):
                     print("Force check:\n", F_cur_batch[0].data)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg)
                     f_out = open("./LOSS.OUT", "a")
@@ -224,7 +224,10 @@ if (True):
             break
 
 if (True):
-    torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
+    if (tf.cuda.device_count == 1):
+        torch.save(ONE_BATCH_NET.state_dict(), "./freeze_model.pytorch")
+    else:
+        torch.save(ONE_BATCH_NET.module.state_dict(()), "./freeze_model.pytorch")
     torch.save(std, "./std.pytorch")
     torch.save(avg, "./avg.pytorch")
     print("Rank 0: Model saved to ./freeze_model.pytorch")

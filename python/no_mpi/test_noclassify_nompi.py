@@ -29,30 +29,15 @@ else:
     MULTIPLIER = 1
 #if (hvd.rank() == 0):
 if (True):
-    f_out = open("./LOSS.OUT", "w")
+    f_out = open("./TEST_LOSS.OUT", "w")
     f_out.close()
 
-print("Number of GPUs: ", tf.cuda.device_count())
-if(True):
-    f_out = open("./LOSS.OUT", "a")
-    print("Number of GPUs: ", tf.cuda.device_count(), file=f_out)
-    f_out.close()
-
-
+FREEZE_MODEL = tf.load("./freeze_model.pytorch", map_location=device)
 
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
-parameters = Parameters()
-read_parameters_flag = read_parameters(parameters)
+parameters = FREEZE_MODEL['parameters']
 print("All parameters:")
 print(parameters)
-if (True):
-    f_out = open("./LOSS.OUT", "a")
-    print("All parameters:", file = f_out)
-    print(parameters, file = f_out)
-    f_out.close()
-if (read_parameters_flag != 0):
-    print("Reading parameters error with code %d\n"%read_parameters_flag)
-    exit()
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
@@ -61,7 +46,13 @@ N_ATOMS_ORI_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
 
-print("Data pre-processing complete. Building net work.\n")
+print("-----------------------------------------------")
+print("|*******************WARNING*******************|")
+print("| YOUR ARE RUNNING TEST ON THE CURRENT SYSTEM |")
+print("|     NO OPTIMIZATION WILL BE PERFORMED!      |")
+print("-----------------------------------------------")
+
+print("Data pre-processing complete. Building net work and load data.\n")
 
 mean_init=np.zeros(parameters.N_types_all_frame)
 A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot)
@@ -73,60 +64,33 @@ mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
 
 ONE_BATCH_NET = one_batch_net(parameters, mean_init)
+ONE_BATCH_NET.load_state_dict(FREEZE_MODEL['model_state_dict'])
+std = FREEZE_MODEL['std'].narrow(0,0,1)
+avg = FREEZE_MODEL['avg'].narrow(0,0,1)
 ###init_weights using xavier with gain = sqrt(0.5) is necessary. Now the damn adam works good with this initialization
-ONE_BATCH_NET.apply(init_weights)
+#ONE_BATCH_NET.apply(init_weights)
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
-if (tf.cuda.device_count() > 1):
-    ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
-if (True):
-    f_out = open("./LOSS.OUT", "a")
-    print(ONE_BATCH_NET, file=f_out)
-    print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
-    f_out.close()
 
-##all data norm
-std = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
-avg = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
-use_std_avg = False
+use_std_avg = True
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf)#0..12
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)
-
-"""
-###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
-###Adam works also horribly. So it is better to use Adadelta
-###Now adam works OK if applied init_weights
-OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
-"""
-
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = 1, shuffle = False)
 
 CRITERION = nn.MSELoss(reduction = "mean")
-LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
+#LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
 
-print("Start training using device: ", device, ", count: ", tf.cuda.device_count())
-if (parameters.decay_rate > 1):
-    print("-----------------------------------------------")
-    print("|*******************WARNING*******************|")
-    print("|YOUR SETTING FOR decay_rate IS LARGER THAN 1!|")
-    print("|     HOPE YOU KNOW WHAT YOU ARE DOING!       |")
-    print("-----------------------------------------------")
-    if (True):
-        f_out = open("./LOSS.OUT", "a")
-        print("-----------------------------------------------", file=f_out)
-        print("|*******************WARNING*******************|", file=f_out)
-        print("|YOUR SETTING FOR decay_rate IS LARGER THAN 1!|", file=f_out)
-        print("|     HOPE YOU KNOW WHAT YOU ARE DOING!       |", file=f_out)
-        print("-----------------------------------------------", file=f_out)
-        f_out.close()
+print("Start testing using device: ", device)#, ", count: ", tf.cuda.device_count())
+###For test, epoch = 1
+parameters.epoch = 1
+
 
 if (True):
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
@@ -140,13 +104,6 @@ if (True):
         else:
             pref_e = parameters.start_pref_e
             pref_f = parameters.start_pref_f
-        if ((epoch % parameters.decay_epoch == 0)):
-            LR_SCHEDULER.step()
-            print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"))
-            if (True):
-                f_out = open("./LOSS.OUT", "a")
-                print("LR update: lr = %lf" % OPTIMIZER2.param_groups[0].get("lr"), file=f_out)
-                f_out.close()
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             for i in range(len(data_cur)):
@@ -174,33 +131,34 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1, device = device)
 
-                if ((STEP_CUR % (parameters.check_step // MULTIPLIER) == 0)):
+                """if ((STEP_CUR % (parameters.check_step // MULTIPLIER) == 0)):
                     print("Force check:\n", F_cur_batch[0].data)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg)
                     f_out = open("./LOSS.OUT", "a")
                     print("Force check:\n", F_cur_batch.data[0], file=f_out)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg, file=f_out)
                     f_out.close()
+                """
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
                 loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
-                OPTIMIZER2.zero_grad()
-                loss_cur_batch.backward()
-                OPTIMIZER2.step()
+                #OPTIMIZER2.zero_grad()
+                #loss_cur_batch.backward()
+                #OPTIMIZER2.step()
                 # correct end
                 ###Adam end
 
                 END_BATCH_TIMER = time.time()
 
                 ###Adam print
-                if (batch_idx  == 0 and epoch % (parameters.output_epoch) == 0):
+                if (True):
                     END_BATCH_USER_TIMER = time.time()
-                    print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+                    print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                         epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
-                        f_out = open("./LOSS.OUT", "a")
-                        print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
+                        f_out = open("./TEST_LOSS.OUT", "a")
+                        print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
                            epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                         file = f_out)
@@ -218,39 +176,11 @@ if (True):
                 print(prof.table(sort_by="cpu_time"), file = f_prof)
                 f_prof.close()
         END_EPOCH_TIMER = time.time()
-        ###Save model, parameters and current lr every save_epoch
-        if (epoch > 0) and (epoch % parameters.save_epoch == 0):
-            if (tf.cuda.device_count() == 1):
-                torch.save(
-                    {'model_state_dict': ONE_BATCH_NET.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters,
-                     'Epoch': epoch, 'batch': batch_idx, 'lr': OPTIMIZER2.param_groups[0].get("lr")},
-                    "./freeze_model.pytorch.ckpt")
-            else:
-                torch.save({'model_state_dict': ONE_BATCH_NET.module.state_dict(), 'std': std, 'avg': avg,
-                            'parameters': parameters, 'Epoch': epoch, 'batch': batch_idx,
-                            'lr': OPTIMIZER2.param_groups[0].get("lr")}, "./freeze_model.pytorch.ckpt")
-            # torch.save(std, "./std.pytorch")
-            # torch.save(avg, "./avg.pytorch")
-            print("Rank 0: Checkpoint saved to ./freeze_model.pytorch.ckpt")
-            f_out = open("./LOSS.OUT", "a")
-            print("Rank 0: Checkpoint saved to ./freeze_model.pytorch.ckpt", file=f_out)
-            f_out.close()
 
 
         if (False):
             break
 
-if (True):
-    if (tf.cuda.device_count() == 1):
-        torch.save({'model_state_dict': ONE_BATCH_NET.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters}, "./freeze_model.pytorch")
-    else:
-        torch.save({'model_state_dict': ONE_BATCH_NET.module.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters}, "./freeze_model.pytorch")
-    #torch.save(std, "./std.pytorch")
-    #torch.save(avg, "./avg.pytorch")
-    print("Rank 0: Model saved to ./freeze_model.pytorch")
-    f_out = open("./LOSS.OUT", "a")
-    print("Rank 0: Model saved to ./freeze_model.pytorch", file = f_out)
-    f_out.close()
 
 END_TRAIN_TIMER = time.time()
 ELAPSED_TRAIN = END_TRAIN_TIMER - START_TRAIN_TIMER

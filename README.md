@@ -7,10 +7,10 @@ Use torch to train NN potential
 
 ## Request:
 1. python version >= 3
-2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v0.4.1 or v1.0; optional: Torchvision)
-3. [horovod](https://github.com/horovod/horovod)
-4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)
-5. An MPI library (Intel MPI 2018 tested)
+2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v1.x; optional: Torchvision)
+3. [horovod](https://github.com/horovod/horovod)(Optional)
+4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional)
+5. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional)
 6. C compiler (icc 2018 tested)
 
 ## Prepare training data:
@@ -112,9 +112,9 @@ The file `all_frame_info.bin.temp` could be deleted and should not affect the tr
 
 ### STEP 3: Run python script to train
 ```bash
-mpirun -n 2 ../python/mpi4py/train_noclassfy.py
-#The scripts in ../python/algo_test/ are for test purpose. Those scripts can also run
-#using more than one processes by mpirun, but it is not recommended.
+export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
+#Current tests show that the no_mpi version works the most stable and efficiently.
+../python/no_mpi/train_noclassify_nompi.py
 ```
 ## Parameters in ALL_PARAMS.json
 **In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying any .c file**
@@ -131,4 +131,5 @@ mpirun -n 2 ../python/mpi4py/train_noclassfy.py
   - For **train_noclassfy.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
 - `start_lr`, `decay_epoch`, `decay_rate`
   - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
-  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training.
+  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training in the MPI enabled version.
+  - `start_lr` will remain untouched in the `no_mpi` version no matter how many GPUs are used.

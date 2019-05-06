@@ -59,7 +59,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_BUILD
+//#define DEBUG_BUILD
 
 #ifdef DEBUG_BUILD
 #define printf_d printf

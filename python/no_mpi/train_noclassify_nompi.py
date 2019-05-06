@@ -174,7 +174,7 @@ if (True):
                 F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
                 loss_F_cur_batch = tf.zeros(1, device = device)
 
-                if ((STEP_CUR % (2000 // MULTIPLIER) == 0)):
+                if ((STEP_CUR % (parameters.check_step // MULTIPLIER) == 0)):
                     print("Force check:\n", F_cur_batch[0].data)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg)
                     f_out = open("./LOSS.OUT", "a")
@@ -193,7 +193,7 @@ if (True):
                 END_BATCH_TIMER = time.time()
 
                 ###Adam print
-                if (batch_idx  == 0 and epoch % 10 == 0):
+                if (batch_idx  == 0 and epoch % (parameters.output_epoch) == 0):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                         epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),

@@ -96,6 +96,16 @@ typedef struct parameters_info_struct_
 	double limit_pref_e;
 	double start_pref_f;
 	double limit_pref_f;
+	int check_step;
+	int check_batch;
+	int check_epoch;
+	int output_step;
+	int output_batch;
+	int output_epoch;
+	int save_step;
+	int save_batch;
+	int save_epoch;
+
 }parameters_info_struct;
 
 /*converted coordinate of one frame(using DeePMD's method)*/

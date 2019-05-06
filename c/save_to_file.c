@@ -22,7 +22,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_SAV
+//#define DEBUG_SAV
 
 #ifdef DEBUG_SAV
 #define printf_d printf
@@ -164,7 +164,16 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
     fprintf(fp_parameters, "    \"start_pref_e\": %.10e,\n", parameters_info->start_pref_e);
     fprintf(fp_parameters, "    \"limit_pref_e\": %.10e,\n", parameters_info->limit_pref_e);
     fprintf(fp_parameters, "    \"start_pref_f\": %.10e,\n", parameters_info->start_pref_f);
-    fprintf(fp_parameters, "    \"limit_pref_f\": %.10e\n", parameters_info->limit_pref_f);
+    fprintf(fp_parameters, "    \"limit_pref_f\": %.10e,\n", parameters_info->limit_pref_f);
+    fprintf(fp_parameters, "    \"check_step\": %d,\n", parameters_info->check_step);
+    fprintf(fp_parameters, "    \"check_batch\": %d,\n", parameters_info->check_batch);
+    fprintf(fp_parameters, "    \"check_epoch\": %d,\n", parameters_info->check_epoch);
+    fprintf(fp_parameters, "    \"output_step\": %d,\n", parameters_info->output_step);
+    fprintf(fp_parameters, "    \"output_batch\": %d,\n", parameters_info->output_batch);
+    fprintf(fp_parameters, "    \"output_epoch\": %d,\n", parameters_info->output_epoch);
+    fprintf(fp_parameters, "    \"save_step\": %d,\n", parameters_info->save_step);
+    fprintf(fp_parameters, "    \"save_batch\": %d,\n", parameters_info->save_batch);
+    fprintf(fp_parameters, "    \"save_epoch\": %d\n", parameters_info->save_epoch);
 
 
     fprintf(fp_parameters, "}\n");//tail. The last line before tail should NOT end with a coma

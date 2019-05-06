@@ -41,6 +41,10 @@ class Parameters():
         limit_pref_e = 400
         start_pref_f = 1000
         limit_pref_f = 1
+
+        check_step = 1000
+        output_epoch = 10
+        save_epoch = 10
     def __str__(self):
         """
         print(">>> cutoff_1: %.6e" % self.cutoff_1)
@@ -93,6 +97,10 @@ class Parameters():
         str_ += (">>> limit_pref_e: %.6e\n" % self.limit_pref_e)
         str_ += (">>> start_pref_f: %.6e\n" % self.start_pref_f)
         str_ += (">>> limit_pref_f: %.6e\n" % self.limit_pref_f)
+
+        str_ += (">>> check_step: %d\n" % self.check_step)
+        str_ += (">>> output_epoch: %d\n" % self.output_epoch)
+        str_ += (">>> save_epoch: %d\n" % self.save_epoch)
         str_ = ''.join(str(element) for element in str_)
 
 
@@ -157,6 +165,10 @@ def read_parameters(parameters):
     parameters.limit_pref_e = INPUT_DATA['limit_pref_e']
     parameters.start_pref_f = INPUT_DATA['start_pref_f']
     parameters.limit_pref_f = INPUT_DATA['limit_pref_f']
+
+    parameters.check_step = INPUT_DATA['check_step']
+    parameters.output_epoch = INPUT_DATA['output_epoch']
+    parameters.save_epoch = INPUT_DATA['save_epoch']
 
     INPUT_FILE.close()
     return 0

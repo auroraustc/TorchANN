@@ -315,43 +315,43 @@ void check_bin(int Nframes_tot)
 	frame_info_struct * frame_info = (frame_info_struct *)calloc(Nframes_tot, sizeof(frame_info_struct));
 	fread(frame_info, sizeof(frame_info_struct), Nframes_tot, fp_in);
 	r = rand() % Nframes_tot;
-	printf("Check saved frames. Randomly select one frame: %d (No.%d)\n", r, r + 1);
-	printf("frame_info.index: %d\n", frame_info[r].index);
-	printf("frame_info.N_Atoms: %d\n", frame_info[r].N_Atoms);
+	printf_d("Check saved frames. Randomly select one frame: %d (No.%d)\n", r, r + 1);
+	printf_d("frame_info.index: %d\n", frame_info[r].index);
+	printf_d("frame_info.N_Atoms: %d\n", frame_info[r].N_Atoms);
 	for (i = 0; i <= 2; i++)
 	{
-		printf("box vector %d: ", i + 1);
+		printf_d("box vector %d: ", i + 1);
 		for (j = 0; j <= 2; j++)
 		{
-			printf("%lf ", frame_info[r].box[i][j]);
+			printf_d("%lf ", frame_info[r].box[i][j]);
 		}
-		printf("\n");
+		printf_d("\n");
 	}
-	printf("frame_info.type: \n");
+	printf_d("frame_info.type: \n");
 	for (i = 0; i <= frame_info[r].N_Atoms - 1; i++)
 	{
-		printf("%d ", frame_info[r].type[i]);
+		printf_d("%d ", frame_info[r].type[i]);
 	}
-	printf("\n");
-	printf("Coord:\n");
-	for (i = 0; i <= frame_info[r].N_Atoms - 1; i++)
-	{
-		for (j = 0; j <= 2; j++)
-		{
-			printf("%.3lf ", frame_info[r].coord[i][j]);
-		}
-		printf("\n");
-	}
-	printf("frame_info.energy: %.6lf\n", frame_info[r].energy);
-	printf("frame_info.no_force: %d\n", frame_info[r].no_force);
-	printf("Force:\n");
+	printf_d("\n");
+	printf_d("Coord:\n");
 	for (i = 0; i <= frame_info[r].N_Atoms - 1; i++)
 	{
 		for (j = 0; j <= 2; j++)
 		{
-			printf("%+.6lf ", frame_info[r].force[i][j]);
+			printf_d("%.3lf ", frame_info[r].coord[i][j]);
 		}
-		printf("\n");
+		printf_d("\n");
+	}
+	printf_d("frame_info.energy: %.6lf\n", frame_info[r].energy);
+	printf_d("frame_info.no_force: %d\n", frame_info[r].no_force);
+	printf_d("Force:\n");
+	for (i = 0; i <= frame_info[r].N_Atoms - 1; i++)
+	{
+		for (j = 0; j <= 2; j++)
+		{
+			printf_d("%+.6lf ", frame_info[r].force[i][j]);
+		}
+		printf_d("\n");
 	}
 	free(frame_info);
 	fclose(fp_in);

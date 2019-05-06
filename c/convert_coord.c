@@ -17,7 +17,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_CONV
+//#define DEBUG_CONV
 
 #ifdef DEBUG_CONV
 #define printf_d printf

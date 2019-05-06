@@ -17,7 +17,7 @@ Return code:
 
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_DERI
+//#define DEBUG_DERI
 #define DEBUG_FRAME_IDX 0
 #define FRAME_TOT 2
 #define N_ATOMS_ 57

@@ -67,6 +67,15 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     parameters_info->limit_pref_e = 1.0;
     parameters_info->start_pref_f = 10000.0;
     parameters_info->limit_pref_f = 1.0;
+    parameters_info->check_step = 1000;
+    parameters_info->check_batch = -1;
+    parameters_info->check_epoch = -1;
+    parameters_info->output_step = -1;
+    parameters_info->output_batch = -1;
+    parameters_info->output_epoch = 10;
+    parameters_info->save_step = -1;
+    parameters_info->save_batch = -1;
+    parameters_info->save_epoch = 10;
 
 
     return 0;

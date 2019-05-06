@@ -14,7 +14,7 @@ Return code:
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
-#define DEBUG_EXT
+//#define DEBUG_EXT
 
 #ifdef DEBUG_EXT
 #define printf_d printf

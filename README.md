@@ -8,9 +8,9 @@ Use torch to train NN potential
 ## Request:
 1. python version >= 3
 2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v1.x; optional: Torchvision)
-3. [horovod](https://github.com/horovod/horovod)(Optional)
-4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional)
-5. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional)
+3. [horovod](https://github.com/horovod/horovod)(Optional, future)
+4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional, future)
+5. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional, future)
 6. C compiler (icc 2018 tested)
 
 ## Prepare training data:
@@ -138,7 +138,7 @@ If you want to test your own data, you need to do **STEP 2** AGAIN in your own d
   - For **train_noclassify.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
 - `start_lr`, `decay_epoch`, `decay_rate`
   - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
-  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training in the MPI enabled version.
+  - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training in the MPI enabled version(Currently not available).
   - `start_lr` will remain untouched in the `no_mpi` version no matter how many GPUs are used.
 - `check_step`, `output_epoch`, `save_epoch`
   - Force of one random frame will be output every `check_step` batches.

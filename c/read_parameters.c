@@ -45,7 +45,7 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     parameters_info->N_Atoms_max = N_Atoms_max;
 
     parameters_info->batch_size = 1;
-    parameters_info->epoch = 1;
+    parameters_info->stop_epoch = 1;
     parameters_info->num_filter_layer = 3;
     parameters_info->filter_neuron = (int *)calloc(parameters_info->num_filter_layer, sizeof(int));
     for (i = 0; i <= parameters_info->num_filter_layer - 1; i++)

@@ -27,7 +27,7 @@ class Parameters():
         sym_coord_type = 1
 
         batch_size = 1
-        epoch = 1
+        stop_epoch = 1
         num_filter_layer = 1
         filter_neuron = []
         axis_neuron = 1
@@ -83,7 +83,7 @@ class Parameters():
         str_ += (">>> Nframes_tot: %2d\n" % self.Nframes_tot)
         str_ += (">>> sym_coord_type: %2d\n" % self.sym_coord_type)
         str_ += (">>> batch_size: %2d\n" % self.batch_size)
-        str_ += (">>> epoch: %2d\n" % self.epoch)
+        str_ += (">>> stop_epoch: %2d\n" % self.stop_epoch)
         str_ += (">>> num_filter_layer: %2d\n" % self.num_filter_layer)
         str_ += (">>> filter_neuron: ", self.filter_neuron, "\n")
         str_ += (">>> axis_neuron: %2d\n" % self.axis_neuron)
@@ -151,7 +151,7 @@ def read_parameters(parameters):
     parameters.sym_coord_type = INPUT_DATA['sym_coord_type']
 ###New add parameters
     parameters.batch_size = INPUT_DATA['batch_size']
-    parameters.epoch = INPUT_DATA['epoch']
+    parameters.stop_epoch = INPUT_DATA['stop_epoch']
     parameters.num_filter_layer = INPUT_DATA['num_filter_layer']
     parameters.filter_neuron = INPUT_DATA['filter_neuron']
     parameters.axis_neuron = INPUT_DATA['axis_neuron']
@@ -391,7 +391,7 @@ class one_batch_net(nn.Module):
 
             ##as nei atom
             ##For example, atom j is atom i's kth neighbour. Then:
-            ##F_X_Atom_j += (-1) * tf.sum(D_E_D_SYM_cur_type[i][j] * SYM_COORD_DX_Reshape_tf_cur_Teshape_cur_type[i][k])
+            ##F_X_Atom_j += (-1) * tf.sum(D_E_D_SYM_cur_type[i][k] * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[i][k])
             ##F_Y_Atom_j += ......
             ##......
             ##Use index_select to select i and j; Use reshape and add offset to simulate looping over i
@@ -399,10 +399,11 @@ class one_batch_net(nn.Module):
             offset_array = tf.arange(0, (D_E_D_SYM_cur_type.shape)[0], device=device).reshape(-1, 1).expand(
                 (D_E_D_SYM_cur_type.shape)[0], parameters.SEL_A_max).reshape(-1, ).to(device) * parameters.SEL_A_max
             NEI_IDX_Reshape_tf_cur_cur_type_new = NEI_IDX_Reshape_tf_cur_cur_type.reshape(-1, ) + offset_array
-            D_E_D_SYM_cur_type_nei = tf.index_select(
+            """D_E_D_SYM_cur_type_nei = tf.index_select(
                 D_E_D_SYM_cur_type.reshape((D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
                                            (D_E_D_SYM_cur_type.shape)[2]), 0,
-                NEI_IDX_Reshape_tf_cur_cur_type_new).reshape(D_E_D_SYM_cur_type.shape)
+                NEI_IDX_Reshape_tf_cur_cur_type_new).reshape(D_E_D_SYM_cur_type.shape)"""
+            D_E_D_SYM_cur_type_nei = D_E_D_SYM_cur_type
             SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type.reshape(
                 D_E_D_SYM_cur_type.shape)
             SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type_nei = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type.reshape(
@@ -562,9 +563,9 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
         tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
-        #tf.nn.init.constant_(m.weight,0.001)
+        tf.nn.init.constant_(m.weight,0.01)
         #m.bias.data.normal_(mean = 0, std = 1.0)
-        #tf.nn.init.constant_(m.bias, -0.01)
+        tf.nn.init.constant_(m.bias, -0.01)
 
 
 def make_dot(var, params):

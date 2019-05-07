@@ -82,7 +82,7 @@ typedef struct parameters_info_struct_
 	int sym_coord_type;
 	
 	int batch_size;
-	int epoch;
+	int stop_epoch;
 	int num_filter_layer;
 	int * filter_neuron;
 	int axis_neuron;

@@ -135,7 +135,7 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
     fprintf(fp_parameters, "    \"sym_coord_type\": %d,\n", parameters_info->sym_coord_type);
 
     fprintf(fp_parameters, "    \"batch_size\": %d,\n", parameters_info->batch_size);
-    fprintf(fp_parameters, "    \"epoch\": %d,\n", parameters_info->epoch);
+    fprintf(fp_parameters, "    \"stop_epoch\": %d,\n", parameters_info->stop_epoch);
     fprintf(fp_parameters, "    \"num_filter_layer\": %d,\n", parameters_info->num_filter_layer);
 
     fprintf(fp_parameters, "    \"filter_neuron\": [\n");

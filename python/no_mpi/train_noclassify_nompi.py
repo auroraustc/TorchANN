@@ -131,12 +131,12 @@ if (parameters.decay_rate > 1):
 if (True):
 #with tf.autograd.profiler.profile(enabled = True, use_cuda=True) as prof:
     START_BATCH_USER_TIMER = time.time()
-    for epoch in range(parameters.epoch):
+    for epoch in range(parameters.stop_epoch):
         #TRAIN_SAMPLER.set_epoch(epoch)
         START_EPOCH_TIMER = time.time()
-        if (parameters.epoch != 1 ):
-            pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_e
-            pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.epoch - 1.0) * epoch + parameters.start_pref_f
+        if (parameters.stop_epoch != 1 ):
+            pref_e = (parameters.limit_pref_e - parameters.start_pref_e) * 1.0 / (parameters.stop_epoch - 1.0) * epoch + parameters.start_pref_e
+            pref_f = (parameters.limit_pref_f - parameters.start_pref_f) * 1.0 / (parameters.stop_epoch - 1.0) * epoch + parameters.start_pref_f
         else:
             pref_e = parameters.start_pref_e
             pref_f = parameters.start_pref_f
@@ -175,10 +175,10 @@ if (True):
                 loss_F_cur_batch = tf.zeros(1, device = device)
 
                 if ((STEP_CUR % (parameters.check_step // MULTIPLIER) == 0)):
-                    print("Force check:\n", F_cur_batch[0].data)
+                    print("Force check:\n", F_cur_batch.data)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg)
                     f_out = open("./LOSS.OUT", "a")
-                    print("Force check:\n", F_cur_batch.data[0], file=f_out)
+                    print("Force check:\n", F_cur_batch.data.data, file=f_out)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg, file=f_out)
                     f_out.close()
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])

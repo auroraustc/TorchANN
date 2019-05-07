@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/box.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/box.raw" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/coord.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/coord.raw" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../test_very_small/energy.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/energy.raw" afterDir="false" />
@@ -25,8 +27,20 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
+                <state relative-caret-position="300">
+                  <caret line="98" column="34" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
+                  <folding>
+                    <element signature="e#47#65#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="405">
+                  <caret line="66" selection-start-line="66" selection-end-line="66" selection-end-column="63" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -41,8 +55,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="567" column="9" selection-start-line="567" selection-start-column="9" selection-end-line="567" selection-end-column="9" />
+                <state relative-caret-position="75">
+                  <caret line="392" column="58" lean-forward="true" selection-start-line="392" selection-start-column="58" selection-end-line="392" selection-end-column="58" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -108,8 +122,8 @@
         <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/use_horovod/class_and_function.py" />
         <option value="$PROJECT_DIR$/mpi4py/class_and_function.py" />
-        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
+        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
       </list>
     </option>
   </component>
@@ -125,6 +139,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -132,11 +147,15 @@
               <item name="python" type="b2602c69:ProjectViewProjectNode" />
               <item name="python" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="python" type="b2602c69:ProjectViewProjectNode" />
+              <item name="python" type="462c0819:PsiDirectoryNode" />
+              <item name="no_mpi" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -181,7 +200,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="train_noclassify_nompi" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="test_noclassify_nompi" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -194,7 +213,7 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -412,11 +431,12 @@
       <workItem from="1557218820057" duration="793000" />
       <workItem from="1557219760346" duration="121000" />
       <workItem from="1557220590509" duration="363000" />
+      <workItem from="1557227049607" duration="8058000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="295827000" />
+    <option name="totallyTimeSpent" value="303885000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -431,7 +451,7 @@
     <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20066334" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20287451" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -514,7 +534,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py</url>
-          <line>166</line>
+          <line>192</line>
           <option name="timeStamp" value="145" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -529,29 +549,21 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>375</line>
+          <line>385</line>
           <option name="timeStamp" value="148" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>400</line>
+          <line>410</line>
           <option name="timeStamp" value="149" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py</url>
+          <line>98</line>
+          <option name="timeStamp" value="150" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="PythonConfigurationType">
-        <watch expression="shape_tmp" language="Python" />
-        <watch expression="MULTIPLIER" language="Python" />
-        <watch expression="std[0].reshape(1, shape_tmp[1] * shape_tmp[2])" language="Python" />
-        <watch expression="std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2])" language="Python" />
-        <watch expression="ONE_BATCH_NET.state_dict()" language="Python" />
-        <watch expression="D_E_D_SYM_cur_type[0][11]" language="Python" />
-        <watch expression="SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[0][0]" language="Python" />
-        <watch expression="F_as_nei_atom_curtype_x" language="Python" />
-        <watch expression="tf.sum(D_E_D_SYM_cur_type[0][11]*SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[0][0])" language="Python" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/python$train_noclassfy_lbfgs.coverage" NAME="train Coverage Results" MODIFIED="1556546167468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
@@ -559,12 +571,17 @@
     <SUITE FILE_PATH="coverage/python$train_noclassify.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557065297001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_.coverage" NAME="train_noclassify_ Coverage Results" MODIFIED="1557061152708" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556530755659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small4+4" />
-    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557220610178" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
+    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="test_noclassify_nompi Coverage Results" MODIFIED="1557235333938" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
     <SUITE FILE_PATH="coverage/python$test_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557218004145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
     <SUITE FILE_PATH="coverage/python$train_noclassfy_mpi4py.coverage" NAME="train_noclassfy_mpi4py Coverage Results" MODIFIED="1557045506427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
+      <expression>
+        <expression-string>parameters.__dict__</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>tf.sum(D_E_D_SYM_cur_type[0][11]*SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[0][0])</expression-string>
         <language-id>Python</language-id>
@@ -607,11 +624,6 @@
       </expression>
       <expression>
         <expression-string>D_E_D_SYM_cur_type_nei</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type.shape</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -710,21 +722,21 @@
     <entry file="file://$PROJECT_DIR$/horovod/train_noclassfy_lbfgs.py" />
     <entry file="file://$PROJECT_DIR$/use_horovod/train_noclassify.py" />
     <entry file="file://$PROJECT_DIR$/use_horovod/class_and_function.py" />
+    <entry file="file://$PROJECT_DIR$/mpi4py/class_and_function.py" />
     <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-390">
-          <caret line="34" column="69" lean-forward="true" selection-start-line="34" selection-start-column="69" selection-end-line="34" selection-end-column="69" />
+        <state relative-caret-position="405">
+          <caret line="66" selection-start-line="66" selection-end-line="66" selection-end-column="63" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mpi4py/class_and_function.py" />
     <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="155" column="25" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="25" />
+        <state relative-caret-position="300">
+          <caret line="98" column="34" selection-start-line="98" selection-start-column="34" selection-end-line="98" selection-end-column="34" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>
@@ -733,8 +745,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="567" column="9" selection-start-line="567" selection-start-column="9" selection-end-line="567" selection-end-column="9" />
+        <state relative-caret-position="75">
+          <caret line="392" column="58" lean-forward="true" selection-start-line="392" selection-start-column="58" selection-end-line="392" selection-end-column="58" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

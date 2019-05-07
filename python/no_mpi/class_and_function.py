@@ -103,8 +103,18 @@ class Parameters():
         str_ += (">>> save_epoch: %d\n" % self.save_epoch)
         str_ = ''.join(str(element) for element in str_)
 
-
         return str_
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            #return self.__dict__ == other.__dict__
+            structure_unchanged = (self.filter_neuron == other.filter_neuron) and (
+                        self.fitting_neuron == other.fitting_neuron) and (
+                                              self.num_filter_layer == other.num_filter_layer) and (
+                                              self.num_fitting_layer == other.num_fitting_layer)
+            return structure_unchanged
+        else:
+            return False
 
 
 

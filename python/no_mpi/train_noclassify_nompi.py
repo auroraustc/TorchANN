@@ -71,10 +71,39 @@ A = A.transpose(0,1).numpy()
 B = ENERGY_tf.numpy()
 mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
+##all data norm
+std = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
+avg = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
+use_std_avg = False
+
 
 ONE_BATCH_NET = one_batch_net(parameters, mean_init)
 ###init_weights using xavier with gain = sqrt(0.5) is necessary. Now the damn adam works good with this initialization
 ONE_BATCH_NET.apply(init_weights)
+
+#Read in checkpoint if checkpoint exists
+if (os.path.isfile("./freeze_model.pytorch.ckpt.cont")):
+    print("-----------------------------------------------")
+    print("|*******************WARNING*******************|")
+    print("|         LOAD CHECKPOINT DATA FROM           |")
+    print("|     ./freeze_model.pytorch.ckpt.cont        |")
+    print("-----------------------------------------------")
+    f_out = open("./LOSS.OUT", "a")
+    print("-----------------------------------------------", file = f_out)
+    print("|*******************WARNING*******************|", file = f_out)
+    print("|         LOAD CHECKPOINT DATA FROM           |", file = f_out)
+    print("|     ./freeze_model.pytorch.ckpt.cont        |", file = f_out)
+    print("-----------------------------------------------", file = f_out)
+    f_out.close()
+    CKPT = tf.load("./freeze_model.pytorch.ckpt.cont", map_location=device)
+    assert CKPT['parameters'] == parameters,"Read in checkpoint failed!\nNet structure has been changed! Parameters read from file:\n %s"%CKPT['parameters']
+    #parameters = CKPT['parameters']
+    std = CKPT['std']
+    avg = CKPT['avg']
+    use_std_avg = True
+    ONE_BATCH_NET.load_state_dict(CKPT['model_state_dict'])
+
+
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
 if (tf.cuda.device_count() > 1):
@@ -87,10 +116,7 @@ if (True):
     print("Number of parameters in the net: %d" % TOTAL_NUM_PARAMS, file=f_out)
     f_out.close()
 
-##all data norm
-std = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
-avg = tf.zeros((MULTIPLIER, parameters.N_types_all_frame, 4), device = device)
-use_std_avg = False
+
 
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \

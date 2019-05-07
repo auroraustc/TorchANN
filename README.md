@@ -116,6 +116,13 @@ export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
 #Current tests show that the no_mpi version works the most stable and efficiently.
 ../python/no_mpi/train_noclassify_nompi.py
 ```
+### STEP 4: Run test script to evaluate the model
+```bash
+#Make sure that ./freeze_model.pytorch exists
+../python/no_mpi/test_noclassify_nompi.py
+```
+If you want to test your own data, you need to do **STEP 2** AGAIN in your own data's folder, then run the test script.
+
 ## Parameters in ALL_PARAMS.json
 **In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying any .c file**
 - `cutoff_1`, `cutoff_2`, `cutoff_3`, `cutoff_max`
@@ -133,3 +140,7 @@ export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
   - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
   - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training in the MPI enabled version.
   - `start_lr` will remain untouched in the `no_mpi` version no matter how many GPUs are used.
+- `check_step`, `output_epoch`, `save_epoch`
+  - Force of one random frame will be output every `check_step` batches.
+  - Loss of force and energy per atom will be output every `output_epoch` epoches.
+  - Every `save_epoch` epoches, a checkpoint will be stored to `./freeze_model.pytorch.ckpt`

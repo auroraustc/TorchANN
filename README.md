@@ -116,6 +116,9 @@ export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
 #Current tests show that the no_mpi version works the most stable and efficiently.
 ../python/no_mpi/train_noclassify_nompi.py
 ```
+During running, checkpoint will be saved to ./freeze_model.pytorch.ckpt. After the training finished, the model will be saved as ./freeze_model.pytorch
+You could copy the checkpoint file or the saved model to ./freeze_model.pytorch.ckpt.cont to continue training.
+
 ### STEP 4: Run test script to evaluate the model
 ```bash
 #Make sure that ./freeze_model.pytorch exists
@@ -135,7 +138,7 @@ If you want to test your own data, you need to do **STEP 2** AGAIN in your own d
   - The total loss is calculated by: `loss_tot = pref_e * loss_e + pref_f * loss_f`. These four parameters determines the amount of contribution of energy `E` and force `F` to the total loss function `loss_tot`.
 - `stop_epoch`, `batch_size`
   - `stop_epoch` determines how many epoches of optimization it will run.
-  - For **train_noclassify.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
+  - For **train_noclassify_nompi.py**, all the frames are mixed together. Some tests show that if frames with different numbers of atoms are in the same batch, the convergence may become slow, therefore setting `batch_size` to `1` may be an option. However, too large `batch_size` can also lead to terrible convergence. You should do your own tests.
 - `start_lr`, `decay_epoch`, `decay_rate`
   - `start_lr` is the initial learning rate. Learning rate will change its value every `decay_epoch` epoches by multiplying `decay_rate`. If `decay_rate` is larger than `1`, then a warning will show up.
   - `start_lr` will be multiplied by `sqrt(NUM OF PROCESSES)` during the training in the MPI enabled version(Currently not available).
@@ -144,3 +147,4 @@ If you want to test your own data, you need to do **STEP 2** AGAIN in your own d
   - Force of one random frame will be output every `check_step` batches.
   - Loss of force and energy per atom will be output every `output_epoch` epoches.
   - Every `save_epoch` epoches, a checkpoint will be stored to `./freeze_model.pytorch.ckpt`
+  - The optimizer used in the training is Adam optimizer. Modify **train_noclassify_nompi.py** to change the optimizer.

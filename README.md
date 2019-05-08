@@ -116,8 +116,7 @@ export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
 #Current tests show that the no_mpi version works the most stable and efficiently.
 ../python/no_mpi/train_noclassify_nompi.py
 ```
-During running, checkpoint will be saved to ./freeze_model.pytorch.ckpt. After the training finished, the model will be saved as ./freeze_model.pytorch
-You could copy the checkpoint file or the saved model to ./freeze_model.pytorch.ckpt.cont to continue training.
+During running, checkpoint will be saved to `./freeze_model.pytorch.ckpt`. After the training finished, the model will be saved as `./freeze_model.pytorch`. You could copy the checkpoint or saved model to `./freeze_model.pytorch.ckpt.cont` to continue if the training stops unexpectedly.
 
 ### STEP 4: Run test script to evaluate the model
 ```bash

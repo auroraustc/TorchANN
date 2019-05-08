@@ -196,6 +196,7 @@ def read_and_init_bin_file(parameters, default_dtype):
     SYM_COORD_DY = np.fromfile("./SYM_COORD_DY.BIN", dtype=np.float64)
     SYM_COORD_DZ = np.fromfile("./SYM_COORD_DZ.BIN", dtype=np.float64)
     N_ATOMS_ORI = np.fromfile("./N_ATOMS_ORI.BIN", dtype=np.int32)
+    NEI_TYPE = np.fromfile("./NEI_TYPE.BIN", dtype=np.int32)
     # print("Number of atoms aligned: ", N_ATOMS)
     # print(np.dtype(np.float64).itemsize)
     parameters.Nframes_tot = len(N_ATOMS)
@@ -226,6 +227,8 @@ def read_and_init_bin_file(parameters, default_dtype):
     print("SYM_COORD_DX_Reshape: shape = ", SYM_COORD_DX_Reshape.shape)
     print("SYM_COORD_DY_Reshape: shape = ", SYM_COORD_DY_Reshape.shape)
     print("SYM_COORD_DZ_Reshape: shape = ", SYM_COORD_DZ_Reshape.shape)
+    NEI_TYPE_Reshape = np.reshape(NEI_TYPE, (parameters.Nframes_tot, -1))
+    print("NEI_TYPE_Reshape: shape = ", NEI_TYPE.shape)
 
     COORD_Reshape_tf = tf.from_numpy(COORD_Reshape).type(default_dtype)
     SYM_COORD_Reshape_tf = tf.from_numpy(SYM_COORD_Reshape).type(default_dtype)
@@ -243,14 +246,16 @@ def read_and_init_bin_file(parameters, default_dtype):
     SYM_COORD_DY_Reshape_tf = tf.from_numpy(SYM_COORD_DY_Reshape).type(default_dtype)
     SYM_COORD_DZ_Reshape_tf = tf.from_numpy(SYM_COORD_DZ_Reshape).type(default_dtype)
     N_ATOMS_ORI_tf = tf.from_numpy(N_ATOMS_ORI)
+    NEI_TYPE_Reshape_tf = tf.from_numpy(NEI_TYPE_Reshape)
 
     return COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, \
            NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, \
-           SYM_COORD_DZ_Reshape_tf, N_ATOMS_ORI_tf
+           SYM_COORD_DZ_Reshape_tf, N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf
 
 
 class one_batch_net(nn.Module):
-    def __init__(self, parameters, mean_init):
+
+    """def __init__(self, parameters, mean_init):
         super(one_batch_net, self).__init__()
         #self.batch_norm = nn.BatchNorm1d(1)
         self.filter_input = nn.ModuleList()
@@ -259,6 +264,7 @@ class one_batch_net(nn.Module):
         self.fitting_hidden = nn.ModuleList()
         self.fitting_out = nn.ModuleList()
         for type_idx in range(len(parameters.type_index_all_frame)):
+
             self.filter_input.append(nn.Linear(1, parameters.filter_neuron[0]))
             self.fitting_input.append(nn.Linear(parameters.axis_neuron * parameters.filter_neuron[len(parameters.filter_neuron) - 1],
                                parameters.fitting_neuron[0]))
@@ -266,22 +272,74 @@ class one_batch_net(nn.Module):
             self.filter_hidden.append(nn.ModuleList())
             self.fitting_hidden.append(nn.ModuleList())
 
-            self.filter_input[type_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
-            self.fitting_input[type_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+            #self.filter_input[type_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+            #self.fitting_input[type_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+            self.filter_input[type_idx].bias.data.normal_(mean = 0, std = 1)
+            self.fitting_input[type_idx].bias.data.normal_(mean = 0, std = 1)
             self.fitting_out[type_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
 
+
         for type_idx in range(len(parameters.type_index_all_frame)):
+
             for hidden_idx in range(len(parameters.filter_neuron) - 1):
                 self.filter_hidden[type_idx].append(nn.Linear(parameters.filter_neuron[hidden_idx],
                                          parameters.filter_neuron[hidden_idx + 1]))
 
-                self.filter_hidden[type_idx][hidden_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+                #self.filter_hidden[type_idx][hidden_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+                self.filter_hidden[type_idx][hidden_idx].bias.data.normal_(mean = 0, std = 1)
 
             for hidden_idx in range(len(parameters.fitting_neuron) - 1):
                 self.fitting_hidden[type_idx].append(nn.Linear(parameters.fitting_neuron[hidden_idx],
                                          parameters.fitting_neuron[hidden_idx + 1]))
 
-                self.fitting_hidden[type_idx][hidden_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+                #self.fitting_hidden[type_idx][hidden_idx].bias.data.normal_(mean = mean_init[type_idx], std = 1)
+                self.fitting_hidden[type_idx][hidden_idx].bias.data.normal_(mean = 0, std = 1)"""
+    ###The above uses len(parameters.type_index_all_frame) filter nets. In DeePMD,
+    ###len(parameters.type_index_all_frame) * len(parameters.type_index_all_frame) filter nets are used
+
+    def __init__(self, parameters, mean_init):
+        super(one_batch_net, self).__init__()
+        # self.batch_norm = nn.BatchNorm1d(1)
+        self.filter_input = nn.ModuleList()
+        self.filter_hidden = nn.ModuleList()
+        self.fitting_input = nn.ModuleList()
+        self.fitting_hidden = nn.ModuleList()
+        self.fitting_out = nn.ModuleList()
+        #fitting net: len(parameters.type_index_all_frame)
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            self.fitting_input.append(
+                nn.Linear(parameters.axis_neuron * parameters.filter_neuron[len(parameters.filter_neuron) - 1],
+                          parameters.fitting_neuron[0]))
+            self.fitting_out.append(nn.Linear(parameters.fitting_neuron[len(parameters.fitting_neuron) - 1], 1))
+            self.fitting_hidden.append(nn.ModuleList())
+
+            self.fitting_input[type_idx].bias.data.normal_(mean=0, std=1)
+            self.fitting_out[type_idx].bias.data.normal_(mean=mean_init[type_idx], std=1)
+
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            for hidden_idx in range(len(parameters.fitting_neuron) - 1):
+                self.fitting_hidden[type_idx].append(nn.Linear(parameters.fitting_neuron[hidden_idx],
+                                                               parameters.fitting_neuron[hidden_idx + 1]))
+
+                self.fitting_hidden[type_idx][hidden_idx].bias.data.normal_(mean=0, std=1)
+
+        #filter net: len(parameters.type_index_all_frame) * len(parameters.type_index_all_frame)
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            self.filter_input.append(nn.ModuleList())
+            self.filter_hidden.append(nn.ModuleList())
+
+        for type_idx in range(len(parameters.type_index_all_frame)):
+            for nei_type_idx in range(len(parameters.type_index_all_frame)):
+                self.filter_input[type_idx].append(nn.Linear(1, parameters.filter_neuron[0]))
+                self.filter_hidden[type_idx].append(nn.ModuleList())
+
+                self.filter_input[type_idx][nei_type_idx].bias.data.normal_(mean=0, std=1)
+                for hidden_idx in range(len(parameters.filter_neuron) - 1):
+                    self.filter_hidden[type_idx][nei_type_idx].append(nn.Linear(parameters.filter_neuron[hidden_idx],
+                                                                  parameters.filter_neuron[hidden_idx + 1]))
+
+                    self.filter_hidden[type_idx][nei_type_idx][hidden_idx].bias.data.normal_(mean=0, std=1)
+
 
     def forward(self, data_cur, parameters, std, avg, use_std_avg, device) : #cur mean current batch
         SYM_COORD_Reshape_tf_cur = data_cur[1]
@@ -293,6 +351,7 @@ class one_batch_net(nn.Module):
         SYM_COORD_DY_Reshape_tf_cur_Reshape = tf.reshape(data_cur[10], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         SYM_COORD_DZ_Reshape_tf_cur_Reshape = tf.reshape(data_cur[11], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
+        NEI_TYPE_Reshape_tf_cur = tf.reshape(data_cur[13], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
         #NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max, 3))
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
         E_cur_batch_atom_wise = tf.zeros((len(data_cur[1]), data_cur[4][0]), device=device).reshape(-1, )
@@ -310,6 +369,9 @@ class one_batch_net(nn.Module):
                 -1, )
             NEI_IDX_Reshape_tf_cur_cur_type = tf.index_select(
                 NEI_IDX_Reshape_tf_cur.reshape(len(data_cur[1]) * data_cur[4][0], parameters.SEL_A_max), 0,
+                type_idx_cur_type)
+            NEI_TYPE_Reshape_tf_cur_cur_type = tf.index_select(
+                NEI_TYPE_Reshape_tf_cur.reshape(len(data_cur[1]) * data_cur[4][0], parameters.SEL_A_max), 0,
                 type_idx_cur_type)
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
                 SYM_COORD_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.SEL_A_max, 4), 0,
@@ -369,18 +431,46 @@ class one_batch_net(nn.Module):
 
             #Calculate energy of these atoms in all frames
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.narrow(2, 0, 1)
-            G_cur_type = tf.tanh(self.filter_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice))
+
+            offset_array = tf.arange(0, (SYM_COORD_Reshape_tf_cur_Reshape_cur_type.shape)[0],
+                                     device=device).reshape(-1, 1).expand(
+                (SYM_COORD_Reshape_tf_cur_Reshape_cur_type.shape)[0], parameters.SEL_A_max).reshape(-1, ).to(device) * parameters.SEL_A_max
+
+            #filter net
+            ### len(parameters.type_index_all_frame) filter nets version
+            """G_cur_type = tf.tanh(self.filter_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice))
             for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx]):
-                G_cur_type = tf.tanh(filter_hidden_layer(G_cur_type))
+                G_cur_type = tf.tanh(filter_hidden_layer(G_cur_type))"""
+            ### len(parameters.type_index_all_frame) * len(parameters.type_index_all_frame) filter nets version
+            shape_input_tmp = SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.shape
+            G_cur_type = tf.zeros((shape_input_tmp[0] * shape_input_tmp[1], parameters.filter_neuron[-1]), device=device)
+            for nei_type_idx in range(parameters.N_types_all_frame):
+                nei_type_idx_cur_type = (NEI_TYPE_Reshape_tf_cur_cur_type.reshape(-1,) == parameters.type_index_all_frame[nei_type_idx]).nonzero().reshape(-1,)
+                SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice_cur_nei_type = tf.index_select(
+                    SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.reshape(
+                        SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.shape[0] *
+                        SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.shape[1], 1), 0, nei_type_idx_cur_type)
+                G_cur_type_cur_nei_type = tf.tanh(self.filter_input[type_idx][nei_type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice_cur_nei_type))
+                for filter_hidden_idx, filter_hidden_layer in enumerate(self.filter_hidden[type_idx][nei_type_idx]):
+                    G_cur_type_cur_nei_type = tf.tanh(filter_hidden_layer(G_cur_type_cur_nei_type))
+                nei_type_idx_cur_type_tmp = nei_type_idx_cur_type.reshape(-1, 1).expand(len(nei_type_idx_cur_type), parameters.filter_neuron[-1])
+                G_cur_type.scatter_(0, nei_type_idx_cur_type_tmp, G_cur_type_cur_nei_type)
+            G_cur_type = G_cur_type.reshape(shape_input_tmp[0], shape_input_tmp[1], parameters.filter_neuron[-1])
+
+
+
+            #filter net end. Start to transformation
             RG_cur_type = tf.bmm((SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2), G_cur_type)
             RG_cur_type = RG_cur_type / (parameters.SEL_A_max)
             GRRG_cur_type = tf.bmm(RG_cur_type.transpose(1, 2), RG_cur_type.narrow(2, 0, parameters.axis_neuron))
             GRRG_cur_type = tf.reshape(GRRG_cur_type, ((GRRG_cur_type.shape)[0], parameters.filter_neuron[
                 len(parameters.filter_neuron) - 1] * parameters.axis_neuron,))
+            #fitting net
             E_cur_type = tf.tanh(self.fitting_input[type_idx](GRRG_cur_type))
             for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx]):
                 E_cur_type = tf.tanh(fitting_hidden_layer(E_cur_type))
             E_cur_type = (self.fitting_out[type_idx](E_cur_type))  # Final layer do not use activation function
+            #fitting net end.
             E_cur_batch_atom_wise.scatter_(0, type_idx_cur_type, tf.reshape(E_cur_type, (-1,)))
             E_tot_cur_type = tf.sum(E_cur_type)
             D_E_D_SYM_cur_type = \
@@ -409,7 +499,9 @@ class one_batch_net(nn.Module):
             offset_array = tf.arange(0, (D_E_D_SYM_cur_type.shape)[0], device=device).reshape(-1, 1).expand(
                 (D_E_D_SYM_cur_type.shape)[0], parameters.SEL_A_max).reshape(-1, ).to(device) * parameters.SEL_A_max
             NEI_IDX_Reshape_tf_cur_cur_type_new = NEI_IDX_Reshape_tf_cur_cur_type.reshape(-1, ) + offset_array
-            """D_E_D_SYM_cur_type_nei = tf.index_select(
+            """### Here is D_E_D_SYM_cur_type[i][j] * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type[i][k], 
+            ### which is of course incorrect.
+            D_E_D_SYM_cur_type_nei = tf.index_select(
                 D_E_D_SYM_cur_type.reshape((D_E_D_SYM_cur_type.shape)[0] * (D_E_D_SYM_cur_type.shape)[1],
                                            (D_E_D_SYM_cur_type.shape)[2]), 0,
                 NEI_IDX_Reshape_tf_cur_cur_type_new).reshape(D_E_D_SYM_cur_type.shape)"""
@@ -438,11 +530,6 @@ class one_batch_net(nn.Module):
             F_cur_batch_as_center_atom = F_cur_batch_as_center_atom.reshape(len(data_cur[1]), data_cur[4][0], 3)
             F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), parameters.SEL_A_max, 3).narrow(1, 0, data_cur[4][0])
             F_cur_batch = F_cur_batch + F_cur_batch_as_center_atom + F_cur_batch_as_nei_atom
-
-            #F_cur_batch_as_nei_atom_dummy_nei = F_cur_batch_as_nei_atom_dummy_nei.narrow(0, 0, data_cur[4][0])  # data_cur[12][frame_idx])
-
-
-            
 
 
         """

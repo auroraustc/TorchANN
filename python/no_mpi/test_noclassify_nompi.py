@@ -41,7 +41,7 @@ print(parameters)
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
-N_ATOMS_ORI_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
+N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
@@ -79,7 +79,7 @@ use_std_avg = True
 DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, \
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
-                                       N_ATOMS_ORI_tf)#0..12
+                                       N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = 1, shuffle = False)
 
 CRITERION = nn.MSELoss(reduction = "mean")

@@ -56,7 +56,7 @@ if (read_parameters_flag != 0):
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
-N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
+N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf = read_and_init_bin_file(parameters, default_dtype=default_dtype)
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
@@ -123,12 +123,13 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)
+#OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)#, betas=(0.9,0.999), weight_decay=5E-4)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0))
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
 ###Adam works also horribly. So it is better to use Adadelta
-###Now adam works OK if applied init_weights
+###Now adam works excellent if applied init_weights
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 

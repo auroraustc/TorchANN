@@ -398,6 +398,7 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
 {
     FILE * fp_nei;
     FILE * fp_nei_coord;
+    FILE * fp_nei_type;
     int i, j, k;
 
     fp_nei = fopen("./NEI_IDX.BIN", "wb");
@@ -418,6 +419,17 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
             {
                 fwrite(frame_info[i].neighbour_list[j].coord_neighbours[k], sizeof(double), 3, fp_nei_coord);
             }
+        }
+    }
+    fp_nei_type = fopen("./NEI_TYPE.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
+        {
+            //for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
+            //{
+            fwrite(frame_info[i].neighbour_list[j].type, sizeof(int), parameters_info->SEL_A_max, fp_nei_type);
+            //}
         }
     }
     return 0;

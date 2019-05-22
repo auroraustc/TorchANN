@@ -199,7 +199,7 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
     double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_);
 
     const int MAX_NUM_ELEMENTS = 172;//the number of elements will not exceed 172 at 2019
-    const int MAX_N_CUTOFF_RADIUS = (int)(parameters_PTSDs_info->cutoff_max / 0.1);// No more than (cutoff_max / 0.1) data.
+    const int MAX_N_CUTOFF_RADIUS = (int)1000;// No more than 1000 data.
     const int N_TYPES_ALL_FRAME = parameters_info->N_types_all_frame;
     char * tmp_line = (char *) calloc(100000, sizeof(char)); 
     char * tmp_token = NULL;
@@ -243,7 +243,7 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
         }
     }
     
-    parameters_PTSDs_info->cutoff_radius = (double ***)calloc(N_TYPES_ALL_FRAME, sizeof(double **));
+    /*parameters_PTSDs_info->cutoff_radius = (double ***)calloc(N_TYPES_ALL_FRAME, sizeof(double **));
     for (i = 0; i <= N_TYPES_ALL_FRAME - 1; i++)
     {
         parameters_PTSDs_info->cutoff_radius[i] = (double **)calloc(parameters_PTSDs_info->N_PTSD_types, sizeof(double *));
@@ -254,9 +254,9 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
         {
             parameters_PTSDs_info->cutoff_radius[i][j] = (double *)calloc(parameters_PTSDs_info->N_cutoff_radius[i][j], sizeof(double));
         }
-    }
+    }*/
 
-    parameters_PTSDs_info->n = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
+    /*parameters_PTSDs_info->n = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
     parameters_PTSDs_info->m = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
     parameters_PTSDs_info->p = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
     parameters_PTSDs_info->L = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
@@ -264,7 +264,17 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
     parameters_PTSDs_info->zeta = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
     parameters_PTSDs_info->lambda = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
     parameters_PTSDs_info->Gmin = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
-    parameters_PTSDs_info->Gmax = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);
+    parameters_PTSDs_info->Gmax = calloc_params_LASP(N_TYPES_ALL_FRAME, parameters_PTSDs_info->N_PTSD_types, parameters_PTSDs_info->N_cutoff_radius, parameters_PTSDs_info->N_neigh_inter);*/
+
+    parameters_PTSDs_info->parameters_PTSDs_info_one_line = (parameters_PTSDs_info_one_line_struct ***)calloc(N_TYPES_ALL_FRAME, sizeof(parameters_PTSDs_info_one_line_struct **));
+    for (i = 0; i <= N_TYPES_ALL_FRAME - 1; i++)
+    {
+        parameters_PTSDs_info->parameters_PTSDs_info_one_line[i] = (parameters_PTSDs_info_one_line_struct **)calloc(parameters_PTSDs_info->N_PTSD_types, sizeof(parameters_PTSDs_info_one_line_struct *));
+        for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j++)
+        {
+            parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j] = (parameters_PTSDs_info_one_line_struct *)calloc(MAX_N_CUTOFF_RADIUS, sizeof(parameters_PTSDs_info_one_line_struct));
+        }
+    }
 
     fp = fopen("./LASP.raw", "r");
     if (fp == NULL)
@@ -297,7 +307,12 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 int N_params_this_type = parameters_PTSDs_info->PTSD_N_params[PTSD_type - 1];
                 double cutoff_this_line;
                 int * neighb_atom_array = (int *)calloc(N_neighb_atom, sizeof(int));
-                double * params_array = (double *)calloc(N_params_this_type, sizeof(double));
+                double * params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));//The last two elements are Gmin and Gmax
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].PTSD_type = PTSD_type;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].PTSD_N_body_type = N_body_this_type_PTSD;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].N_params = N_params_this_type;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].neigh_type_array = (int *)calloc(N_neighb_atom, sizeof(int));
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));
                 /*The data in one line should be arranged as:*/
                 /*{at least 0 spaces}[cutoff]{spaces}{N_neighb_atom integers}{spaces}{N_params_this_type parameters}{spaces}{Gmin and Gmax}{at least 1 char}[\n]*/
 
@@ -308,29 +323,35 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                     return 33;
                 }
                 printf_d("$%7.2lf", cutoff_this_line);
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].cutoff_radius = cutoff_this_line;
                 for (k = 0; k <= N_neighb_atom - 1; k++)//read in the neighbour atom type
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%d", &(neighb_atom_array[k]));
                     printf_d("   %7d", neighb_atom_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].neigh_type_array[k] = neighb_atom_array[k];
                 }
                 for (k = 0; k <= N_params_this_type - 1; k++)//read in all the parameters of this type of PTSD
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%lf", &(params_array[k]));
                     printf_d("     %6d  ", (int)params_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }
-                for (k = 0; k <= 2 - 1; k++)//read in Gmin and Gmax
+                for (k = N_params_this_type; k <= N_params_this_type + 1; k++)//read in Gmin and Gmax
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%lf", &(params_array[k]));
                     printf_d("      %21.15E", params_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }
                 printf_d("\n");
                 fgets(tmp_line, 100000, fp);
                 printf_d("#%s", tmp_line);
-                /*dim0: center type; dim1: PTSD type; dim2: cutoff radius; dim3: neigh_inter*/
+                /*dim0: center type; dim1: PTSD type; dim2: cutoff radius*/
+                cutoff_radius_pointer ++;
             }
+            parameters_PTSDs_info->N_cutoff_radius[i][j] = cutoff_radius_pointer;
         }
     }
 

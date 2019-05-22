@@ -86,6 +86,11 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
         parameters_info->sym_coord_type = (((sym_coord_type == 1) || (sym_coord_type == 2)) ? sym_coord_type : parameters_info->sym_coord_type);
         fclose(fp_param);
     }
+    else
+    {
+        parameters_info->sym_coord_type = 1;
+    }
+    
     
 
     return 0;

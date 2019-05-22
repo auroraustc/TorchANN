@@ -132,6 +132,27 @@ typedef struct sym_coord_LASP_struct_
 	double ** d_to_center_z;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
 }sym_coord_LASP_struct;
 
+typedef struct parameters_PTSDs_info_one_line_struct_
+{
+	double cutoff_radius;
+	int PTSD_type;//S1 or S2 or ... S6. Ranges from 0 to 5.
+	int PTSD_N_body_type;//two or three or four
+	int N_params;//Number of parameters in this PTSD
+	int * neigh_type_array;//neigh_type_array[0..PTSD_N_body_type-1]
+	/*The following values will be initialized as -9999*/
+	/*Some of the values should be converted to int when calculating sym coords*/
+	double n;
+	double m;
+	double p;
+	double L;
+	double r_c;
+	double zeta;
+	double lambda;
+	double Gmin;
+	double Gmax;
+	double * params_array;
+}parameters_PTSDs_info_one_line_struct;
+
 typedef struct parameters_PTSDs_info_struct_
 {
 	int N_PTSD_types;//6, S_i^1~S_i^6
@@ -152,6 +173,9 @@ typedef struct parameters_PTSDs_info_struct_
 	double **** lambda;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
 	double **** Gmin;
 	double **** Gmax;
+	/*from cutoff_radius to Gmax are not used.*/
+	/*All the parameters are packed into the following struct.*/
+	parameters_PTSDs_info_one_line_struct *** parameters_PTSDs_info_one_line;
 }parameters_PTSDs_info_struct;
 
 

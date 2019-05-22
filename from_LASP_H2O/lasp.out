@@ -1,0 +1,3071 @@
++--------------------------------------------------------------------------------+
+|                 Welcome to Fantastic Atomic World in Neural Network            |
+|                              ---------                                         |
+|                               L A S P                                          |
+|                              ---------                                         |
+|           Large-scale Atomic Simulation with neural network Potential          |
+|                             Version 2.0.1     Feb. 2019                        |
+|                                Shanghai, China                                 |
+|                   More on Website: www.lasphub.com                             |
+|                                                                                |
+|      Please cite: S.D. Huang, C. Shang, P.L. Kang, X.J. Zhang and Z.P. Liu ,   |
+|                   "LASP: Fast Global Potential Energy Surface Exploration" ,   |
+|                   WIREs. Comp. Mole. Sci. 2019, (DOI: 10.1002/wcms.1415)       |
+|                                                                                |
+|                  Compiled by IntelFortran version: ifort      12               |
+|                  CPU Parallel Run on    4      cores                           |
++--------------------------------------------------------------------------------+
+ 
++--------------------------------------------------------------------------------+
++       train neural network potential                                           +
++--------------------------------------------------------------------------------+
+ 
+
+  NN Started  at 20:08:08 27th March      2019                               
+
+  Time consuming until read train data is     0.0700 s
+
+  Time consuming for build network is         0.0370 s
+
+  Number of parameters in system is    15902
+
+   H  : layer  1 is  inpu with   1 channel, each  106 nodes, total   106 nodes.
+   H  : layer  2 is  full with   1 channel, each   50 nodes, total    50 nodes.
+   H  : layer  3 is  full with   1 channel, each   50 nodes, total    50 nodes.
+   H  : layer  4 is  full with   1 channel, each    1 nodes, total     1 nodes.
+   O  : layer  1 is  inpu with   1 channel, each  106 nodes, total   106 nodes.
+   O  : layer  2 is  full with   1 channel, each   50 nodes, total    50 nodes.
+   O  : layer  3 is  full with   1 channel, each   50 nodes, total    50 nodes.
+   O  : layer  4 is  full with   1 channel, each    1 nodes, total     1 nodes.
+ 
+  YWarning : O   S1  No. 4 Gmax is too small in dataset. 
+  YWarning : O   S1  No. 6 Gmax is too small in dataset. 
+
+  Time consuming for calculating symf is      2.0127 s
+
+ -------------------------------------------------------------------------------
+ 
+   step      0 C =       4300385.184609   BFGS-step =   0.000000
+ 
+ 
+   RMS (E/F/S) :   8775.439 meV/atom      8.696 eV/A    200.81 GPa Nc =     100
+   MAX (E/F/S) :   9595.456 meV/atom    395.257 eV/A   1091.31 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :   8775.439 meV/atom      8.696 eV/A    200.81 GPa Nc =     100
+   scale_MAX_  :   9595.456 meV/atom    395.257 eV/A   1091.31 GPa Nc =     100
+ 
+    Ce 4259674.5493 Cf   40710.6353 Cs       0.0000 L2       0.0000
+ 
+ -------------------------------------------------------------------------------
+ 
+   step      1 C =       1138893.993849   BFGS-step =   0.500000
+ 
+ 
+   RMS (E/F/S) :   2558.050 meV/atom     37.190 eV/A    419.43 GPa Nc =     100
+   MAX (E/F/S) :   3663.323 meV/atom   2182.795 eV/A   3639.38 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :   2558.050 meV/atom     37.190 eV/A    419.43 GPa Nc =     100
+   scale_MAX_  :   3663.323 meV/atom   2182.795 eV/A   3639.38 GPa Nc =     100
+ 
+    Ce  366005.0681 Cf  772888.9257 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3564
+ -------------------------------------------------------------------------------
+ 
+   step      2 C =        109345.424840   BFGS-step =   0.149810
+ 
+ 
+   RMS (E/F/S) :   1166.095 meV/atom      7.851 eV/A    301.09 GPa Nc =     100
+   MAX (E/F/S) :   2638.856 meV/atom    405.510 eV/A   1086.13 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :   1166.095 meV/atom      7.851 eV/A    301.09 GPa Nc =     100
+   scale_MAX_  :   2638.856 meV/atom    405.510 eV/A   1086.13 GPa Nc =     100
+ 
+    Ce   75527.5096 Cf   33817.9152 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2440
+ -------------------------------------------------------------------------------
+ 
+   step      3 C =         46199.261324   BFGS-step =   0.036159
+ 
+ 
+   RMS (E/F/S) :    824.322 meV/atom      4.193 eV/A    260.77 GPa Nc =     100
+   MAX (E/F/S) :   2722.916 meV/atom     92.951 eV/A    953.89 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    824.322 meV/atom      4.193 eV/A    260.77 GPa Nc =     100
+   scale_MAX_  :   2722.916 meV/atom     92.951 eV/A    953.89 GPa Nc =     100
+ 
+    Ce   36998.9712 Cf    9200.2902 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2542
+ -------------------------------------------------------------------------------
+ 
+   step      4 C =         33244.137355   BFGS-step =   0.020124
+ 
+ 
+   RMS (E/F/S) :    688.208 meV/atom      3.885 eV/A    222.85 GPa Nc =     100
+   MAX (E/F/S) :   2521.441 meV/atom     50.768 eV/A    857.60 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    688.208 meV/atom      3.885 eV/A    222.85 GPa Nc =     100
+   scale_MAX_  :   2521.441 meV/atom     50.768 eV/A    857.60 GPa Nc =     100
+ 
+    Ce   25412.6670 Cf    7831.4704 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3060
+ -------------------------------------------------------------------------------
+ 
+   step      5 C =         23975.122016   BFGS-step =   0.021168
+ 
+ 
+   RMS (E/F/S) :    551.233 meV/atom      3.863 eV/A    181.67 GPa Nc =     100
+   MAX (E/F/S) :   2037.303 meV/atom     68.636 eV/A    771.33 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    551.233 meV/atom      3.863 eV/A    181.67 GPa Nc =     100
+   scale_MAX_  :   2037.303 meV/atom     68.636 eV/A    771.33 GPa Nc =     100
+ 
+    Ce   16202.4500 Cf    7772.6720 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2572
+ -------------------------------------------------------------------------------
+ 
+   step      6 C =         12701.084701   BFGS-step =   0.043942
+ 
+ 
+   RMS (E/F/S) :    331.125 meV/atom      3.633 eV/A    119.56 GPa Nc =     100
+   MAX (E/F/S) :   1889.388 meV/atom     53.952 eV/A    624.65 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    331.125 meV/atom      3.633 eV/A    119.56 GPa Nc =     100
+   scale_MAX_  :   1889.388 meV/atom     53.952 eV/A    624.65 GPa Nc =     100
+ 
+    Ce    5837.8694 Cf    6863.2153 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2710
+ -------------------------------------------------------------------------------
+ 
+   step      7 C =         10865.394444   BFGS-step =   0.016568
+ 
+ 
+   RMS (E/F/S) :    292.565 meV/atom      3.486 eV/A    107.26 GPa Nc =     100
+   MAX (E/F/S) :   1812.391 meV/atom     47.479 eV/A    578.50 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    292.565 meV/atom      3.486 eV/A    107.26 GPa Nc =     100
+   scale_MAX_  :   1812.391 meV/atom     47.479 eV/A    578.50 GPa Nc =     100
+ 
+    Ce    4563.0434 Cf    6302.3511 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2736
+ -------------------------------------------------------------------------------
+ 
+   step      8 C =         10161.802130   BFGS-step =   0.013156
+ 
+ 
+   RMS (E/F/S) :    276.484 meV/atom      3.426 eV/A     99.41 GPa Nc =     100
+   MAX (E/F/S) :   1728.975 meV/atom     46.004 eV/A    542.58 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    276.484 meV/atom      3.426 eV/A     99.41 GPa Nc =     100
+   scale_MAX_  :   1728.975 meV/atom     46.004 eV/A    542.58 GPa Nc =     100
+ 
+    Ce    4079.5433 Cf    6082.2588 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3404
+ -------------------------------------------------------------------------------
+ 
+   step      9 C =          9260.526420   BFGS-step =   0.020284
+ 
+ 
+   RMS (E/F/S) :    252.382 meV/atom      3.365 eV/A     88.79 GPa Nc =     100
+   MAX (E/F/S) :   1596.393 meV/atom     43.212 eV/A    488.37 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    252.382 meV/atom      3.365 eV/A     88.79 GPa Nc =     100
+   scale_MAX_  :   1596.393 meV/atom     43.212 eV/A    488.37 GPa Nc =     100
+ 
+    Ce    3398.8726 Cf    5861.6538 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2434
+ -------------------------------------------------------------------------------
+ 
+   step     10 C =          7607.003725   BFGS-step =   0.042430
+ 
+ 
+   RMS (E/F/S) :    199.784 meV/atom      3.263 eV/A     70.96 GPa Nc =     100
+   MAX (E/F/S) :   1334.241 meV/atom     39.684 eV/A    380.02 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    199.784 meV/atom      3.263 eV/A     70.96 GPa Nc =     100
+   scale_MAX_  :   1334.241 meV/atom     39.684 eV/A    380.02 GPa Nc =     100
+ 
+    Ce    2119.4979 Cf    5487.5059 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.9644
+ -------------------------------------------------------------------------------
+ 
+   step     11 C =          4935.635016   BFGS-step =   0.087689
+ 
+ 
+   RMS (E/F/S) :    166.971 meV/atom      2.587 eV/A     51.50 GPa Nc =     100
+   MAX (E/F/S) :    945.371 meV/atom     27.296 eV/A    219.97 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    166.971 meV/atom      2.587 eV/A     51.50 GPa Nc =     100
+   scale_MAX_  :    945.371 meV/atom     27.296 eV/A    219.97 GPa Nc =     100
+ 
+    Ce    1473.0336 Cf    3462.6014 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       1.4209
+ -------------------------------------------------------------------------------
+ 
+   step     12 C =          4173.317098   BFGS-step =   0.038846
+ 
+ 
+   RMS (E/F/S) :    156.140 meV/atom      2.360 eV/A     47.33 GPa Nc =     100
+   MAX (E/F/S) :    778.665 meV/atom     23.819 eV/A    213.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    156.140 meV/atom      2.360 eV/A     47.33 GPa Nc =     100
+   scale_MAX_  :    778.665 meV/atom     23.819 eV/A    213.59 GPa Nc =     100
+ 
+    Ce    1293.5780 Cf    2879.7391 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2485
+ -------------------------------------------------------------------------------
+ 
+   step     13 C =          3960.094457   BFGS-step =   0.009058
+ 
+ 
+   RMS (E/F/S) :    148.231 meV/atom      2.324 eV/A     44.79 GPa Nc =     100
+   MAX (E/F/S) :    774.193 meV/atom     24.180 eV/A    208.63 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    148.231 meV/atom      2.324 eV/A     44.79 GPa Nc =     100
+   scale_MAX_  :    774.193 meV/atom     24.180 eV/A    208.63 GPa Nc =     100
+ 
+    Ce    1166.3838 Cf    2793.7107 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2542
+ -------------------------------------------------------------------------------
+ 
+   step     14 C =          3704.887583   BFGS-step =   0.014838
+ 
+ 
+   RMS (E/F/S) :    139.056 meV/atom      2.275 eV/A     44.53 GPa Nc =     100
+   MAX (E/F/S) :    784.671 meV/atom     28.846 eV/A    249.87 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    139.056 meV/atom      2.275 eV/A     44.53 GPa Nc =     100
+   scale_MAX_  :    784.671 meV/atom     28.846 eV/A    249.87 GPa Nc =     100
+ 
+    Ce    1024.2912 Cf    2680.5964 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2509
+ -------------------------------------------------------------------------------
+ 
+   step     15 C =          3291.779192   BFGS-step =   0.025853
+ 
+ 
+   RMS (E/F/S) :    128.389 meV/atom      2.163 eV/A     47.19 GPa Nc =     100
+   MAX (E/F/S) :    770.639 meV/atom     27.396 eV/A    293.04 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    128.389 meV/atom      2.163 eV/A     47.19 GPa Nc =     100
+   scale_MAX_  :    770.639 meV/atom     27.396 eV/A    293.04 GPa Nc =     100
+ 
+    Ce     869.2007 Cf    2422.5785 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2723
+ -------------------------------------------------------------------------------
+ 
+   step     16 C =          2501.562133   BFGS-step =   0.065252
+ 
+ 
+   RMS (E/F/S) :    101.546 meV/atom      1.939 eV/A     53.98 GPa Nc =     100
+   MAX (E/F/S) :    622.963 meV/atom     38.529 eV/A    348.33 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :    101.546 meV/atom      1.939 eV/A     53.98 GPa Nc =     100
+   scale_MAX_  :    622.963 meV/atom     38.529 eV/A    348.33 GPa Nc =     100
+ 
+    Ce     543.9288 Cf    1957.6333 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2831
+ -------------------------------------------------------------------------------
+ 
+   step     17 C =          2028.264980   BFGS-step =   0.063636
+ 
+ 
+   RMS (E/F/S) :     92.877 meV/atom      1.737 eV/A     55.04 GPa Nc =     100
+   MAX (E/F/S) :    460.354 meV/atom     33.528 eV/A    356.81 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     92.877 meV/atom      1.737 eV/A     55.04 GPa Nc =     100
+   scale_MAX_  :    460.354 meV/atom     33.528 eV/A    356.81 GPa Nc =     100
+ 
+    Ce     458.4007 Cf    1569.8643 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2817
+ -------------------------------------------------------------------------------
+ 
+   step     18 C =          1840.644504   BFGS-step =   0.023247
+ 
+ 
+   RMS (E/F/S) :     83.683 meV/atom      1.677 eV/A     53.39 GPa Nc =     100
+   MAX (E/F/S) :    367.611 meV/atom     33.567 eV/A    348.75 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     83.683 meV/atom      1.677 eV/A     53.39 GPa Nc =     100
+   scale_MAX_  :    367.611 meV/atom     33.567 eV/A    348.75 GPa Nc =     100
+ 
+    Ce     376.7100 Cf    1463.9345 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2920
+ -------------------------------------------------------------------------------
+ 
+   step     19 C =          1783.055834   BFGS-step =   0.013612
+ 
+ 
+   RMS (E/F/S) :     77.002 meV/atom      1.677 eV/A     48.36 GPa Nc =     100
+   MAX (E/F/S) :    305.555 meV/atom     34.472 eV/A    323.56 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     77.002 meV/atom      1.677 eV/A     48.36 GPa Nc =     100
+   scale_MAX_  :    305.555 meV/atom     34.472 eV/A    323.56 GPa Nc =     100
+ 
+    Ce     320.3424 Cf    1462.7134 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2764
+ -------------------------------------------------------------------------------
+ 
+   step     20 C =          1682.405460   BFGS-step =   0.011430
+ 
+ 
+   RMS (E/F/S) :     73.205 meV/atom      1.638 eV/A     44.72 GPa Nc =     100
+   MAX (E/F/S) :    259.032 meV/atom     30.456 eV/A    306.21 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     73.205 meV/atom      1.638 eV/A     44.72 GPa Nc =     100
+   scale_MAX_  :    259.032 meV/atom     30.456 eV/A    306.21 GPa Nc =     100
+ 
+    Ce     290.2837 Cf    1392.1217 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4828
+ -------------------------------------------------------------------------------
+ 
+   step     21 C =          1362.852949   BFGS-step =   0.047089
+ 
+ 
+   RMS (E/F/S) :     67.432 meV/atom      1.472 eV/A     37.96 GPa Nc =     100
+   MAX (E/F/S) :    250.157 meV/atom     14.034 eV/A    276.63 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     67.432 meV/atom      1.472 eV/A     37.96 GPa Nc =     100
+   scale_MAX_  :    250.157 meV/atom     14.034 eV/A    276.63 GPa Nc =     100
+ 
+    Ce     247.8583 Cf    1114.9947 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2541
+ -------------------------------------------------------------------------------
+ 
+   step     22 C =          1242.141406   BFGS-step =   0.028762
+ 
+ 
+   RMS (E/F/S) :     61.982 meV/atom      1.417 eV/A     37.63 GPa Nc =     100
+   MAX (E/F/S) :    235.757 meV/atom     13.499 eV/A    279.10 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     61.982 meV/atom      1.417 eV/A     37.63 GPa Nc =     100
+   scale_MAX_  :    235.757 meV/atom     13.499 eV/A    279.10 GPa Nc =     100
+ 
+    Ce     209.3241 Cf    1032.8173 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2699
+ -------------------------------------------------------------------------------
+ 
+   step     23 C =          1178.853163   BFGS-step =   0.020907
+ 
+ 
+   RMS (E/F/S) :     57.355 meV/atom      1.393 eV/A     39.34 GPa Nc =     100
+   MAX (E/F/S) :    237.908 meV/atom     14.605 eV/A    289.64 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     57.355 meV/atom      1.393 eV/A     39.34 GPa Nc =     100
+   scale_MAX_  :    237.908 meV/atom     14.605 eV/A    289.64 GPa Nc =     100
+ 
+    Ce     178.8111 Cf    1000.0420 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2647
+ -------------------------------------------------------------------------------
+ 
+   step     24 C =          1136.955232   BFGS-step =   0.015915
+ 
+ 
+   RMS (E/F/S) :     55.206 meV/atom      1.373 eV/A     41.61 GPa Nc =     100
+   MAX (E/F/S) :    256.409 meV/atom     15.829 eV/A    300.80 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     55.206 meV/atom      1.373 eV/A     41.61 GPa Nc =     100
+   scale_MAX_  :    256.409 meV/atom     15.829 eV/A    300.80 GPa Nc =     100
+ 
+    Ce     164.9416 Cf     972.0136 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2615
+ -------------------------------------------------------------------------------
+ 
+   step     25 C =          1023.300960   BFGS-step =   0.029262
+ 
+ 
+   RMS (E/F/S) :     50.966 meV/atom      1.309 eV/A     41.10 GPa Nc =     100
+   MAX (E/F/S) :    235.012 meV/atom     13.091 eV/A    296.17 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     50.966 meV/atom      1.309 eV/A     41.10 GPa Nc =     100
+   scale_MAX_  :    235.012 meV/atom     13.091 eV/A    296.17 GPa Nc =     100
+ 
+    Ce     140.4259 Cf     882.8750 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2604
+ -------------------------------------------------------------------------------
+ 
+   step     26 C =           885.149839   BFGS-step =   0.050126
+ 
+ 
+   RMS (E/F/S) :     48.811 meV/atom      1.213 eV/A     36.86 GPa Nc =     100
+   MAX (E/F/S) :    164.813 meV/atom      9.705 eV/A    269.89 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     48.811 meV/atom      1.213 eV/A     36.86 GPa Nc =     100
+   scale_MAX_  :    164.813 meV/atom      9.705 eV/A    269.89 GPa Nc =     100
+ 
+    Ce     129.7665 Cf     755.3834 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2570
+ -------------------------------------------------------------------------------
+ 
+   step     27 C =           850.768240   BFGS-step =   0.014911
+ 
+ 
+   RMS (E/F/S) :     48.973 meV/atom      1.183 eV/A     33.52 GPa Nc =     100
+   MAX (E/F/S) :    211.567 meV/atom      9.588 eV/A    251.04 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     48.973 meV/atom      1.183 eV/A     33.52 GPa Nc =     100
+   scale_MAX_  :    211.567 meV/atom      9.588 eV/A    251.04 GPa Nc =     100
+ 
+    Ce     132.2307 Cf     718.5375 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2536
+ -------------------------------------------------------------------------------
+ 
+   step     28 C =           835.876894   BFGS-step =   0.007440
+ 
+ 
+   RMS (E/F/S) :     49.440 meV/atom      1.168 eV/A     31.37 GPa Nc =     100
+   MAX (E/F/S) :    237.338 meV/atom      9.553 eV/A    238.07 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     49.440 meV/atom      1.168 eV/A     31.37 GPa Nc =     100
+   scale_MAX_  :    237.338 meV/atom      9.553 eV/A    238.07 GPa Nc =     100
+ 
+    Ce     135.3084 Cf     700.5685 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2531
+ -------------------------------------------------------------------------------
+ 
+   step     29 C =           810.414416   BFGS-step =   0.008203
+ 
+ 
+   RMS (E/F/S) :     49.594 meV/atom      1.145 eV/A     29.62 GPa Nc =     100
+   MAX (E/F/S) :    259.106 meV/atom      9.531 eV/A    226.74 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     49.594 meV/atom      1.145 eV/A     29.62 GPa Nc =     100
+   scale_MAX_  :    259.106 meV/atom      9.531 eV/A    226.74 GPa Nc =     100
+ 
+    Ce     136.5330 Cf     673.8814 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2488
+ -------------------------------------------------------------------------------
+ 
+   step     30 C =           733.586581   BFGS-step =   0.025787
+ 
+ 
+   RMS (E/F/S) :     49.766 meV/atom      1.077 eV/A     27.05 GPa Nc =     100
+   MAX (E/F/S) :    279.681 meV/atom      9.236 eV/A    206.81 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     49.766 meV/atom      1.077 eV/A     27.05 GPa Nc =     100
+   scale_MAX_  :    279.681 meV/atom      9.236 eV/A    206.81 GPa Nc =     100
+ 
+    Ce     137.3777 Cf     596.2089 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2678
+ -------------------------------------------------------------------------------
+ 
+   step     31 C =           623.166415   BFGS-step =   0.046373
+ 
+ 
+   RMS (E/F/S) :     47.411 meV/atom      0.986 eV/A     26.00 GPa Nc =     100
+   MAX (E/F/S) :    260.486 meV/atom      8.492 eV/A    194.11 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     47.411 meV/atom      0.986 eV/A     26.00 GPa Nc =     100
+   scale_MAX_  :    260.486 meV/atom      8.492 eV/A    194.11 GPa Nc =     100
+ 
+    Ce     124.0735 Cf     499.0929 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2693
+ -------------------------------------------------------------------------------
+ 
+   step     32 C =           510.076732   BFGS-step =   0.066093
+ 
+ 
+   RMS (E/F/S) :     40.984 meV/atom      0.904 eV/A     27.40 GPa Nc =     100
+   MAX (E/F/S) :    188.807 meV/atom      7.616 eV/A    194.91 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     40.984 meV/atom      0.904 eV/A     27.40 GPa Nc =     100
+   scale_MAX_  :    188.807 meV/atom      7.616 eV/A    194.91 GPa Nc =     100
+ 
+    Ce      92.2308 Cf     417.8459 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2720
+ -------------------------------------------------------------------------------
+ 
+   step     33 C =           461.645055   BFGS-step =   0.046673
+ 
+ 
+   RMS (E/F/S) :     37.105 meV/atom      0.870 eV/A     30.68 GPa Nc =     100
+   MAX (E/F/S) :    140.965 meV/atom      7.219 eV/A    206.90 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     37.105 meV/atom      0.870 eV/A     30.68 GPa Nc =     100
+   scale_MAX_  :    140.965 meV/atom      7.219 eV/A    206.90 GPa Nc =     100
+ 
+    Ce      75.2830 Cf     386.3621 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2722
+ -------------------------------------------------------------------------------
+ 
+   step     34 C =           443.728989   BFGS-step =   0.018673
+ 
+ 
+   RMS (E/F/S) :     36.143 meV/atom      0.854 eV/A     32.25 GPa Nc =     100
+   MAX (E/F/S) :    143.970 meV/atom      7.101 eV/A    212.42 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     36.143 meV/atom      0.854 eV/A     32.25 GPa Nc =     100
+   scale_MAX_  :    143.970 meV/atom      7.101 eV/A    212.42 GPa Nc =     100
+ 
+    Ce      71.1992 Cf     372.5298 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2642
+ -------------------------------------------------------------------------------
+ 
+   step     35 C =           422.270330   BFGS-step =   0.017186
+ 
+ 
+   RMS (E/F/S) :     34.995 meV/atom      0.833 eV/A     33.20 GPa Nc =     100
+   MAX (E/F/S) :    132.724 meV/atom      7.002 eV/A    214.07 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     34.995 meV/atom      0.833 eV/A     33.20 GPa Nc =     100
+   scale_MAX_  :    132.724 meV/atom      7.002 eV/A    214.07 GPa Nc =     100
+ 
+    Ce      66.5323 Cf     355.7381 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2814
+ -------------------------------------------------------------------------------
+ 
+   step     36 C =           399.818759   BFGS-step =   0.018413
+ 
+ 
+   RMS (E/F/S) :     33.498 meV/atom      0.813 eV/A     32.67 GPa Nc =     100
+   MAX (E/F/S) :    123.405 meV/atom      6.865 eV/A    207.46 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     33.498 meV/atom      0.813 eV/A     32.67 GPa Nc =     100
+   scale_MAX_  :    123.405 meV/atom      6.865 eV/A    207.46 GPa Nc =     100
+ 
+    Ce      60.7735 Cf     339.0452 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2572
+ -------------------------------------------------------------------------------
+ 
+   step     37 C =           361.023176   BFGS-step =   0.028996
+ 
+ 
+   RMS (E/F/S) :     29.739 meV/atom      0.781 eV/A     29.57 GPa Nc =     100
+   MAX (E/F/S) :    111.123 meV/atom      6.567 eV/A    185.28 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     29.739 meV/atom      0.781 eV/A     29.57 GPa Nc =     100
+   scale_MAX_  :    111.123 meV/atom      6.567 eV/A    185.28 GPa Nc =     100
+ 
+    Ce      48.0504 Cf     312.9727 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2722
+ -------------------------------------------------------------------------------
+ 
+   step     38 C =           321.963011   BFGS-step =   0.048511
+ 
+ 
+   RMS (E/F/S) :     28.502 meV/atom      0.735 eV/A     23.59 GPa Nc =     100
+   MAX (E/F/S) :     88.165 meV/atom      6.444 eV/A    145.30 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     28.502 meV/atom      0.735 eV/A     23.59 GPa Nc =     100
+   scale_MAX_  :     88.165 meV/atom      6.444 eV/A    145.30 GPa Nc =     100
+ 
+    Ce      44.8283 Cf     277.1347 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2759
+ -------------------------------------------------------------------------------
+ 
+   step     39 C =           298.803881   BFGS-step =   0.016434
+ 
+ 
+   RMS (E/F/S) :     23.396 meV/atom      0.724 eV/A     21.17 GPa Nc =     100
+   MAX (E/F/S) :     78.959 meV/atom      5.932 eV/A    130.18 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     23.396 meV/atom      0.724 eV/A     21.17 GPa Nc =     100
+   scale_MAX_  :     78.959 meV/atom      5.932 eV/A    130.18 GPa Nc =     100
+ 
+    Ce      30.2041 Cf     268.5998 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2847
+ -------------------------------------------------------------------------------
+ 
+   step     40 C =           294.040037   BFGS-step =   0.007047
+ 
+ 
+   RMS (E/F/S) :     23.091 meV/atom      0.719 eV/A     20.03 GPa Nc =     100
+   MAX (E/F/S) :     86.547 meV/atom      5.871 eV/A    123.67 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     23.091 meV/atom      0.719 eV/A     20.03 GPa Nc =     100
+   scale_MAX_  :     86.547 meV/atom      5.871 eV/A    123.67 GPa Nc =     100
+ 
+    Ce      29.3461 Cf     264.6940 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3930
+ -------------------------------------------------------------------------------
+ 
+   step     41 C =           291.567195   BFGS-step =   0.005131
+ 
+ 
+   RMS (E/F/S) :     23.013 meV/atom      0.716 eV/A     19.44 GPa Nc =     100
+   MAX (E/F/S) :     90.315 meV/atom      5.816 eV/A    120.31 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     23.013 meV/atom      0.716 eV/A     19.44 GPa Nc =     100
+   scale_MAX_  :     90.315 meV/atom      5.816 eV/A    120.31 GPa Nc =     100
+ 
+    Ce      29.0802 Cf     262.4870 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2682
+ -------------------------------------------------------------------------------
+ 
+   step     42 C =           286.323840   BFGS-step =   0.007055
+ 
+ 
+   RMS (E/F/S) :     22.800 meV/atom      0.710 eV/A     19.01 GPa Nc =     100
+   MAX (E/F/S) :     90.687 meV/atom      5.770 eV/A    118.58 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.800 meV/atom      0.710 eV/A     19.01 GPa Nc =     100
+   scale_MAX_  :     90.687 meV/atom      5.770 eV/A    118.58 GPa Nc =     100
+ 
+    Ce      28.5032 Cf     257.8207 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2705
+ -------------------------------------------------------------------------------
+ 
+   step     43 C =           270.512818   BFGS-step =   0.029524
+ 
+ 
+   RMS (E/F/S) :     22.671 meV/atom      0.688 eV/A     18.08 GPa Nc =     100
+   MAX (E/F/S) :     86.352 meV/atom      5.626 eV/A    116.01 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.671 meV/atom      0.688 eV/A     18.08 GPa Nc =     100
+   scale_MAX_  :     86.352 meV/atom      5.626 eV/A    116.01 GPa Nc =     100
+ 
+    Ce      28.0752 Cf     242.4376 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2491
+ -------------------------------------------------------------------------------
+ 
+   step     44 C =           257.026520   BFGS-step =   0.023902
+ 
+ 
+   RMS (E/F/S) :     22.496 meV/atom      0.669 eV/A     17.81 GPa Nc =     100
+   MAX (E/F/S) :     77.432 meV/atom      5.515 eV/A    115.58 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.496 meV/atom      0.669 eV/A     17.81 GPa Nc =     100
+   scale_MAX_  :     77.432 meV/atom      5.515 eV/A    115.58 GPa Nc =     100
+ 
+    Ce      27.6188 Cf     229.4077 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2918
+ -------------------------------------------------------------------------------
+ 
+   step     45 C =           239.198101   BFGS-step =   0.030391
+ 
+ 
+   RMS (E/F/S) :     22.475 meV/atom      0.642 eV/A     17.96 GPa Nc =     100
+   MAX (E/F/S) :     70.460 meV/atom      5.484 eV/A    116.63 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.475 meV/atom      0.642 eV/A     17.96 GPa Nc =     100
+   scale_MAX_  :     70.460 meV/atom      5.484 eV/A    116.63 GPa Nc =     100
+ 
+    Ce      27.6943 Cf     211.5038 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2737
+ -------------------------------------------------------------------------------
+ 
+   step     46 C =           229.570522   BFGS-step =   0.016936
+ 
+ 
+   RMS (E/F/S) :     22.542 meV/atom      0.627 eV/A     18.33 GPa Nc =     100
+   MAX (E/F/S) :     80.272 meV/atom      6.021 eV/A    117.13 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.542 meV/atom      0.627 eV/A     18.33 GPa Nc =     100
+   scale_MAX_  :     80.272 meV/atom      6.021 eV/A    117.13 GPa Nc =     100
+ 
+    Ce      28.0182 Cf     201.5523 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2618
+ -------------------------------------------------------------------------------
+ 
+   step     47 C =           223.706991   BFGS-step =   0.014577
+ 
+ 
+   RMS (E/F/S) :     22.446 meV/atom      0.618 eV/A     18.70 GPa Nc =     100
+   MAX (E/F/S) :     88.068 meV/atom      6.778 eV/A    117.22 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.446 meV/atom      0.618 eV/A     18.70 GPa Nc =     100
+   scale_MAX_  :     88.068 meV/atom      6.778 eV/A    117.22 GPa Nc =     100
+ 
+    Ce      27.9346 Cf     195.7724 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2779
+ -------------------------------------------------------------------------------
+ 
+   step     48 C =           218.173686   BFGS-step =   0.013678
+ 
+ 
+   RMS (E/F/S) :     22.030 meV/atom      0.610 eV/A     19.00 GPa Nc =     100
+   MAX (E/F/S) :     92.803 meV/atom      7.106 eV/A    116.81 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     22.030 meV/atom      0.610 eV/A     19.00 GPa Nc =     100
+   scale_MAX_  :     92.803 meV/atom      7.106 eV/A    116.81 GPa Nc =     100
+ 
+    Ce      26.9712 Cf     191.2025 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2870
+ -------------------------------------------------------------------------------
+ 
+   step     49 C =           199.517609   BFGS-step =   0.029197
+ 
+ 
+   RMS (E/F/S) :     20.951 meV/atom      0.583 eV/A     18.32 GPa Nc =     100
+   MAX (E/F/S) :     88.061 meV/atom      6.910 eV/A    110.03 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     20.951 meV/atom      0.583 eV/A     18.32 GPa Nc =     100
+   scale_MAX_  :     88.061 meV/atom      6.910 eV/A    110.03 GPa Nc =     100
+ 
+    Ce      24.3462 Cf     175.1714 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2848
+ -------------------------------------------------------------------------------
+ 
+   step     50 C =           185.205077   BFGS-step =   0.025929
+ 
+ 
+   RMS (E/F/S) :     19.503 meV/atom      0.565 eV/A     18.08 GPa Nc =     100
+   MAX (E/F/S) :     80.621 meV/atom      6.204 eV/A    106.32 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.503 meV/atom      0.565 eV/A     18.08 GPa Nc =     100
+   scale_MAX_  :     80.621 meV/atom      6.204 eV/A    106.32 GPa Nc =     100
+ 
+    Ce      20.9520 Cf     164.2531 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2839
+ -------------------------------------------------------------------------------
+ 
+   step     51 C =           176.152024   BFGS-step =   0.036143
+ 
+ 
+   RMS (E/F/S) :     19.336 meV/atom      0.550 eV/A     17.35 GPa Nc =     100
+   MAX (E/F/S) :     76.850 meV/atom      5.503 eV/A    101.26 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.336 meV/atom      0.550 eV/A     17.35 GPa Nc =     100
+   scale_MAX_  :     76.850 meV/atom      5.503 eV/A    101.26 GPa Nc =     100
+ 
+    Ce      20.4964 Cf     155.6556 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2889
+ -------------------------------------------------------------------------------
+ 
+   step     52 C =           171.233872   BFGS-step =   0.032660
+ 
+ 
+   RMS (E/F/S) :     19.386 meV/atom      0.542 eV/A     16.81 GPa Nc =     100
+   MAX (E/F/S) :     71.968 meV/atom      5.286 eV/A     97.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.386 meV/atom      0.542 eV/A     16.81 GPa Nc =     100
+   scale_MAX_  :     71.968 meV/atom      5.286 eV/A     97.59 GPa Nc =     100
+ 
+    Ce      20.4468 Cf     150.7871 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2921
+ -------------------------------------------------------------------------------
+ 
+   step     53 C =           168.936959   BFGS-step =   0.026133
+ 
+ 
+   RMS (E/F/S) :     19.919 meV/atom      0.536 eV/A     16.15 GPa Nc =     100
+   MAX (E/F/S) :     78.971 meV/atom      5.159 eV/A     92.63 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.919 meV/atom      0.536 eV/A     16.15 GPa Nc =     100
+   scale_MAX_  :     78.971 meV/atom      5.159 eV/A     92.63 GPa Nc =     100
+ 
+    Ce      21.5280 Cf     147.4090 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2809
+ -------------------------------------------------------------------------------
+ 
+   step     54 C =           165.667819   BFGS-step =   0.017130
+ 
+ 
+   RMS (E/F/S) :     19.980 meV/atom      0.530 eV/A     15.50 GPa Nc =     100
+   MAX (E/F/S) :     82.866 meV/atom      5.089 eV/A     87.44 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.980 meV/atom      0.530 eV/A     15.50 GPa Nc =     100
+   scale_MAX_  :     82.866 meV/atom      5.089 eV/A     87.44 GPa Nc =     100
+ 
+    Ce      21.6270 Cf     144.0408 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2795
+ -------------------------------------------------------------------------------
+ 
+   step     55 C =           160.358188   BFGS-step =   0.030292
+ 
+ 
+   RMS (E/F/S) :     20.082 meV/atom      0.519 eV/A     14.22 GPa Nc =     100
+   MAX (E/F/S) :     79.626 meV/atom      5.012 eV/A     76.19 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     20.082 meV/atom      0.519 eV/A     14.22 GPa Nc =     100
+   scale_MAX_  :     79.626 meV/atom      5.012 eV/A     76.19 GPa Nc =     100
+ 
+    Ce      21.8698 Cf     138.4884 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2763
+ -------------------------------------------------------------------------------
+ 
+   step     56 C =           153.070034   BFGS-step =   0.025016
+ 
+ 
+   RMS (E/F/S) :     19.468 meV/atom      0.508 eV/A     13.03 GPa Nc =     100
+   MAX (E/F/S) :     71.265 meV/atom      4.940 eV/A     64.76 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     19.468 meV/atom      0.508 eV/A     13.03 GPa Nc =     100
+   scale_MAX_  :     71.265 meV/atom      4.940 eV/A     64.76 GPa Nc =     100
+ 
+    Ce      20.6269 Cf     132.4432 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2583
+ -------------------------------------------------------------------------------
+ 
+   step     57 C =           140.519403   BFGS-step =   0.042569
+ 
+ 
+   RMS (E/F/S) :     17.600 meV/atom      0.490 eV/A     11.08 GPa Nc =     100
+   MAX (E/F/S) :     60.775 meV/atom      4.765 eV/A     49.98 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     17.600 meV/atom      0.490 eV/A     11.08 GPa Nc =     100
+   scale_MAX_  :     60.775 meV/atom      4.765 eV/A     49.98 GPa Nc =     100
+ 
+    Ce      16.9542 Cf     123.5652 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2664
+ -------------------------------------------------------------------------------
+ 
+   step     58 C =           132.634376   BFGS-step =   0.032067
+ 
+ 
+   RMS (E/F/S) :     15.882 meV/atom      0.480 eV/A      9.80 GPa Nc =     100
+   MAX (E/F/S) :     57.769 meV/atom      7.284 eV/A     48.45 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     15.882 meV/atom      0.480 eV/A      9.80 GPa Nc =     100
+   scale_MAX_  :     57.769 meV/atom      7.284 eV/A     48.45 GPa Nc =     100
+ 
+    Ce      13.8331 Cf     118.8013 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2598
+ -------------------------------------------------------------------------------
+ 
+   step     59 C =           126.201937   BFGS-step =   0.022801
+ 
+ 
+   RMS (E/F/S) :     15.164 meV/atom      0.470 eV/A      9.44 GPa Nc =     100
+   MAX (E/F/S) :     52.690 meV/atom      4.453 eV/A     48.29 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     15.164 meV/atom      0.470 eV/A      9.44 GPa Nc =     100
+   scale_MAX_  :     52.690 meV/atom      4.453 eV/A     48.29 GPa Nc =     100
+ 
+    Ce      12.6475 Cf     113.5545 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3023
+ -------------------------------------------------------------------------------
+ 
+   step     60 C =           123.846146   BFGS-step =   0.005147
+ 
+ 
+   RMS (E/F/S) :     14.445 meV/atom      0.468 eV/A      9.45 GPa Nc =     100
+   MAX (E/F/S) :     47.922 meV/atom      4.402 eV/A     48.17 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     14.445 meV/atom      0.468 eV/A      9.45 GPa Nc =     100
+   scale_MAX_  :     47.922 meV/atom      4.402 eV/A     48.17 GPa Nc =     100
+ 
+    Ce      11.4283 Cf     112.4179 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4459
+ -------------------------------------------------------------------------------
+ 
+   step     61 C =           122.731708   BFGS-step =   0.017117
+ 
+ 
+   RMS (E/F/S) :     14.160 meV/atom      0.466 eV/A      9.76 GPa Nc =     100
+   MAX (E/F/S) :     47.453 meV/atom      4.422 eV/A     49.82 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     14.160 meV/atom      0.466 eV/A      9.76 GPa Nc =     100
+   scale_MAX_  :     47.453 meV/atom      4.422 eV/A     49.82 GPa Nc =     100
+ 
+    Ce      10.9622 Cf     111.7695 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2580
+ -------------------------------------------------------------------------------
+ 
+   step     62 C =           121.466521   BFGS-step =   0.003160
+ 
+ 
+   RMS (E/F/S) :     14.073 meV/atom      0.464 eV/A      9.75 GPa Nc =     100
+   MAX (E/F/S) :     47.238 meV/atom      4.418 eV/A     49.79 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     14.073 meV/atom      0.464 eV/A      9.75 GPa Nc =     100
+   scale_MAX_  :     47.238 meV/atom      4.418 eV/A     49.79 GPa Nc =     100
+ 
+    Ce      10.8238 Cf     110.6427 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2646
+ -------------------------------------------------------------------------------
+ 
+   step     63 C =           116.297304   BFGS-step =   0.010944
+ 
+ 
+   RMS (E/F/S) :     13.866 meV/atom      0.454 eV/A      9.13 GPa Nc =     100
+   MAX (E/F/S) :     45.251 meV/atom      4.352 eV/A     47.47 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.866 meV/atom      0.454 eV/A      9.13 GPa Nc =     100
+   scale_MAX_  :     45.251 meV/atom      4.352 eV/A     47.47 GPa Nc =     100
+ 
+    Ce      10.5088 Cf     105.7885 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2817
+ -------------------------------------------------------------------------------
+ 
+   step     64 C =           112.874616   BFGS-step =   0.014927
+ 
+ 
+   RMS (E/F/S) :     13.794 meV/atom      0.446 eV/A      8.39 GPa Nc =     100
+   MAX (E/F/S) :     43.347 meV/atom      4.299 eV/A     44.09 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.794 meV/atom      0.446 eV/A      8.39 GPa Nc =     100
+   scale_MAX_  :     43.347 meV/atom      4.299 eV/A     44.09 GPa Nc =     100
+ 
+    Ce      10.4042 Cf     102.4704 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2766
+ -------------------------------------------------------------------------------
+ 
+   step     65 C =           107.013043   BFGS-step =   0.028203
+ 
+ 
+   RMS (E/F/S) :     13.694 meV/atom      0.434 eV/A      7.54 GPa Nc =     100
+   MAX (E/F/S) :     48.008 meV/atom      4.069 eV/A     37.22 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.694 meV/atom      0.434 eV/A      7.54 GPa Nc =     100
+   scale_MAX_  :     48.008 meV/atom      4.069 eV/A     37.22 GPa Nc =     100
+ 
+    Ce      10.2388 Cf      96.7743 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2695
+ -------------------------------------------------------------------------------
+ 
+   step     66 C =           102.220359   BFGS-step =   0.044768
+ 
+ 
+   RMS (E/F/S) :     13.871 meV/atom      0.422 eV/A      7.17 GPa Nc =     100
+   MAX (E/F/S) :     50.524 meV/atom      3.820 eV/A     32.68 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.871 meV/atom      0.422 eV/A      7.17 GPa Nc =     100
+   scale_MAX_  :     50.524 meV/atom      3.820 eV/A     32.68 GPa Nc =     100
+ 
+    Ce      10.4265 Cf      91.7939 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2796
+ -------------------------------------------------------------------------------
+ 
+   step     67 C =            99.983843   BFGS-step =   0.027614
+ 
+ 
+   RMS (E/F/S) :     13.643 meV/atom      0.418 eV/A      7.16 GPa Nc =     100
+   MAX (E/F/S) :     50.365 meV/atom      3.869 eV/A     33.62 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.643 meV/atom      0.418 eV/A      7.16 GPa Nc =     100
+   scale_MAX_  :     50.365 meV/atom      3.869 eV/A     33.62 GPa Nc =     100
+ 
+    Ce      10.0717 Cf      89.9121 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2855
+ -------------------------------------------------------------------------------
+ 
+   step     68 C =            97.929263   BFGS-step =   0.026209
+ 
+ 
+   RMS (E/F/S) :     13.207 meV/atom      0.415 eV/A      7.13 GPa Nc =     100
+   MAX (E/F/S) :     49.386 meV/atom      3.909 eV/A     35.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     13.207 meV/atom      0.415 eV/A      7.13 GPa Nc =     100
+   scale_MAX_  :     49.386 meV/atom      3.909 eV/A     35.59 GPa Nc =     100
+ 
+    Ce       9.4463 Cf      88.4829 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.8510
+ -------------------------------------------------------------------------------
+ 
+   step     69 C =            95.542585   BFGS-step =   0.025963
+ 
+ 
+   RMS (E/F/S) :     12.753 meV/atom      0.411 eV/A      7.03 GPa Nc =     100
+   MAX (E/F/S) :     48.805 meV/atom      3.817 eV/A     35.76 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     12.753 meV/atom      0.411 eV/A      7.03 GPa Nc =     100
+   scale_MAX_  :     48.805 meV/atom      3.817 eV/A     35.76 GPa Nc =     100
+ 
+    Ce       8.8214 Cf      86.7212 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       1.2251
+ -------------------------------------------------------------------------------
+ 
+   step     70 C =            90.131524   BFGS-step =   0.040560
+ 
+ 
+   RMS (E/F/S) :     12.022 meV/atom      0.400 eV/A      6.79 GPa Nc =     100
+   MAX (E/F/S) :     49.033 meV/atom      3.596 eV/A     36.02 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     12.022 meV/atom      0.400 eV/A      6.79 GPa Nc =     100
+   scale_MAX_  :     49.033 meV/atom      3.596 eV/A     36.02 GPa Nc =     100
+ 
+    Ce       7.8256 Cf      82.3059 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4155
+ -------------------------------------------------------------------------------
+ 
+   step     71 C =            85.828520   BFGS-step =   0.029637
+ 
+ 
+   RMS (E/F/S) :     11.659 meV/atom      0.391 eV/A      6.36 GPa Nc =     100
+   MAX (E/F/S) :     49.540 meV/atom      3.215 eV/A     32.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.659 meV/atom      0.391 eV/A      6.36 GPa Nc =     100
+   scale_MAX_  :     49.540 meV/atom      3.215 eV/A     32.59 GPa Nc =     100
+ 
+    Ce       7.3367 Cf      78.4918 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3018
+ -------------------------------------------------------------------------------
+ 
+   step     72 C =            84.592176   BFGS-step =   0.017233
+ 
+ 
+   RMS (E/F/S) :     11.727 meV/atom      0.388 eV/A      6.25 GPa Nc =     100
+   MAX (E/F/S) :     47.576 meV/atom      3.669 eV/A     32.42 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.727 meV/atom      0.388 eV/A      6.25 GPa Nc =     100
+   scale_MAX_  :     47.576 meV/atom      3.669 eV/A     32.42 GPa Nc =     100
+ 
+    Ce       7.4196 Cf      77.1726 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2474
+ -------------------------------------------------------------------------------
+ 
+   step     73 C =            83.482727   BFGS-step =   0.017955
+ 
+ 
+   RMS (E/F/S) :     11.786 meV/atom      0.385 eV/A      6.07 GPa Nc =     100
+   MAX (E/F/S) :     45.586 meV/atom      3.215 eV/A     30.33 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.786 meV/atom      0.385 eV/A      6.07 GPa Nc =     100
+   scale_MAX_  :     45.586 meV/atom      3.215 eV/A     30.33 GPa Nc =     100
+ 
+    Ce       7.4948 Cf      75.9879 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2552
+ -------------------------------------------------------------------------------
+ 
+   step     74 C =            82.678283   BFGS-step =   0.015032
+ 
+ 
+   RMS (E/F/S) :     11.759 meV/atom      0.383 eV/A      5.99 GPa Nc =     100
+   MAX (E/F/S) :     43.897 meV/atom      3.219 eV/A     29.00 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.759 meV/atom      0.383 eV/A      5.99 GPa Nc =     100
+   scale_MAX_  :     43.897 meV/atom      3.219 eV/A     29.00 GPa Nc =     100
+ 
+    Ce       7.4426 Cf      75.2357 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2561
+ -------------------------------------------------------------------------------
+ 
+   step     75 C =            81.713151   BFGS-step =   0.014252
+ 
+ 
+   RMS (E/F/S) :     11.731 meV/atom      0.380 eV/A      5.90 GPa Nc =     100
+   MAX (E/F/S) :     39.369 meV/atom      3.238 eV/A     27.50 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.731 meV/atom      0.380 eV/A      5.90 GPa Nc =     100
+   scale_MAX_  :     39.369 meV/atom      3.238 eV/A     27.50 GPa Nc =     100
+ 
+    Ce       7.4159 Cf      74.2972 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3884
+ -------------------------------------------------------------------------------
+ 
+   step     76 C =            78.497265   BFGS-step =   0.014669
+ 
+ 
+   RMS (E/F/S) :     11.548 meV/atom      0.373 eV/A      5.72 GPa Nc =     100
+   MAX (E/F/S) :     35.158 meV/atom      3.294 eV/A     25.90 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.548 meV/atom      0.373 eV/A      5.72 GPa Nc =     100
+   scale_MAX_  :     35.158 meV/atom      3.294 eV/A     25.90 GPa Nc =     100
+ 
+    Ce       7.2028 Cf      71.2944 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2818
+ -------------------------------------------------------------------------------
+ 
+   step     77 C =            73.284473   BFGS-step =   0.050815
+ 
+ 
+   RMS (E/F/S) :     11.346 meV/atom      0.359 eV/A      5.46 GPa Nc =     100
+   MAX (E/F/S) :     27.819 meV/atom      3.335 eV/A     25.09 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.346 meV/atom      0.359 eV/A      5.46 GPa Nc =     100
+   scale_MAX_  :     27.819 meV/atom      3.335 eV/A     25.09 GPa Nc =     100
+ 
+    Ce       7.0343 Cf      66.2501 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2698
+ -------------------------------------------------------------------------------
+ 
+   step     78 C =            70.763233   BFGS-step =   0.037082
+ 
+ 
+   RMS (E/F/S) :     11.226 meV/atom      0.352 eV/A      5.44 GPa Nc =     100
+   MAX (E/F/S) :     29.747 meV/atom      3.280 eV/A     24.30 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.226 meV/atom      0.352 eV/A      5.44 GPa Nc =     100
+   scale_MAX_  :     29.747 meV/atom      3.280 eV/A     24.30 GPa Nc =     100
+ 
+    Ce       6.9063 Cf      63.8569 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2768
+ -------------------------------------------------------------------------------
+ 
+   step     79 C =            68.812108   BFGS-step =   0.039544
+ 
+ 
+   RMS (E/F/S) :     11.322 meV/atom      0.347 eV/A      5.54 GPa Nc =     100
+   MAX (E/F/S) :     32.005 meV/atom      3.350 eV/A     24.08 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.322 meV/atom      0.347 eV/A      5.54 GPa Nc =     100
+   scale_MAX_  :     32.005 meV/atom      3.350 eV/A     24.08 GPa Nc =     100
+ 
+    Ce       7.0406 Cf      61.7716 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2761
+ -------------------------------------------------------------------------------
+ 
+   step     80 C =            67.898283   BFGS-step =   0.024196
+ 
+ 
+   RMS (E/F/S) :     11.450 meV/atom      0.344 eV/A      5.65 GPa Nc =     100
+   MAX (E/F/S) :     36.957 meV/atom      3.413 eV/A     25.42 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.450 meV/atom      0.344 eV/A      5.65 GPa Nc =     100
+   scale_MAX_  :     36.957 meV/atom      3.413 eV/A     25.42 GPa Nc =     100
+ 
+    Ce       7.1810 Cf      60.7172 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3176
+ -------------------------------------------------------------------------------
+ 
+   step     81 C =            67.108573   BFGS-step =   0.009482
+ 
+ 
+   RMS (E/F/S) :     11.509 meV/atom      0.341 eV/A      5.72 GPa Nc =     100
+   MAX (E/F/S) :     38.520 meV/atom      3.462 eV/A     26.42 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.509 meV/atom      0.341 eV/A      5.72 GPa Nc =     100
+   scale_MAX_  :     38.520 meV/atom      3.462 eV/A     26.42 GPa Nc =     100
+ 
+    Ce       7.2495 Cf      59.8591 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2955
+ -------------------------------------------------------------------------------
+ 
+   step     82 C =            66.546266   BFGS-step =   0.005328
+ 
+ 
+   RMS (E/F/S) :     11.387 meV/atom      0.340 eV/A      5.70 GPa Nc =     100
+   MAX (E/F/S) :     39.726 meV/atom      3.487 eV/A     26.32 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     11.387 meV/atom      0.340 eV/A      5.70 GPa Nc =     100
+   scale_MAX_  :     39.726 meV/atom      3.487 eV/A     26.32 GPa Nc =     100
+ 
+    Ce       7.0831 Cf      59.4632 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2831
+ -------------------------------------------------------------------------------
+ 
+   step     83 C =            64.885467   BFGS-step =   0.009205
+ 
+ 
+   RMS (E/F/S) :     10.949 meV/atom      0.337 eV/A      5.49 GPa Nc =     100
+   MAX (E/F/S) :     38.968 meV/atom      3.480 eV/A     24.58 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.949 meV/atom      0.337 eV/A      5.49 GPa Nc =     100
+   scale_MAX_  :     38.968 meV/atom      3.480 eV/A     24.58 GPa Nc =     100
+ 
+    Ce       6.5406 Cf      58.3448 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2837
+ -------------------------------------------------------------------------------
+ 
+   step     84 C =            61.153345   BFGS-step =   0.021269
+ 
+ 
+   RMS (E/F/S) :     10.152 meV/atom      0.329 eV/A      4.89 GPa Nc =     100
+   MAX (E/F/S) :     37.696 meV/atom      3.379 eV/A     21.03 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.152 meV/atom      0.329 eV/A      4.89 GPa Nc =     100
+   scale_MAX_  :     37.696 meV/atom      3.379 eV/A     21.03 GPa Nc =     100
+ 
+    Ce       5.6020 Cf      55.5514 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2742
+ -------------------------------------------------------------------------------
+ 
+   step     85 C =            58.605997   BFGS-step =   0.021754
+ 
+ 
+   RMS (E/F/S) :      9.554 meV/atom      0.323 eV/A      4.50 GPa Nc =     100
+   MAX (E/F/S) :     33.127 meV/atom      3.238 eV/A     21.08 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.554 meV/atom      0.323 eV/A      4.50 GPa Nc =     100
+   scale_MAX_  :     33.127 meV/atom      3.238 eV/A     21.08 GPa Nc =     100
+ 
+    Ce       4.9827 Cf      53.6233 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2803
+ -------------------------------------------------------------------------------
+ 
+   step     86 C =            56.823733   BFGS-step =   0.027110
+ 
+ 
+   RMS (E/F/S) :      9.467 meV/atom      0.318 eV/A      4.35 GPa Nc =     100
+   MAX (E/F/S) :     34.477 meV/atom      3.112 eV/A     20.28 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.467 meV/atom      0.318 eV/A      4.35 GPa Nc =     100
+   scale_MAX_  :     34.477 meV/atom      3.112 eV/A     20.28 GPa Nc =     100
+ 
+    Ce       4.8881 Cf      51.9357 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2902
+ -------------------------------------------------------------------------------
+ 
+   step     87 C =            55.388749   BFGS-step =   0.020017
+ 
+ 
+   RMS (E/F/S) :      9.583 meV/atom      0.313 eV/A      4.29 GPa Nc =     100
+   MAX (E/F/S) :     33.906 meV/atom      3.052 eV/A     19.54 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.583 meV/atom      0.313 eV/A      4.29 GPa Nc =     100
+   scale_MAX_  :     33.906 meV/atom      3.052 eV/A     19.54 GPa Nc =     100
+ 
+    Ce       5.0131 Cf      50.3756 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2880
+ -------------------------------------------------------------------------------
+ 
+   step     88 C =            54.429385   BFGS-step =   0.026443
+ 
+ 
+   RMS (E/F/S) :      9.974 meV/atom      0.309 eV/A      4.22 GPa Nc =     100
+   MAX (E/F/S) :     36.299 meV/atom      3.038 eV/A     18.49 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.974 meV/atom      0.309 eV/A      4.22 GPa Nc =     100
+   scale_MAX_  :     36.299 meV/atom      3.038 eV/A     18.49 GPa Nc =     100
+ 
+    Ce       5.4297 Cf      48.9996 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2918
+ -------------------------------------------------------------------------------
+ 
+   step     89 C =            53.845276   BFGS-step =   0.005424
+ 
+ 
+   RMS (E/F/S) :     10.215 meV/atom      0.306 eV/A      4.20 GPa Nc =     100
+   MAX (E/F/S) :     34.548 meV/atom      3.038 eV/A     18.10 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.215 meV/atom      0.306 eV/A      4.20 GPa Nc =     100
+   scale_MAX_  :     34.548 meV/atom      3.038 eV/A     18.10 GPa Nc =     100
+ 
+    Ce       5.7118 Cf      48.1335 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4084
+ -------------------------------------------------------------------------------
+ 
+   step     90 C =            52.946694   BFGS-step =   0.010922
+ 
+ 
+   RMS (E/F/S) :     10.577 meV/atom      0.302 eV/A      4.17 GPa Nc =     100
+   MAX (E/F/S) :     33.528 meV/atom      3.065 eV/A     17.53 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.577 meV/atom      0.302 eV/A      4.17 GPa Nc =     100
+   scale_MAX_  :     33.528 meV/atom      3.065 eV/A     17.53 GPa Nc =     100
+ 
+    Ce       6.1408 Cf      46.8059 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4969
+ -------------------------------------------------------------------------------
+ 
+   step     91 C =            51.990169   BFGS-step =   0.010511
+ 
+ 
+   RMS (E/F/S) :     10.650 meV/atom      0.299 eV/A      4.20 GPa Nc =     100
+   MAX (E/F/S) :     29.968 meV/atom      3.074 eV/A     17.68 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.650 meV/atom      0.299 eV/A      4.20 GPa Nc =     100
+   scale_MAX_  :     29.968 meV/atom      3.074 eV/A     17.68 GPa Nc =     100
+ 
+    Ce       6.2480 Cf      45.7422 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2929
+ -------------------------------------------------------------------------------
+ 
+   step     92 C =            51.115549   BFGS-step =   0.009533
+ 
+ 
+   RMS (E/F/S) :     10.570 meV/atom      0.296 eV/A      4.22 GPa Nc =     100
+   MAX (E/F/S) :     27.871 meV/atom      3.087 eV/A     18.15 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.570 meV/atom      0.296 eV/A      4.22 GPa Nc =     100
+   scale_MAX_  :     27.871 meV/atom      3.087 eV/A     18.15 GPa Nc =     100
+ 
+    Ce       6.1730 Cf      44.9425 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2984
+ -------------------------------------------------------------------------------
+ 
+   step     93 C =            50.485856   BFGS-step =   0.006006
+ 
+ 
+   RMS (E/F/S) :     10.226 meV/atom      0.295 eV/A      4.24 GPa Nc =     100
+   MAX (E/F/S) :     25.707 meV/atom      3.064 eV/A     18.49 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :     10.226 meV/atom      0.295 eV/A      4.24 GPa Nc =     100
+   scale_MAX_  :     25.707 meV/atom      3.064 eV/A     18.49 GPa Nc =     100
+ 
+    Ce       5.7876 Cf      44.6983 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2886
+ -------------------------------------------------------------------------------
+ 
+   step     94 C =            49.792581   BFGS-step =   0.014660
+ 
+ 
+   RMS (E/F/S) :      9.770 meV/atom      0.295 eV/A      4.22 GPa Nc =     100
+   MAX (E/F/S) :     26.293 meV/atom      3.034 eV/A     19.39 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.770 meV/atom      0.295 eV/A      4.22 GPa Nc =     100
+   scale_MAX_  :     26.293 meV/atom      3.034 eV/A     19.39 GPa Nc =     100
+ 
+    Ce       5.2892 Cf      44.5033 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2895
+ -------------------------------------------------------------------------------
+ 
+   step     95 C =            48.807278   BFGS-step =   0.023276
+ 
+ 
+   RMS (E/F/S) :      9.332 meV/atom      0.293 eV/A      4.10 GPa Nc =     100
+   MAX (E/F/S) :     26.099 meV/atom      3.015 eV/A     20.87 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      9.332 meV/atom      0.293 eV/A      4.10 GPa Nc =     100
+   scale_MAX_  :     26.099 meV/atom      3.015 eV/A     20.87 GPa Nc =     100
+ 
+    Ce       4.8299 Cf      43.9773 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2863
+ -------------------------------------------------------------------------------
+ 
+   step     96 C =            47.531919   BFGS-step =   0.049576
+ 
+ 
+   RMS (E/F/S) :      8.904 meV/atom      0.290 eV/A      3.90 GPa Nc =     100
+   MAX (E/F/S) :     23.854 meV/atom      3.017 eV/A     23.14 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.904 meV/atom      0.290 eV/A      3.90 GPa Nc =     100
+   scale_MAX_  :     23.854 meV/atom      3.017 eV/A     23.14 GPa Nc =     100
+ 
+    Ce       4.3986 Cf      43.1333 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2657
+ -------------------------------------------------------------------------------
+ 
+   step     97 C =            46.987629   BFGS-step =   0.023773
+ 
+ 
+   RMS (E/F/S) :      8.857 meV/atom      0.288 eV/A      3.84 GPa Nc =     100
+   MAX (E/F/S) :     24.386 meV/atom      3.031 eV/A     23.73 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.857 meV/atom      0.288 eV/A      3.84 GPa Nc =     100
+   scale_MAX_  :     24.386 meV/atom      3.031 eV/A     23.73 GPa Nc =     100
+ 
+    Ce       4.3530 Cf      42.6347 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2790
+ -------------------------------------------------------------------------------
+ 
+   step     98 C =            46.414808   BFGS-step =   0.024366
+ 
+ 
+   RMS (E/F/S) :      8.896 meV/atom      0.286 eV/A      3.80 GPa Nc =     100
+   MAX (E/F/S) :     24.828 meV/atom      3.047 eV/A     23.69 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.896 meV/atom      0.286 eV/A      3.80 GPa Nc =     100
+   scale_MAX_  :     24.828 meV/atom      3.047 eV/A     23.69 GPa Nc =     100
+ 
+    Ce       4.3888 Cf      42.0260 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2741
+ -------------------------------------------------------------------------------
+ 
+   step     99 C =            45.366649   BFGS-step =   0.016487
+ 
+ 
+   RMS (E/F/S) :      8.783 meV/atom      0.283 eV/A      3.78 GPa Nc =     100
+   MAX (E/F/S) :     22.766 meV/atom      3.026 eV/A     22.90 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.783 meV/atom      0.283 eV/A      3.78 GPa Nc =     100
+   scale_MAX_  :     22.766 meV/atom      3.026 eV/A     22.90 GPa Nc =     100
+ 
+    Ce       4.2768 Cf      41.0899 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2759
+ -------------------------------------------------------------------------------
+ 
+   step    100 C =            44.128849   BFGS-step =   0.018113
+ 
+ 
+   RMS (E/F/S) :      8.693 meV/atom      0.279 eV/A      3.71 GPa Nc =     100
+   MAX (E/F/S) :     22.779 meV/atom      2.959 eV/A     20.75 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.693 meV/atom      0.279 eV/A      3.71 GPa Nc =     100
+   scale_MAX_  :     22.779 meV/atom      2.959 eV/A     20.75 GPa Nc =     100
+ 
+    Ce       4.1850 Cf      39.9439 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3268
+ -------------------------------------------------------------------------------
+ 
+   step    101 C =            43.383576   BFGS-step =   0.008396
+ 
+ 
+   RMS (E/F/S) :      8.724 meV/atom      0.276 eV/A      3.60 GPa Nc =     100
+   MAX (E/F/S) :     24.267 meV/atom      2.920 eV/A     19.62 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.724 meV/atom      0.276 eV/A      3.60 GPa Nc =     100
+   scale_MAX_  :     24.267 meV/atom      2.920 eV/A     19.62 GPa Nc =     100
+ 
+    Ce       4.2026 Cf      39.1810 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2532
+ -------------------------------------------------------------------------------
+ 
+   step    102 C =            42.578185   BFGS-step =   0.028316
+ 
+ 
+   RMS (E/F/S) :      8.679 meV/atom      0.274 eV/A      3.56 GPa Nc =     100
+   MAX (E/F/S) :     23.575 meV/atom      2.849 eV/A     18.21 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.679 meV/atom      0.274 eV/A      3.56 GPa Nc =     100
+   scale_MAX_  :     23.575 meV/atom      2.849 eV/A     18.21 GPa Nc =     100
+ 
+    Ce       4.1482 Cf      38.4300 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2518
+ -------------------------------------------------------------------------------
+ 
+   step    103 C =            42.180373   BFGS-step =   0.007491
+ 
+ 
+   RMS (E/F/S) :      8.537 meV/atom      0.273 eV/A      3.55 GPa Nc =     100
+   MAX (E/F/S) :     24.127 meV/atom      2.828 eV/A     18.48 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.537 meV/atom      0.273 eV/A      3.55 GPa Nc =     100
+   scale_MAX_  :     24.127 meV/atom      2.828 eV/A     18.48 GPa Nc =     100
+ 
+    Ce       3.9989 Cf      38.1814 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2576
+ -------------------------------------------------------------------------------
+ 
+   step    104 C =            41.820518   BFGS-step =   0.008195
+ 
+ 
+   RMS (E/F/S) :      8.382 meV/atom      0.272 eV/A      3.61 GPa Nc =     100
+   MAX (E/F/S) :     22.826 meV/atom      2.807 eV/A     19.08 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.382 meV/atom      0.272 eV/A      3.61 GPa Nc =     100
+   scale_MAX_  :     22.826 meV/atom      2.807 eV/A     19.08 GPa Nc =     100
+ 
+    Ce       3.8426 Cf      37.9779 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2620
+ -------------------------------------------------------------------------------
+ 
+   step    105 C =            41.460338   BFGS-step =   0.005509
+ 
+ 
+   RMS (E/F/S) :      8.316 meV/atom      0.271 eV/A      3.66 GPa Nc =     100
+   MAX (E/F/S) :     23.675 meV/atom      2.794 eV/A     19.75 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.316 meV/atom      0.271 eV/A      3.66 GPa Nc =     100
+   scale_MAX_  :     23.675 meV/atom      2.794 eV/A     19.75 GPa Nc =     100
+ 
+    Ce       3.7714 Cf      37.6889 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2667
+ -------------------------------------------------------------------------------
+ 
+   step    106 C =            41.118815   BFGS-step =   0.008578
+ 
+ 
+   RMS (E/F/S) :      8.324 meV/atom      0.270 eV/A      3.69 GPa Nc =     100
+   MAX (E/F/S) :     25.045 meV/atom      2.784 eV/A     20.10 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.324 meV/atom      0.270 eV/A      3.69 GPa Nc =     100
+   scale_MAX_  :     25.045 meV/atom      2.784 eV/A     20.10 GPa Nc =     100
+ 
+    Ce       3.7691 Cf      37.3497 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2461
+ -------------------------------------------------------------------------------
+ 
+   step    107 C =            40.662118   BFGS-step =   0.013304
+ 
+ 
+   RMS (E/F/S) :      8.306 meV/atom      0.268 eV/A      3.68 GPa Nc =     100
+   MAX (E/F/S) :     25.544 meV/atom      2.780 eV/A     20.28 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.306 meV/atom      0.268 eV/A      3.68 GPa Nc =     100
+   scale_MAX_  :     25.544 meV/atom      2.780 eV/A     20.28 GPa Nc =     100
+ 
+    Ce       3.7500 Cf      36.9121 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2508
+ -------------------------------------------------------------------------------
+ 
+   step    108 C =            39.897223   BFGS-step =   0.022473
+ 
+ 
+   RMS (E/F/S) :      8.286 meV/atom      0.266 eV/A      3.68 GPa Nc =     100
+   MAX (E/F/S) :     25.782 meV/atom      2.780 eV/A     20.33 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.286 meV/atom      0.266 eV/A      3.68 GPa Nc =     100
+   scale_MAX_  :     25.782 meV/atom      2.780 eV/A     20.33 GPa Nc =     100
+ 
+    Ce       3.7339 Cf      36.1633 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2511
+ -------------------------------------------------------------------------------
+ 
+   step    109 C =            39.132705   BFGS-step =   0.022405
+ 
+ 
+   RMS (E/F/S) :      8.353 meV/atom      0.262 eV/A      3.69 GPa Nc =     100
+   MAX (E/F/S) :     24.706 meV/atom      2.795 eV/A     20.44 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.353 meV/atom      0.262 eV/A      3.69 GPa Nc =     100
+   scale_MAX_  :     24.706 meV/atom      2.795 eV/A     20.44 GPa Nc =     100
+ 
+    Ce       3.8071 Cf      35.3256 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2500
+ -------------------------------------------------------------------------------
+ 
+   step    110 C =            38.457842   BFGS-step =   0.015571
+ 
+ 
+   RMS (E/F/S) :      8.457 meV/atom      0.260 eV/A      3.75 GPa Nc =     100
+   MAX (E/F/S) :     23.642 meV/atom      2.813 eV/A     20.67 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.457 meV/atom      0.260 eV/A      3.75 GPa Nc =     100
+   scale_MAX_  :     23.642 meV/atom      2.813 eV/A     20.67 GPa Nc =     100
+ 
+    Ce       3.9142 Cf      34.5437 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2719
+ -------------------------------------------------------------------------------
+ 
+   step    111 C =            38.111019   BFGS-step =   0.004518
+ 
+ 
+   RMS (E/F/S) :      8.408 meV/atom      0.258 eV/A      3.75 GPa Nc =     100
+   MAX (E/F/S) :     23.162 meV/atom      2.827 eV/A     21.03 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.408 meV/atom      0.258 eV/A      3.75 GPa Nc =     100
+   scale_MAX_  :     23.162 meV/atom      2.827 eV/A     21.03 GPa Nc =     100
+ 
+    Ce       3.8710 Cf      34.2400 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2617
+ -------------------------------------------------------------------------------
+ 
+   step    112 C =            37.876820   BFGS-step =   0.003167
+ 
+ 
+   RMS (E/F/S) :      8.272 meV/atom      0.258 eV/A      3.75 GPa Nc =     100
+   MAX (E/F/S) :     24.252 meV/atom      2.830 eV/A     21.45 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.272 meV/atom      0.258 eV/A      3.75 GPa Nc =     100
+   scale_MAX_  :     24.252 meV/atom      2.830 eV/A     21.45 GPa Nc =     100
+ 
+    Ce       3.7387 Cf      34.1381 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.3267
+ -------------------------------------------------------------------------------
+ 
+   step    113 C =            37.684078   BFGS-step =   0.003252
+ 
+ 
+   RMS (E/F/S) :      8.199 meV/atom      0.258 eV/A      3.84 GPa Nc =     100
+   MAX (E/F/S) :     25.649 meV/atom      2.820 eV/A     21.60 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.199 meV/atom      0.258 eV/A      3.84 GPa Nc =     100
+   scale_MAX_  :     25.649 meV/atom      2.820 eV/A     21.60 GPa Nc =     100
+ 
+    Ce       3.6621 Cf      34.0220 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2557
+ -------------------------------------------------------------------------------
+ 
+   step    114 C =            37.463925   BFGS-step =   0.009402
+ 
+ 
+   RMS (E/F/S) :      8.209 meV/atom      0.257 eV/A      3.94 GPa Nc =     100
+   MAX (E/F/S) :     27.170 meV/atom      2.802 eV/A     21.61 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.209 meV/atom      0.257 eV/A      3.94 GPa Nc =     100
+   scale_MAX_  :     27.170 meV/atom      2.802 eV/A     21.61 GPa Nc =     100
+ 
+    Ce       3.6608 Cf      33.8031 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2590
+ -------------------------------------------------------------------------------
+ 
+   step    115 C =            37.266621   BFGS-step =   0.011391
+ 
+ 
+   RMS (E/F/S) :      8.250 meV/atom      0.256 eV/A      4.09 GPa Nc =     100
+   MAX (E/F/S) :     27.807 meV/atom      2.776 eV/A     21.58 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.250 meV/atom      0.256 eV/A      4.09 GPa Nc =     100
+   scale_MAX_  :     27.807 meV/atom      2.776 eV/A     21.58 GPa Nc =     100
+ 
+    Ce       3.6917 Cf      33.5749 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.4097
+ -------------------------------------------------------------------------------
+ 
+   step    116 C =            37.051711   BFGS-step =   0.012203
+ 
+ 
+   RMS (E/F/S) :      8.191 meV/atom      0.255 eV/A      4.11 GPa Nc =     100
+   MAX (E/F/S) :     27.154 meV/atom      2.762 eV/A     22.18 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      8.191 meV/atom      0.255 eV/A      4.11 GPa Nc =     100
+   scale_MAX_  :     27.154 meV/atom      2.762 eV/A     22.18 GPa Nc =     100
+ 
+    Ce       3.6417 Cf      33.4100 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2520
+ -------------------------------------------------------------------------------
+ 
+   step    117 C =            36.478422   BFGS-step =   0.024640
+ 
+ 
+   RMS (E/F/S) :      7.928 meV/atom      0.254 eV/A      4.15 GPa Nc =     100
+   MAX (E/F/S) :     23.234 meV/atom      2.728 eV/A     23.44 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.928 meV/atom      0.254 eV/A      4.15 GPa Nc =     100
+   scale_MAX_  :     23.234 meV/atom      2.728 eV/A     23.44 GPa Nc =     100
+ 
+    Ce       3.4240 Cf      33.0544 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2555
+ -------------------------------------------------------------------------------
+ 
+   step    118 C =            35.825912   BFGS-step =   0.021413
+ 
+ 
+   RMS (E/F/S) :      7.617 meV/atom      0.252 eV/A      4.15 GPa Nc =     100
+   MAX (E/F/S) :     19.282 meV/atom      2.707 eV/A     24.10 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.617 meV/atom      0.252 eV/A      4.15 GPa Nc =     100
+   scale_MAX_  :     19.282 meV/atom      2.707 eV/A     24.10 GPa Nc =     100
+ 
+    Ce       3.1738 Cf      32.6521 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2535
+ -------------------------------------------------------------------------------
+ 
+   step    119 C =            34.910768   BFGS-step =   0.017319
+ 
+ 
+   RMS (E/F/S) :      7.344 meV/atom      0.250 eV/A      4.27 GPa Nc =     100
+   MAX (E/F/S) :     18.893 meV/atom      2.694 eV/A     25.70 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.344 meV/atom      0.250 eV/A      4.27 GPa Nc =     100
+   scale_MAX_  :     18.893 meV/atom      2.694 eV/A     25.70 GPa Nc =     100
+ 
+    Ce       2.9592 Cf      31.9516 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2471
+ -------------------------------------------------------------------------------
+ 
+   step    120 C =            34.323211   BFGS-step =   0.008776
+ 
+ 
+   RMS (E/F/S) :      7.244 meV/atom      0.248 eV/A      4.31 GPa Nc =     100
+   MAX (E/F/S) :     18.113 meV/atom      2.712 eV/A     26.08 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.244 meV/atom      0.248 eV/A      4.31 GPa Nc =     100
+   scale_MAX_  :     18.113 meV/atom      2.712 eV/A     26.08 GPa Nc =     100
+ 
+    Ce       2.8822 Cf      31.4410 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2866
+ -------------------------------------------------------------------------------
+ 
+   step    121 C =            34.105312   BFGS-step =   0.015900
+ 
+ 
+   RMS (E/F/S) :      7.273 meV/atom      0.247 eV/A      4.45 GPa Nc =     100
+   MAX (E/F/S) :     18.463 meV/atom      2.733 eV/A     27.45 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.273 meV/atom      0.247 eV/A      4.45 GPa Nc =     100
+   scale_MAX_  :     18.463 meV/atom      2.733 eV/A     27.45 GPa Nc =     100
+ 
+    Ce       2.9041 Cf      31.2012 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2510
+ -------------------------------------------------------------------------------
+ 
+   step    122 C =            34.048161   BFGS-step =   0.003729
+ 
+ 
+   RMS (E/F/S) :      7.309 meV/atom      0.246 eV/A      4.43 GPa Nc =     100
+   MAX (E/F/S) :     18.123 meV/atom      2.749 eV/A     27.17 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.309 meV/atom      0.246 eV/A      4.43 GPa Nc =     100
+   scale_MAX_  :     18.123 meV/atom      2.749 eV/A     27.17 GPa Nc =     100
+ 
+    Ce       2.9349 Cf      31.1132 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2490
+ -------------------------------------------------------------------------------
+ 
+   step    123 C =            34.024559   BFGS-step =   0.001256
+ 
+ 
+   RMS (E/F/S) :      7.344 meV/atom      0.246 eV/A      4.46 GPa Nc =     100
+   MAX (E/F/S) :     18.517 meV/atom      2.752 eV/A     27.48 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.344 meV/atom      0.246 eV/A      4.46 GPa Nc =     100
+   scale_MAX_  :     18.517 meV/atom      2.752 eV/A     27.48 GPa Nc =     100
+ 
+    Ce       2.9626 Cf      31.0619 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2472
+ -------------------------------------------------------------------------------
+ 
+   step    124 C =            33.972634   BFGS-step =   0.003764
+ 
+ 
+   RMS (E/F/S) :      7.415 meV/atom      0.246 eV/A      4.50 GPa Nc =     100
+   MAX (E/F/S) :     18.914 meV/atom      2.751 eV/A     27.92 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.415 meV/atom      0.246 eV/A      4.50 GPa Nc =     100
+   scale_MAX_  :     18.914 meV/atom      2.751 eV/A     27.92 GPa Nc =     100
+ 
+    Ce       3.0196 Cf      30.9531 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2471
+ -------------------------------------------------------------------------------
+ 
+   step    125 C =            33.863412   BFGS-step =   0.009038
+ 
+ 
+   RMS (E/F/S) :      7.524 meV/atom      0.245 eV/A      4.55 GPa Nc =     100
+   MAX (E/F/S) :     19.635 meV/atom      2.751 eV/A     28.50 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.524 meV/atom      0.245 eV/A      4.55 GPa Nc =     100
+   scale_MAX_  :     19.635 meV/atom      2.751 eV/A     28.50 GPa Nc =     100
+ 
+    Ce       3.1083 Cf      30.7551 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2484
+ -------------------------------------------------------------------------------
+ 
+   step    126 C =            33.652235   BFGS-step =   0.019069
+ 
+ 
+   RMS (E/F/S) :      7.698 meV/atom      0.244 eV/A      4.60 GPa Nc =     100
+   MAX (E/F/S) :     20.147 meV/atom      2.744 eV/A     29.15 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.698 meV/atom      0.244 eV/A      4.60 GPa Nc =     100
+   scale_MAX_  :     20.147 meV/atom      2.744 eV/A     29.15 GPa Nc =     100
+ 
+    Ce       3.2520 Cf      30.4003 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2515
+ -------------------------------------------------------------------------------
+ 
+   step    127 C =            33.308350   BFGS-step =   0.026350
+ 
+ 
+   RMS (E/F/S) :      7.870 meV/atom      0.242 eV/A      4.62 GPa Nc =     100
+   MAX (E/F/S) :     20.825 meV/atom      2.736 eV/A     29.65 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.870 meV/atom      0.242 eV/A      4.62 GPa Nc =     100
+   scale_MAX_  :     20.825 meV/atom      2.736 eV/A     29.65 GPa Nc =     100
+ 
+    Ce       3.3946 Cf      29.9137 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2481
+ -------------------------------------------------------------------------------
+ 
+   step    128 C =            32.804762   BFGS-step =   0.034476
+ 
+ 
+   RMS (E/F/S) :      7.996 meV/atom      0.239 eV/A      4.60 GPa Nc =     100
+   MAX (E/F/S) :     20.406 meV/atom      2.717 eV/A     30.06 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.996 meV/atom      0.239 eV/A      4.60 GPa Nc =     100
+   scale_MAX_  :     20.406 meV/atom      2.717 eV/A     30.06 GPa Nc =     100
+ 
+    Ce       3.4913 Cf      29.3135 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2497
+ -------------------------------------------------------------------------------
+ 
+   step    129 C =            32.278528   BFGS-step =   0.022752
+ 
+ 
+   RMS (E/F/S) :      7.997 meV/atom      0.237 eV/A      4.61 GPa Nc =     100
+   MAX (E/F/S) :     23.812 meV/atom      2.708 eV/A     30.70 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.997 meV/atom      0.237 eV/A      4.61 GPa Nc =     100
+   scale_MAX_  :     23.812 meV/atom      2.708 eV/A     30.70 GPa Nc =     100
+ 
+    Ce       3.4717 Cf      28.8068 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2484
+ -------------------------------------------------------------------------------
+ 
+   step    130 C =            31.884070   BFGS-step =   0.012120
+ 
+ 
+   RMS (E/F/S) :      7.772 meV/atom      0.236 eV/A      4.61 GPa Nc =     100
+   MAX (E/F/S) :     25.143 meV/atom      2.691 eV/A     31.39 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.772 meV/atom      0.236 eV/A      4.61 GPa Nc =     100
+   scale_MAX_  :     25.143 meV/atom      2.691 eV/A     31.39 GPa Nc =     100
+ 
+    Ce       3.2674 Cf      28.6167 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2507
+ -------------------------------------------------------------------------------
+ 
+   step    131 C =            31.647418   BFGS-step =   0.016453
+ 
+ 
+   RMS (E/F/S) :      7.520 meV/atom      0.236 eV/A      4.71 GPa Nc =     100
+   MAX (E/F/S) :     21.963 meV/atom      2.695 eV/A     32.73 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.520 meV/atom      0.236 eV/A      4.71 GPa Nc =     100
+   scale_MAX_  :     21.963 meV/atom      2.695 eV/A     32.73 GPa Nc =     100
+ 
+    Ce       3.0623 Cf      28.5852 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2486
+ -------------------------------------------------------------------------------
+ 
+   step    132 C =            31.554926   BFGS-step =   0.009562
+ 
+ 
+   RMS (E/F/S) :      7.393 meV/atom      0.236 eV/A      4.78 GPa Nc =     100
+   MAX (E/F/S) :     19.307 meV/atom      2.697 eV/A     33.69 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.393 meV/atom      0.236 eV/A      4.78 GPa Nc =     100
+   scale_MAX_  :     19.307 meV/atom      2.697 eV/A     33.69 GPa Nc =     100
+ 
+    Ce       2.9656 Cf      28.5893 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2508
+ -------------------------------------------------------------------------------
+ 
+   step    133 C =            31.512875   BFGS-step =   0.006475
+ 
+ 
+   RMS (E/F/S) :      7.387 meV/atom      0.236 eV/A      4.88 GPa Nc =     100
+   MAX (E/F/S) :     19.856 meV/atom      2.699 eV/A     34.68 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.387 meV/atom      0.236 eV/A      4.88 GPa Nc =     100
+   scale_MAX_  :     19.856 meV/atom      2.699 eV/A     34.68 GPa Nc =     100
+ 
+    Ce       2.9638 Cf      28.5490 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2497
+ -------------------------------------------------------------------------------
+ 
+   step    134 C =            31.462499   BFGS-step =   0.002351
+ 
+ 
+   RMS (E/F/S) :      7.430 meV/atom      0.236 eV/A      4.94 GPa Nc =     100
+   MAX (E/F/S) :     20.588 meV/atom      2.697 eV/A     35.42 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.430 meV/atom      0.236 eV/A      4.94 GPa Nc =     100
+   scale_MAX_  :     20.588 meV/atom      2.697 eV/A     35.42 GPa Nc =     100
+ 
+    Ce       2.9992 Cf      28.4633 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2528
+ -------------------------------------------------------------------------------
+ 
+   step    135 C =            31.317884   BFGS-step =   0.006698
+ 
+ 
+   RMS (E/F/S) :      7.504 meV/atom      0.235 eV/A      5.04 GPa Nc =     100
+   MAX (E/F/S) :     21.654 meV/atom      2.682 eV/A     36.54 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.504 meV/atom      0.235 eV/A      5.04 GPa Nc =     100
+   scale_MAX_  :     21.654 meV/atom      2.682 eV/A     36.54 GPa Nc =     100
+ 
+    Ce       3.0615 Cf      28.2564 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2497
+ -------------------------------------------------------------------------------
+ 
+   step    136 C =            31.050182   BFGS-step =   0.015768
+ 
+ 
+   RMS (E/F/S) :      7.606 meV/atom      0.233 eV/A      5.12 GPa Nc =     100
+   MAX (E/F/S) :     22.893 meV/atom      2.644 eV/A     37.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.606 meV/atom      0.233 eV/A      5.12 GPa Nc =     100
+   scale_MAX_  :     22.893 meV/atom      2.644 eV/A     37.59 GPa Nc =     100
+ 
+    Ce       3.1500 Cf      27.9002 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2497
+ -------------------------------------------------------------------------------
+ 
+   step    137 C =            30.597091   BFGS-step =   0.020034
+ 
+ 
+   RMS (E/F/S) :      7.619 meV/atom      0.232 eV/A      5.06 GPa Nc =     100
+   MAX (E/F/S) :     23.392 meV/atom      2.569 eV/A     37.29 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.619 meV/atom      0.232 eV/A      5.06 GPa Nc =     100
+   scale_MAX_  :     23.392 meV/atom      2.569 eV/A     37.29 GPa Nc =     100
+ 
+    Ce       3.1675 Cf      27.4296 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2735
+ -------------------------------------------------------------------------------
+ 
+   step    138 C =            29.979933   BFGS-step =   0.026983
+ 
+ 
+   RMS (E/F/S) :      7.503 meV/atom      0.229 eV/A      4.85 GPa Nc =     100
+   MAX (E/F/S) :     22.522 meV/atom      2.447 eV/A     35.16 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.503 meV/atom      0.229 eV/A      4.85 GPa Nc =     100
+   scale_MAX_  :     22.522 meV/atom      2.447 eV/A     35.16 GPa Nc =     100
+ 
+    Ce       3.0767 Cf      26.9033 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2603
+ -------------------------------------------------------------------------------
+ 
+   step    139 C =            29.506530   BFGS-step =   0.012900
+ 
+ 
+   RMS (E/F/S) :      7.261 meV/atom      0.228 eV/A      4.49 GPa Nc =     100
+   MAX (E/F/S) :     20.157 meV/atom      2.335 eV/A     30.35 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.261 meV/atom      0.228 eV/A      4.49 GPa Nc =     100
+   scale_MAX_  :     20.157 meV/atom      2.335 eV/A     30.35 GPa Nc =     100
+ 
+    Ce       2.8840 Cf      26.6225 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2509
+ -------------------------------------------------------------------------------
+ 
+   step    140 C =            29.279667   BFGS-step =   0.007951
+ 
+ 
+   RMS (E/F/S) :      7.069 meV/atom      0.228 eV/A      4.36 GPa Nc =     100
+   MAX (E/F/S) :     19.455 meV/atom      2.288 eV/A     27.94 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.069 meV/atom      0.228 eV/A      4.36 GPa Nc =     100
+   scale_MAX_  :     19.455 meV/atom      2.288 eV/A     27.94 GPa Nc =     100
+ 
+    Ce       2.7305 Cf      26.5492 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2939
+ -------------------------------------------------------------------------------
+ 
+   step    141 C =            29.172483   BFGS-step =   0.013175
+ 
+ 
+   RMS (E/F/S) :      6.958 meV/atom      0.228 eV/A      4.22 GPa Nc =     100
+   MAX (E/F/S) :     19.216 meV/atom      2.307 eV/A     25.93 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.958 meV/atom      0.228 eV/A      4.22 GPa Nc =     100
+   scale_MAX_  :     19.216 meV/atom      2.307 eV/A     25.93 GPa Nc =     100
+ 
+    Ce       2.6445 Cf      26.5279 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2598
+ -------------------------------------------------------------------------------
+ 
+   step    142 C =            29.139274   BFGS-step =   0.008090
+ 
+ 
+   RMS (E/F/S) :      6.936 meV/atom      0.228 eV/A      4.21 GPa Nc =     100
+   MAX (E/F/S) :     19.379 meV/atom      2.328 eV/A     25.81 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.936 meV/atom      0.228 eV/A      4.21 GPa Nc =     100
+   scale_MAX_  :     19.379 meV/atom      2.328 eV/A     25.81 GPa Nc =     100
+ 
+    Ce       2.6261 Cf      26.5132 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2944
+ -------------------------------------------------------------------------------
+ 
+   step    143 C =            29.113215   BFGS-step =   0.002669
+ 
+ 
+   RMS (E/F/S) :      6.949 meV/atom      0.228 eV/A      4.19 GPa Nc =     100
+   MAX (E/F/S) :     19.489 meV/atom      2.334 eV/A     25.68 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.949 meV/atom      0.228 eV/A      4.19 GPa Nc =     100
+   scale_MAX_  :     19.489 meV/atom      2.334 eV/A     25.68 GPa Nc =     100
+ 
+    Ce       2.6349 Cf      26.4783 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2766
+ -------------------------------------------------------------------------------
+ 
+   step    144 C =            29.076799   BFGS-step =   0.001752
+ 
+ 
+   RMS (E/F/S) :      6.969 meV/atom      0.227 eV/A      4.18 GPa Nc =     100
+   MAX (E/F/S) :     19.629 meV/atom      2.326 eV/A     25.45 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.969 meV/atom      0.227 eV/A      4.18 GPa Nc =     100
+   scale_MAX_  :     19.629 meV/atom      2.326 eV/A     25.45 GPa Nc =     100
+ 
+    Ce       2.6492 Cf      26.4276 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2676
+ -------------------------------------------------------------------------------
+ 
+   step    145 C =            29.026458   BFGS-step =   0.006326
+ 
+ 
+   RMS (E/F/S) :      6.999 meV/atom      0.227 eV/A      4.17 GPa Nc =     100
+   MAX (E/F/S) :     19.738 meV/atom      2.300 eV/A     25.09 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.999 meV/atom      0.227 eV/A      4.17 GPa Nc =     100
+   scale_MAX_  :     19.738 meV/atom      2.300 eV/A     25.09 GPa Nc =     100
+ 
+    Ce       2.6723 Cf      26.3542 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2626
+ -------------------------------------------------------------------------------
+ 
+   step    146 C =            28.954024   BFGS-step =   0.008736
+ 
+ 
+   RMS (E/F/S) :      7.009 meV/atom      0.227 eV/A      4.17 GPa Nc =     100
+   MAX (E/F/S) :     19.774 meV/atom      2.265 eV/A     24.73 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      7.009 meV/atom      0.227 eV/A      4.17 GPa Nc =     100
+   scale_MAX_  :     19.774 meV/atom      2.265 eV/A     24.73 GPa Nc =     100
+ 
+    Ce       2.6802 Cf      26.2739 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2618
+ -------------------------------------------------------------------------------
+ 
+   step    147 C =            28.797699   BFGS-step =   0.018155
+ 
+ 
+   RMS (E/F/S) :      6.994 meV/atom      0.226 eV/A      4.15 GPa Nc =     100
+   MAX (E/F/S) :     19.666 meV/atom      2.193 eV/A     24.05 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.994 meV/atom      0.226 eV/A      4.15 GPa Nc =     100
+   scale_MAX_  :     19.666 meV/atom      2.193 eV/A     24.05 GPa Nc =     100
+ 
+    Ce       2.6700 Cf      26.1277 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2591
+ -------------------------------------------------------------------------------
+ 
+   step    148 C =            28.526320   BFGS-step =   0.022753
+ 
+ 
+   RMS (E/F/S) :      6.924 meV/atom      0.225 eV/A      4.14 GPa Nc =     100
+   MAX (E/F/S) :     19.379 meV/atom      2.095 eV/A     23.08 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.924 meV/atom      0.225 eV/A      4.14 GPa Nc =     100
+   scale_MAX_  :     19.379 meV/atom      2.095 eV/A     23.08 GPa Nc =     100
+ 
+    Ce       2.6188 Cf      25.9076 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2485
+ -------------------------------------------------------------------------------
+ 
+   step    149 C =            28.032234   BFGS-step =   0.035097
+ 
+ 
+   RMS (E/F/S) :      6.784 meV/atom      0.224 eV/A      4.13 GPa Nc =     100
+   MAX (E/F/S) :     18.542 meV/atom      1.935 eV/A     21.30 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.784 meV/atom      0.224 eV/A      4.13 GPa Nc =     100
+   scale_MAX_  :     18.542 meV/atom      1.935 eV/A     21.30 GPa Nc =     100
+ 
+    Ce       2.5196 Cf      25.5127 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2562
+ -------------------------------------------------------------------------------
+ 
+   step    150 C =            27.551041   BFGS-step =   0.021942
+ 
+ 
+   RMS (E/F/S) :      6.663 meV/atom      0.222 eV/A      4.14 GPa Nc =     100
+   MAX (E/F/S) :     17.801 meV/atom      1.876 eV/A     19.77 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.663 meV/atom      0.222 eV/A      4.14 GPa Nc =     100
+   scale_MAX_  :     17.801 meV/atom      1.876 eV/A     19.77 GPa Nc =     100
+ 
+    Ce       2.4356 Cf      25.1155 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2582
+ -------------------------------------------------------------------------------
+ 
+   step    151 C =            27.276551   BFGS-step =   0.014628
+ 
+ 
+   RMS (E/F/S) :      6.647 meV/atom      0.221 eV/A      4.10 GPa Nc =     100
+   MAX (E/F/S) :     18.096 meV/atom      1.865 eV/A     18.71 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.647 meV/atom      0.221 eV/A      4.10 GPa Nc =     100
+   scale_MAX_  :     18.096 meV/atom      1.865 eV/A     18.71 GPa Nc =     100
+ 
+    Ce       2.4287 Cf      24.8479 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2584
+ -------------------------------------------------------------------------------
+ 
+   step    152 C =            27.191833   BFGS-step =   0.022464
+ 
+ 
+   RMS (E/F/S) :      6.566 meV/atom      0.220 eV/A      4.06 GPa Nc =     100
+   MAX (E/F/S) :     17.253 meV/atom      1.826 eV/A     19.14 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.566 meV/atom      0.220 eV/A      4.06 GPa Nc =     100
+   scale_MAX_  :     17.253 meV/atom      1.826 eV/A     19.14 GPa Nc =     100
+ 
+    Ce       2.3726 Cf      24.8192 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2540
+ -------------------------------------------------------------------------------
+ 
+   step    153 C =            27.131721   BFGS-step =   0.004065
+ 
+ 
+   RMS (E/F/S) :      6.534 meV/atom      0.220 eV/A      4.04 GPa Nc =     100
+   MAX (E/F/S) :     17.734 meV/atom      1.850 eV/A     19.15 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.534 meV/atom      0.220 eV/A      4.04 GPa Nc =     100
+   scale_MAX_  :     17.734 meV/atom      1.850 eV/A     19.15 GPa Nc =     100
+ 
+    Ce       2.3495 Cf      24.7823 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2567
+ -------------------------------------------------------------------------------
+ 
+   step    154 C =            27.104689   BFGS-step =   0.004116
+ 
+ 
+   RMS (E/F/S) :      6.534 meV/atom      0.220 eV/A      4.05 GPa Nc =     100
+   MAX (E/F/S) :     17.996 meV/atom      1.869 eV/A     19.26 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.534 meV/atom      0.220 eV/A      4.05 GPa Nc =     100
+   scale_MAX_  :     17.996 meV/atom      1.869 eV/A     19.26 GPa Nc =     100
+ 
+    Ce       2.3493 Cf      24.7554 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2500
+ -------------------------------------------------------------------------------
+ 
+   step    155 C =            27.072786   BFGS-step =   0.006089
+ 
+ 
+   RMS (E/F/S) :      6.525 meV/atom      0.220 eV/A      4.06 GPa Nc =     100
+   MAX (E/F/S) :     18.247 meV/atom      1.883 eV/A     19.39 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.525 meV/atom      0.220 eV/A      4.06 GPa Nc =     100
+   scale_MAX_  :     18.247 meV/atom      1.883 eV/A     19.39 GPa Nc =     100
+ 
+    Ce       2.3433 Cf      24.7295 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2521
+ -------------------------------------------------------------------------------
+ 
+   step    156 C =            27.026910   BFGS-step =   0.004820
+ 
+ 
+   RMS (E/F/S) :      6.529 meV/atom      0.220 eV/A      4.09 GPa Nc =     100
+   MAX (E/F/S) :     18.469 meV/atom      1.884 eV/A     19.47 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.529 meV/atom      0.220 eV/A      4.09 GPa Nc =     100
+   scale_MAX_  :     18.469 meV/atom      1.884 eV/A     19.47 GPa Nc =     100
+ 
+    Ce       2.3466 Cf      24.6803 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2596
+ -------------------------------------------------------------------------------
+ 
+   step    157 C =            26.890322   BFGS-step =   0.005676
+ 
+ 
+   RMS (E/F/S) :      6.502 meV/atom      0.219 eV/A      4.14 GPa Nc =     100
+   MAX (E/F/S) :     18.520 meV/atom      1.863 eV/A     19.53 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.502 meV/atom      0.219 eV/A      4.14 GPa Nc =     100
+   scale_MAX_  :     18.520 meV/atom      1.863 eV/A     19.53 GPa Nc =     100
+ 
+    Ce       2.3267 Cf      24.5637 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2615
+ -------------------------------------------------------------------------------
+ 
+   step    158 C =            26.447483   BFGS-step =   0.023517
+ 
+ 
+   RMS (E/F/S) :      6.391 meV/atom      0.218 eV/A      4.26 GPa Nc =     100
+   MAX (E/F/S) :     18.044 meV/atom      1.779 eV/A     19.66 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.391 meV/atom      0.218 eV/A      4.26 GPa Nc =     100
+   scale_MAX_  :     18.044 meV/atom      1.779 eV/A     19.66 GPa Nc =     100
+ 
+    Ce       2.2450 Cf      24.2025 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2485
+ -------------------------------------------------------------------------------
+ 
+   step    159 C =            26.014519   BFGS-step =   0.030675
+ 
+ 
+   RMS (E/F/S) :      6.205 meV/atom      0.216 eV/A      4.34 GPa Nc =     100
+   MAX (E/F/S) :     17.191 meV/atom      1.684 eV/A     19.86 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.205 meV/atom      0.216 eV/A      4.34 GPa Nc =     100
+   scale_MAX_  :     17.191 meV/atom      1.684 eV/A     19.86 GPa Nc =     100
+ 
+    Ce       2.1129 Cf      23.9016 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2546
+ -------------------------------------------------------------------------------
+ 
+   step    160 C =            25.433012   BFGS-step =   0.047043
+ 
+ 
+   RMS (E/F/S) :      6.265 meV/atom      0.214 eV/A      4.37 GPa Nc =     100
+   MAX (E/F/S) :     16.598 meV/atom      1.573 eV/A     19.73 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.265 meV/atom      0.214 eV/A      4.37 GPa Nc =     100
+   scale_MAX_  :     16.598 meV/atom      1.573 eV/A     19.73 GPa Nc =     100
+ 
+    Ce       2.1504 Cf      23.2826 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2929
+ -------------------------------------------------------------------------------
+ 
+   step    161 C =            24.960768   BFGS-step =   0.026198
+ 
+ 
+   RMS (E/F/S) :      6.197 meV/atom      0.212 eV/A      4.28 GPa Nc =     100
+   MAX (E/F/S) :     15.548 meV/atom      1.540 eV/A     20.10 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.197 meV/atom      0.212 eV/A      4.28 GPa Nc =     100
+   scale_MAX_  :     15.548 meV/atom      1.540 eV/A     20.10 GPa Nc =     100
+ 
+    Ce       2.1014 Cf      22.8593 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2613
+ -------------------------------------------------------------------------------
+ 
+   step    162 C =            24.701041   BFGS-step =   0.019185
+ 
+ 
+   RMS (E/F/S) :      6.312 meV/atom      0.210 eV/A      4.24 GPa Nc =     100
+   MAX (E/F/S) :     16.127 meV/atom      1.519 eV/A     20.03 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.312 meV/atom      0.210 eV/A      4.24 GPa Nc =     100
+   scale_MAX_  :     16.127 meV/atom      1.519 eV/A     20.03 GPa Nc =     100
+ 
+    Ce       2.1778 Cf      22.5233 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2624
+ -------------------------------------------------------------------------------
+ 
+   step    163 C =            24.462228   BFGS-step =   0.010769
+ 
+ 
+   RMS (E/F/S) :      6.333 meV/atom      0.209 eV/A      4.09 GPa Nc =     100
+   MAX (E/F/S) :     16.107 meV/atom      1.493 eV/A     19.29 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.333 meV/atom      0.209 eV/A      4.09 GPa Nc =     100
+   scale_MAX_  :     16.107 meV/atom      1.493 eV/A     19.29 GPa Nc =     100
+ 
+    Ce       2.1905 Cf      22.2717 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2609
+ -------------------------------------------------------------------------------
+ 
+   step    164 C =            24.205269   BFGS-step =   0.011388
+ 
+ 
+   RMS (E/F/S) :      6.395 meV/atom      0.208 eV/A      4.08 GPa Nc =     100
+   MAX (E/F/S) :     17.200 meV/atom      1.494 eV/A     19.85 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.395 meV/atom      0.208 eV/A      4.08 GPa Nc =     100
+   scale_MAX_  :     17.200 meV/atom      1.494 eV/A     19.85 GPa Nc =     100
+ 
+    Ce       2.2345 Cf      21.9708 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2494
+ -------------------------------------------------------------------------------
+ 
+   step    165 C =            23.790261   BFGS-step =   0.023222
+ 
+ 
+   RMS (E/F/S) :      6.349 meV/atom      0.206 eV/A      4.06 GPa Nc =     100
+   MAX (E/F/S) :     17.753 meV/atom      1.515 eV/A     20.50 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.349 meV/atom      0.206 eV/A      4.06 GPa Nc =     100
+   scale_MAX_  :     17.753 meV/atom      1.515 eV/A     20.50 GPa Nc =     100
+ 
+    Ce       2.2052 Cf      21.5850 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2510
+ -------------------------------------------------------------------------------
+ 
+   step    166 C =            23.348000   BFGS-step =   0.024120
+ 
+ 
+   RMS (E/F/S) :      6.348 meV/atom      0.204 eV/A      4.19 GPa Nc =     100
+   MAX (E/F/S) :     16.158 meV/atom      1.566 eV/A     23.49 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.348 meV/atom      0.204 eV/A      4.19 GPa Nc =     100
+   scale_MAX_  :     16.158 meV/atom      1.566 eV/A     23.49 GPa Nc =     100
+ 
+    Ce       2.2071 Cf      21.1409 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2531
+ -------------------------------------------------------------------------------
+ 
+   step    167 C =            23.213216   BFGS-step =   0.014000
+ 
+ 
+   RMS (E/F/S) :      6.337 meV/atom      0.203 eV/A      4.26 GPa Nc =     100
+   MAX (E/F/S) :     16.690 meV/atom      1.579 eV/A     24.43 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.337 meV/atom      0.203 eV/A      4.26 GPa Nc =     100
+   scale_MAX_  :     16.690 meV/atom      1.579 eV/A     24.43 GPa Nc =     100
+ 
+    Ce       2.1978 Cf      21.0154 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2624
+ -------------------------------------------------------------------------------
+ 
+   step    168 C =            23.152194   BFGS-step =   0.015449
+ 
+ 
+   RMS (E/F/S) :      6.371 meV/atom      0.203 eV/A      4.30 GPa Nc =     100
+   MAX (E/F/S) :     16.326 meV/atom      1.579 eV/A     25.00 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.371 meV/atom      0.203 eV/A      4.30 GPa Nc =     100
+   scale_MAX_  :     16.326 meV/atom      1.579 eV/A     25.00 GPa Nc =     100
+ 
+    Ce       2.2209 Cf      20.9313 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2660
+ -------------------------------------------------------------------------------
+ 
+   step    169 C =            23.127310   BFGS-step =   0.010461
+ 
+ 
+   RMS (E/F/S) :      6.406 meV/atom      0.203 eV/A      4.32 GPa Nc =     100
+   MAX (E/F/S) :     16.274 meV/atom      1.581 eV/A     25.32 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.406 meV/atom      0.203 eV/A      4.32 GPa Nc =     100
+   scale_MAX_  :     16.274 meV/atom      1.581 eV/A     25.32 GPa Nc =     100
+ 
+    Ce       2.2454 Cf      20.8819 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2648
+ -------------------------------------------------------------------------------
+ 
+   step    170 C =            23.107774   BFGS-step =   0.005727
+ 
+ 
+   RMS (E/F/S) :      6.414 meV/atom      0.203 eV/A      4.33 GPa Nc =     100
+   MAX (E/F/S) :     16.336 meV/atom      1.586 eV/A     25.46 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.414 meV/atom      0.203 eV/A      4.33 GPa Nc =     100
+   scale_MAX_  :     16.336 meV/atom      1.586 eV/A     25.46 GPa Nc =     100
+ 
+    Ce       2.2512 Cf      20.8566 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2622
+ -------------------------------------------------------------------------------
+ 
+   step    171 C =            23.089552   BFGS-step =   0.004265
+ 
+ 
+   RMS (E/F/S) :      6.411 meV/atom      0.202 eV/A      4.34 GPa Nc =     100
+   MAX (E/F/S) :     16.496 meV/atom      1.591 eV/A     25.47 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.411 meV/atom      0.202 eV/A      4.34 GPa Nc =     100
+   scale_MAX_  :     16.496 meV/atom      1.591 eV/A     25.47 GPa Nc =     100
+ 
+    Ce       2.2495 Cf      20.8400 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2566
+ -------------------------------------------------------------------------------
+ 
+   step    172 C =            23.069369   BFGS-step =   0.001868
+ 
+ 
+   RMS (E/F/S) :      6.395 meV/atom      0.202 eV/A      4.35 GPa Nc =     100
+   MAX (E/F/S) :     16.550 meV/atom      1.592 eV/A     25.40 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.395 meV/atom      0.202 eV/A      4.35 GPa Nc =     100
+   scale_MAX_  :     16.550 meV/atom      1.592 eV/A     25.40 GPa Nc =     100
+ 
+    Ce       2.2384 Cf      20.8309 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2495
+ -------------------------------------------------------------------------------
+ 
+   step    173 C =            23.029154   BFGS-step =   0.003147
+ 
+ 
+   RMS (E/F/S) :      6.376 meV/atom      0.202 eV/A      4.34 GPa Nc =     100
+   MAX (E/F/S) :     16.630 meV/atom      1.587 eV/A     25.23 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.376 meV/atom      0.202 eV/A      4.34 GPa Nc =     100
+   scale_MAX_  :     16.630 meV/atom      1.587 eV/A     25.23 GPa Nc =     100
+ 
+    Ce       2.2253 Cf      20.8039 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2489
+ -------------------------------------------------------------------------------
+ 
+   step    174 C =            22.960374   BFGS-step =   0.003093
+ 
+ 
+   RMS (E/F/S) :      6.356 meV/atom      0.202 eV/A      4.32 GPa Nc =     100
+   MAX (E/F/S) :     16.443 meV/atom      1.575 eV/A     25.00 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.356 meV/atom      0.202 eV/A      4.32 GPa Nc =     100
+   scale_MAX_  :     16.443 meV/atom      1.575 eV/A     25.00 GPa Nc =     100
+ 
+    Ce       2.2117 Cf      20.7487 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2495
+ -------------------------------------------------------------------------------
+ 
+   step    175 C =            22.774576   BFGS-step =   0.014779
+ 
+ 
+   RMS (E/F/S) :      6.342 meV/atom      0.201 eV/A      4.23 GPa Nc =     100
+   MAX (E/F/S) :     15.882 meV/atom      1.532 eV/A     24.38 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.342 meV/atom      0.201 eV/A      4.23 GPa Nc =     100
+   scale_MAX_  :     15.882 meV/atom      1.532 eV/A     24.38 GPa Nc =     100
+ 
+    Ce       2.2027 Cf      20.5719 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2493
+ -------------------------------------------------------------------------------
+ 
+   step    176 C =            22.557159   BFGS-step =   0.020295
+ 
+ 
+   RMS (E/F/S) :      6.330 meV/atom      0.200 eV/A      4.09 GPa Nc =     100
+   MAX (E/F/S) :     14.832 meV/atom      1.485 eV/A     23.56 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.330 meV/atom      0.200 eV/A      4.09 GPa Nc =     100
+   scale_MAX_  :     14.832 meV/atom      1.485 eV/A     23.56 GPa Nc =     100
+ 
+    Ce       2.1954 Cf      20.3618 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2561
+ -------------------------------------------------------------------------------
+ 
+   step    177 C =            22.230346   BFGS-step =   0.044626
+ 
+ 
+   RMS (E/F/S) :      6.352 meV/atom      0.199 eV/A      3.87 GPa Nc =     100
+   MAX (E/F/S) :     15.292 meV/atom      1.422 eV/A     22.28 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.352 meV/atom      0.199 eV/A      3.87 GPa Nc =     100
+   scale_MAX_  :     15.292 meV/atom      1.422 eV/A     22.28 GPa Nc =     100
+ 
+    Ce       2.2135 Cf      20.0169 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2609
+ -------------------------------------------------------------------------------
+ 
+   step    178 C =            21.955229   BFGS-step =   0.028725
+ 
+ 
+   RMS (E/F/S) :      6.366 meV/atom      0.197 eV/A      3.65 GPa Nc =     100
+   MAX (E/F/S) :     16.927 meV/atom      1.379 eV/A     20.30 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.366 meV/atom      0.197 eV/A      3.65 GPa Nc =     100
+   scale_MAX_  :     16.927 meV/atom      1.379 eV/A     20.30 GPa Nc =     100
+ 
+    Ce       2.2280 Cf      19.7272 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2625
+ -------------------------------------------------------------------------------
+ 
+   step    179 C =            21.765101   BFGS-step =   0.040450
+ 
+ 
+   RMS (E/F/S) :      6.420 meV/atom      0.196 eV/A      3.57 GPa Nc =     100
+   MAX (E/F/S) :     16.874 meV/atom      1.429 eV/A     20.54 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.420 meV/atom      0.196 eV/A      3.57 GPa Nc =     100
+   scale_MAX_  :     16.874 meV/atom      1.429 eV/A     20.54 GPa Nc =     100
+ 
+    Ce       2.2661 Cf      19.4990 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2620
+ -------------------------------------------------------------------------------
+ 
+   step    180 C =            21.640574   BFGS-step =   0.007896
+ 
+ 
+   RMS (E/F/S) :      6.328 meV/atom      0.196 eV/A      3.58 GPa Nc =     100
+   MAX (E/F/S) :     16.993 meV/atom      1.409 eV/A     21.50 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.328 meV/atom      0.196 eV/A      3.58 GPa Nc =     100
+   scale_MAX_  :     16.993 meV/atom      1.409 eV/A     21.50 GPa Nc =     100
+ 
+    Ce       2.2016 Cf      19.4389 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2919
+ -------------------------------------------------------------------------------
+ 
+   step    181 C =            21.611661   BFGS-step =   0.009093
+ 
+ 
+   RMS (E/F/S) :      6.309 meV/atom      0.196 eV/A      3.59 GPa Nc =     100
+   MAX (E/F/S) :     17.153 meV/atom      1.429 eV/A     21.52 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.309 meV/atom      0.196 eV/A      3.59 GPa Nc =     100
+   scale_MAX_  :     17.153 meV/atom      1.429 eV/A     21.52 GPa Nc =     100
+ 
+    Ce       2.1886 Cf      19.4231 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2494
+ -------------------------------------------------------------------------------
+ 
+   step    182 C =            21.588926   BFGS-step =   0.002817
+ 
+ 
+   RMS (E/F/S) :      6.280 meV/atom      0.196 eV/A      3.60 GPa Nc =     100
+   MAX (E/F/S) :     16.743 meV/atom      1.427 eV/A     21.82 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.280 meV/atom      0.196 eV/A      3.60 GPa Nc =     100
+   scale_MAX_  :     16.743 meV/atom      1.427 eV/A     21.82 GPa Nc =     100
+ 
+    Ce       2.1672 Cf      19.4218 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2631
+ -------------------------------------------------------------------------------
+ 
+   step    183 C =            21.579679   BFGS-step =   0.001928
+ 
+ 
+   RMS (E/F/S) :      6.284 meV/atom      0.196 eV/A      3.60 GPa Nc =     100
+   MAX (E/F/S) :     16.630 meV/atom      1.417 eV/A     21.96 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.284 meV/atom      0.196 eV/A      3.60 GPa Nc =     100
+   scale_MAX_  :     16.630 meV/atom      1.417 eV/A     21.96 GPa Nc =     100
+ 
+    Ce       2.1695 Cf      19.4102 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2643
+ -------------------------------------------------------------------------------
+ 
+   step    184 C =            21.571853   BFGS-step =   0.002586
+ 
+ 
+   RMS (E/F/S) :      6.308 meV/atom      0.195 eV/A      3.59 GPa Nc =     100
+   MAX (E/F/S) :     16.619 meV/atom      1.405 eV/A     21.98 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.308 meV/atom      0.195 eV/A      3.59 GPa Nc =     100
+   scale_MAX_  :     16.619 meV/atom      1.405 eV/A     21.98 GPa Nc =     100
+ 
+    Ce       2.1855 Cf      19.3864 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2545
+ -------------------------------------------------------------------------------
+ 
+   step    185 C =            21.542137   BFGS-step =   0.001650
+ 
+ 
+   RMS (E/F/S) :      6.316 meV/atom      0.195 eV/A      3.58 GPa Nc =     100
+   MAX (E/F/S) :     16.593 meV/atom      1.394 eV/A     21.88 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.316 meV/atom      0.195 eV/A      3.58 GPa Nc =     100
+   scale_MAX_  :     16.593 meV/atom      1.394 eV/A     21.88 GPa Nc =     100
+ 
+    Ce       2.1911 Cf      19.3510 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2530
+ -------------------------------------------------------------------------------
+ 
+   step    186 C =            21.271488   BFGS-step =   0.012729
+ 
+ 
+   RMS (E/F/S) :      6.373 meV/atom      0.194 eV/A      3.48 GPa Nc =     100
+   MAX (E/F/S) :     16.274 meV/atom      1.291 eV/A     20.22 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.373 meV/atom      0.194 eV/A      3.48 GPa Nc =     100
+   scale_MAX_  :     16.274 meV/atom      1.291 eV/A     20.22 GPa Nc =     100
+ 
+    Ce       2.2283 Cf      19.0432 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2513
+ -------------------------------------------------------------------------------
+ 
+   step    187 C =            21.019181   BFGS-step =   0.010062
+ 
+ 
+   RMS (E/F/S) :      6.303 meV/atom      0.193 eV/A      3.46 GPa Nc =     100
+   MAX (E/F/S) :     15.808 meV/atom      1.233 eV/A     21.00 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.303 meV/atom      0.193 eV/A      3.46 GPa Nc =     100
+   scale_MAX_  :     15.808 meV/atom      1.233 eV/A     21.00 GPa Nc =     100
+ 
+    Ce       2.1767 Cf      18.8424 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2498
+ -------------------------------------------------------------------------------
+ 
+   step    188 C =            20.651630   BFGS-step =   0.018371
+ 
+ 
+   RMS (E/F/S) :      6.168 meV/atom      0.191 eV/A      3.48 GPa Nc =     100
+   MAX (E/F/S) :     15.297 meV/atom      1.257 eV/A     22.55 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.168 meV/atom      0.191 eV/A      3.48 GPa Nc =     100
+   scale_MAX_  :     15.297 meV/atom      1.257 eV/A     22.55 GPa Nc =     100
+ 
+    Ce       2.0805 Cf      18.5711 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2625
+ -------------------------------------------------------------------------------
+ 
+   step    189 C =            20.396442   BFGS-step =   0.033922
+ 
+ 
+   RMS (E/F/S) :      6.083 meV/atom      0.190 eV/A      3.70 GPa Nc =     100
+   MAX (E/F/S) :     17.407 meV/atom      1.289 eV/A     24.97 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      6.083 meV/atom      0.190 eV/A      3.70 GPa Nc =     100
+   scale_MAX_  :     17.407 meV/atom      1.289 eV/A     24.97 GPa Nc =     100
+ 
+    Ce       2.0213 Cf      18.3752 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2628
+ -------------------------------------------------------------------------------
+ 
+   step    190 C =            20.198249   BFGS-step =   0.023229
+ 
+ 
+   RMS (E/F/S) :      5.952 meV/atom      0.190 eV/A      3.69 GPa Nc =     100
+   MAX (E/F/S) :     16.001 meV/atom      1.391 eV/A     25.19 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.952 meV/atom      0.190 eV/A      3.69 GPa Nc =     100
+   scale_MAX_  :     16.001 meV/atom      1.391 eV/A     25.19 GPa Nc =     100
+ 
+    Ce       1.9340 Cf      18.2643 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2612
+ -------------------------------------------------------------------------------
+ 
+   step    191 C =            20.111439   BFGS-step =   0.017551
+ 
+ 
+   RMS (E/F/S) :      5.870 meV/atom      0.190 eV/A      3.70 GPa Nc =     100
+   MAX (E/F/S) :     15.482 meV/atom      1.453 eV/A     25.01 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.870 meV/atom      0.190 eV/A      3.70 GPa Nc =     100
+   scale_MAX_  :     15.482 meV/atom      1.453 eV/A     25.01 GPa Nc =     100
+ 
+    Ce       1.8807 Cf      18.2308 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2506
+ -------------------------------------------------------------------------------
+ 
+   step    192 C =            20.044418   BFGS-step =   0.010861
+ 
+ 
+   RMS (E/F/S) :      5.804 meV/atom      0.190 eV/A      3.71 GPa Nc =     100
+   MAX (E/F/S) :     15.133 meV/atom      1.480 eV/A     24.72 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.804 meV/atom      0.190 eV/A      3.71 GPa Nc =     100
+   scale_MAX_  :     15.133 meV/atom      1.480 eV/A     24.72 GPa Nc =     100
+ 
+    Ce       1.8385 Cf      18.2059 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2526
+ -------------------------------------------------------------------------------
+ 
+   step    193 C =            19.978077   BFGS-step =   0.026130
+ 
+ 
+   RMS (E/F/S) :      5.769 meV/atom      0.189 eV/A      3.72 GPa Nc =     100
+   MAX (E/F/S) :     15.528 meV/atom      1.525 eV/A     24.60 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.769 meV/atom      0.189 eV/A      3.72 GPa Nc =     100
+   scale_MAX_  :     15.528 meV/atom      1.525 eV/A     24.60 GPa Nc =     100
+ 
+    Ce       1.8168 Cf      18.1613 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2493
+ -------------------------------------------------------------------------------
+ 
+   step    194 C =            19.887290   BFGS-step =   0.022507
+ 
+ 
+   RMS (E/F/S) :      5.747 meV/atom      0.189 eV/A      3.72 GPa Nc =     100
+   MAX (E/F/S) :     15.441 meV/atom      1.543 eV/A     24.56 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.747 meV/atom      0.189 eV/A      3.72 GPa Nc =     100
+   scale_MAX_  :     15.441 meV/atom      1.543 eV/A     24.56 GPa Nc =     100
+ 
+    Ce       1.8042 Cf      18.0831 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2508
+ -------------------------------------------------------------------------------
+ 
+   step    195 C =            19.777359   BFGS-step =   0.030312
+ 
+ 
+   RMS (E/F/S) :      5.763 meV/atom      0.188 eV/A      3.71 GPa Nc =     100
+   MAX (E/F/S) :     15.482 meV/atom      1.563 eV/A     24.72 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.763 meV/atom      0.188 eV/A      3.71 GPa Nc =     100
+   scale_MAX_  :     15.482 meV/atom      1.563 eV/A     24.72 GPa Nc =     100
+ 
+    Ce       1.8155 Cf      17.9619 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2507
+ -------------------------------------------------------------------------------
+ 
+   step    196 C =            19.691691   BFGS-step =   0.017711
+ 
+ 
+   RMS (E/F/S) :      5.757 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   MAX (E/F/S) :     14.844 meV/atom      1.546 eV/A     25.06 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.757 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   scale_MAX_  :     14.844 meV/atom      1.546 eV/A     25.06 GPa Nc =     100
+ 
+    Ce       1.8120 Cf      17.8797 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2533
+ -------------------------------------------------------------------------------
+ 
+   step    197 C =            19.634444   BFGS-step =   0.019281
+ 
+ 
+   RMS (E/F/S) :      5.740 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   MAX (E/F/S) :     14.978 meV/atom      1.528 eV/A     25.59 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.740 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   scale_MAX_  :     14.978 meV/atom      1.528 eV/A     25.59 GPa Nc =     100
+ 
+    Ce       1.8021 Cf      17.8324 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2496
+ -------------------------------------------------------------------------------
+ 
+   step    198 C =            19.601565   BFGS-step =   0.003699
+ 
+ 
+   RMS (E/F/S) :      5.677 meV/atom      0.188 eV/A      3.68 GPa Nc =     100
+   MAX (E/F/S) :     14.447 meV/atom      1.480 eV/A     25.65 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.677 meV/atom      0.188 eV/A      3.68 GPa Nc =     100
+   scale_MAX_  :     14.447 meV/atom      1.480 eV/A     25.65 GPa Nc =     100
+ 
+    Ce       1.7619 Cf      17.8397 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2504
+ -------------------------------------------------------------------------------
+ 
+   step    199 C =            19.570770   BFGS-step =   0.010390
+ 
+ 
+   RMS (E/F/S) :      5.603 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   MAX (E/F/S) :     14.793 meV/atom      1.450 eV/A     26.21 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.603 meV/atom      0.188 eV/A      3.70 GPa Nc =     100
+   scale_MAX_  :     14.793 meV/atom      1.450 eV/A     26.21 GPa Nc =     100
+ 
+    Ce       1.7157 Cf      17.8551 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2500
+ -------------------------------------------------------------------------------
+ 
+   step    200 C =            19.543342   BFGS-step =   0.005879
+ 
+ 
+   RMS (E/F/S) :      5.566 meV/atom      0.188 eV/A      3.69 GPa Nc =     100
+   MAX (E/F/S) :     15.062 meV/atom      1.434 eV/A     25.97 GPa Nc =     100
+ 
+ 
+   scale_RMS_  :      5.566 meV/atom      0.188 eV/A      3.69 GPa Nc =     100
+   scale_MAX_  :     15.062 meV/atom      1.434 eV/A     25.97 GPa Nc =     100
+ 
+    Ce       1.6921 Cf      17.8513 Cs       0.0000 L2       0.0000
+ 
+   delt_time_Epoch       0.2968
+ 
+ -------------------------------------------------------------------------------
+ 
+  Total time consuming      63.2139 s
+ 
+  Global NN PES Training References :
+            1) Huang S D, Shang C, Liu Z P*, et al. Chem. Sci., 2017,8, 6327.
+            2) Huang S D, Shang C, Liu Z P*, et al. Chem. Sci., 2018,9, 8644.
+ 
+  --- Copyright LASP Program----
+ 
+  NN Finished at 20:09:11 27th March      2019                               

@@ -154,8 +154,7 @@ int main()
         printf_d("atom type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
     }
 
-    sym_coord_type = 1;
-    parameters_info->sym_coord_type = sym_coord_type;
+    sym_coord_type = parameters_info->sym_coord_type;
     convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, sym_coord_type, (void **)&sym_coord_DeePMD);
     if (convert_coord_flag != 0)
     {

@@ -77,6 +77,16 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     parameters_info->save_batch = -1;
     parameters_info->save_epoch = 10;
 
+    fp_param = fopen("./INPUT.raw","r");
+    if (fp_param != NULL)
+    {
+        int sym_coord_type;
+        fscanf(fp_param, "%d", &sym_coord_type);
+        printf_d("sym_coord_type read from file: %d\n", sym_coord_type);
+        parameters_info->sym_coord_type = (((sym_coord_type == 1) || (sym_coord_type == 2)) ? sym_coord_type : parameters_info->sym_coord_type);
+        fclose(fp_param);
+    }
+    
 
     return 0;
 }

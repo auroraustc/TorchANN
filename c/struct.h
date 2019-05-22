@@ -120,4 +120,38 @@ typedef struct sym_coord_DeePMD_struct_
 	double ** d_to_center_z;//coord_converted[0..N_Atoms-1][0..SEL_A*4-1]
 }sym_coord_DeePMD_struct;
 
+typedef struct sym_coord_LASP_struct_
+{
+	int N_Atoms;
+	int SEL_A;
+	int N_PTSDs;//Number of PTSDs(Power-type structural descriptors) for each atom
+	int * type;//type[0..N_Atoms-1]
+	double ** coord_converted;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
+	double ** d_to_center_x;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
+	double ** d_to_center_y;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
+	double ** d_to_center_z;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
+}sym_coord_LASP_struct;
+
+typedef struct parameters_PTSDs_info_struct_
+{
+	int N_PTSD_types;//6, S_i^1~S_i^6
+	int N_types_all_frame;// = parameters.N_types_all_frame
+	int * PTSD_N_body_type;//PTSD_N_body_type[0..N_PTSD_types-1], {2, 2, 3, 3, 3, 4}
+	int * PTSD_N_params;//Excluding rc. PTSD_N_params[0..N_PTSD_types-1], {1, 2, 4, 5, 4, 5}
+	double cutoff_max;// = parameters.cutoff_max
+	int ** N_cutoff_radius;//Number of cutoff layers for each type of PTSD, N_cutoff_radius[0..N_types_all_frame-1][0..N_PTSD_types-1]
+	int ** N_neigh_inter;//N_neigh_inter[0..N_types_all_frame-1][0..N_PTSD_types-1], Number of neigh-type combinations for each type of PTSD, 
+	                     //for example, K body N type interaction: N_neigh_inter = a[K][N] = N * b[K][N], b[K][N] = b[K-1][N] + b[K-1][N-1] + ... + b[K-1][1]
+	double *** cutoff_radius;//cutoff_radius[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]]
+	double **** n;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** m;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** p;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** L;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** r_c;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** zeta;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** lambda;//n[0..N_types_all_frame-1][0..N_PTSD_types-1][N_cutoff_radius[i, i=0..N_PTSD_types-1]][N_neigh_inter[i, i=0..N_PTSD_types-1]]
+	double **** Gmin;
+	double **** Gmax;
+}parameters_PTSDs_info_struct;
+
 

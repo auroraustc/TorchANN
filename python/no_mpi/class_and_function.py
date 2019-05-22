@@ -111,7 +111,9 @@ class Parameters():
             structure_unchanged = (self.filter_neuron == other.filter_neuron) and (
                         self.fitting_neuron == other.fitting_neuron) and (
                                               self.num_filter_layer == other.num_filter_layer) and (
-                                              self.num_fitting_layer == other.num_fitting_layer)
+                                              self.num_fitting_layer == other.num_fitting_layer) and (
+                                              self.sym_coord_type == other.sym_coord_type) and (
+                                              self.SEL_A_max == other.SEL_A_max)
             return structure_unchanged
         else:
             return False

@@ -302,7 +302,11 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 /*{at least 0 spaces}[cutoff]{spaces}{N_neighb_atom integers}{spaces}{N_params_this_type parameters}{spaces}{Gmin and Gmax}{at least 1 char}[\n]*/
 
                 tmp_token = strtok(tmp_line, " ");
-                sscanf(tmp_token, "%lf", &cutoff_this_line);
+                if (sscanf(tmp_token, "%lf", &cutoff_this_line) != 1 )
+                {
+                    printf("Format within one block is incorrect. Make sure there are no comment or empty lines mixed with data lines!\nReading stops at center atom type %d PTSD type %d\n", center_type, PTSD_type);
+                    return 33;
+                }
                 printf_d("$%7.2lf", cutoff_this_line);
                 for (k = 0; k <= N_neighb_atom - 1; k++)//read in the neighbour atom type
                 {

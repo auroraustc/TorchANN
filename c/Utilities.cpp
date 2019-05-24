@@ -9,6 +9,7 @@ Utilities functions.
 #include <stdlib.h>
 #include <math.h>
 /*#include <complex.h>*/
+#include <algorithm>
 #include <boost/math/special_functions/spherical_harmonic.hpp>
 #include "struct.h"
 
@@ -319,6 +320,29 @@ int calc_N_neigh_inter(int K, int N)// total N types; K body interaction; MULTIP
         result += calc_N_neigh_inter(K - 1, i);
     }
     return result;
+}
+
+int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type)//For example, current_type = {1, 8, 8}, params_type = {8, 1, 8}, then return 1
+{
+    int i, j, k;
+    int sum = 0;
+    std::vector<int> current_type_ (current_type, current_type + N_neighb_atom);
+    std::vector<int> params_type_ (params_type, params_type + N_neighb_atom);
+    std::sort(current_type_.begin(), current_type_.end());
+    std::sort(params_type_.begin(), params_type_.end());
+    for (i = 0; i <= N_neighb_atom - 1; i++)
+    {
+        sum += ((current_type_[i] - params_type_[i]) * (current_type_[i] - params_type_[i]));
+    }
+    return ((sum == 0) ? 1 : 0);
+}
+
+int find_index_int(int target, int * array, int array_length)
+{
+    std::vector<int> array_ (array, array + array_length);
+    std::vector<int>::iterator it = std::find(array_.begin(), array_.end(), target);
+    int index = std::distance(array_.begin(), it);
+    return index;
 }
 
 double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_)

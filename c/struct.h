@@ -138,7 +138,7 @@ typedef struct parameters_PTSDs_info_one_line_struct_
 	int PTSD_type;//S1 or S2 or ... S6. Ranges from 0 to 5.
 	int PTSD_N_body_type;//two or three or four
 	int N_params;//Number of parameters in this PTSD
-	int * neigh_type_array;//neigh_type_array[0..PTSD_N_body_type-1]
+	int * neigh_type_array;//neigh_type_array[0..PTSD_N_body_type-1-1]
 	/*The following values will be initialized as -9999*/
 	/*Some of the values should be converted to int when calculating sym coords*/
 	double n;
@@ -150,7 +150,7 @@ typedef struct parameters_PTSDs_info_one_line_struct_
 	double lambda;
 	double Gmin;
 	double Gmax;
-	double * params_array;
+	double * params_array;//params_array[0..N_params-1]
 }parameters_PTSDs_info_one_line_struct;
 
 typedef struct parameters_PTSDs_info_struct_

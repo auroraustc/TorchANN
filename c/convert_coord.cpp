@@ -61,7 +61,7 @@ int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_in
     }
 
 
-
+    printf_d("From convert_coord: error_code = %d\n", error_code);
     return error_code;
 }
 
@@ -181,6 +181,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 {
     int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info);
 
+    int i, j, k, l;
     int read_LASP_parameters_flag = 0;
     parameters_PTSDs_info_struct * parameters_PTSDs_info = (parameters_PTSDs_info_struct *)calloc(1, sizeof(parameters_PTSDs_info_struct));//Remeber to free parameters_PTSDs_info before the return of this function.
 
@@ -190,11 +191,37 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
         return read_LASP_parameters_flag;
     }
 
+    printf_d("Check from convert_coord: the read-in parameters.\n");
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j++)
+        {
+            printf_d("center type: %d, PTSD type: %d (%d body PTSD). There are %d parameters in this type of PTSD.\n", i, j + 1, parameters_PTSDs_info->PTSD_N_body_type[j], parameters_PTSDs_info->PTSD_N_params[j]);
+            printf_d("Read in %d sets of parameters for this type of PTSD.\n", parameters_PTSDs_info->N_cutoff_radius[i][j]);
+            for (k = 0; k <= parameters_PTSDs_info->N_cutoff_radius[i][j] - 1; k++)
+            {
+                printf_d("cutoff: %.2lf ", parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].cutoff_radius);
+                for (l = 0; l <= parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].PTSD_N_body_type - 1 - 1; l++)
+                {
+                    printf_d("nei_type: %3d, ", parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].neigh_type_array[l]);
+                }
+                for (l = 0; l <= parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].N_params + 1; l++)
+                {
+                    printf_d("param%-2d: %+.2lf ", l + 1, parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].params_array[l]);
+                }
+                printf_d("\n");
+            }
+        }
+    }
+
+    return (printf("Not completed, return 999.\n"), 999);//incomplete
+
 }
 
 int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info)
 {
     int calc_N_neigh_inter(int K, int N);
+    int find_index_int(int target, int * array, int array_length);
     /*double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_);*/
 
     const int MAX_NUM_ELEMENTS = 172;//the number of elements will not exceed 172 at 2019
@@ -292,26 +319,36 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 printf("LASP.raw file format is not correct. Unexpected space lines or incomplete data. \nReading stops at center atom type %d PTSD type %d\n", center_type, PTSD_type);
                 return 32;
             }
+            /*No need. Add fscanf(fp, " ") to skip all the spaces at the beginning of a line
+            if (tmp_line[0] != '%')
+            {
+                printf("No spaces before %%block_start and %%block_end are allowed!\n");
+                return 33;
+            }*/
             printf_d("#%s %d %d\n", tmp_line, center_type, PTSD_type);
+            int ii = find_index_int(center_type, parameters_info->type_index_all_frame, parameters_info->N_types_all_frame);
+            int jj = PTSD_type - 1;//index of PTSD_type. Remember -1. In the input file, PTSD type ranges from 1 to 6, not 0 to 5.
+            printf_d("center_type index = %d\n", ii);
             fgets(tmp_line, 100000, fp);//Read the comment line
             printf_d("#%s", tmp_line);
-            fgets(tmp_line, 100000, fp);//The first line of data
+            fscanf(fp, " "); fgets(tmp_line, 100000, fp);//The first line of data
             printf_d("#%s", tmp_line);
             int cutoff_radius_pointer = 0;//Also counts for the actual value of N_cutoff_radius[i][j], and is also the number of PTSDs.
-            
+
+
             while (tmp_line[7] != 'e')//loop over a block and read in data
             {
-                int N_body_this_type_PTSD = parameters_PTSDs_info->PTSD_N_body_type[PTSD_type - 1];//Remember -1. In the input file, PTSD type ranges from 1 to 6, not 0 to 5.
+                int N_body_this_type_PTSD = parameters_PTSDs_info->PTSD_N_body_type[jj];
                 int N_neighb_atom = N_body_this_type_PTSD - 1;
-                int N_params_this_type = parameters_PTSDs_info->PTSD_N_params[PTSD_type - 1];
+                int N_params_this_type = parameters_PTSDs_info->PTSD_N_params[jj];
                 double cutoff_this_line;
                 int * neighb_atom_array = (int *)calloc(N_neighb_atom, sizeof(int));
                 double * params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));//The last two elements are Gmin and Gmax
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].PTSD_type = PTSD_type;
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].PTSD_N_body_type = N_body_this_type_PTSD;
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].N_params = N_params_this_type;
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].neigh_type_array = (int *)calloc(N_neighb_atom, sizeof(int));
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].PTSD_type = PTSD_type;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].PTSD_N_body_type = N_body_this_type_PTSD;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].N_params = N_params_this_type;
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].neigh_type_array = (int *)calloc(N_neighb_atom, sizeof(int));
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));
                 /*The data in one line should be arranged as:*/
                 /*{at least 0 spaces}[cutoff]{spaces}{N_neighb_atom integers}{spaces}{N_params_this_type parameters}{spaces}{Gmin and Gmax}{at least 1 char}[\n]*/
 
@@ -321,44 +358,41 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                     printf("Format within one block is incorrect. Make sure there are no comment or empty lines mixed with data lines!\nReading stops at center atom type %d PTSD type %d\n", center_type, PTSD_type);
                     return 33;
                 }
-                printf_d("$%7.2lf", cutoff_this_line);
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].cutoff_radius = cutoff_this_line;
+                //printf_d("$%7.2lf", cutoff_this_line);
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].cutoff_radius = cutoff_this_line;
                 for (k = 0; k <= N_neighb_atom - 1; k++)//read in the neighbour atom type
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%d", &(neighb_atom_array[k]));
-                    printf_d("   %7d", neighb_atom_array[k]);
-                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].neigh_type_array[k] = neighb_atom_array[k];
+                    //printf_d("   %7d", neighb_atom_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].neigh_type_array[k] = neighb_atom_array[k];
                 }
                 for (k = 0; k <= N_params_this_type - 1; k++)//read in all the parameters of this type of PTSD
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%lf", &(params_array[k]));
-                    printf_d("     %6d  ", (int)params_array[k]);
-                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array[k] = params_array[k];
+                    //printf_d("     %6d  ", (int)params_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }
                 for (k = N_params_this_type; k <= N_params_this_type + 1; k++)//read in Gmin and Gmax
                 {
                     tmp_token = strtok(NULL, " ");
                     sscanf(tmp_token, "%lf", &(params_array[k]));
-                    printf_d("      %21.15E", params_array[k]);
-                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][cutoff_radius_pointer].params_array[k] = params_array[k];
+                    //printf_d("      %21.15E", params_array[k]);
+                    parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }
-                printf_d("\n");
-                fgets(tmp_line, 100000, fp);
+                //printf_d("\n");
+                
+                fscanf(fp, " "); fgets(tmp_line, 100000, fp);
                 printf_d("#%s", tmp_line);
                 /*dim0: center type; dim1: PTSD type; dim2: cutoff radius*/
                 cutoff_radius_pointer ++;
             }
-            parameters_PTSDs_info->N_cutoff_radius[i][j] = cutoff_radius_pointer;
+            parameters_PTSDs_info->N_cutoff_radius[ii][jj] = cutoff_radius_pointer;
         }
     }
 
-
-    
-
     fclose(fp);
-    exit(888);
     return 0;
 
 }

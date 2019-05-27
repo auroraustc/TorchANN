@@ -180,8 +180,11 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
 int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, void ** sym_coord)
 {
     int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info);
+    int find_index_int(int target, int * array, int array_length);
 
-    int i, j, k, l;
+    sym_coord_LASP_struct * sym_coord_LASP;
+    int i, j, k, l, x, y, z, t, M;
+    int N_PTSD_tot = 0;
     int read_LASP_parameters_flag = 0;
     parameters_PTSDs_info_struct * parameters_PTSDs_info = (parameters_PTSDs_info_struct *)calloc(1, sizeof(parameters_PTSDs_info_struct));//Remeber to free parameters_PTSDs_info before the return of this function.
 
@@ -194,6 +197,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     printf_d("Check from convert_coord: the read-in parameters.\n");
     for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
     {
+        int N_PTSD_tot_each_type = 0;
         for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j++)
         {
             printf_d("center type: %d, PTSD type: %d (%d body PTSD). There are %d parameters in this type of PTSD.\n", i, j + 1, parameters_PTSDs_info->PTSD_N_body_type[j], parameters_PTSDs_info->PTSD_N_params[j]);
@@ -210,10 +214,99 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                     printf_d("param%-2d: %+.2lf ", l + 1, parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].params_array[l]);
                 }
                 printf_d("\n");
+                N_PTSD_tot_each_type++;
+            }
+        }
+        N_PTSD_tot = (N_PTSD_tot_each_type > N_PTSD_tot ? N_PTSD_tot_each_type : N_PTSD_tot);
+    }
+    printf_d("Total number of PTSDs: %d\n", N_PTSD_tot);
+    parameters_info->N_sym_coord = N_PTSD_tot;
+    
+    sym_coord_LASP = (sym_coord_LASP_struct *)calloc(parameters_info->Nframes_tot, sizeof(sym_coord_LASP_struct));
+    sym_coord_LASP->N_PTSDs = N_PTSD_tot;
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        sym_coord_LASP[i].N_Atoms = parameters_info->N_Atoms_max;
+        sym_coord_LASP[i].SEL_A = N_PTSD_tot;
+        sym_coord_LASP[i].N_PTSDs = N_PTSD_tot;
+        sym_coord_LASP[i].coord_converted = (double **)calloc(parameters_info->N_Atoms_max, sizeof(double *));
+        for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
+        {
+            sym_coord_LASP[i].coord_converted[j] = (double *)calloc(N_PTSD_tot, sizeof(double));
+            //printf_d("i, j: %d %d\n", i, j);
+        }
+    }
+    //#pragma omp parallel for private(j, k, l)
+    for (i = 0; i <=parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
+        {
+            int type_cur_atom_cur_frame = (frame_info[i].type[j] == -1 ? parameters_info->type_index_all_frame[0] : frame_info[i].type[j]);
+            int ii = find_index_int(type_cur_atom_cur_frame, parameters_info->type_index_all_frame, parameters_info->N_types_all_frame);
+            int N_PTSD_count_idx = 0;//N_PTSD_count_idx should be equal to SEL_A - 1
+            for (k = 0; k <= parameters_PTSDs_info->N_PTSD_types - 1; k++)
+            {
+                /*PTSD parameters information stored in idx[ii][k][0..NN-1], NN=N_cutoff_radius[ii][k]*/
+                /*Pay attention to the sequence of parameters!!*/
+                for (l = 0; l <= parameters_PTSDs_info->N_cutoff_radius[ii][k] - 1; l++)
+                {
+                    int N_params_ii_k_l = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].N_params;
+                    /*Number of neighbour atoms needed by each type of PTSD:
+                    S1: 1
+                    S2: 1
+                    S3: 2
+                    S4: 2
+                    S5: 2
+                    S6: 3
+                    */
+                    /*In addition to r_c, the parameters stored in params_array follows this order:
+                    S1: (int)n
+                    S2: (int)L, (int)n
+                    S3: (int)n, (int)m, (int)zeta, (double)lambda
+                    S4: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
+                    S5: (int)L, (int)n, (int)m, (int)p
+                    S6: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
+                    */
+                    //printf_d("i, j, k, l, ii, N_params: %d %d %d %d %d %d\n", i, j, k, l, ii, N_params_ii_k_l);
+                    switch (k)
+                    {
+                        case 0:
+                        {
+                            int nb1;
+                            break;
+                        }
+                        case 1:
+                        {
+                            break;
+                        }
+                        case 2:
+                        {
+                            break;
+                        }
+                        case 3:
+                        {
+                            break;
+                        }
+                        case 4:
+                        {
+                            break;
+                        }
+                        case 5:
+                        {
+                            break;
+                        }
+                        default:
+                        {
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
+    *(sym_coord_LASP_struct **)sym_coord = sym_coord_LASP;
+    //return 0;
     return (printf("Not completed, return 999.\n"), 999);//incomplete
 
 }

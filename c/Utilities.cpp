@@ -39,20 +39,20 @@ double fastpow2(double number, int dummy)
     return number * number;
 }
 
-double f_c(double r_ij, parameters_info_struct * parameters_info)
+double f_c(double r_ij, double r_c)
 {
     double result;
-    double rc = parameters_info->cutoff_max;
+    double rc = r_c;
     result = (r_ij <= rc) ? 0.5 * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) : 0;
     return result;
 }
 
-double R_sup_n(double r_ij, double n, parameters_info_struct * parameters_info)
+double R_sup_n(double r_ij, double n, double r_c)
 {
-    double f_c(double r_ij, parameters_info_struct * parameters_info_);
+    double f_c(double r_ij, double r_c);
 
     double result;
-    return pow(r_ij, n) * f_c(r_ij, parameters_info);
+    return pow(r_ij, n) * f_c(r_ij, r_c);
 }
 
 double factorial(int n)

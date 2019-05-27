@@ -80,6 +80,7 @@ typedef struct parameters_info_struct_
 	int SEL_A_max;
 	int Nframes_tot;
 	int sym_coord_type;
+	int N_sym_coord;//Not used for DeePMD type
 	
 	int batch_size;
 	int stop_epoch;
@@ -142,7 +143,7 @@ typedef struct parameters_PTSDs_info_one_line_struct_
 	/*The following values will be initialized as -9999*/
 	/*Some of the values should be converted to int when calculating sym coords*/
 	double n;
-	double m;
+	double m;//Note: the m here is an different parameter from that appeared in the Y_LM function!
 	double p;
 	double L;
 	double r_c;

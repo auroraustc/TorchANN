@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_very_small/box.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/box.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_very_small/coord.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/coord.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_very_small/energy.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/energy.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_very_small/force.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/force.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../test_very_small/type.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_very_small/type.raw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/Utilities.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/convert_coord.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/convert_coord.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/save_to_file.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/save_to_file.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../test_1g/LASP.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../test_1g/LASP.raw" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +24,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="558">
+                <state relative-caret-position="161">
                   <caret line="98" column="73" selection-start-line="98" selection-start-column="73" selection-end-line="98" selection-end-column="73" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
@@ -65,7 +64,7 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1005">
+                <state relative-caret-position="1476">
                   <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
@@ -150,6 +149,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -166,7 +166,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -456,11 +455,12 @@
       <workItem from="1557308192831" duration="2442000" />
       <workItem from="1557812401604" duration="1732000" />
       <workItem from="1557989667602" duration="1582000" />
+      <workItem from="1558947754349" duration="13000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="326037000" />
+    <option name="totallyTimeSpent" value="326050000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -472,9 +472,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="67" y="25" width="1213" height="695" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14538419" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.14824335" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -679,20 +679,8 @@
     <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/utils/data/dataloader.py" />
     <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/linear.py" />
     <entry file="file://$USER_HOME$/intel/intelpython3/lib/python3.6/site-packages/torch/nn/modules/module.py" />
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/functional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="20025">
-          <caret line="1351" selection-start-line="1351" selection-end-line="1351" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3675">
-          <caret line="256" selection-start-line="256" selection-end-line="256" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/functional.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/numpy/core/fromnumeric.py" />
     <entry file="file://$APPLICATION_HOME_DIR$/helpers/pydev/_pydev_imps/_pydev_execfile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -700,48 +688,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/profiler.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="524">
-          <caret line="503" column="33" selection-start-line="503" selection-start-column="33" selection-end-line="503" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="83" selection-start-line="83" selection-end-line="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/tensor.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="326" selection-start-line="326" selection-end-line="326" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2040">
-          <caret line="144" selection-start-line="144" selection-end-line="144" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python3.5/ctypes/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="899">
-          <caret line="356" column="32" selection-start-line="356" selection-start-column="32" selection-end-line="356" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/functional.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="645">
-          <caret line="51" selection-start-line="51" selection-end-line="51" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/profiler.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/__init__.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/tensor.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py" />
+    <entry file="file:///usr/lib/python3.5/ctypes/__init__.py" />
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/functional.py" />
     <entry file="file://$PROJECT_DIR$/algo_test/train_noclassfy_lbfgs.py" />
     <entry file="file://$PROJECT_DIR$/algo_test/train_noclassfy.py" />
     <entry file="file://$PROJECT_DIR$/algo_test/class_and_function.py" />
@@ -755,10 +707,14 @@
     <entry file="file://$PROJECT_DIR$/use_horovod/train_noclassify.py" />
     <entry file="file://$PROJECT_DIR$/use_horovod/class_and_function.py" />
     <entry file="file://$PROJECT_DIR$/mpi4py/class_and_function.py" />
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py">
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/nn/modules/module.py" />
+    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="73" column="8" selection-start-line="73" selection-start-column="8" selection-end-line="73" selection-end-column="8" />
+        <state relative-caret-position="161">
+          <caret line="98" column="73" selection-start-line="98" selection-start-column="73" selection-end-line="98" selection-end-column="73" />
+          <folding>
+            <element signature="e#47#65#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -782,19 +738,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="558">
-          <caret line="98" column="73" selection-start-line="98" selection-start-column="73" selection-end-line="98" selection-end-column="73" />
-          <folding>
-            <element signature="e#47#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1005">
+        <state relative-caret-position="1476">
           <caret line="115" column="46" selection-start-line="115" selection-start-column="46" selection-end-line="115" selection-end-column="46" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />

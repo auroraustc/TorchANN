@@ -17,6 +17,7 @@ Return code:
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <complex>
 #include "struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
@@ -181,6 +182,12 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 {
     int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info);
     int find_index_int(int target, int * array, int array_length);
+    double fastpow2(double number, int dummy);
+    double R_sup_n(double r_ij, double n, double r_c);
+    int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type);
+    std::complex<double> Y_LM(double * coord_ij, int L, int m);
+    double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k);
+    double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, double * coord_l);
 
     sym_coord_LASP_struct * sym_coord_LASP;
     int i, j, k, l, x, y, z, t, M;
@@ -200,7 +207,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
         int N_PTSD_tot_each_type = 0;
         for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j++)
         {
-            printf_d("center type: %d, PTSD type: %d (%d body PTSD). There are %d parameters in this type of PTSD.\n", i, j + 1, parameters_PTSDs_info->PTSD_N_body_type[j], parameters_PTSDs_info->PTSD_N_params[j]);
+            printf_d("center type: %d, PTSD type: %d (%d body PTSD). There are %d parameters in this type of PTSD.\n", parameters_info->type_index_all_frame[i], j + 1, parameters_PTSDs_info->PTSD_N_body_type[j], parameters_PTSDs_info->PTSD_N_params[j]);
             printf_d("Read in %d sets of parameters for this type of PTSD.\n", parameters_PTSDs_info->N_cutoff_radius[i][j]);
             for (k = 0; k <= parameters_PTSDs_info->N_cutoff_radius[i][j] - 1; k++)
             {
@@ -236,14 +243,14 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
             //printf_d("i, j: %d %d\n", i, j);
         }
     }
-    //#pragma omp parallel for private(j, k, l)
+    #pragma omp parallel for private(j, k, l)
     for (i = 0; i <=parameters_info->Nframes_tot - 1; i++)
     {
         for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
         {
             int type_cur_atom_cur_frame = (frame_info[i].type[j] == -1 ? parameters_info->type_index_all_frame[0] : frame_info[i].type[j]);
             int ii = find_index_int(type_cur_atom_cur_frame, parameters_info->type_index_all_frame, parameters_info->N_types_all_frame);
-            int N_PTSD_count_idx = 0;//N_PTSD_count_idx should be equal to SEL_A - 1
+            int N_PTSD_count_idx = 0;
             for (k = 0; k <= parameters_PTSDs_info->N_PTSD_types - 1; k++)
             {
                 /*PTSD parameters information stored in idx[ii][k][0..NN-1], NN=N_cutoff_radius[ii][k]*/
@@ -266,6 +273,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                     S4: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
                     S5: (int)L, (int)n, (int)m, (int)p
                     S6: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
+                    Note: the S3/S4 are S4/S3 on the paper Chem. Sci. 2018. 9. 8644-8655 
                     */
                     //printf_d("i, j, k, l, ii, N_params: %d %d %d %d %d %d\n", i, j, k, l, ii, N_params_ii_k_l);
                     switch (k)
@@ -273,26 +281,266 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 0:
                         {
                             int nb1;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            double n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                            {
+                                int current_type[1] = {frame_info->neighbour_list[j].type[nb1]};
+                                if (compare_Nei_type(N_nei, current_type, params_type) == 0)
+                                {
+                                    continue;
+                                }
+                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                
+                                if (r_ij > r_c)
+                                {
+                                    break;
+                                }
+                                //printf_d("r_ij = %.2lf, ", r_ij);
+                                result += R_sup_n(r_ij, n, r_c);
+                            }
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result;
+                            //printf_d("r_c: %.2lf, S1: %lf\n", r_c, result);
+                            N_PTSD_count_idx++;                            
                             break;
                         }
                         case 1:
                         {
+                            int nb1;
+                            int M;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            int L = (int)(parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0]);
+                            double n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            for (M = -L; M <= L; M++)
+                            {
+                                std::complex<double> result_inner = (0, 0);
+                                for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                                {
+                                    int current_type[1]= {frame_info->neighbour_list[j].type[nb1]};
+                                    std::complex<double> R_Y;
+                                    if (compare_Nei_type(N_nei, current_type, params_type) == 0)
+                                    {
+                                    continue;
+                                    }
+                                    double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                    double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                    double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
+                                    if (r_ij > r_c)
+                                    {
+                                        break;
+                                    }
+                                    R_Y = Y_LM(coord_ij, L, M);
+                                    R_Y = R_Y * R_sup_n(r_ij, n, r_c);
+                                    result_inner += R_Y;
+                                }
+                                result += std::norm(result_inner);
+                            }
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            N_PTSD_count_idx++;
                             break;
                         }
                         case 2:
                         {
+                            int nb1, nb2;
+                            double n, m, zeta, lambda;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
+                            m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
+                            lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                            {
+                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                if (r_ij > r_c)
+                                {
+                                    break;
+                                }
+                                for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
+                                {
+                                    int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
+                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    if (compare_Nei_type(N_nei, current_type, params_type) == 0)
+                                    {
+                                        continue;
+                                    }
+                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    if (r_ik > r_c)
+                                    {
+                                        break;
+                                    }
+                                    double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
+                                    result += (pow((1 + lambda * cos_theta), zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c));
+                                }
+                            }
+
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            N_PTSD_count_idx++;
                             break;
                         }
                         case 3:
                         {
+                            int nb1, nb2;
+                            double n, m, p, zeta, lambda;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
+                            m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
+                            zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[4];
+                            for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                            {
+                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                if (r_ij > r_c)
+                                {
+                                    break;
+                                }
+                                for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
+                                {
+                                    int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
+                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    if (compare_Nei_type(N_nei, current_type, params_type) == 0)
+                                    {
+                                        continue;
+                                    }
+                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    if (r_ik > r_c)
+                                    {
+                                        break;
+                                    }
+                                    double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
+                                    double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
+                                    result += (pow((1 + lambda * cos_theta), zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c)) * R_sup_n(r_jk, p, r_c);
+                                }
+                            }
+
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            N_PTSD_count_idx++;
                             break;
                         }
                         case 4:
                         {
+                            int nb1, nb2;
+                            int L, M;
+                            double n, m, p;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            L = (int)(parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0]);
+                            n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
+                            p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            for (M = - L; M <= L; M++)
+                            {
+                                std::complex<double> result_inner = (0, 0);
+                                for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                                {
+                                    double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                    double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                    if (r_ij > r_c)
+                                    {
+                                        break;
+                                    }
+                                    for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
+                                    {
+                                        int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
+                                        double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                        if (compare_Nei_type(N_nei, current_type, params_type) == 0)
+                                        {
+                                            continue;
+                                        }
+                                        double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                        if (r_ik > r_c)
+                                        {
+                                            break;
+                                        }
+                                        double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
+                                        double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
+                                        double coord_ik[3] = {coord_i[0] - coord_k[0], coord_i[1] - coord_k[1], coord_i[2] - coord_k[2]};
+                                        std::complex<double> R_Y;
+                                        R_Y = Y_LM(coord_ij, L, M) + Y_LM(coord_ik, L, M);
+                                        R_Y = R_Y * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_jk, p, r_c);
+                                        result_inner += R_Y;
+                                    }
+                                }
+                                result += std::norm(result_inner);
+                            }
+
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            N_PTSD_count_idx++;
                             break;
                         }
                         case 5:
                         {
+                            int nb1, nb2, nb3;
+                            double n, m, p, zeta, lambda;
+                            double * coord_i = frame_info->coord[j];
+                            double result = 0;
+                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
+                            m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
+                            zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[4];
+                            int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
+                            int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
+                            int N_nei = N_body - 1;
+                            for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
+                            {
+                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                if (r_ij > r_c)
+                                {
+                                    break;
+                                }
+                                for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
+                                {
+                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    if (r_ik > r_c)
+                                    {
+                                        break;
+                                    }
+                                    for (nb3 = nb2 + 1; nb3 <= parameters_info->SEL_A_max - 1; nb3++)
+                                    {
+                                        double * coord_l = frame_info->neighbour_list[j].coord_neighbours[nb3];
+                                        double r_il = sqrt(fastpow2(coord_i[0] - coord_l[0], 2) + fastpow2(coord_i[1] - coord_l[1], 2) + fastpow2(coord_i[2] - coord_l[2], 2));
+                                        if (r_il > r_c)
+                                        {
+                                            break;
+                                        }
+                                        double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
+                                        result += (pow(1 + lambda * cos_delta, zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_il, p, r_c));
+                                    }
+                                }
+                            }
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            N_PTSD_count_idx++;
                             break;
                         }
                         default:
@@ -302,6 +550,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                     }
                 }
             }
+            printf_d("N_PTSD_count = %d\n", N_PTSD_count_idx);
         }
     }
 
@@ -331,8 +580,10 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
 
     parameters_PTSDs_info->N_PTSD_types = 6;
     parameters_PTSDs_info->N_types_all_frame = N_TYPES_ALL_FRAME;
-    parameters_PTSDs_info->PTSD_N_body_type = N_body_type;
-    parameters_PTSDs_info->PTSD_N_params = N_params;
+    parameters_PTSDs_info->PTSD_N_body_type = (int *)calloc(6, sizeof(int));
+    parameters_PTSDs_info->PTSD_N_body_type[0] = 2; parameters_PTSDs_info->PTSD_N_body_type[1] = 2; parameters_PTSDs_info->PTSD_N_body_type[2] = 3; parameters_PTSDs_info->PTSD_N_body_type[3] = 3; parameters_PTSDs_info->PTSD_N_body_type[4] = 3; parameters_PTSDs_info->PTSD_N_body_type[5] = 4; 
+    parameters_PTSDs_info->PTSD_N_params = (int *)calloc(6, sizeof(int));
+    parameters_PTSDs_info->PTSD_N_params[0] = 1; parameters_PTSDs_info->PTSD_N_params[1] = 2; parameters_PTSDs_info->PTSD_N_params[2] = 4; parameters_PTSDs_info->PTSD_N_params[3] = 5; parameters_PTSDs_info->PTSD_N_params[4] = 4; parameters_PTSDs_info->PTSD_N_params[5] = 5; 
     parameters_PTSDs_info->cutoff_max = parameters_info->cutoff_max;
 
     parameters_PTSDs_info->N_cutoff_radius = (int **)calloc(N_TYPES_ALL_FRAME, sizeof(int *));
@@ -420,6 +671,11 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
             }*/
             printf_d("#%s %d %d\n", tmp_line, center_type, PTSD_type);
             int ii = find_index_int(center_type, parameters_info->type_index_all_frame, parameters_info->N_types_all_frame);
+            if (ii >= parameters_info->N_types_all_frame)
+            {
+                printf("Type error: type %d in LASP.raw does not exist in type.raw!\n", center_type);
+                return 33;
+            }
             int jj = PTSD_type - 1;//index of PTSD_type. Remember -1. In the input file, PTSD type ranges from 1 to 6, not 0 to 5.
             printf_d("center_type index = %d\n", ii);
             fgets(tmp_line, 100000, fp);//Read the comment line

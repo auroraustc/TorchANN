@@ -23,7 +23,7 @@ typedef struct neighbour_list_struct_
 	double ** coord_neighbours;//coord_neighbour[0..SEL_A_max - 1][0..2]
 	double ** force_neighbours;//Just in case; force_neighbours[0..SEL_A_max - 1][0..2]
 	//atom_info_struct * atom_info;
-	int * type;//type[0..SEL_A_max - 1]
+	int * type;//type[0..SEL_A_max - 1], type = all_types[0] for atoms with r_c > cutoff_max
 	int * index_neighbours;//index of the neighbour atoms. index_neighbours[0..SEL_A_max]
 }neighbour_list_struct;
 
@@ -35,7 +35,7 @@ typedef struct frame_info_struct_
 	int N_Atoms_ori;
 	int N_types;
 	double box[3][3];
-	int * type;//type[0..N_Atoms-1]
+	int * type;//type[0..N_Atoms-1], after expand type = -1 for dummy atoms
 	double ** coord;//coord[0..N_Atoms-1][0..2]
 	double energy;
 	int no_force;

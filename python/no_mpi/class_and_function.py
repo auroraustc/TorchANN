@@ -22,9 +22,11 @@ class Parameters():
         cutoff_max = 0.0
         N_types_all_frame = 0
         type_index_all_frame = []
+        N_Atoms_max = 1
         SEL_A_max = 0
         Nframes_tot = 0
         sym_coord_type = 1
+        N_sym_coord = 0
 
         batch_size = 1
         stop_epoch = 1
@@ -79,9 +81,11 @@ class Parameters():
         str_ += (">>> cutoff_max: %.6e\n" % self.cutoff_max)
         str_ += (">>> N_types_all_frame: %2d\n" % self.N_types_all_frame)
         str_ += (">>> type_index_all_frame: ", self.type_index_all_frame, "\n")
+        str_ += (">>> N_Atoms_max: %2d" % self.N_Atoms_max)
         str_ += (">>> SEL_A_max: %2d\n" % self.SEL_A_max)
         str_ += (">>> Nframes_tot: %2d\n" % self.Nframes_tot)
         str_ += (">>> sym_coord_type: %2d\n" % self.sym_coord_type)
+        str_ += (">>> N_sym_coord: %2d\n" % self.N_sym_coord)
         str_ += (">>> batch_size: %2d\n" % self.batch_size)
         str_ += (">>> stop_epoch: %2d\n" % self.stop_epoch)
         str_ += (">>> num_filter_layer: %2d\n" % self.num_filter_layer)
@@ -158,10 +162,12 @@ def read_parameters(parameters):
     parameters.cutoff_max = INPUT_DATA['cutoff_max']
     parameters.N_types_all_frame = INPUT_DATA['N_types_all_frame']
     parameters.type_index_all_frame = INPUT_DATA['type_index_all_frame']
+    parameters.N_Atoms_max = INPUT_DATA['N_Atoms_max']
     parameters.SEL_A_max = INPUT_DATA['SEL_A_max']
     parameters.Nframes_tot = INPUT_DATA['Nframes_tot']
     parameters.sym_coord_type = INPUT_DATA['sym_coord_type']
 ###New add parameters
+    parameters.N_sym_coord = INPUT_DATA['N_sym_coord']
     parameters.batch_size = INPUT_DATA['batch_size']
     parameters.stop_epoch = INPUT_DATA['stop_epoch']
     parameters.num_filter_layer = INPUT_DATA['num_filter_layer']
@@ -302,6 +308,7 @@ class one_batch_net(nn.Module):
     def __init__(self, parameters, mean_init):
         super(one_batch_net, self).__init__()
         # self.batch_norm = nn.BatchNorm1d(1)
+        self.batch_norm = nn.BatchNorm1d(parameters.N_Atoms_max)
         self.filter_input = nn.ModuleList()
         self.filter_hidden = nn.ModuleList()
         self.fitting_input = nn.ModuleList()
@@ -652,6 +659,77 @@ class one_batch_net(nn.Module):
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
         #use_std_avg = True
         return E_cur_batch, F_cur_batch, std_, avg_
+
+    def forward_fitting_only(self, data_cur, parameters, std, avg, use_std_avg, device):
+        SYM_COORD_Reshape_tf_cur = data_cur[1]
+        N_ATOMS_tf_cur = data_cur[4]
+        SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
+                                                      (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
+                                                       parameters.N_sym_coord))
+        NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
+        NEI_TYPE_Reshape_tf_cur = tf.reshape(data_cur[13], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
+        E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device=device)
+        E_cur_batch_atom_wise = tf.zeros((len(data_cur[1]), data_cur[4][0]), device=device).reshape(-1, )
+        F_cur_batch = tf.zeros((len(SYM_COORD_Reshape_tf_cur), data_cur[4][0], 3), device=device)
+        std_ = tf.zeros((1, parameters.N_types_all_frame, 4), device=device)
+        avg_ = tf.zeros((1, parameters.N_types_all_frame, 4), device=device)
+
+        #SYM_COORD_Reshape_tf_cur_Reshape = self.batch_norm(SYM_COORD_Reshape_tf_cur_Reshape)
+        for type_idx in range(parameters.N_types_all_frame):
+
+
+
+            type_idx_cur_type = (data_cur[5] == parameters.type_index_all_frame[type_idx]).nonzero()
+            type_idx_cur_type = (
+                        type_idx_cur_type.narrow(1, 0, 1) * data_cur[4][0].long() + type_idx_cur_type.narrow(1, 1, 1)).reshape(
+                -1, )
+            SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                SYM_COORD_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.N_sym_coord), 0,
+                type_idx_cur_type)
+            ###DeePMD-type batch-norm
+            if (use_std_avg == True):
+                """SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg[
+                    type_idx]) / std[type_idx]
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / std[
+                    type_idx]"""
+                std_ = std
+                avg_ = avg
+                std_cur_type = std_[0][type_idx]
+                avg_cur_type = avg_[0][type_idx]
+            else:
+                with tf.no_grad():
+                    sji = SYM_COORD_Reshape_tf_cur_Reshape_cur_type
+                    xyz_hat = SYM_COORD_Reshape_tf_cur_Reshape_cur_type
+                    sji_avg = tf.mean(sji)
+                    xyz_hat_avg = tf.mean(xyz_hat)
+                    avg_unit = tf.cat((sji_avg.reshape(1, 1), xyz_hat_avg.expand(1, 3)), dim=1)
+                    sji_avg2 = tf.mean(sji ** 2)
+                    xyz_hat_avg2 = tf.mean(xyz_hat ** 2)
+                    avg_unit2 = tf.cat((sji_avg2.reshape(1, 1), xyz_hat_avg2.expand(1, 3)), dim=1)
+                    std_unit = tf.sqrt(avg_unit2 - avg_unit ** 2)
+                    avg_cur_type = tf.cat((avg_unit[0][0].reshape(1, 1), tf.zeros((1, 3), device=device)), dim=1)
+                    #avg_cur_type = avg_unit
+                    std_cur_type = std_unit + 1E-16
+                    std_[0][type_idx] = std_cur_type
+                    avg_[0][type_idx] = avg_cur_type
+
+            SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type.reshape(-1, )[0]) / std_cur_type.reshape(-1, )[0]
+
+            E_cur_type = tf.tanh(self.fitting_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type))
+            for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx]):
+                E_cur_type = tf.tanh(fitting_hidden_layer(E_cur_type))
+            E_cur_type = (self.fitting_out[type_idx](E_cur_type))
+            E_cur_batch_atom_wise.scatter_(0, type_idx_cur_type, tf.reshape(E_cur_type, (-1,)))
+
+
+        E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
+        return E_cur_batch, F_cur_batch, std_, avg_
+
+
 
 def init_weights(m):
     '''Takes in a module and initializes all linear layers with weight

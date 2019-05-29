@@ -39,6 +39,7 @@ int main()
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
     int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
     int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord);
+    int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info);
     
     struct timeval start_main, end_main;
     double t_main;//Unit: ms
@@ -54,6 +55,7 @@ int main()
     frame_info_struct * frame_info = NULL;
     parameters_info_struct * parameters_info = (parameters_info_struct *)calloc(1, sizeof(parameters_info_struct));
     sym_coord_DeePMD_struct * sym_coord_DeePMD = NULL;
+    sym_coord_LASP_struct * sym_coord_LASP = NULL;
     int Nframes_tot;
     int max_N_neighbours_all_frame = -1;
     int SEL_A_max;
@@ -155,7 +157,26 @@ int main()
     }
 
     sym_coord_type = parameters_info->sym_coord_type;
-    convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, sym_coord_type, (void **)&sym_coord_DeePMD);
+    switch (sym_coord_type)
+    {
+        case 1:
+        {
+            convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, sym_coord_type, (void **)&sym_coord_DeePMD);
+            break;
+        }
+        case 2:
+        {
+            convert_coord_flag = convert_coord(frame_info, Nframes_tot, parameters_info, sym_coord_type, (void **)&sym_coord_LASP);
+            break;
+        }
+        default:
+        {
+            printf("Symmetry coordinate type not supported!\n");
+            return 7;
+            break;
+        }
+    }
+    
     if (convert_coord_flag != 0)
     {
         printf("Error when converting coordinates: convert_coord_flag = %d\n", convert_coord_flag);
@@ -163,18 +184,28 @@ int main()
     }
     printf("No errors converting coordinates.\n");
     error_code ++;
-    printf_d("Check from main(): sym_coord_DeePMD of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
-    printf_d("%-11s %-11s %-11s %-11s\n", "s_rij", "x_hat", "y_hat", "z_hat");
-    for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
+    printf_d("Check from main(): sym_coord of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
+    if (sym_coord_type == 1)
     {
-        for (j = 0; j <= 3; j++)
+        printf_d("%-11s %-11s %-11s %-11s\n", "s_rij", "x_hat", "y_hat", "z_hat");
+        for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
         {
-            int idx = i * 4 + j;
-            printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].coord_converted[DEBUG_ATOM][idx]);
+            for (j = 0; j <= 3; j++)
+            {
+                int idx = i * 4 + j;
+                printf_d("%+18.6lf ", sym_coord_DeePMD[DEBUG_FRAME].coord_converted[DEBUG_ATOM][idx]);
+            }
+            printf_d("\n");
         }
-        printf_d("\n");
     }
-    printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijx", "dx_hatx", "dy_hatx", "dz_hatx");
+    if (sym_coord_type == 2)
+    {
+        for (i = 0; i <= parameters_info->N_sym_coord - 1; i++)
+        {
+            printf_d("%+18.6lf\n", sym_coord_LASP[DEBUG_FRAME].coord_converted[DEBUG_ATOM][i]);
+        }
+    }
+    /*printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijx", "dx_hatx", "dy_hatx", "dz_hatx");
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
         for (j = 0; j <= 3; j++)
@@ -203,9 +234,21 @@ int main()
             printf_d("%+10.6lf ", sym_coord_DeePMD[DEBUG_FRAME].d_to_center_z[DEBUG_ATOM][idx]);
         }
         printf_d("\n");
+    }*/
+    
+    switch (sym_coord_type)
+    {
+        case 1:
+        {
+            save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_DeePMD);
+            break;
+        }
+        case 2:
+        {
+            save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_LASP);
+            break;
+        }
     }
-
-    save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_DeePMD);
     if (save_to_file_flag != 0)
     {
         printf("Error when saving to files: save_to_file_flag = %d\n", save_to_file_flag);
@@ -242,23 +285,21 @@ int main()
     }
     free(frame_info);
         /*sym_coord*/
-    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    void * sym_coord_;
+    switch (sym_coord_type)
     {
-        //free(sym_coord_DeePMD[i].type);
-        for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
+        case 1:
         {
-            free(sym_coord_DeePMD[i].coord_converted[j]);
-            free(sym_coord_DeePMD[i].d_to_center_x[j]);
-            free(sym_coord_DeePMD[i].d_to_center_y[j]);
-            free(sym_coord_DeePMD[i].d_to_center_z[j]);
+            sym_coord_ = (void *)sym_coord_DeePMD;
+            break;
         }
-
-        free(sym_coord_DeePMD[i].coord_converted);
-        free(sym_coord_DeePMD[i].d_to_center_x);
-        free(sym_coord_DeePMD[i].d_to_center_y);
-        free(sym_coord_DeePMD[i].d_to_center_z);
+        case 2:
+        {
+            sym_coord_ = (void *)sym_coord_LASP;
+            break;
+        }
     }
-    free(sym_coord_DeePMD);
+    free_sym_coord(sym_coord_, sym_coord_type, parameters_info);
         /*parameters_info*/
     free(parameters_info->type_index_all_frame);
     free(parameters_info);

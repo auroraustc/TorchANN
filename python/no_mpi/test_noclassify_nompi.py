@@ -120,7 +120,13 @@ if (True):
 
                 ###Adam
                 # correct
-                E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
+                if (parameters.sym_coord_type == 1):
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
+                                                                               use_std_avg, device)
+                elif (parameters.sym_coord_type == 2):
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
+                                                                                            avg,
+                                                                                            use_std_avg, device)
                 shape_tmp = std.shape
                 std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)

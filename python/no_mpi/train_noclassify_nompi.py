@@ -123,7 +123,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16, weight_decay=5E-4 * MULTIPLIER)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16, weight_decay=5E-5 * MULTIPLIER)
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
@@ -189,7 +189,13 @@ if (True):
 
                 ###Adam
                 # correct
-                E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET(data_cur, parameters, std, avg, use_std_avg, device)
+                if (parameters.sym_coord_type == 1):
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
+                                                                               use_std_avg, device)
+                elif (parameters.sym_coord_type == 2):
+                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
+                                                                                            avg,
+                                                                                            use_std_avg, device)
                 shape_tmp = std.shape
                 std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
@@ -219,7 +225,7 @@ if (True):
                 END_BATCH_TIMER = time.time()
 
                 ###Adam print
-                if (batch_idx  == 0 and epoch % (parameters.output_epoch) == 0):
+                if ((batch_idx  == 0 and epoch % (parameters.output_epoch) == 0) or ((epoch == parameters.stop_epoch - 1) and (batch_idx == 0))):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                         epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),

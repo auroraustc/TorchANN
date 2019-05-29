@@ -56,7 +56,7 @@ int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_in
         }
         default:
         {
-            printf_d("Symmetry coordinate type not supported!\n");
+            printf("Symmetry coordinate type not supported!\n");
             return 1;
         }
     }
@@ -74,6 +74,7 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
     int i, j, k, l;
     sym_coord_DeePMD_struct * sym_coord_DeePMD;
 
+    parameters_info->N_sym_coord = parameters_info->SEL_A_max * 4;
     sym_coord_DeePMD = (sym_coord_DeePMD_struct *)calloc(Nframes_tot, sizeof(sym_coord_DeePMD_struct));
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
@@ -183,6 +184,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info);
     int find_index_int(int target, int * array, int array_length);
     double fastpow2(double number, int dummy);
+    double fastpown(double number, int power);
     double R_sup_n(double r_ij, double n, double r_c);
     int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type);
     std::complex<double> Y_LM(double * coord_ij, int L, int m);
@@ -233,7 +235,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     sym_coord_LASP->N_PTSDs = N_PTSD_tot;
     for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
     {
-        sym_coord_LASP[i].N_Atoms = parameters_info->N_Atoms_max;
+        sym_coord_LASP[i].N_Atoms = frame_info->N_Atoms;
         sym_coord_LASP[i].SEL_A = N_PTSD_tot;
         sym_coord_LASP[i].N_PTSDs = N_PTSD_tot;
         sym_coord_LASP[i].coord_converted = (double **)calloc(parameters_info->N_Atoms_max, sizeof(double *));
@@ -386,11 +388,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         break;
                                     }
                                     double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    result += (pow((1 + lambda * cos_theta), zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c));
+                                    result += (fastpown((1 + lambda * cos_theta), (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c));
                                 }
                             }
 
-                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -432,11 +434,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     }
                                     double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
                                     double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    result += (pow((1 + lambda * cos_theta), zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c)) * R_sup_n(r_jk, p, r_c);
+                                    result += (fastpown((1 + lambda * cos_theta), (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c)) * R_sup_n(r_jk, p, r_c);
                                 }
                             }
 
-                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -535,11 +537,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                             break;
                                         }
                                         double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
-                                        result += (pow(1 + lambda * cos_delta, zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_il, p, r_c));
+                                        result += (fastpown(1 + lambda * cos_delta, (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_il, p, r_c));
                                     }
                                 }
                             }
-                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * pow(2, 1 - zeta);
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -555,8 +557,29 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     }
 
     *(sym_coord_LASP_struct **)sym_coord = sym_coord_LASP;
-    //return 0;
-    return (printf("Not completed, return 999.\n"), 999);//incomplete
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j ++)
+        {
+            for (k = 0; k <= parameters_PTSDs_info->N_cutoff_radius[i][j] - 1; k++)
+            {
+                free(parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].neigh_type_array);
+                free(parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j][k].params_array);
+            }
+            free(parameters_PTSDs_info->parameters_PTSDs_info_one_line[i][j]);
+        }
+        free(parameters_PTSDs_info->parameters_PTSDs_info_one_line[i]);
+        free(parameters_PTSDs_info->N_cutoff_radius[i]);
+        free(parameters_PTSDs_info->N_neigh_inter[i]);
+    }
+    free(parameters_PTSDs_info->parameters_PTSDs_info_one_line);
+    free(parameters_PTSDs_info->PTSD_N_body_type);
+    free(parameters_PTSDs_info->PTSD_N_params);
+    free(parameters_PTSDs_info->N_cutoff_radius);
+    free(parameters_PTSDs_info->N_neigh_inter);
+
+    return 0;
+    //return (printf("Not completed, return 999.\n"), 999);//incomplete
 
 }
 
@@ -736,12 +759,15 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 printf_d("#%s", tmp_line);
                 /*dim0: center type; dim1: PTSD type; dim2: cutoff radius*/
                 cutoff_radius_pointer ++;
+                free(neighb_atom_array);
+                free(params_array);
             }
             parameters_PTSDs_info->N_cutoff_radius[ii][jj] = cutoff_radius_pointer;
         }
     }
 
     fclose(fp);
+    free(tmp_line);
     return 0;
 
 }

@@ -39,6 +39,34 @@ double fastpow2(double number, int dummy)
     return number * number;
 }
 
+double fastpown(double number, int power)
+{
+    int i;
+    double result = 1;
+    int N = power;
+    if (power == 0)
+    {
+        return 1;
+    }
+    if (power < 0)
+    {
+        N *= -1;
+    }
+    for (i = 1; i <= N; i++)
+    {
+        result *= number;
+    }
+    if (power < 0)
+    {
+        return 1.0 / result;
+    }
+    else
+    {
+        return result;
+    }
+    
+}
+
 double f_c(double r_ij, double r_c)
 {
     double result;
@@ -52,7 +80,7 @@ double R_sup_n(double r_ij, double n, double r_c)
     double f_c(double r_ij, double r_c);
 
     double result;
-    return pow(r_ij, n) * f_c(r_ij, r_c);
+    return fastpown(r_ij, (int)n) * f_c(r_ij, r_c);
 }
 
 double factorial(int n)
@@ -219,6 +247,11 @@ std::complex<double> Y_LM(double * coord_ij, int L, int m)
     std::complex<double> result;
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
+    if (phi < 0)
+    {
+        phi += (2 * PI);
+    }
+    //printf_d("L, m, theta, phi: %d, %d, %.6lf, %.6lf\n", L, m, theta, phi);
     result = boost::math::spherical_harmonic(L, m, theta, phi);
     return result;
 }
@@ -230,6 +263,10 @@ std::complex<double> d_Y_LM_d_theta(double * coord_ij, int L, int m)
     std::complex<double> I(0.0, 1.0);
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
+    if (phi < 0)
+    {
+        phi += (2 * PI);
+    }
     /*\partial Y/\partial \theta = m * cot(\theta) * Y_LM(\theta, \phi) + \sqrt((L-m) * (L + m + 1)) * exp(- I * \phi) * Y_L(M+1)(\theta, \phi)*/
     result = m * tan((double)PI / 2.0 - theta) * boost::math::spherical_harmonic(L, m, theta, phi) + sqrt((L-m) * (L + m + 1)) * exp(-I * phi) * boost::math::spherical_harmonic(L, m + 1, theta, phi);
     return result;
@@ -242,6 +279,10 @@ std::complex<double> d_Y_LM_d_phi(double * coord_ij, int L, int m)
     std::complex<double> I(0.0, 1.0);
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
+    if (phi < 0)
+    {
+        phi += (2 * PI);
+    }
     /*\partial Y/\partial \phi = I * m * Y_LM(\theta, \phi)*/
     result = I * (double)m * boost::math::spherical_harmonic(L, m, theta, phi);
     return result;
@@ -376,4 +417,67 @@ double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_)
 int free_params_LASP(double **** target, int dim1, int dim2, int ** dim3_, int ** dim4_)
 {
     return 1;
+}
+
+int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info)
+{
+    switch (sym_coord_type)
+    {
+        case 1:
+        {
+            int i, j;
+            sym_coord_DeePMD_struct * sym_coord_DeePMD = (sym_coord_DeePMD_struct *)sym_coord_;
+            for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+            {
+                //free(sym_coord_DeePMD[i].type);
+                for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
+                {
+                    free(sym_coord_DeePMD[i].coord_converted[j]);
+                    free(sym_coord_DeePMD[i].d_to_center_x[j]);
+                    free(sym_coord_DeePMD[i].d_to_center_y[j]);
+                    free(sym_coord_DeePMD[i].d_to_center_z[j]);
+                }
+
+                free(sym_coord_DeePMD[i].coord_converted);
+                free(sym_coord_DeePMD[i].d_to_center_x);
+                free(sym_coord_DeePMD[i].d_to_center_y);
+                free(sym_coord_DeePMD[i].d_to_center_z);
+            }
+            free(sym_coord_DeePMD);
+            return 0;
+            break;
+        }
+        case 2:
+        {
+            int i, j;
+            sym_coord_LASP_struct * sym_coord_LASP = (sym_coord_LASP_struct *)sym_coord_;
+            for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+            {
+                //free(sym_coord_DeePMD[i].type);
+                for (j = 0; j <= sym_coord_LASP[i].N_Atoms - 1; j++)
+                {
+                    free(sym_coord_LASP[i].coord_converted[j]);
+                    /*Not completed
+                    free(sym_coord_LASP[i].d_to_center_x[j]);
+                    free(sym_coord_LASP[i].d_to_center_y[j]);
+                    free(sym_coord_LASP[i].d_to_center_z[j]);*/
+                }
+
+                free(sym_coord_LASP[i].coord_converted);
+                /*Not completed
+                free(sym_coord_LASP[i].d_to_center_x);
+                free(sym_coord_LASP[i].d_to_center_y);
+                free(sym_coord_LASP[i].d_to_center_z);*/
+            }
+            free(sym_coord_LASP);
+            return 0;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return 0;
+
 }

@@ -144,10 +144,10 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
     {
         fprintf(fp_parameters, "        %d,\n", parameters_info->filter_neuron[i]);
     }
-    fprintf(fp_parameters, "        %d\n", parameters_info->filter_neuron[i]);
+    fprintf(fp_parameters, "        %d\n", (parameters_info->sym_coord_type == 1 ? parameters_info->filter_neuron[i] : parameters_info->N_sym_coord));
     fprintf(fp_parameters, "    ],\n");
 
-    fprintf(fp_parameters, "    \"axis_neuron\": %d,\n", parameters_info->axis_neuron);
+    fprintf(fp_parameters, "    \"axis_neuron\": %d,\n", (parameters_info->sym_coord_type == 1 ? parameters_info->axis_neuron : 1));
     fprintf(fp_parameters, "    \"num_fitting_layer\": %d,\n", parameters_info->num_fitting_layer);
 
     fprintf(fp_parameters, "    \"fitting_neuron\": [\n");
@@ -219,6 +219,7 @@ int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_inf
 int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters_info)
 {
     int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * parameters_info);
+    int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * parameters_info);
 
     int error_code;
     int sym_coord_type = parameters_info->sym_coord_type;
@@ -228,6 +229,11 @@ int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters
         case 1:
         {
             error_code = save_to_file_sym_coord_DeePMD(sym_coord, parameters_info);
+            break;
+        }
+        case 2:
+        {
+            error_code = save_to_file_sym_coord_LASP(sym_coord, parameters_info);
             break;
         }
         default:
@@ -302,6 +308,74 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
     free(N_Atoms_array);
     
     check_sym_coord_from_bin(parameters_info);
+
+    return 0;
+}
+
+int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * parameters_info)
+{
+    int check_sym_coord_from_bin(parameters_info_struct * parameters_info);
+
+    FILE * fp_sym_coord;
+    FILE * fp_N_Atoms;
+    sym_coord_LASP_struct * sym_coord_LASP = (sym_coord_LASP_struct *)sym_coord;
+    int * N_Atoms_array = (int *)calloc(parameters_info->Nframes_tot, sizeof(int));
+    int i, j, k;
+
+    fp_N_Atoms = fopen("./N_ATOMS.BIN", "rb");
+    fread(N_Atoms_array, sizeof(int), parameters_info->Nframes_tot, fp_N_Atoms);
+    fclose(fp_N_Atoms);
+
+    printf_d("N_Atoms_array read from file:\n");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        printf_d("%d ", N_Atoms_array[i]);
+    }
+    printf_d("\n");
+
+    fp_sym_coord = fopen("./SYM_COORD.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+
+    /*Incomplete*/
+    fp_sym_coord = fopen("./SYM_COORD_DX.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].d_to_center_x[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+    fp_sym_coord = fopen("./SYM_COORD_DY.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].d_to_center_y[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+    fp_sym_coord = fopen("./SYM_COORD_DZ.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= N_Atoms_array[i] - 1; j++)
+        {
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].d_to_center_z[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+        }
+    }
+    fclose(fp_sym_coord);
+
+    free(N_Atoms_array);
 
     return 0;
 }

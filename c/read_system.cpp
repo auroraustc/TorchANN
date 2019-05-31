@@ -305,6 +305,7 @@ int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_
 		token_type = strtok(NULL, " \n");
 	}
 	printf_d("\n");
+	return 0;
 }
 
 void check_bin(int Nframes_tot)

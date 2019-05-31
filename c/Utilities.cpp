@@ -307,6 +307,7 @@ double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k)//cen
     }
     /*cos(\theta_ijk_centered_i) = dot_prod(coord_ji, coord_ki) / \sqrt(norm_ji * norm_ki)*/
     result = dot_jiki / sqrt(norm_ji * norm_ki);
+    return result;
 }
 int cross_prod(double * vec1, double * vec2, double * vec_result)
 {
@@ -348,6 +349,7 @@ double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, 
         dot_kij_ijl += norm_vec_kij[i] * norm_vec_ijl[i];
     }
     result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((double)-1.0);
+    return result;
 }
 
 int calc_N_neigh_inter(int K, int N)// total N types; K body interaction; MULTIPLY N to the return value to get correct answer!!!
@@ -367,19 +369,51 @@ int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type)//
 {
     int i, j, k;
     int sum = 0;
-    std::vector<int> current_type_ (current_type, current_type + N_neighb_atom);
-    std::vector<int> params_type_ (params_type, params_type + N_neighb_atom);
+    /*std::vector<int> current_type_ (current_type, current_type + N_neighb_atom);
+    std::vector<int> params_type_ (params_type, params_type + N_neighb_atom);*/
     if (params_type[0] == -1)
     {
         return 1;
     }
-    std::sort(current_type_.begin(), current_type_.end());
+    /*std::sort(current_type_.begin(), current_type_.end());
     std::sort(params_type_.begin(), params_type_.end());
     for (i = 0; i <= N_neighb_atom - 1; i++)
     {
         sum += ((current_type_[i] - params_type_[i]) * (current_type_[i] - params_type_[i]));
     }
-    return ((sum == 0) ? 1 : 0);
+    return ( sum == 0 ? 1 : 0);*/
+    switch (N_neighb_atom)
+    {
+        case 1://two body
+        {
+            if (current_type[0] == params_type[0])
+            {
+                return 1;
+            }
+            break;
+        }
+        case 2://three body
+        {
+            if ((((current_type[0] == params_type[0])&&(current_type[1] == params_type[1]))) || (((current_type[0] == params_type[1])&&(current_type[1] == params_type[0]))))
+            {
+                return 1;
+            }
+            break;
+        }
+        case 3://four body
+        {
+            int mul1 = current_type[0] * current_type[1] * current_type[2];
+            int mul2 = params_type[0] * params_type[1] * params_type[2];
+            int sum1 = current_type[0] + current_type[1] + current_type[2];
+            int sum2 = params_type[0] + params_type[1] + params_type[2];
+            if ((mul1 == mul2)&&(sum1 == sum2))
+            {
+                return 1;
+            }
+            break;
+        }
+    }
+    return 0;
 }
 
 int find_index_int(int target, int * array, int array_length)

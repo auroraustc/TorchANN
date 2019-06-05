@@ -323,7 +323,7 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     FILE * fp_N_Atoms;
     sym_coord_LASP_struct * sym_coord_LASP = (sym_coord_LASP_struct *)sym_coord;
     int * N_Atoms_array = (int *)calloc(parameters_info->Nframes_tot, sizeof(int));
-    int i, j, k;
+    int i, j, k, l;
 
     fp_N_Atoms = fopen("./N_ATOMS.BIN", "rb");
     fread(N_Atoms_array, sizeof(int), parameters_info->Nframes_tot, fp_N_Atoms);
@@ -352,9 +352,10 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].d_to_center_x[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
+            {
+                fwrite(sym_coord_LASP[i].d_x[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+            }
         }
     }
     fclose(fp_sym_coord);
@@ -363,9 +364,10 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].d_to_center_y[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
+            {
+                fwrite(sym_coord_LASP[i].d_y[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+            }
         }
     }
     fclose(fp_sym_coord);
@@ -374,9 +376,10 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
-            //fwrite(sym_coord_LASP[i].d_to_center_z[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
+            {
+                fwrite(sym_coord_LASP[i].d_z[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+            }
         }
     }
     fclose(fp_sym_coord);

@@ -363,6 +363,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
                                     int current_type[1]= {frame_info->neighbour_list[j].type[nb1]};
                                     std::complex<double> R_Y;
+                                    std::complex<double> YLM;
+                                    double R;
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                     continue;
@@ -374,12 +376,43 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     {
                                         break;
                                     }
-                                    R_Y = Y_LM(coord_ij, L, M);
-                                    R_Y = R_Y * R_sup_n(r_ij, n, r_c);
+                                    YLM = Y_LM(coord_ij, L, M);
+                                    R = R_sup_n(r_ij, n, r_c);
+                                    R_Y = YLM * R;
                                     result_inner += R_Y;
                                     /*Calculate \partial RYLM / \partial x,y,z*/
                                     /*+= dR/dr * dr/dxi * Y_LM + R * (dY_LM/dtheta * dtheta/dxi + dY_LM/dphi * dphi/dxi)*/
-                                    derivative_tmp[idx_i] += 0;
+                                    /*First, I need to calculate all damn d_angle/d_x,y,z*/
+                                    double d_r_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    double d_r_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    double d_r_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    double d_r_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    double d_r_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    double d_r_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    double d_theta_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                    double d_theta_d_x_j = 0.0 - d_theta_d_x_i;
+                                    double d_theta_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                    double d_theta_d_y_j = 0.0 - d_theta_d_y_i;
+                                    double d_theta_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
+                                    double d_theta_d_z_j = 0.0 - d_theta_d_z_i;
+                                    double d_phi_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                    double d_phi_d_x_j = 0.0 - d_phi_d_x_i;
+                                    double d_phi_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                    double d_phi_d_y_j = 0.0 - d_phi_d_y_i;
+                                    double d_phi_d_z_i = 0.0;
+                                    double d_phi_d_z_j = 0.0;
+                                    std::complex<double> D_YLM_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
+                                    std::complex<double> D_YLM_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
+                                    double D_R_D_r = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    //d to x
+                                    derivative_tmp[idx_i] += D_R_D_r * d_r_d_x_i * YLM + R * (D_YLM_D_THETA * d_theta_d_x_i + D_YLM_D_PHI * d_phi_d_x_i);
+                                    derivative_tmp[idx_j] += D_R_D_r * d_r_d_x_j * YLM + R * (D_YLM_D_THETA * d_theta_d_x_j + D_YLM_D_PHI * d_phi_d_x_j);
+                                    //d to y
+                                    derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_i] += D_R_D_r * d_r_d_y_i * YLM + R * (D_YLM_D_THETA * d_theta_d_y_i + D_YLM_D_PHI * d_phi_d_y_i);
+                                    derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_j] += D_R_D_r * d_r_d_y_j * YLM + R * (D_YLM_D_THETA * d_theta_d_y_j + D_YLM_D_PHI * d_phi_d_y_j);;
+                                    //d to z
+                                    derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_i] += D_R_D_r * d_r_d_z_i * YLM + R * (D_YLM_D_THETA * d_theta_d_z_i + D_YLM_D_PHI * d_phi_d_z_i);
+                                    derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_j] += D_R_D_r * d_r_d_z_j * YLM + R * (D_YLM_D_THETA * d_theta_d_z_j + D_YLM_D_PHI * d_phi_d_z_j);
                                 }
                                 result += std::norm(result_inner);
                                 for (d_idx = 0; d_idx <= 3 * parameters_info->N_Atoms_max - 1; d_idx++)

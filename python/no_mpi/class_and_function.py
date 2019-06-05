@@ -677,7 +677,7 @@ class one_batch_net(nn.Module):
         #SYM_COORD_Reshape_tf_cur_Reshape = self.batch_norm(SYM_COORD_Reshape_tf_cur_Reshape)
         for type_idx in range(parameters.N_types_all_frame):
 
-
+            """Now we load the pre-calculated derivative, N_frames * N_atoms_max * N_PTSDs * N_atoms_max * 3 * 8 / 1024 / 1024 Mb"""
 
             type_idx_cur_type = (data_cur[5] == parameters.type_index_all_frame[type_idx]).nonzero()
             type_idx_cur_type = (
@@ -718,12 +718,18 @@ class one_batch_net(nn.Module):
                     avg_[0][type_idx] = avg_cur_type
 
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type.reshape(-1, )[0]) / std_cur_type.reshape(-1, )[0]
+            SYM_COORD_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.requires_grad_()
 
             E_cur_type = tf.tanh(self.fitting_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type))
             for fitting_hidden_idx, fitting_hidden_layer in enumerate(self.fitting_hidden[type_idx]):
                 E_cur_type = tf.tanh(fitting_hidden_layer(E_cur_type))
             E_cur_type = (self.fitting_out[type_idx](E_cur_type))
             E_cur_batch_atom_wise.scatter_(0, type_idx_cur_type, tf.reshape(E_cur_type, (-1,)))
+
+            E_tot_cur_type = tf.sum(E_cur_type)
+            D_E_D_SYM_cur_type = \
+                tf.autograd.grad(E_tot_cur_type, SYM_COORD_Reshape_tf_cur_Reshape_cur_type, create_graph=True)[0]
+
 
 
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)

@@ -124,7 +124,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
 #OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)#, betas=(0.9,0.999), weight_decay=5E-4)
-OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0))
+OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0))
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations

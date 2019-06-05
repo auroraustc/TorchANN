@@ -188,8 +188,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     double R_sup_n(double r_ij, double n, double r_c);
     int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type);
     std::complex<double> Y_LM(double * coord_ij, int L, int m);
+    std::complex<double> d_Y_LM_d_theta(double * coord_ij, int L, int m);
+    std::complex<double> d_Y_LM_d_phi(double * coord_ij, int L, int m);
     double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k);
     double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, double * coord_l);
+    double d_R_sup_n_d_r(double r_ij, double n, double r_c);
 
     sym_coord_LASP_struct * sym_coord_LASP;
     int i, j, k, l, x, y, z, t, M;
@@ -239,12 +242,27 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
         sym_coord_LASP[i].SEL_A = N_PTSD_tot;
         sym_coord_LASP[i].N_PTSDs = N_PTSD_tot;
         sym_coord_LASP[i].coord_converted = (double **)calloc(parameters_info->N_Atoms_max, sizeof(double *));
+        sym_coord_LASP[i].idx_nei = (int ***)calloc(parameters_info->N_Atoms_max, sizeof(int **));
+        sym_coord_LASP[i].d_x = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
+        sym_coord_LASP[i].d_y = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
+        sym_coord_LASP[i].d_z = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
         for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
         {
             sym_coord_LASP[i].coord_converted[j] = (double *)calloc(N_PTSD_tot, sizeof(double));
+            sym_coord_LASP[i].idx_nei[j] = (int **)calloc(parameters_info->N_sym_coord, sizeof(int *));
+            sym_coord_LASP[i].d_x[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
+            sym_coord_LASP[i].d_y[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
+            sym_coord_LASP[i].d_z[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
+            for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
+            {
+                sym_coord_LASP[i].d_x[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
+                sym_coord_LASP[i].d_y[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
+                sym_coord_LASP[i].d_z[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
+            }
             //printf_d("i, j: %d %d\n", i, j);
         }
     }
+
     #pragma omp parallel for private(j, k, l)
     for (i = 0; i <=parameters_info->Nframes_tot - 1; i++)
     {
@@ -290,8 +308,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
+                            int idx_i = j;
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
+                                int idx_j = frame_info->neighbour_list[i].index_neighbours[nb1];//idx_i = j
                                 int current_type[1] = {frame_info->neighbour_list[j].type[nb1]};
                                 if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                 {
@@ -306,6 +326,13 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                                 //printf_d("r_ij = %.2lf, ", r_ij);
                                 result += R_sup_n(r_ij, n, r_c);
+                                /*d_S1/d_xk = d_S1/d_rij * d_rij/d_xk, k = i or j*/
+                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij;
+                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij * (-1.0);
+                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_i] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[1] - coord_j[1]) / r_ij;
+                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[1] - coord_j[1]) / r_ij * (-1.0);
+                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_i] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[2] - coord_j[2]) / r_ij;
+                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[2] - coord_j[2]) / r_ij * (-1.0);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result;
                             //printf_d("r_c: %.2lf, S1: %lf\n", r_c, result);
@@ -324,11 +351,16 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
+                            double derivative_prefector = 0;
+                            int idx_i = j;
                             for (M = -L; M <= L; M++)
                             {
                                 std::complex<double> result_inner = (0, 0);
+                                int d_idx;
+                                std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));//dx,dy,dz
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
+                                    int idx_j = frame_info->neighbour_list[i].index_neighbours[nb1];
                                     int current_type[1]= {frame_info->neighbour_list[j].type[nb1]};
                                     std::complex<double> R_Y;
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
@@ -345,10 +377,33 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     R_Y = Y_LM(coord_ij, L, M);
                                     R_Y = R_Y * R_sup_n(r_ij, n, r_c);
                                     result_inner += R_Y;
+                                    /*Calculate \partial RYLM / \partial x,y,z*/
+                                    /*+= dR/dr * dr/dxi * Y_LM + R * (dY_LM/dtheta * dtheta/dxi + dY_LM/dphi * dphi/dxi)*/
+                                    derivative_tmp[idx_i] += 0;
                                 }
                                 result += std::norm(result_inner);
+                                for (d_idx = 0; d_idx <= 3 * parameters_info->N_Atoms_max - 1; d_idx++)
+                                {
+                                    derivative_tmp[d_idx] *= (2.0 * result_inner);
+                                }
+                                for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
+                                {
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                }
+                                free(derivative_tmp);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            derivative_prefector = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
+                            int d_idx = 0;
+                            /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
+                            for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
+                            {
+                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
+                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
+                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
+                            }
                             N_PTSD_count_idx++;
                             break;
                         }

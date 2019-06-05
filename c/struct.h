@@ -128,9 +128,10 @@ typedef struct sym_coord_LASP_struct_
 	int N_PTSDs;//Number of PTSDs(Power-type structural descriptors) for each atom
 	int * type;//type[0..N_Atoms-1]
 	double ** coord_converted;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
-	double ** d_to_center_x;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
-	double ** d_to_center_y;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
-	double ** d_to_center_z;//coord_converted[0..N_Atoms-1][0..N_PTSDs-1]
+	int *** idx_nei;//idx_nei[0..N_Atoms - 1][0..N_PTSDs - 1][]. Record the index of all the atoms invloved in No.[atom_idx][PTSD_idx]'s PTSD.
+	double *** d_x;//Record the d_PTSD / d_x.
+	double *** d_y;//
+	double *** d_z;//
 }sym_coord_LASP_struct;
 
 typedef struct parameters_PTSDs_info_one_line_struct_

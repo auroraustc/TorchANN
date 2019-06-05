@@ -179,6 +179,9 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
 
     fprintf(fp_parameters, "}\n");//tail. The last line before tail should NOT end with a coma
     fclose(fp_parameters);
+
+    /*Save a binary version of parameters*/
+    /*Not completed. Parsing json seems to be more flexible.*/
     return 0;
 }
 
@@ -349,7 +352,8 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
             //fwrite(sym_coord_LASP[i].d_to_center_x[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
         }
     }
@@ -359,7 +363,8 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
             //fwrite(sym_coord_LASP[i].d_to_center_y[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
         }
     }
@@ -369,7 +374,8 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), 0, fp_sym_coord);
+            //fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
             //fwrite(sym_coord_LASP[i].d_to_center_z[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
         }
     }

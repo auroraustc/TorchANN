@@ -75,12 +75,30 @@ double f_c(double r_ij, double r_c)
     return result;
 }
 
+double d_f_c_d_r(double r_ij, double r_c)
+{
+    double result;
+    double rc = r_c;
+    result = (r_ij <= rc) ? (-3.0 / cosh(1 - r_ij / rc) / cosh(1 - r_ij / rc) * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) / 2.0 / rc ) : (0);
+    return result;
+}
+
 double R_sup_n(double r_ij, double n, double r_c)
 {
     double f_c(double r_ij, double r_c);
 
     double result;
     return fastpown(r_ij, (int)n) * f_c(r_ij, r_c);
+}
+
+double d_R_sup_n_d_r(double r_ij, double n, double r_c)
+{
+    double f_c(double r_ij, double r_c);
+    double d_f_c_d_r(double r_ij, double r_c);
+    double result;
+
+    result = n * fastpown(r_ij, (int)(n - 1)) * f_c(r_ij, r_c) + fastpown(r_ij, (int)n) * d_f_c_d_r(r_ij, r_c);
+    return result;
 }
 
 double factorial(int n)
@@ -483,7 +501,7 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
         }
         case 2:
         {
-            int i, j;
+            int i, j, k;
             sym_coord_LASP_struct * sym_coord_LASP = (sym_coord_LASP_struct *)sym_coord_;
             for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
             {
@@ -491,6 +509,15 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
                 for (j = 0; j <= sym_coord_LASP[i].N_Atoms - 1; j++)
                 {
                     free(sym_coord_LASP[i].coord_converted[j]);
+                    for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
+                    {
+                        free(sym_coord_LASP[i].d_x[j][k]);
+                        free(sym_coord_LASP[i].d_y[j][k]);
+                        free(sym_coord_LASP[i].d_z[j][k]);
+                    }
+                    free(sym_coord_LASP[i].d_x[j]);
+                    free(sym_coord_LASP[i].d_y[j]);
+                    free(sym_coord_LASP[i].d_z[j]);
                     /*Not completed
                     free(sym_coord_LASP[i].d_to_center_x[j]);
                     free(sym_coord_LASP[i].d_to_center_y[j]);
@@ -498,6 +525,9 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
                 }
 
                 free(sym_coord_LASP[i].coord_converted);
+                free(sym_coord_LASP[i].d_x);
+                free(sym_coord_LASP[i].d_y);
+                free(sym_coord_LASP[i].d_z);
                 /*Not completed
                 free(sym_coord_LASP[i].d_to_center_x);
                 free(sym_coord_LASP[i].d_to_center_y);

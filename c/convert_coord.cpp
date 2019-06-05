@@ -311,7 +311,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int idx_i = j;
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                int idx_j = frame_info->neighbour_list[i].index_neighbours[nb1];//idx_i = j
+                                int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];//idx_i = j
                                 int current_type[1] = {frame_info->neighbour_list[j].type[nb1]};
                                 if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                 {
@@ -360,7 +360,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));//dx,dy,dz
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
-                                    int idx_j = frame_info->neighbour_list[i].index_neighbours[nb1];
+                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
                                     int current_type[1]= {frame_info->neighbour_list[j].type[nb1]};
                                     std::complex<double> R_Y;
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)

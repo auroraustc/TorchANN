@@ -253,7 +253,7 @@ if (True):
         END_EPOCH_TIMER = time.time()
         ###Save model, parameters and current lr every save_epoch
         if (epoch > 0) and (epoch % parameters.save_epoch == 0):
-            if (tf.cuda.device_count() == 1):
+            if (tf.cuda.device_count() <= 1):
                 torch.save(
                     {'model_state_dict': ONE_BATCH_NET.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters,
                      'Epoch': epoch, 'batch': batch_idx, 'lr': OPTIMIZER2.param_groups[0].get("lr")},
@@ -274,7 +274,7 @@ if (True):
             break
 
 if (True):
-    if (tf.cuda.device_count() == 1):
+    if (tf.cuda.device_count() <= 1):
         torch.save({'model_state_dict': ONE_BATCH_NET.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters}, "./freeze_model.pytorch")
     else:
         torch.save({'model_state_dict': ONE_BATCH_NET.module.state_dict(), 'std': std, 'avg': avg, 'parameters': parameters}, "./freeze_model.pytorch")

@@ -688,8 +688,9 @@ class one_batch_net(nn.Module):
             """Now we load the pre-calculated derivative, N_frames * N_atoms_max * N_PTSDs * N_atoms_max * 3 * 8 / 1024 / 1024 Mb"""
 
             type_idx_cur_type = (data_cur[5] == parameters.type_index_all_frame[type_idx]).nonzero()
+            frame_idx_cur_type = type_idx_cur_type.narrow(1, 0, 1)
             type_idx_cur_type = (
-                        type_idx_cur_type.narrow(1, 0, 1) * data_cur[4][0].long() + type_idx_cur_type.narrow(1, 1, 1)).reshape(
+                        frame_idx_cur_type * data_cur[4][0].long() + type_idx_cur_type.narrow(1, 1, 1)).reshape(
                 -1, )
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
                 SYM_COORD_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.N_sym_coord), 0,
@@ -737,6 +738,12 @@ class one_batch_net(nn.Module):
                     avg_[0][type_idx] = avg_cur_type
 
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg_cur_type.reshape(-1, )[0]) / std_cur_type.reshape(-1, )[0]
+            SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type / \
+                                                           std_cur_type.reshape(-1, )[0]
+            SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type / \
+                                                           std_cur_type.reshape(-1, )[0]
+            SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type / \
+                                                           std_cur_type.reshape(-1, )[0]
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = SYM_COORD_Reshape_tf_cur_Reshape_cur_type.requires_grad_()
 
             E_cur_type = tf.tanh(self.fitting_input[type_idx](SYM_COORD_Reshape_tf_cur_Reshape_cur_type))
@@ -748,6 +755,30 @@ class one_batch_net(nn.Module):
             E_tot_cur_type = tf.sum(E_cur_type)
             D_E_D_SYM_cur_type = \
                 tf.autograd.grad(E_tot_cur_type, SYM_COORD_Reshape_tf_cur_Reshape_cur_type, create_graph=True)[0]
+            shape_d_e_tmp = D_E_D_SYM_cur_type.shape
+            D_E_D_SYM_cur_type = tf.reshape(D_E_D_SYM_cur_type, (shape_d_e_tmp[0], shape_d_e_tmp[1], 1))
+            SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = tf.reshape(SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type * \
+                                                           D_E_D_SYM_cur_type, (-1, ))
+            SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = tf.reshape(SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type * \
+                                                           D_E_D_SYM_cur_type, (-1, ))
+            SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = tf.reshape(SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type * \
+                                                           D_E_D_SYM_cur_type, (-1, ))
+            F_x_cur_type = tf.sum(
+                SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type.reshape(-1, parameters.N_sym_coord, N_ATOMS_tf_cur[0]),
+                dim=1)
+            F_y_cur_type = tf.sum(
+                SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type.reshape(-1, parameters.N_sym_coord, N_ATOMS_tf_cur[0]),
+                dim=1)
+            F_z_cur_type = tf.sum(
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type.reshape(-1, parameters.N_sym_coord, N_ATOMS_tf_cur[0]),
+                dim=1)
+
+            F_xyz_cur_type = tf.cat((F_x_cur_type, F_y_cur_type, F_z_cur_type)).reshape(3, -1).transpose(0,1)
+
+            #F_cur_batch += F_cur_batch.reshape(shape_f_tmp[0] * shape_f_tmp[1], shape_f_tmp[2]).scatter_add_(0, F_idx_cur_type.long(), F_xyz_cur_type).reshape(shape_f_tmp)
+
+            1
+
 
 
 

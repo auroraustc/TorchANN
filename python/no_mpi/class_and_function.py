@@ -666,6 +666,14 @@ class one_batch_net(nn.Module):
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
                                                       (len(SYM_COORD_Reshape_tf_cur), N_ATOMS_tf_cur[0], \
                                                        parameters.N_sym_coord))
+
+        SYM_COORD_DX_Reshape_tf_cur_Reshape = tf.reshape(data_cur[9], (len(data_cur[1]), N_ATOMS_tf_cur[0],
+                                                                           parameters.N_sym_coord, N_ATOMS_tf_cur[0]))
+        SYM_COORD_DY_Reshape_tf_cur_Reshape = tf.reshape(data_cur[10], (len(data_cur[1]), N_ATOMS_tf_cur[0],
+                                                                            parameters.N_sym_coord, N_ATOMS_tf_cur[0]))
+        SYM_COORD_DZ_Reshape_tf_cur_Reshape = tf.reshape(data_cur[11], (len(data_cur[1]), N_ATOMS_tf_cur[0],
+                                                                            parameters.N_sym_coord, N_ATOMS_tf_cur[0]))
+
         NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
         NEI_TYPE_Reshape_tf_cur = tf.reshape(data_cur[13], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device=device)
@@ -686,6 +694,17 @@ class one_batch_net(nn.Module):
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
                 SYM_COORD_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.N_sym_coord), 0,
                 type_idx_cur_type)
+            shape_d_tmp = SYM_COORD_DX_Reshape_tf_cur_Reshape.shape
+            SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                SYM_COORD_DX_Reshape_tf_cur_Reshape.reshape(shape_d_tmp[0] * shape_d_tmp[1], shape_d_tmp[2],
+                                                            shape_d_tmp[3]), 0, type_idx_cur_type)
+            SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                SYM_COORD_DY_Reshape_tf_cur_Reshape.reshape(shape_d_tmp[0] * shape_d_tmp[1], shape_d_tmp[2],
+                                                            shape_d_tmp[3]), 0, type_idx_cur_type)
+            SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
+                SYM_COORD_DZ_Reshape_tf_cur_Reshape.reshape(shape_d_tmp[0] * shape_d_tmp[1], shape_d_tmp[2],
+                                                            shape_d_tmp[3]), 0, type_idx_cur_type)
+
             ###DeePMD-type batch-norm
             if (use_std_avg == True):
                 """SYM_COORD_Reshape_tf_cur_Reshape_cur_type = (SYM_COORD_Reshape_tf_cur_Reshape_cur_type - avg[
@@ -729,6 +748,7 @@ class one_batch_net(nn.Module):
             E_tot_cur_type = tf.sum(E_cur_type)
             D_E_D_SYM_cur_type = \
                 tf.autograd.grad(E_tot_cur_type, SYM_COORD_Reshape_tf_cur_Reshape_cur_type, create_graph=True)[0]
+
 
 
 

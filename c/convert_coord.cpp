@@ -326,6 +326,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                                 //printf_d("r_ij = %.2lf, ", r_ij);
                                 result += R_sup_n(r_ij, n, r_c);
+                                if (r_ij <= 1E-4) printf_d("small r_ij:%lf\n", r_ij);
                                 /*d_S1/d_xk = d_S1/d_rij * d_rij/d_xk, k = i or j*/
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij;
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij * (-1.0);
@@ -376,6 +377,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     {
                                         break;
                                     }
+                                    if (r_ij <= 1E-4) printf_d("small r_ij:%lf\n", r_ij);
                                     YLM = Y_LM(coord_ij, L, M);
                                     R = R_sup_n(r_ij, n, r_c);
                                     R_Y = YLM * R;
@@ -428,7 +430,15 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 free(derivative_tmp);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
-                            derivative_prefector = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
+                            if (result <= 1E-8 )
+                            {
+                                derivative_prefector = 0;
+                            }
+                            else
+                            {
+                                derivative_prefector = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
+                            }
+                            
                             int d_idx = 0;
                             /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
                             for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)

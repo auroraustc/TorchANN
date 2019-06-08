@@ -774,8 +774,15 @@ class one_batch_net(nn.Module):
                 dim=1)
 
             F_xyz_cur_type = tf.cat((F_x_cur_type, F_y_cur_type, F_z_cur_type)).reshape(3, -1).transpose(0,1)
+            len_frame_idx = len(frame_idx_cur_type)
+            F_idx_xyz_cur_type_ = tf.arange(N_ATOMS_tf_cur[0], device=device).expand(len_frame_idx, N_ATOMS_tf_cur[0])
+            F_idx_xyz_cur_type_offset = frame_idx_cur_type.expand(len_frame_idx, N_ATOMS_tf_cur[0]) * N_ATOMS_tf_cur[0]
+            F_idx_xyz_cur_type = F_idx_xyz_cur_type_ + F_idx_xyz_cur_type_offset
+            F_idx_xyz_cur_type = F_idx_xyz_cur_type.reshape(-1, )
+            F_idx_xyz_cur_type_all = tf.cat((F_idx_xyz_cur_type * 3, F_idx_xyz_cur_type * 3 + 1, F_idx_xyz_cur_type * 3 + 2)).reshape(3, -1).transpose(0, 1).reshape(-1, )
 
-            #F_cur_batch += F_cur_batch.reshape(shape_f_tmp[0] * shape_f_tmp[1], shape_f_tmp[2]).scatter_add_(0, F_idx_cur_type.long(), F_xyz_cur_type).reshape(shape_f_tmp)
+            shape_f_tmp = F_cur_batch.shape
+            F_cur_batch = F_cur_batch.reshape(-1, ).scatter_add_(0, F_idx_xyz_cur_type_all.long(), F_xyz_cur_type.reshape(-1, )).reshape(shape_f_tmp)
 
             1
 

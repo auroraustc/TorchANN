@@ -193,6 +193,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k);
     double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, double * coord_l);
     double d_R_sup_n_d_r(double r_ij, double n, double r_c);
+    int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * result);
+    int d_cos_dihedral_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * coord_l, double * result);
 
     sym_coord_LASP_struct * sym_coord_LASP;
     int i, j, k, l, x, y, z, t, M;
@@ -352,7 +354,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
-                            double derivative_prefector = 0;
+                            double derivative_prefactor = 0;
                             int idx_i = j;
                             for (M = -L; M <= L; M++)
                             {
@@ -432,20 +434,20 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
                             if (result <= 1E-8 )
                             {
-                                derivative_prefector = 0;
+                                derivative_prefactor = 0;
                             }
                             else
                             {
-                                derivative_prefector = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
+                                derivative_prefactor = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
                             }
                             
                             int d_idx = 0;
                             /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
                             for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                             {
-                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
-                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
-                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefector;
+                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
+                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
+                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                             }
                             N_PTSD_count_idx++;
                             break;
@@ -464,6 +466,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
                             zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
                             lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            int idx_i = j;
+                            double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
                                 double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
@@ -476,6 +480,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 {
                                     int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
                                     double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
+                                    int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
@@ -486,11 +492,46 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         break;
                                     }
                                     double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    result += (fastpown((1 + lambda * cos_theta), (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c));
+                                    double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                    double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+
+                                    double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                    double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                    
+                                    double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                    double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                    
+                                    double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
+                                    double zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
+                                    double d_cos_theta_d_coord[9];
+                                    double R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                    double R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                    double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+
+                                    d_cos_bond_angle_d_coord(coord_i, coord_j, coord_k, d_cos_theta_d_coord);
+
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[0] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_i);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[1] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_i);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[2] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_i);
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[3] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_j * R_m_r_ik);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[4] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[5] * R_n_r_ij * R_m_r_ik + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik);
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[6] * R_n_r_ij * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_k);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[7] * R_n_r_ij * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[8] * R_n_r_ij * R_m_r_ik + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k);
+
+                                    result += (zeta_prefac * R_n_r_ij * R_m_r_ik);
                                 }
                             }
 
-                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -506,9 +547,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int N_nei = N_body - 1;
                             n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
                             m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
-                            lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
+                            p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
                             zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
                             lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[4];
+                            int idx_i = j;
+                            double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
                                 double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
@@ -521,6 +564,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 {
                                     int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
                                     double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
+                                    int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
@@ -532,7 +577,50 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     }
                                     double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
                                     double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    result += (fastpown((1 + lambda * cos_theta), (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c)) * R_sup_n(r_jk, p, r_c);
+                                    double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                    double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                    double d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
+                                    double d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
+
+                                    double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                    double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                    double d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
+                                    double d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
+                                    
+                                    double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                    double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                    double d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
+                                    double d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
+                                    
+                                    double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
+                                    double zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
+                                    double d_cos_theta_d_coord[9];
+                                    double R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                    double R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                    double R_p_r_jk = R_sup_n(r_jk, p, r_c);
+                                    double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                    double d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
+
+                                    d_cos_bond_angle_d_coord(coord_i, coord_j, coord_k, d_cos_theta_d_coord);
+
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[0] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_i * R_p_r_jk);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[1] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_i * R_p_r_jk);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_i] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[2] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_i * R_p_r_jk);
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[3] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_j * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_j);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[4] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_j);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[5] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_j);
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[6] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_k * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_k);
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[7] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_k);
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_k] += prefac_2 * (d_zeta_prefac * lambda * d_cos_theta_d_coord[8] * R_n_r_ij * R_m_r_ik * R_p_r_jk + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k * R_p_r_jk + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_k);
+
+                                    result += (zeta_prefac * R_n_r_ij * R_m_r_ik * R_p_r_jk);
                                 }
                             }
 
@@ -555,9 +643,13 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
                             m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
                             p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
+                            int idx_i = j;
+                            double derivative_prefactor = 0; 
                             for (M = - L; M <= L; M++)
                             {
                                 std::complex<double> result_inner = (0, 0);
+                                int d_idx;
+                                std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
                                     double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
@@ -568,6 +660,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     }
                                     for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                     {
+                                        int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
+                                        int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
                                         int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
                                         double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
                                         if (compare_Nei_type(N_nei, current_type, params_type) == 0)
@@ -583,15 +677,119 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
                                         double coord_ik[3] = {coord_i[0] - coord_k[0], coord_i[1] - coord_k[1], coord_i[2] - coord_k[2]};
                                         std::complex<double> R_Y;
-                                        R_Y = Y_LM(coord_ij, L, M) + Y_LM(coord_ik, L, M);
-                                        R_Y = R_Y * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_jk, p, r_c);
+                                        std::complex<double> Y_LM_IJ = Y_LM(coord_ij, L, M);
+                                        std::complex<double> Y_LM_IK = Y_LM(coord_ik, L, M);
+                                        double R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                        double R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                        double R_p_r_jk = R_sup_n(r_jk, p, r_c);
+                                        R_Y = Y_LM_IJ + Y_LM_IK;
+                                        R_Y = R_Y * R_n_r_ij * R_m_r_ik * R_p_r_jk;
                                         result_inner += R_Y;
+                                        /*For derivative*/
+                                        double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                        double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                        double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                        double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                        double d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
+                                        double d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
+
+                                        double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                        double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                        double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                        double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                        double d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
+                                        double d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
+                                    
+                                        double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                        double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                        double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                        double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                        double d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
+                                        double d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
+
+                                        double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                        double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                        double d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
+
+                                        double d_theta_ij_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                        double d_theta_ij_d_x_j = 0.0 - d_theta_ij_d_x_i;
+                                        double d_theta_ij_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                        double d_theta_ij_d_y_j = 0.0 - d_theta_ij_d_y_i;
+                                        double d_theta_ij_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
+                                        double d_theta_ij_d_z_j = 0.0 - d_theta_ij_d_z_i;
+                                        double d_phi_ij_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                        double d_phi_ij_d_x_j = 0.0 - d_phi_ij_d_x_i;
+                                        double d_phi_ij_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                        double d_phi_ij_d_y_j = 0.0 - d_phi_ij_d_y_i;
+                                        double d_phi_ij_d_z_i = 0.0;
+                                        double d_phi_ij_d_z_j = 0.0;
+                                        std::complex<double> D_YLM_IJ_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
+                                        std::complex<double> D_YLM_IJ_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
+
+                                        double d_theta_ik_d_x_i = (coord_ik[0]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
+                                        double d_theta_ik_d_x_k = 0.0 - d_theta_ik_d_x_i;
+                                        double d_theta_ik_d_y_i = (coord_ik[1]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
+                                        double d_theta_ik_d_y_k = 0.0 - d_theta_ik_d_y_i;
+                                        double d_theta_ik_d_z_i = 0.0 - (1.0 / r_ik - fastpow2(coord_ik[2], 2) / fastpown(r_ik, 3)) / (1.0 - fastpow2(coord_ik[2], 2) / fastpow2(r_ik, 2));
+                                        double d_theta_ik_d_z_k = 0.0 - d_theta_ik_d_z_i;
+                                        double d_phi_ik_d_x_i = 0.0 - (coord_ik[1]) / ((fastpow2(coord_ik[0], 2)) * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
+                                        double d_phi_ik_d_x_k = 0.0 - d_phi_ik_d_x_i;
+                                        double d_phi_ik_d_y_i = 1.0 / (coord_ik[0] * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
+                                        double d_phi_ik_d_y_k = 0.0 - d_phi_ik_d_y_i;
+                                        double d_phi_ik_d_z_i = 0.0;
+                                        double d_phi_ik_d_z_k = 0.0;
+                                        std::complex<double> D_YLM_IK_D_THETA = d_Y_LM_d_theta(coord_ik, L, M);
+                                        std::complex<double> D_YLM_IK_D_PHI = d_Y_LM_d_phi(coord_ik, L, M);
+
+                                        //d to x
+                                        derivative_tmp[idx_i] += d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_x_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_x_i + D_YLM_IJ_D_PHI * d_phi_ij_d_x_i + D_YLM_IK_D_THETA * d_phi_ik_d_x_i + D_YLM_IK_D_PHI * d_phi_ik_d_x_i);
+                                        derivative_tmp[idx_j] += d_R_d_r_ij * d_r_ij_d_x_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_x_j + D_YLM_IJ_D_PHI * d_phi_ij_d_x_j + Y_LM_IK);
+                                        derivative_tmp[idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_x_k + D_YLM_IK_D_PHI * d_phi_ik_d_x_k);
+                                        //d to y
+                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_i] += d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_y_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_i + D_YLM_IJ_D_PHI * d_phi_ij_d_y_i + D_YLM_IK_D_THETA * d_phi_ik_d_y_i + D_YLM_IK_D_PHI * d_phi_ik_d_y_i);
+                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_j] += d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_j + D_YLM_IJ_D_PHI * d_phi_ij_d_y_j + Y_LM_IK);
+                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_y_k + D_YLM_IK_D_PHI * d_phi_ik_d_y_k);
+                                        //d to z
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_i] += d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_z_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_i + D_YLM_IJ_D_PHI * d_phi_ij_d_z_i + D_YLM_IK_D_THETA * d_phi_ik_d_z_i + D_YLM_IK_D_PHI * d_phi_ik_d_z_i);
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_j] += d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_j + D_YLM_IJ_D_PHI * d_phi_ij_d_z_j + Y_LM_IK);
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_z_k + D_YLM_IK_D_PHI * d_phi_ik_d_z_k);
                                     }
                                 }
                                 result += std::norm(result_inner);
+                                for (d_idx = 0; d_idx <= 3 * parameters_info->N_Atoms_max - 1; d_idx++)
+                                {
+                                    derivative_tmp[d_idx] *= (2.0 * result_inner);
+                                }
+                                for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
+                                {
+                                    sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                }
+
+                                free(derivative_tmp);
                             }
 
+                            
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            if (result <= 1E-8 )
+                            {
+                                derivative_prefactor = 0;
+                            }
+                            else
+                            {
+                                derivative_prefactor = 0.5 / sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx];
+                            }
+
+                            int d_idx = 0;
+                            /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
+                            for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
+                            {
+                                sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
+                                sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
+                                sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
+                            }
+
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -610,6 +808,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
+                            int idx_i = j;
+                            double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
                                 double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
@@ -634,12 +834,61 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         {
                                             break;
                                         }
+                                        int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
+                                        int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
+                                        int idx_l = frame_info->neighbour_list[j].index_neighbours[nb3];
                                         double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
-                                        result += (fastpown(1 + lambda * cos_delta, (int)zeta) * R_sup_n(r_ij, n, r_c) * R_sup_n(r_ik, m, r_c) * R_sup_n(r_il, p, r_c));
+                                        double d_cos_delta_d_coord[12];
+                                        d_cos_dihedral_angle_d_coord(coord_i, coord_j, coord_k, coord_l, d_cos_delta_d_coord);
+                                        
+                                        double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                        double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                        double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                        double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                        double d_r_il_d_x_i = (coord_i[0] - coord_l[0]) / r_il;
+                                        double d_r_il_d_x_l = (coord_l[0] - coord_i[0]) / r_il;
+
+                                        double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                        double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                        double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                        double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                        double d_r_il_d_y_i = (coord_i[1] - coord_l[1]) / r_il;
+                                        double d_r_il_d_y_l = (coord_l[1] - coord_i[1]) / r_il;
+                                        
+                                        double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                        double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                        double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                        double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                        double d_r_il_d_z_i = (coord_i[2] - coord_l[2]) / r_il;
+                                        double d_r_il_d_z_l = (coord_l[2] - coord_i[2]) / r_il;
+                                        
+                                        double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_delta, (int)(zeta - 1));
+                                        double zeta_prefac = fastpown((1 + lambda * cos_delta), (int)zeta);
+                                        double R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                        double R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                        double R_p_r_il = R_sup_n(r_il, p, r_c);
+                                        double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                        double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                        double d_R_d_r_il = d_R_sup_n_d_r(r_il, p, r_c);
+
+                                        sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[0] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_i * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_x_i;
+                                        sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_i] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[1] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_i * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_y_i;
+                                        sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_i] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[2] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_i * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_z_i;
+                                        sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[3] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_j * R_m_r_ik * R_p_r_il;
+                                        sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_j] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[4] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik * R_p_r_il;
+                                        sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[5] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik * R_p_r_il;
+                                        sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_k] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[6] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_k * R_p_r_il;
+                                        sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_k] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[7] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k * R_p_r_il;
+                                        sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_k] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[8] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k * R_p_r_il;
+                                        sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_l] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[9] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_x_l;
+                                        sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_l] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[10] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_y_l;
+                                        sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_l] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[11] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_z_l;
+
+                                        result += (zeta_prefac * R_n_r_ij * R_m_r_ik * R_p_r_il);
                                     }
                                 }
                             }
-                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
+                            sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
                             N_PTSD_count_idx++;
                             break;
                         }

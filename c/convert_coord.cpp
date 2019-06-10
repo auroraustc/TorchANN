@@ -337,6 +337,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[2] - coord_j[2]) / r_ij * (-1.0);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result;
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n", 1, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             //printf_d("r_c: %.2lf, S1: %lf\n", r_c, result);
                             N_PTSD_count_idx++;                            
                             break;
@@ -430,6 +434,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 free(derivative_tmp);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n", 2, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             if (result <= 1E-8 )
                             {
                                 derivative_prefactor = 0;
@@ -530,6 +538,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             }
 
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n", 3, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -623,6 +635,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             }
 
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n",4, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -770,6 +786,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 
                             
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n", 5, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             if (result <= 1E-8 )
                             {
                                 derivative_prefactor = 0;
@@ -837,6 +857,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                         int idx_l = frame_info[i].neighbour_list[j].index_neighbours[nb3];
                                         double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
+                                        if (cos_delta > 998)//Three atoms are on one line;
+                                        {
+                                            continue;
+                                        }
                                         double d_cos_delta_d_coord[12];
                                         d_cos_dihedral_angle_d_coord(coord_i, coord_j, coord_k, coord_l, d_cos_delta_d_coord);
                                         
@@ -884,10 +908,18 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_l] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[11] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_z_l;
 
                                         result += (zeta_prefac * R_n_r_ij * R_m_r_ik * R_p_r_il);
+                                        if (result != result)
+                                        {
+                                            printf_d("%lf %lf %lf %lf\n", zeta_prefac, R_n_r_ij, R_m_r_ik, R_p_r_il);
+                                        }
                                     }
                                 }
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
+                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            {
+                                printf("%d, %lf\n",6, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            }
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -898,7 +930,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                     }
                 }
             }
-            printf_d("N_PTSD_count = %d\n", N_PTSD_count_idx);
+            //printf_d("N_PTSD_count = %d\n", N_PTSD_count_idx);
         }
     }
 

@@ -402,6 +402,10 @@ double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, 
         norm_norm_vec_ijl += (norm_vec_ijl[i] * norm_vec_ijl[i]);
         dot_kij_ijl += norm_vec_kij[i] * norm_vec_ijl[i];
     }
+    if (norm_norm_vec_kij * norm_norm_vec_ijl == 0)//three points are on a line; no plane is formed.
+    {
+        return 999;
+    }
     result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((double)-1.0);
     return result;
 }

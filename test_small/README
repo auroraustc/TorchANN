@@ -1,2 +1,0 @@
-test atom DEBUG_ATOM of FRAME DEBUG_FRAME
-DEBUG_ATOM and DEBUG_FRAME are defined in struct.h (2 and 5 -- 3rd atom and 6th frame)

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../from_LASP_H2O/aaa" beforeDir="false" afterPath="$PROJECT_DIR$/../from_LASP_H2O/aaa" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../from_LASP_H2O/all_frame_info.bin.temp" beforeDir="false" afterPath="$PROJECT_DIR$/../from_LASP_H2O/all_frame_info.bin.temp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/INPUT.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/INPUT.raw" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,14 +57,14 @@
         </leaf>
       </split-first>
       <split-second>
-        <splitter split-orientation="horizontal" split-proportion="0.77555555">
+        <splitter split-orientation="horizontal" split-proportion="0.4513591">
           <split-first>
             <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
               <file pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="159">
-                      <caret line="786" selection-start-line="786" selection-end-line="786" />
+                    <state relative-caret-position="122">
+                      <caret line="819" column="28" selection-start-line="819" selection-start-column="28" selection-end-line="819" selection-end-column="28" />
                       <folding>
                         <element signature="e#0#18#0" expanded="true" />
                       </folding>
@@ -80,8 +79,8 @@
               <file pinned="false" current-in-tab="true">
                 <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
                   <provider selected="true" editor-type-id="text-editor">
-                    <state relative-caret-position="3984">
-                      <caret line="786" selection-start-line="786" selection-end-line="786" />
+                    <state relative-caret-position="2656">
+                      <caret line="824" selection-start-line="824" selection-end-line="824" />
                       <folding>
                         <element signature="e#0#18#0" expanded="true" />
                       </folding>
@@ -159,10 +158,10 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
+    <option name="x" value="64" />
     <option name="y" value="-4" />
-    <option name="width" value="1855" />
-    <option name="height" value="1084" />
+    <option name="width" value="1857" />
+    <option name="height" value="1085" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -490,11 +489,12 @@
       <workItem from="1559821064647" duration="756000" />
       <workItem from="1559821875239" duration="936000" />
       <workItem from="1559969254557" duration="1672000" />
+      <workItem from="1560133518039" duration="750000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="347244000" />
+    <option name="totallyTimeSpent" value="347994000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -506,9 +506,9 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="67" y="25" width="1213" height="695" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.035989717" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.035931453" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -631,32 +631,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>865</line>
-          <option name="timeStamp" value="171" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>846</line>
-          <option name="timeStamp" value="173" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>813</line>
+          <line>851</line>
           <option name="timeStamp" value="174" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>763</line>
+          <line>801</line>
           <option name="timeStamp" value="176" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>786</line>
+          <line>824</line>
           <option name="timeStamp" value="178" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
-          <line>775</line>
+          <line>813</line>
           <option name="timeStamp" value="179" />
         </line-breakpoint>
       </breakpoints>
@@ -809,8 +799,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="159">
-          <caret line="786" selection-start-line="786" selection-end-line="786" />
+        <state relative-caret-position="2656">
+          <caret line="824" selection-start-line="824" selection-end-line="824" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

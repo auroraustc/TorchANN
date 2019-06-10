@@ -303,7 +303,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 0:
                         {
                             int nb1;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             double n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
@@ -313,22 +313,21 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int idx_i = j;
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];//idx_i = j
-                                int current_type[1] = {frame_info->neighbour_list[j].type[nb1]};
+                                int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];//idx_i = j
+                                int current_type[1] = {frame_info[i].neighbour_list[j].type[nb1]};
+                                //if (idx_j >= 21) printf_d("idx_j:%d\n", idx_j);
                                 if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                 {
                                     continue;
                                 }
-                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                 double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
-                                
                                 if (r_ij > r_c)
                                 {
                                     break;
                                 }
                                 //printf_d("r_ij = %.2lf, ", r_ij);
                                 result += R_sup_n(r_ij, n, r_c);
-                                if (r_ij <= 1E-4) printf_d("small r_ij:%lf\n", r_ij);
                                 /*d_S1/d_xk = d_S1/d_rij * d_rij/d_xk, k = i or j*/
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij;
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[0] - coord_j[0]) / r_ij * (-1.0);
@@ -346,7 +345,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1;
                             int M;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int L = (int)(parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0]);
@@ -363,23 +362,22 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));//dx,dy,dz
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
-                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
-                                    int current_type[1]= {frame_info->neighbour_list[j].type[nb1]};
+                                    int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
+                                    int current_type[1]= {frame_info[i].neighbour_list[j].type[nb1]};
                                     std::complex<double> R_Y;
                                     std::complex<double> YLM;
                                     double R;
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
-                                    continue;
+                                        continue;
                                     }
-                                    double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                    double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                     double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                     double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
                                     if (r_ij > r_c)
                                     {
                                         break;
                                     }
-                                    if (r_ij <= 1E-4) printf_d("small r_ij:%lf\n", r_ij);
                                     YLM = Y_LM(coord_ij, L, M);
                                     R = R_sup_n(r_ij, n, r_c);
                                     R_Y = YLM * R;
@@ -456,7 +454,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1, nb2;
                             double n, m, zeta, lambda;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
@@ -470,7 +468,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                 double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
@@ -478,10 +476,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
-                                    int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
-                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
-                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
-                                    int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
+                                    int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
+                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                    int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
+                                    int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
@@ -539,7 +537,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1, nb2;
                             double n, m, p, zeta, lambda;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
@@ -554,7 +552,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                 double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
@@ -562,10 +560,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
-                                    int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
-                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
-                                    int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
-                                    int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
+                                    int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
+                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                    int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
+                                    int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
@@ -633,7 +631,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int nb1, nb2;
                             int L, M;
                             double n, m, p;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
@@ -652,7 +650,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
-                                    double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                    double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                     double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                     if (r_ij > r_c)
                                     {
@@ -660,10 +658,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     }
                                     for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                     {
-                                        int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
-                                        int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
-                                        int current_type[2] = {frame_info->neighbour_list[j].type[nb1], frame_info->neighbour_list[j].type[nb2]};
-                                        double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                        int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
+                                        int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
+                                        int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
+                                        double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
                                         if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                         {
                                             continue;
@@ -797,7 +795,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1, nb2, nb3;
                             double n, m, p, zeta, lambda;
-                            double * coord_i = frame_info->coord[j];
+                            double * coord_i = frame_info[i].coord[j];
                             double result = 0;
                             double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
@@ -812,7 +810,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             double prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info->neighbour_list[j].coord_neighbours[nb1];
+                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
                                 double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
@@ -820,7 +818,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
-                                    double * coord_k = frame_info->neighbour_list[j].coord_neighbours[nb2];
+                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
                                     double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
                                     if (r_ik > r_c)
                                     {
@@ -828,15 +826,16 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     }
                                     for (nb3 = nb2 + 1; nb3 <= parameters_info->SEL_A_max - 1; nb3++)
                                     {
-                                        double * coord_l = frame_info->neighbour_list[j].coord_neighbours[nb3];
+                                        double * coord_l = frame_info[i].neighbour_list[j].coord_neighbours[nb3];
                                         double r_il = sqrt(fastpow2(coord_i[0] - coord_l[0], 2) + fastpow2(coord_i[1] - coord_l[1], 2) + fastpow2(coord_i[2] - coord_l[2], 2));
                                         if (r_il > r_c)
                                         {
                                             break;
                                         }
-                                        int idx_j = frame_info->neighbour_list[j].index_neighbours[nb1];
-                                        int idx_k = frame_info->neighbour_list[j].index_neighbours[nb2];
-                                        int idx_l = frame_info->neighbour_list[j].index_neighbours[nb3];
+                                        
+                                        int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
+                                        int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
+                                        int idx_l = frame_info[i].neighbour_list[j].index_neighbours[nb3];
                                         double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
                                         double d_cos_delta_d_coord[12];
                                         d_cos_dihedral_angle_d_coord(coord_i, coord_j, coord_k, coord_l, d_cos_delta_d_coord);

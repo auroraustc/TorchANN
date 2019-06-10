@@ -37,9 +37,9 @@ int main()
     int extend_max_atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
     int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step);
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
-    int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);
-    int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord);
-    int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info);
+    /*int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int coord_type, void ** sym_coord_struct);*/
+    int save_to_file_partial(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord);
+    /*int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info);*/
     
     struct timeval start_main, end_main;
     double t_main;//Unit: ms
@@ -156,7 +156,7 @@ int main()
         printf_d("atom type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
     }
 
-    sym_coord_type = parameters_info->sym_coord_type;
+    /*sym_coord_type = parameters_info->sym_coord_type;
     switch (sym_coord_type)
     {
         case 1:
@@ -204,7 +204,7 @@ int main()
         {
             printf_d("%+18.6lf\n", sym_coord_LASP[DEBUG_FRAME].coord_converted[DEBUG_ATOM][i]);
         }
-    }
+    }*/
     /*printf_d("%-11s %-11s %-11s %-11s\n", "ds_rijx", "dx_hatx", "dy_hatx", "dz_hatx");
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
@@ -236,19 +236,7 @@ int main()
         printf_d("\n");
     }*/
     
-    switch (sym_coord_type)
-    {
-        case 1:
-        {
-            save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_DeePMD);
-            break;
-        }
-        case 2:
-        {
-            save_to_file_flag = save_to_file(frame_info, parameters_info, (void *)sym_coord_LASP);
-            break;
-        }
-    }
+    save_to_file_flag = save_to_file_partial(frame_info, parameters_info, (void *)sym_coord_DeePMD);
     if (save_to_file_flag != 0)
     {
         printf("Error when saving to files: save_to_file_flag = %d\n", save_to_file_flag);
@@ -286,7 +274,7 @@ int main()
     }
     free(frame_info);
         /*sym_coord*/
-    void * sym_coord_;
+    /*void * sym_coord_;
     switch (sym_coord_type)
     {
         case 1:
@@ -300,7 +288,7 @@ int main()
             break;
         }
     }
-    free_sym_coord(sym_coord_, sym_coord_type, parameters_info);
+    free_sym_coord(sym_coord_, sym_coord_type, parameters_info);*/
         /*parameters_info*/
     free(parameters_info->type_index_all_frame);
     free(parameters_info);

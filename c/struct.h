@@ -25,6 +25,7 @@ typedef struct neighbour_list_struct_
 	//atom_info_struct * atom_info;
 	int * type;//type[0..SEL_A_max - 1], type = all_types[0] for atoms with r_c > cutoff_max
 	int * index_neighbours;//index of the neighbour atoms. index_neighbours[0..SEL_A_max]
+	double * dist_neighbours;//dist[0..SEL_A_max - 1]
 }neighbour_list_struct;
 
 /*Frame info for one frame*/

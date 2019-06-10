@@ -300,7 +300,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     for (i = index_tmp_dist; i <= parameters_info->SEL_A_max - 1; i ++)
     {
         dist_info[i].atom_info = &dummy_atom;
-        dist_info[i].dist = 9999;
+        dist_info[i].dist = 9999.0;
     } 
 
 
@@ -397,6 +397,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     neighbour_list_cur_atom->coord_neighbours = (double **)calloc(parameters_info->SEL_A_max, sizeof(double));
     neighbour_list_cur_atom->type = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
     neighbour_list_cur_atom->index_neighbours = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
+    neighbour_list_cur_atom->dist_neighbours = (double *)calloc(parameters_info->SEL_A_max, sizeof(double));
     /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
@@ -404,6 +405,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         /*neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i + 1]->atom_info->index)%(frame_info_cur->N_Atoms)];*/
         neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i]->atom_info->index)%(frame_info_cur->N_Atoms)];
         neighbour_list_cur_atom->index_neighbours[i] = (b_tmp[i]->atom_info->index);
+        neighbour_list_cur_atom->dist_neighbours[i] = (b_tmp[i]->dist);
     }
     /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)

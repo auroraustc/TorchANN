@@ -81,6 +81,56 @@ int save_to_file(frame_info_struct * frame_info, parameters_info_struct * parame
     return 0;
 }
 
+int save_to_file_partial(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord)
+{
+    int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    int save_to_file_parameters(parameters_info_struct * parameters_info);
+    int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    /*int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters_info);*/
+    int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+
+    int ef_flag, p_flag, sc_flag, tna_flag, c_flag, nei_flag;
+
+    ef_flag = save_to_file_energy_and_force(frame_info, parameters_info);
+    if (ef_flag != 0)
+    {
+        return ef_flag;
+    }
+
+    p_flag = save_to_file_parameters(parameters_info);
+    if (p_flag != 0)
+    {
+        return p_flag;
+    }
+
+    tna_flag = save_to_file_type_and_N_Atoms(frame_info, parameters_info);
+    if (tna_flag != 0)
+    {
+        return tna_flag;
+    }
+
+    /*sc_flag = save_to_file_sym_coord(sym_coord, parameters_info);
+    if (sc_flag != 0)
+    {
+        return sc_flag;
+    }*/
+
+    c_flag = save_to_file_coord(frame_info, parameters_info);
+    if (c_flag != 0)
+    {
+        return c_flag;
+    }
+
+    nei_flag = save_to_file_nei(frame_info, parameters_info);
+    if (nei_flag != 0)
+    {
+        return nei_flag;
+    }
+
+    return 0;
+}
+
 int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
 {
     FILE * fp_energy;
@@ -483,6 +533,7 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
     FILE * fp_nei;
     FILE * fp_nei_coord;
     FILE * fp_nei_type;
+    FILE * fp_nei_dist;
     int i, j, k;
 
     fp_nei = fopen("./NEI_IDX.BIN", "wb");
@@ -514,6 +565,14 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
             //{
             fwrite(frame_info[i].neighbour_list[j].type, sizeof(int), parameters_info->SEL_A_max, fp_nei_type);
             //}
+        }
+    }
+    fp_nei_dist = fopen("./NEI_DIST.BIN", "wb");
+    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    {
+        for (j = 0; j <= frame_info[j].N_Atoms - 1; j++)
+        {
+            fwrite(frame_info[i].neighbour_list[j].dist_neighbours, sizeof(double), parameters_info->SEL_A_max, fp_nei_dist);
         }
     }
     return 0;

@@ -1027,6 +1027,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     free(parameters_PTSDs_info->PTSD_N_params);
     free(parameters_PTSDs_info->N_cutoff_radius);
     free(parameters_PTSDs_info->N_neigh_inter);
+    free(parameters_PTSDs_info);
 
     return 0;
     //return (printf("Not completed, return 999.\n"), 999);//incomplete

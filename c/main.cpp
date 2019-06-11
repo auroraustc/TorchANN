@@ -302,6 +302,8 @@ int main()
     }
     free_sym_coord(sym_coord_, sym_coord_type, parameters_info);
         /*parameters_info*/
+    free(parameters_info->filter_neuron);
+    free(parameters_info->fitting_neuron);
     free(parameters_info->type_index_all_frame);
     free(parameters_info);
 

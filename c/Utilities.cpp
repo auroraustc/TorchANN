@@ -614,10 +614,12 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
                     free(sym_coord_LASP[i].coord_converted[j]);
                     for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
                     {
+                        free(sym_coord_LASP[i].idx_nei[j][k]);
                         free(sym_coord_LASP[i].d_x[j][k]);
                         free(sym_coord_LASP[i].d_y[j][k]);
                         free(sym_coord_LASP[i].d_z[j][k]);
                     }
+                    free(sym_coord_LASP[i].idx_nei[j]);
                     free(sym_coord_LASP[i].d_x[j]);
                     free(sym_coord_LASP[i].d_y[j]);
                     free(sym_coord_LASP[i].d_z[j]);
@@ -628,6 +630,7 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
                 }
 
                 free(sym_coord_LASP[i].coord_converted);
+                free(sym_coord_LASP[i].idx_nei);
                 free(sym_coord_LASP[i].d_x);
                 free(sym_coord_LASP[i].d_y);
                 free(sym_coord_LASP[i].d_z);

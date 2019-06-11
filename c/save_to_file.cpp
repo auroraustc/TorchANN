@@ -570,7 +570,7 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
     fp_nei_dist = fopen("./NEI_DIST.BIN", "wb");
     for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
     {
-        for (j = 0; j <= frame_info[j].N_Atoms - 1; j++)
+        for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
             fwrite(frame_info[i].neighbour_list[j].dist_neighbours, sizeof(double), parameters_info->SEL_A_max, fp_nei_dist);
         }

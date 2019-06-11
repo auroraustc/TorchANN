@@ -333,7 +333,8 @@ int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_
 
     double coord_ji[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
     double coord_ki[3];
-    double norm_ji, norm_ki;//norm = (x^2 + y^2 + z^2)
+    double norm_ji = 0;
+    double norm_ki = 0;//norm = (x^2 + y^2 + z^2)
     double dot_jiki = 0;
     //double result = 0;
     int i, j, k;

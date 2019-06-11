@@ -268,6 +268,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
     #pragma omp parallel for private(j, k, l)
     for (i = 0; i <=parameters_info->Nframes_tot - 1; i++)
     {
+        printf("Processing frame %d.\n", i);
         for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
         {
             int type_cur_atom_cur_frame = (frame_info[i].type[j] == -1 ? parameters_info->type_index_all_frame[0] : frame_info[i].type[j]);
@@ -337,10 +338,21 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][idx_j] += d_R_sup_n_d_r(r_ij, n, r_c) * (coord_i[2] - coord_j[2]) / r_ij * (-1.0);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result;
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n", 1, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n", 1, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             //printf_d("r_c: %.2lf, S1: %lf\n", r_c, result);
                             N_PTSD_count_idx++;                            
                             break;
@@ -361,7 +373,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int idx_i = j;
                             for (M = -L; M <= L; M++)
                             {
-                                std::complex<double> result_inner = (0, 0);
+                                std::complex<double> result_inner = (0., 0.);
                                 int d_idx;
                                 std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));//dx,dy,dz
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
@@ -381,6 +393,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     if (r_ij > r_c)
                                     {
                                         break;
+                                    }
+                                    if ((i == 0)&&(idx_j >= 21))
+                                    {
+                                        printf_d("nei idx : %d\n", idx_j);
                                     }
                                     YLM = Y_LM(coord_ij, L, M);
                                     R = R_sup_n(r_ij, n, r_c);
@@ -414,11 +430,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     derivative_tmp[idx_i] += D_R_D_r * d_r_d_x_i * YLM + R * (D_YLM_D_THETA * d_theta_d_x_i + D_YLM_D_PHI * d_phi_d_x_i);
                                     derivative_tmp[idx_j] += D_R_D_r * d_r_d_x_j * YLM + R * (D_YLM_D_THETA * d_theta_d_x_j + D_YLM_D_PHI * d_phi_d_x_j);
                                     //d to y
-                                    derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_i] += D_R_D_r * d_r_d_y_i * YLM + R * (D_YLM_D_THETA * d_theta_d_y_i + D_YLM_D_PHI * d_phi_d_y_i);
-                                    derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_j] += D_R_D_r * d_r_d_y_j * YLM + R * (D_YLM_D_THETA * d_theta_d_y_j + D_YLM_D_PHI * d_phi_d_y_j);;
+                                    derivative_tmp[parameters_info->N_Atoms_max + idx_i] += D_R_D_r * d_r_d_y_i * YLM + R * (D_YLM_D_THETA * d_theta_d_y_i + D_YLM_D_PHI * d_phi_d_y_i);
+                                    derivative_tmp[parameters_info->N_Atoms_max + idx_j] += D_R_D_r * d_r_d_y_j * YLM + R * (D_YLM_D_THETA * d_theta_d_y_j + D_YLM_D_PHI * d_phi_d_y_j);;
                                     //d to z
-                                    derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_i] += D_R_D_r * d_r_d_z_i * YLM + R * (D_YLM_D_THETA * d_theta_d_z_i + D_YLM_D_PHI * d_phi_d_z_i);
-                                    derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_j] += D_R_D_r * d_r_d_z_j * YLM + R * (D_YLM_D_THETA * d_theta_d_z_j + D_YLM_D_PHI * d_phi_d_z_j);
+                                    derivative_tmp[2 * parameters_info->N_Atoms_max + idx_i] += D_R_D_r * d_r_d_z_i * YLM + R * (D_YLM_D_THETA * d_theta_d_z_i + D_YLM_D_PHI * d_phi_d_z_i);
+                                    derivative_tmp[2 * parameters_info->N_Atoms_max + idx_j] += D_R_D_r * d_r_d_z_j * YLM + R * (D_YLM_D_THETA * d_theta_d_z_j + D_YLM_D_PHI * d_phi_d_z_j);
                                 }
                                 result += std::norm(result_inner);
                                 for (d_idx = 0; d_idx <= 3 * parameters_info->N_Atoms_max - 1; d_idx++)
@@ -428,16 +444,16 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                                 {
                                     sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
-                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
-                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
                                 }
                                 free(derivative_tmp);
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n", 2, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n", 2, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
                             if (result <= 1E-8 )
                             {
                                 derivative_prefactor = 0;
@@ -449,12 +465,24 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             
                             int d_idx = 0;
                             /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] != 0.0)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %.16e\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                             {
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                                 sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                                 sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                             }
+                            
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -538,10 +566,21 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             }
 
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n", 3, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n", 3, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -635,10 +674,21 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             }
 
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n",4, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n",4, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -661,7 +711,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             double derivative_prefactor = 0; 
                             for (M = - L; M <= L; M++)
                             {
-                                std::complex<double> result_inner = (0, 0);
+                                std::complex<double> result_inner = (0., 0.);
                                 int d_idx;
                                 std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
@@ -760,13 +810,13 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         derivative_tmp[idx_j] += d_R_d_r_ij * d_r_ij_d_x_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_x_j + D_YLM_IJ_D_PHI * d_phi_ij_d_x_j + Y_LM_IK);
                                         derivative_tmp[idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_x_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_x_k + D_YLM_IK_D_PHI * d_phi_ik_d_x_k);
                                         //d to y
-                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_i] += d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_y_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_i + D_YLM_IJ_D_PHI * d_phi_ij_d_y_i + D_YLM_IK_D_THETA * d_phi_ik_d_y_i + D_YLM_IK_D_PHI * d_phi_ik_d_y_i);
-                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_j] += d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_j + D_YLM_IJ_D_PHI * d_phi_ij_d_y_j + Y_LM_IK);
-                                        derivative_tmp[parameters_info->N_Atoms_max - 1 + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_y_k + D_YLM_IK_D_PHI * d_phi_ik_d_y_k);
+                                        derivative_tmp[parameters_info->N_Atoms_max + idx_i] += d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_y_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_i + D_YLM_IJ_D_PHI * d_phi_ij_d_y_i + D_YLM_IK_D_THETA * d_phi_ik_d_y_i + D_YLM_IK_D_PHI * d_phi_ik_d_y_i);
+                                        derivative_tmp[parameters_info->N_Atoms_max + idx_j] += d_R_d_r_ij * d_r_ij_d_y_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_y_j + D_YLM_IJ_D_PHI * d_phi_ij_d_y_j + Y_LM_IK);
+                                        derivative_tmp[parameters_info->N_Atoms_max + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_y_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_y_k + D_YLM_IK_D_PHI * d_phi_ik_d_y_k);
                                         //d to z
-                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_i] += d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_z_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_i + D_YLM_IJ_D_PHI * d_phi_ij_d_z_i + D_YLM_IK_D_THETA * d_phi_ik_d_z_i + D_YLM_IK_D_PHI * d_phi_ik_d_z_i);
-                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_j] += d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_j + D_YLM_IJ_D_PHI * d_phi_ij_d_z_j + Y_LM_IK);
-                                        derivative_tmp[2 * parameters_info->N_Atoms_max - 1 + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_z_k + D_YLM_IK_D_PHI * d_phi_ik_d_z_k);
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max + idx_i] += d_R_d_r_ij * d_r_ij_d_z_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_z_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_i + D_YLM_IJ_D_PHI * d_phi_ij_d_z_i + D_YLM_IK_D_THETA * d_phi_ik_d_z_i + D_YLM_IK_D_PHI * d_phi_ik_d_z_i);
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max + idx_j] += d_R_d_r_ij * d_r_ij_d_z_j * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_j * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_z_j + D_YLM_IJ_D_PHI * d_phi_ij_d_z_j + Y_LM_IK);
+                                        derivative_tmp[2 * parameters_info->N_Atoms_max + idx_k] += R_n_r_ij * d_R_d_r_ik * d_r_ik_d_z_k * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * d_R_d_r_jk * d_r_jk_d_z_k * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (Y_LM_IJ + D_YLM_IK_D_THETA * d_phi_ik_d_z_k + D_YLM_IK_D_PHI * d_phi_ik_d_z_k);
                                     }
                                 }
                                 result += std::norm(result_inner);
@@ -777,8 +827,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                                 {
                                     sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
-                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
-                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
                                 }
 
                                 free(derivative_tmp);
@@ -786,10 +836,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 
                             
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n", 5, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n", 5, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
                             if (result <= 1E-8 )
                             {
                                 derivative_prefactor = 0;
@@ -801,13 +851,24 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 
                             int d_idx = 0;
                             /*Derivative = prefactor * \sum^L_(M=-L) 2 * result_inner * \sum \partial RYLM/ \partial x,y,z*/
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] != 0.0)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %.16e\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                             {
                                 sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                                 sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                                 sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] *= derivative_prefactor;
                             }
-
+                            
                             N_PTSD_count_idx++;
                             break;
                         }
@@ -916,10 +977,21 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 }
                             }
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
-                            if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
-                            {
-                                printf("%d, %lf\n",6, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
-                            }
+                            // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
+                            // {
+                            //     printf("%d, %lf\n",6, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            // }
+                            // int tmpp;
+                            // if (i == 0)
+                            // {
+                            //     for (tmpp = 21; tmpp <= 23; tmpp++)
+                            //     {
+                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
+                            //         {
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //         }                                    
+                            //     }
+                            // }
                             N_PTSD_count_idx++;
                             break;
                         }

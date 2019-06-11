@@ -484,6 +484,13 @@ int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type)//
     int sum = 0;
     /*std::vector<int> current_type_ (current_type, current_type + N_neighb_atom);
     std::vector<int> params_type_ (params_type, params_type + N_neighb_atom);*/
+    for (i = 0; i <= N_neighb_atom - 1; i++)
+    {
+        if (current_type[i] == -1)
+        {
+            return 0;
+        }
+    }
     if (params_type[0] == -1)
     {
         return 1;

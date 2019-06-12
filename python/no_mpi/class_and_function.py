@@ -789,7 +789,7 @@ class one_batch_net(nn.Module):
 
 
 
-
+        F_cur_batch *= -1.
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
         return E_cur_batch, F_cur_batch, std_, avg_
 

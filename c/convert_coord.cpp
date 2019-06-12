@@ -444,8 +444,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                                 {
                                     sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
-                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
-                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max + d_idx].imag();
                                 }
                                 free(derivative_tmp);
                             }
@@ -470,9 +470,9 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             // {
                             //     for (tmpp = 21; tmpp <= 23; tmpp++)
                             //     {
-                            //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] != 0.0)
+                            //         if (sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][tmpp] >= (double)1E-15)
                             //         {
-                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %.16e\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_y for atom %d: %.16e, prefactor: %.6lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][tmpp], derivative_prefactor);
                             //         }                                    
                             //     }
                             // }
@@ -827,8 +827,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (d_idx = 0; d_idx <= parameters_info->N_Atoms_max - 1; d_idx++)
                                 {
                                     sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][d_idx] += derivative_tmp[d_idx].real() + derivative_tmp[d_idx].imag();
-                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max - 1 + d_idx].imag();
-                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max  - 1 + d_idx].imag();
+                                    sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][d_idx] += derivative_tmp[parameters_info->N_Atoms_max + d_idx].real() + derivative_tmp[parameters_info->N_Atoms_max + d_idx].imag();
+                                    sym_coord_LASP[i].d_z[j][N_PTSD_count_idx][d_idx] += derivative_tmp[2 * parameters_info->N_Atoms_max  + d_idx].real() + derivative_tmp[2 * parameters_info->N_Atoms_max + d_idx].imag();
                                 }
 
                                 free(derivative_tmp);

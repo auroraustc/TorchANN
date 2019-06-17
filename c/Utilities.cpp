@@ -651,3 +651,4 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
     return 0;
 
 }
+

@@ -11,11 +11,11 @@ Use torch to train NN potential
 3. [horovod](https://github.com/horovod/horovod)(Optional, future)
 4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional, future)
 5. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional, future)
-6. C compiler (icc 2018 tested)
+6. C++ compiler which supports c11 standard (icpc 2018 and gcc 4.9.4 tested)
 
 ## Prepare training data:
 ```bash
-box.raw type.raw coord.raw force.raw energy.raw
+box.raw type.raw coord.raw force.raw energy.raw PARAMS.json
 ```
 Property| Unit
 ---	| :---:
@@ -89,10 +89,25 @@ The format of `force.raw` is the same as `coord.raw`.
 -374.89802095
 ```
 
+#### `PARAMS.json` contains parameters for pre-processing and training
+```bash
+{
+    "cutoff_1": 7.700,
+    "cutoff_2": 8.000,
+    "cutoff_3": 0.000,
+    "cutoff_max": 8.000,
+    "sym_coord_type": 2,
+    "batch_size": 1,
+    "stop_epoch": 1,
+    "num_filter_layer": 3,
+    ......
+}
+```
+
 ## How to run the training
 ### STEP 1: Make C executable for data pre-processing
 ```bash
-cd ./Torch-NNMD/c
+cd ./Torch-ANN/c
 #Adapt the makefile for your computer
 #For example, change the -g flag to -O2
 make
@@ -100,9 +115,9 @@ make
 
 ### STEP 2: Pre-process input data
 ```bash
-cd ../test_2 #The input data for test is under this directory
-../c/a.out > log
-#Modify the ALL_PARAMS.json for your dataset
+cd ../tests/test_2 #The input data for test is under this directory
+#Modify the PARAMS.json for your dataset
+../../c/GENERATE > log
 ```
 The C code will convert the raw data into symmetry coordinates needed by training and some bin files will be stored in the `./` directory:
 ```bash
@@ -114,22 +129,21 @@ The file `all_frame_info.bin.temp` could be deleted and should not affect the tr
 ```bash
 export CUDA_VISIBLE_DEVICES=0,1 #For example, I want to use GPU0 and GPU1
 #Current tests show that the no_mpi version works the most stable and efficiently.
-../python/no_mpi/train_noclassify_nompi.py
+../../python/no_mpi/train_noclassify_nompi.py
 ```
 During running, checkpoint will be saved to `./freeze_model.pytorch.ckpt`. After the training finished, the model will be saved as `./freeze_model.pytorch`. You could copy the checkpoint or saved model to `./freeze_model.pytorch.ckpt.cont` to continue if the training stops unexpectedly.
 
 ### STEP 4: Run test script to evaluate the model
 ```bash
 #Make sure that ./freeze_model.pytorch exists
-../python/no_mpi/test_noclassify_nompi.py
+../../python/no_mpi/test_noclassify_nompi.py
 ```
 If you want to test your own data, you need to do **STEP 2** AGAIN in your own data's folder, then run the test script.
 
 ## Parameters in ALL_PARAMS.json
-**In the current version the read_parameters() function has not been fully completed. All the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying any .c file**
+**In the current version the read_parameters() function has not been fully completed. Some of the parameters involved in the data pre-processing procedure need to be modified through the source code. Remember to rebuild the C code after modifying any .c file**
 - `cutoff_1`, `cutoff_2`, `cutoff_3`, `cutoff_max`
   - For [DeePMD](https://github.com/deepmodeling/deepmd-kit)-type symmetry coordinates, `cutoff_1` and `cutoff_2` (or `cutoff_max`) correspond to rcs and rc in [its paper](https://arxiv.org/abs/1805.09003).
-  - Editing the **read_parameters.c** to change their values.
 - `filter_neuron`, `fitting_neuron`, `axis_neuron`
   - `filter_neuron` and `fitting_neuron` are two arrays describing the filter network and fitting network in [DeePMD's paper](https://arxiv.org/abs/1805.09003).
   - `axis_neuron` is the number of columns of the G^(i2) matrix in DeePMD's paper.

@@ -4,8 +4,6 @@
 Define all the struct used in the c code.
 */
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
 
 /*****************MACRO FOR DEBUG*****************/
 #define DEBUG_FRAME 0
@@ -184,13 +182,5 @@ typedef struct parameters_PTSDs_info_struct_
 	parameters_PTSDs_info_one_line_struct *** parameters_PTSDs_info_one_line;
 }parameters_PTSDs_info_struct;
 
-template <typename T>
-std::vector<T> as_vector(boost::property_tree::ptree const& pt, boost::property_tree::ptree::key_type const& key)
-{
-    std::vector<T> r;
-    for (auto& item : pt.get_child(key))
-        r.push_back(item.second.get_value<T>());
-    return r;
-}
 
 

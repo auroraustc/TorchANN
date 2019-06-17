@@ -11,6 +11,7 @@ Return code:
 #include <stdio.h>
 #include <stdlib.h>
 #include "struct.h"
+#include "template_func.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
@@ -26,9 +27,10 @@ Return code:
 
 /*Read the array values in a json file and returns a std::vector<T>*/
 
-
 int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
 {
+    
+
     FILE * fp_param = NULL;
     int i, j, k;
     int N_Atoms_max;

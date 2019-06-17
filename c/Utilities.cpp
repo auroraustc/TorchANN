@@ -25,6 +25,7 @@ Utilities functions.
 
 #define PI 3.141592653589793238462643383279
 
+
 double s_r(double r_ij, parameters_info_struct * parameters_info)
 {
     double result;
@@ -651,4 +652,6 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
     return 0;
 
 }
+
+
 

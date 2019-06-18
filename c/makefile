@@ -13,7 +13,7 @@ DEBUG = -O0 -g -Wall
 CXXFLAGS = -fopenmp -std=c++11 -I$(BOOST_ROOT)
 LD_DEBUG = $(DEBUG)
 LD_CXXFLAGS = $(CXXFLAGS)
-LIB = -fPIC -shared -o libNNMD.so
+LIB = -fPIC -shared -o libANN.so
 EXE = GENERATE
 EXE_P = GENERATE_P
 

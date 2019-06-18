@@ -33,7 +33,7 @@ Return code:
 int main()
 {
     int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_);
-    int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info, char * filename);
     int extend_max_atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
     int build_neighbour_list(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, int step);
     int count_types(frame_info_struct * frame_info, int Nframes_tot, int * N_types_all_frame_, int ** type_index_all_frame_);
@@ -79,7 +79,7 @@ int main()
     parameters_info->Nframes_tot = Nframes_tot;
     error_code ++;
 
-    read_parameters_info_flag = read_parameters(frame_info, parameters_info);
+    read_parameters_info_flag = read_parameters(frame_info, parameters_info, "PARAMS.json");
     if (read_parameters_info_flag != 0)
     {
         printf("Error when reading input parameters: read_parameters_info_flag = %d\n", read_parameters_info_flag);
@@ -138,6 +138,10 @@ int main()
     }
     printf_d("\n");
     parameters_info->N_types_all_frame = N_types_all_frame;
+    if (parameters_info->type_index_all_frame != NULL)
+    {
+        free(parameters_info->type_index_all_frame);
+    }
     parameters_info->type_index_all_frame = type_index_all_frame;
     parameters_info->SEL_A_max = SEL_A_max;
 

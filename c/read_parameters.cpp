@@ -27,7 +27,7 @@ Return code:
 
 /*Read the array values in a json file and returns a std::vector<T>*/
 
-int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info)
+int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info, char * filename)
 {
     
 
@@ -39,33 +39,83 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     FILE * tmp;
     boost::property_tree::ptree PARAMS;
     boost::property_tree::ptree PARAMS_ITEMS;
-    tmp = fopen("./PARAMS.json", "r");
+    tmp = fopen(filename, "r");
     if (tmp == NULL)
     {
-        printf("Please provide PARAMS.json!\n");
+        printf("Please provide %s!\n", filename);
         return 21;
     }
     fclose(tmp);
-    boost::property_tree::read_json<boost::property_tree::ptree>("./PARAMS.json", PARAMS);
+    boost::property_tree::read_json<boost::property_tree::ptree>(filename, PARAMS);
 
     parameters_info->cutoff_1 = PARAMS.get<double>("cutoff_1");
     parameters_info->cutoff_2 = PARAMS.get<double>("cutoff_2");
     parameters_info->cutoff_3 = PARAMS.get<double>("cutoff_3");
     parameters_info->cutoff_max = PARAMS.get<double>("cutoff_max");
+    if (PARAMS.count("N_types_all_frame") != 0)
+    {
+        parameters_info->N_types_all_frame = PARAMS.get<int>("N_types_all_frame");
+        parameters_info->type_index_all_frame = (int *)calloc(parameters_info->N_types_all_frame, sizeof(int));
+        std::vector<int> TYPE_INDEX_ALL_FRAME = as_vector<int>(PARAMS, "type_index_all_frame");
+        for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+        {
+            parameters_info->type_index_all_frame[i] = TYPE_INDEX_ALL_FRAME[i];
+        }
+    }
+
+    // if (PARAMS.count("N_Atoms_max") != 0)
+    // {
+    //     parameters_info->N_Atoms_max = PARAMS.get<int>("N_Atoms_max");
+    // }
+    if (frame_info != NULL)
+    {
+        N_Atoms_max = 0;
+        for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+        {
+            N_Atoms_max = (N_Atoms_max <= frame_info[i].N_Atoms ? frame_info[i].N_Atoms : N_Atoms_max);
+            printf_d("N_Atoms: %d\n", frame_info[i].N_Atoms);
+        }
+        parameters_info->N_Atoms_max = N_Atoms_max;
+    }
+    else
+    {
+        parameters_info->N_Atoms_max = PARAMS.get<int>("N_Atoms_max");
+    }
+
+    if (PARAMS.count("SEL_A_max") != 0)
+    {
+        parameters_info->SEL_A_max = PARAMS.get<int>("SEL_A_max");
+    }
+    if (PARAMS.count("Nframes_tot") != 0)
+    {
+        parameters_info->Nframes_tot = PARAMS.get<int>("Nframes_tot");
+    }
     parameters_info->sym_coord_type = PARAMS.get<int>("sym_coord_type");
     if ((parameters_info->sym_coord_type != 1) && (parameters_info->sym_coord_type != 2))
     {
         printf("sym_coord_type %d not supported!\n", parameters_info->sym_coord_type);
         return 22;
     }
-
-    N_Atoms_max = 0;
-    for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    if (PARAMS.count("N_sym_coord") != 0)
     {
-        N_Atoms_max = (N_Atoms_max <= frame_info[i].N_Atoms ? frame_info[i].N_Atoms : N_Atoms_max);
-        printf_d("N_Atoms: %d\n", frame_info[i].N_Atoms);
+        parameters_info->N_sym_coord = PARAMS.get<int>("N_sym_coord");
     }
-    parameters_info->N_Atoms_max = N_Atoms_max;
+
+    // if (frame_info != NULL)
+    // {
+    //     N_Atoms_max = 0;
+    //     for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
+    //     {
+    //         N_Atoms_max = (N_Atoms_max <= frame_info[i].N_Atoms ? frame_info[i].N_Atoms : N_Atoms_max);
+    //         printf_d("N_Atoms: %d\n", frame_info[i].N_Atoms);
+    //     }
+    //     parameters_info->N_Atoms_max = N_Atoms_max;
+    // }
+    // else
+    // {
+    //     parameters_info->N_Atoms_max = PARAMS.get<int>("N_Atoms_max");
+    // }
+    
 
     parameters_info->batch_size = PARAMS.get<int>("batch_size");
     parameters_info->stop_epoch = PARAMS.get<int>("stop_epoch");
@@ -73,6 +123,7 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     std::vector<int> FILTER_NEURON = as_vector<int>(PARAMS, "filter_neuron");
     if (FILTER_NEURON.size() != parameters_info->num_filter_layer)
     {
+        printf("WARNING: num_filter_layer %3d is not equal to the number of layers defined in filter_neuron %3d !\n", parameters_info->num_filter_layer, FILTER_NEURON.size());
         parameters_info->num_filter_layer = FILTER_NEURON.size();
     }
     parameters_info->filter_neuron = (int *)calloc(parameters_info->num_filter_layer, sizeof(int));
@@ -85,6 +136,7 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     std::vector<int> FITTING_NEURON = as_vector<int>(PARAMS, "fitting_neuron");
     if (FITTING_NEURON.size() != parameters_info->num_fitting_layer)
     {
+        printf("WARNING: num_fitting_layer %3d is not equal to the number of layers defined in fitting_neuron %3d !\n", parameters_info->num_fitting_layer, FITTING_NEURON.size());
         parameters_info->num_fitting_layer = FITTING_NEURON.size();
     }
     parameters_info->fitting_neuron = (int *)calloc(parameters_info->num_fitting_layer, sizeof(int));

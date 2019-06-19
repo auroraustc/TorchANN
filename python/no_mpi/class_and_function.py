@@ -81,7 +81,7 @@ class Parameters():
         str_ += (">>> cutoff_max: %.6e\n" % self.cutoff_max)
         str_ += (">>> N_types_all_frame: %2d\n" % self.N_types_all_frame)
         str_ += (">>> type_index_all_frame: ", self.type_index_all_frame, "\n")
-        str_ += (">>> N_Atoms_max: %2d" % self.N_Atoms_max)
+        str_ += (">>> N_Atoms_max: %2d\n" % self.N_Atoms_max)
         str_ += (">>> SEL_A_max: %2d\n" % self.SEL_A_max)
         str_ += (">>> Nframes_tot: %2d\n" % self.Nframes_tot)
         str_ += (">>> sym_coord_type: %2d\n" % self.sym_coord_type)

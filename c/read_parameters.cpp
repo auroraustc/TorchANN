@@ -86,7 +86,7 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     {
         parameters_info->SEL_A_max = PARAMS.get<int>("SEL_A_max");
     }
-    if (PARAMS.count("Nframes_tot") != 0)
+    if ((PARAMS.count("Nframes_tot") != 0) && (parameters_info->Nframes_tot == 0))
     {
         parameters_info->Nframes_tot = PARAMS.get<int>("Nframes_tot");
     }

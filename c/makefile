@@ -10,7 +10,7 @@ OBJECTS = Utilities.o read_system.o read_parameters.o extend_max_atoms.o build_n
 OBJECTS_P = Utilities.o read_system.o read_parameters.o extend_max_atoms.o build_neighbour_list.o count_types.o convert_coord.o save_to_file.o main_partial.o
 #flags
 DEBUG = -O0 -g -Wall
-CXXFLAGS = -fopenmp -std=c++11 -I$(BOOST_ROOT)
+CXXFLAGS = -fopenmp -std=c++11 -I$(BOOST_INC)
 LD_DEBUG = $(DEBUG)
 LD_CXXFLAGS = $(CXXFLAGS)
 LIB = -fPIC -shared -o libANN.so

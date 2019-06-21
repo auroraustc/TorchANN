@@ -9,7 +9,7 @@ cpp version of training using libtorch.
 #include <math.h>
 #include <torch/torch.h>
 #include "struct_train_nompi.h"
-#include "../struct.h"
+//#include "../struct.h"
 
 /*****************MACRO FOR DEBUG*****************/
 #define DEBUG_MAIN
@@ -26,6 +26,7 @@ cpp version of training using libtorch.
 int main()
 {
     int test();
+    int test_2();
 
     int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info, char * filename);
     int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_struct * parameters_info);
@@ -36,7 +37,7 @@ int main()
     parameters_info_struct * parameters_info = (parameters_info_struct *)calloc(1, sizeof(parameters_info_struct));
     input_bin_files_struct input_bin_files;
 
-
+    test();
     read_parameters_flag = read_parameters(NULL, parameters_info, "./ALL_PARAMSS.json");
     if (read_parameters_flag != 0)
     {
@@ -72,7 +73,6 @@ int main()
     std::cout << parameters_info->N_Atoms_max << std::endl;
     std::cout << torch::eq(torch::reshape(input_bin_files.TYPE, {1, parameters_info->N_Atoms_max}), 1).nonzero() << std::endl;
 
-    //test();
     /*free all the data*/
         /*parameters*/
     free(parameters_info->filter_neuron);

@@ -9,7 +9,6 @@ Utilities functions for training.
 #include <tuple>
 #include <torch/torch.h>
 #include "struct_train_nompi.h"
-#include "../struct.h"
 
 
 int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_struct * parameters_info)
@@ -289,6 +288,15 @@ int test()
         torch::Tensor ENERGY = torch::from_file("ENERGY.BIN", true, parameters_info->Nframes_tot, torch::kFloat64);
         std::cout << "coord:" << COORD.sizes() << std::endl << "energy:" << ENERGY.sizes() << std::endl;
     }
+
+    std::cout << sizeof(torch::nn::Linear) << std::endl;
+    one_batch_net model(parameters_info, NULL);
+    torch::Tensor aa = torch::randn({128,128});
+    for (const auto& pair : model.named_parameters()) 
+    {
+        std::cout << pair.key() << ": " << pair.value().sizes() << std::endl;
+    }  
+    std::cout << model.forward(aa) << std::endl;
      
 
     /*free all the data*/
@@ -299,6 +307,12 @@ int test()
     free(parameters_info); 
 
     return 0;
+}
+
+int test_2()
+{
+    std::cout << sizeof(torch::nn::Linear) << std::endl;
+    //one_batch_net model = nullptr;
 }
 
 

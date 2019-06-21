@@ -290,14 +290,20 @@ int test()
     }
 
     std::cout << sizeof(torch::nn::Linear) << std::endl;
-    one_batch_net model(parameters_info, NULL);
     torch::Tensor aa = torch::randn({128,128});
+    aa = aa.to(torch::kFloat64);
+    torch::set_default_dtype(aa.dtype());
+    aa = aa.to(device);
+    one_batch_net model(parameters_info, NULL);
+    model.to(device);
+ 
     for (const auto& pair : model.named_parameters()) 
     {
         std::cout << pair.key() << ": " << pair.value().sizes() << std::endl;
     }  
     std::cout << model.forward(aa) << std::endl;
-     
+    printf("%f\n", aa.accessor<double, 2>()[0][0]);
+
 
     /*free all the data*/
         /*parameters*/
@@ -313,6 +319,7 @@ int test_2()
 {
     std::cout << sizeof(torch::nn::Linear) << std::endl;
     //one_batch_net model = nullptr;
+    return 0;
 }
 
 

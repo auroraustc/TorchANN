@@ -8,10 +8,13 @@ Use torch to train NN potential
 ## Request:
 1. python version >= 3
 2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v1.x; optional: Torchvision)
-3. [horovod](https://github.com/horovod/horovod)(Optional, future)
-4. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional, future)
-5. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional, future)
-6. C++ compiler which supports c11 standard (icpc 2018 and gcc 4.9.4 tested)
+3. [ninja](https://pypi.org/project/ninja/)
+4. C++ compiler which supports c11 standard (icpc 2018 and gcc 4.9.4 tested)
+
+***Below are not requested at present but on the road map.***
+1. [horovod](https://github.com/horovod/horovod)(Optional, future)
+2. [mpi4py](https://mpi4py.readthedocs.io/en/stable/)(Optional, future)
+3. An MPI library (Intel MPI 2018 and OpenMPI 4.0 tested)(Optional, future) 
 
 ## Prepare training data:
 ```bash
@@ -110,14 +113,15 @@ The format of `force.raw` is the same as `coord.raw`.
 cd ./Torch-ANN/c
 #Adapt the makefile for your computer
 #For example, change the -g flag to -O2
-make
+make partial
 ```
 
 ### STEP 2: Pre-process input data
 ```bash
 cd ../tests/test_2 #The input data for test is under this directory
 #Modify the PARAMS.json for your dataset
-../../c/GENERATE > log
+#The [root path of TorchANN]/c/GENERATE_P will not calculate descriptors while [root path of TorchANN]/c/GENERATE calculates all the things before training.
+../../c/GENERATE_P > log
 ```
 The C code will convert the raw data into symmetry coordinates needed by training and some bin files will be stored in the `./` directory:
 ```bash

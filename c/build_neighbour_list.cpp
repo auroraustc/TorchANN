@@ -161,6 +161,10 @@ s2:
             printf_d("atom type %d coord %.3lf %.3lf %.3lf \n", frame_info_cur->neighbour_list[DEBUG_ATOM].type[i], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
         }
     }
+    if (parameters_info->sym_coord_type == 1)
+    {
+        parameters_info->N_sym_coord = parameters_info->SEL_A_max * 4;
+    }
 
     free(system_info_expanded->atom_info);free(system_info_expanded->type);free(system_info_expanded);
     return 0;

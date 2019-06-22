@@ -44,7 +44,10 @@ if(True):
 
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 script_path = sys.path[0]
-comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+if (device != tf.device('cpu')):
+    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+else:
+    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
 print("All parameters:")
@@ -126,7 +129,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = False)
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
 OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16, weight_decay=5E-5 * MULTIPLIER)
 
 """
@@ -180,7 +183,7 @@ if (True):
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             #1,9,10,11
-            data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max, parameters.cutoff_1, parameters.cutoff_2)[0:4]
+            #data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max, parameters.cutoff_1, parameters.cutoff_2)[0:4]
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
@@ -197,7 +200,8 @@ if (True):
                 # correct
                 if (parameters.sym_coord_type == 1):
                     E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
-                                                                               use_std_avg, device)
+                                                                               use_std_avg, device,
+                                                                               comput_descrpt_and_deriv)
                 elif (parameters.sym_coord_type == 2):
                     E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
                                                                                             avg,

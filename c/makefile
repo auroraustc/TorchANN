@@ -2,7 +2,7 @@
 CC = g++
 CXX = g++
 #define the BOOST C++ library root and include path
-BOOST_ROOT = /home/aurora/Softwares/boost_1_70_0/install/include/
+BOOST_ROOT = /home/aurora/Softwares/boost_1_70_0/install/
 BOOST_INC = $(BOOST_ROOT)/include/
 #Objects used for make
 OBJECTS_CXX = Utilities.cpp read_system.cpp read_parameters.cpp extend_max_atoms.cpp build_neighbour_list.cpp count_types.cpp convert_coord.cpp save_to_file.cpp main.cpp

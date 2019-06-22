@@ -419,7 +419,11 @@ class one_batch_net(nn.Module):
                     self.filter_hidden[type_idx][nei_type_idx][hidden_idx].bias.data.normal_(mean=0, std=1)
 
 
-    def forward(self, data_cur, parameters, std, avg, use_std_avg, device) : #cur mean current batch
+    def forward(self, data_cur, parameters, std, avg, use_std_avg, device, comput_descrpt_and_deriv_module) : #cur mean current batch
+        data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv_module.calc_descrpt_and_deriv_DPMD(
+            data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max,
+            parameters.cutoff_1, parameters.cutoff_2)[0:4]
+
         SYM_COORD_Reshape_tf_cur = data_cur[1]
         N_ATOMS_tf_cur = data_cur[4]
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
@@ -873,7 +877,7 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
         tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
-        #tf.nn.init.constant_(m.weight,0.01)
+        #tf.nn.init.constant_(m.weight,0.02)
         #m.bias.data.normal_(mean = 0, std = 1.0)
         #tf.nn.init.constant_(m.bias, -0.01)
 

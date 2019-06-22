@@ -38,7 +38,10 @@ FREEZE_MODEL = tf.load("./freeze_model.pytorch", map_location=device)
 
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 script_path = sys.path[0]
-comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+if (device != tf.device('cpu')):
+    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+else:
+    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters = FREEZE_MODEL['parameters']
 print("All parameters:")
 print(parameters)
@@ -111,9 +114,9 @@ if (True):
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
             # 1,9,10,11
-            data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(
+            """data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(
                 data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max,
-                parameters.cutoff_1, parameters.cutoff_2)[0:4]
+                parameters.cutoff_1, parameters.cutoff_2)[0:4]"""
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
@@ -130,7 +133,8 @@ if (True):
                 # correct
                 if (parameters.sym_coord_type == 1):
                     E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
-                                                                               use_std_avg, device)
+                                                                               use_std_avg, device,
+                                                                               comput_descrpt_and_deriv)
                 elif (parameters.sym_coord_type == 2):
                     E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
                                                                                             avg,

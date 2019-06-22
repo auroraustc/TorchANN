@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" afterDir="false" />
@@ -20,14 +22,14 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5424312">
+    <splitter split-orientation="horizontal" split-proportion="0.63761467">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="188">
-                  <caret line="46" column="191" selection-start-line="46" selection-start-column="191" selection-end-line="46" selection-end-column="191" />
+                <state relative-caret-position="3988">
+                  <caret line="292" column="29" lean-forward="true" selection-start-line="292" selection-start-column="29" selection-end-line="292" selection-end-column="29" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -50,8 +52,8 @@
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1860">
-                  <caret line="134" column="70" selection-start-line="134" selection-start-column="70" selection-end-line="134" selection-end-column="70" />
+                <state relative-caret-position="825">
+                  <caret line="115" column="62" selection-start-line="115" selection-start-column="62" selection-end-line="115" selection-end-column="62" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -66,8 +68,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="184">
-                  <caret line="428" selection-start-line="428" selection-end-line="428" />
+                <state relative-caret-position="521">
+                  <caret line="877" column="9" selection-start-line="877" selection-start-column="9" selection-end-line="877" selection-end-column="9" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -88,7 +90,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>tf</find>
       <find>G_cur_atom</find>
       <find>parameters.filter_neuron[len(paramete</find>
       <find>E_cur_bat</find>
@@ -118,6 +119,7 @@
       <find>require</find>
       <find>n_atoms</find>
       <find>dist</find>
+      <find>data_cur</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -136,10 +138,10 @@
         <option value="$PROJECT_DIR$/horovod/train_noclassfy_lbfgs.py" />
         <option value="$PROJECT_DIR$/use_horovod/class_and_function.py" />
         <option value="$PROJECT_DIR$/mpi4py/class_and_function.py" />
-        <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi_algotest.py" />
-        <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
+        <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
+        <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
       </list>
     </option>
   </component>
@@ -155,6 +157,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -171,13 +174,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tests/test_2" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tests/test_1g" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -224,7 +226,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/test_2" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/test_1g" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -482,11 +484,12 @@
       <workItem from="1561121718260" duration="4000" />
       <workItem from="1561122414156" duration="4429000" />
       <workItem from="1561128302377" duration="149000" />
+      <workItem from="1561184305537" duration="815000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="353900000" />
+    <option name="totallyTimeSpent" value="354715000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -498,7 +501,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.035931453" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -583,12 +586,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>66</line>
+          <line>70</line>
           <option name="timeStamp" value="146" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>82</line>
+          <line>86</line>
           <option name="timeStamp" value="147" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -667,7 +670,7 @@
     <SUITE FILE_PATH="coverage/python$train_noclassify_nompi_algotest.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557306937759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556530755659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small4+4" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1561128424259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_2" />
-    <SUITE FILE_PATH="coverage/python$test_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557218004145" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
+    <SUITE FILE_PATH="coverage/python$test_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1561185088196" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassfy_mpi4py.coverage" NAME="train_noclassfy_mpi4py Coverage Results" MODIFIED="1557045506427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="debuggerHistoryManager">
@@ -776,8 +779,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1860">
-          <caret line="134" column="70" selection-start-line="134" selection-start-column="70" selection-end-line="134" selection-end-column="70" />
+        <state relative-caret-position="825">
+          <caret line="115" column="62" selection-start-line="115" selection-start-column="62" selection-end-line="115" selection-end-column="62" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>
@@ -786,8 +789,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="428" selection-start-line="428" selection-end-line="428" />
+        <state relative-caret-position="521">
+          <caret line="877" column="9" selection-start-line="877" selection-start-column="9" selection-end-line="877" selection-end-column="9" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -796,8 +799,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="46" column="191" selection-start-line="46" selection-start-column="191" selection-end-line="46" selection-end-column="191" />
+        <state relative-caret-position="3988">
+          <caret line="292" column="29" lean-forward="true" selection-start-line="292" selection-start-column="29" selection-end-line="292" selection-end-column="29" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>

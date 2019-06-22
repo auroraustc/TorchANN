@@ -10,8 +10,10 @@ import torch.optim as optim
 import os
 import gc
 import time
+import sys
 from ctypes import *
 from class_and_function import *
+from torch.utils.cpp_extension import load
 
 
 default_dtype = tf.float64
@@ -35,6 +37,8 @@ if (True):
 FREEZE_MODEL = tf.load("./freeze_model.pytorch", map_location=device)
 
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
+script_path = sys.path[0]
+comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters = FREEZE_MODEL['parameters']
 print("All parameters:")
 print(parameters)
@@ -106,6 +110,10 @@ if (True):
             pref_f = parameters.start_pref_f
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
+            # 1,9,10,11
+            data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(
+                data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max,
+                parameters.cutoff_1, parameters.cutoff_2)[0:4]
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()

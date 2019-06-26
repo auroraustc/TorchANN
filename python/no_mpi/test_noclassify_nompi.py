@@ -43,18 +43,15 @@ if (device != tf.device('cpu')):
 else:
     comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters_from_bin = FREEZE_MODEL['parameters']
-
 parameters_from_file = Parameters()
 read_parameters_flag = read_parameters(parameters_from_file)
-parameters = parameters_from_bin
-parameters.SEL_A_max = parameters_from_file.SEL_A_max
-parameters.Nframes_tot = parameters_from_file.Nframes_tot
+parameters = parameters_from_file
 print("All parameters:")
 print(parameters)
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
-N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
+N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters_from_file, default_dtype=default_dtype)
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
@@ -75,8 +72,10 @@ A = A.transpose(0,1).numpy()
 B = ENERGY_tf.numpy()
 mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
-ONE_BATCH_NET = one_batch_net(parameters, mean_init)
-parameters.N_Atoms_max = parameters_from_file.N_Atoms_max
+
+parameters = parameters_from_bin
+ONE_BATCH_NET = one_batch_net(parameters_from_bin, mean_init)
+parameters = parameters_from_file
 ONE_BATCH_NET.load_state_dict(FREEZE_MODEL['model_state_dict'])
 std = FREEZE_MODEL['std'].narrow(0,0,1)
 avg = FREEZE_MODEL['avg'].narrow(0,0,1)
@@ -174,16 +173,20 @@ if (True):
 
                 END_BATCH_TIMER = time.time()
 
+                TEST_maxlossF = tf.max(F_cur_batch-data_cur[3])
+                TEST_lossF = tf.sqrt(loss_F_cur_batch)
+                TEST_maxlossF_percentage = tf.max((F_cur_batch-data_cur[3])[((F_cur_batch-data_cur[3]) >= TEST_lossF)] / (data_cur[3][((F_cur_batch-data_cur[3]) >= TEST_lossF)])) * 100
+
                 ###Adam print
                 if (True):
                     END_BATCH_USER_TIMER = time.time()
-                    print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
+                    print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % (
+                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch), TEST_maxlossF , TEST_maxlossF_percentage,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./TEST_LOSS.OUT", "a")
-                        print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
-                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
+                        print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % ( \
+                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch), TEST_maxlossF , TEST_maxlossF_percentage,
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                         file = f_out)
                         f_out.close()

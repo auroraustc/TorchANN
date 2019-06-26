@@ -42,7 +42,13 @@ if (device != tf.device('cpu')):
     comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
 else:
     comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
-parameters = FREEZE_MODEL['parameters']
+parameters_from_bin = FREEZE_MODEL['parameters']
+
+parameters_from_file = Parameters()
+read_parameters_flag = read_parameters(parameters_from_file)
+parameters = parameters_from_bin
+parameters.SEL_A_max = parameters_from_file.SEL_A_max
+parameters.Nframes_tot = parameters_from_file.Nframes_tot
 print("All parameters:")
 print(parameters)
 
@@ -69,8 +75,8 @@ A = A.transpose(0,1).numpy()
 B = ENERGY_tf.numpy()
 mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
-
 ONE_BATCH_NET = one_batch_net(parameters, mean_init)
+parameters.N_Atoms_max = parameters_from_file.N_Atoms_max
 ONE_BATCH_NET.load_state_dict(FREEZE_MODEL['model_state_dict'])
 std = FREEZE_MODEL['std'].narrow(0,0,1)
 avg = FREEZE_MODEL['avg'].narrow(0,0,1)

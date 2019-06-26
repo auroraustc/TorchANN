@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/makefile" beforeDir="false" afterPath="$PROJECT_DIR$/../c/makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" afterDir="false" />
@@ -28,11 +24,11 @@
     <splitter split-orientation="horizontal" split-proportion="0.5315367">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
+          <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="210">
-                  <caret line="65" column="59" selection-start-line="65" selection-start-column="59" selection-end-line="65" selection-end-column="59" />
+                <state relative-caret-position="134">
+                  <caret line="50" selection-start-line="50" selection-end-line="51" selection-end-column="50" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -52,11 +48,11 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-379">
-                  <caret line="50" column="59" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
+                <state relative-caret-position="494">
+                  <caret line="84" column="40" lean-forward="true" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -71,8 +67,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="304">
-                  <caret line="422" column="8" selection-start-line="422" selection-start-column="8" selection-end-line="422" selection-end-column="8" />
+                <state relative-caret-position="420">
+                  <caret line="379" column="8" selection-start-line="379" selection-start-column="8" selection-end-line="379" selection-end-column="8" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -93,7 +89,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>G_cur_atom</find>
       <find>parameters.filter_neuron[len(paramete</find>
       <find>E_cur_bat</find>
       <find>stack</find>
@@ -123,6 +118,7 @@
       <find>n_atoms</find>
       <find>dist</find>
       <find>data_cur</find>
+      <find>parameters</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -142,17 +138,17 @@
         <option value="$PROJECT_DIR$/use_horovod/class_and_function.py" />
         <option value="$PROJECT_DIR$/mpi4py/class_and_function.py" />
         <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi_algotest.py" />
-        <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
-        <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
         <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
+        <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
+        <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="65" />
+    <option name="x" value="64" />
     <option name="y" value="-4" />
-    <option name="width" value="1855" />
-    <option name="height" value="1084" />
+    <option name="width" value="1857" />
+    <option name="height" value="1085" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -160,6 +156,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -176,7 +173,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -491,11 +487,13 @@
       <workItem from="1561197429018" duration="258000" />
       <workItem from="1561197718966" duration="284000" />
       <workItem from="1561198017896" duration="1362000" />
+      <workItem from="1561543962403" duration="20000" />
+      <workItem from="1561545023550" duration="942000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="356619000" />
+    <option name="totallyTimeSpent" value="357581000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -592,12 +590,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>73</line>
+          <line>79</line>
           <option name="timeStamp" value="146" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>89</line>
+          <line>95</line>
           <option name="timeStamp" value="147" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -783,10 +781,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
+    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-379">
-          <caret line="50" column="59" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
+        <state relative-caret-position="134">
+          <caret line="50" selection-start-line="50" selection-end-line="51" selection-end-column="50" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>
@@ -795,18 +793,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="304">
-          <caret line="422" column="8" selection-start-line="422" selection-start-column="8" selection-end-line="422" selection-end-column="8" />
+        <state relative-caret-position="420">
+          <caret line="379" column="8" selection-start-line="379" selection-start-column="8" selection-end-line="379" selection-end-column="8" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
+    <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="65" column="59" selection-start-line="65" selection-start-column="59" selection-end-line="65" selection-end-column="59" />
+        <state relative-caret-position="494">
+          <caret line="84" column="40" lean-forward="true" selection-start-line="84" selection-start-column="40" selection-end-line="84" selection-end-column="40" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>

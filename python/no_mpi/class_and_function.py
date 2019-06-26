@@ -458,6 +458,8 @@ class one_batch_net(nn.Module):
             SYM_COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
                 SYM_COORD_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.SEL_A_max, 4), 0,
                 type_idx_cur_type)
+            if ((SYM_COORD_Reshape_tf_cur_Reshape_cur_type.shape)[0] == 0):
+                continue
             SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type = tf.index_select(
                 SYM_COORD_DX_Reshape_tf_cur_Reshape.reshape(len(data_cur[1]) * data_cur[4][0], parameters.SEL_A_max, 4),
                 0,

@@ -260,11 +260,15 @@ def read_and_init_bin_file_all(parameters, default_dtype):
            NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, \
            SYM_COORD_DZ_Reshape_tf, N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf
 
-def read_and_init_bin_file(parameters, default_dtype):
+def read_and_init_bin_file(parameters, default_dtype, is_predict=0):
     COORD = np.fromfile("./COORD.BIN", dtype=np.float64)
     #SYM_COORD = np.fromfile("./SYM_COORD.BIN", dtype=np.float64)
-    ENERGY = np.fromfile("./ENERGY.BIN", dtype=np.float64)
-    FORCE = np.fromfile("./FORCE.BIN", dtype=np.float64)
+    if (is_predict == 0):
+        ENERGY = np.fromfile("./ENERGY.BIN", dtype=np.float64)
+        FORCE = np.fromfile("./FORCE.BIN", dtype=np.float64)
+    else:
+        ENERGY = np.zeros(shape=(parameters.Nframes_tot, ), dtype=np.float64)
+        FORCE = np.zeros(shape=COORD.shape, dtype=np.float64)
     TYPE = np.fromfile("./TYPE.BIN", dtype=np.int32)
     N_ATOMS = np.fromfile("./N_ATOMS.BIN", dtype=np.int32)
     NEI_IDX = np.fromfile("./NEI_IDX.BIN", dtype=np.int32)

@@ -445,6 +445,8 @@ class one_batch_net(nn.Module):
             F_cur_batch_as_center_atom = tf.zeros((len(data_cur[1]) * data_cur[4][0], 3), device = device)
             F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * parameters.SEL_A_max, 3), device=device)
             type_idx_cur_type = (data_cur[5]==parameters.type_index_all_frame[type_idx]).nonzero()
+            if (type_idx_cur_type.nelement() == 0):
+                continue
             offset_array_frame = type_idx_cur_type.narrow(1, 0, 1)
             type_idx_cur_type = (
                         type_idx_cur_type.narrow(1, 0, 1) * data_cur[4][0].long() + type_idx_cur_type.narrow(1, 1, 1)).reshape(
@@ -530,6 +532,8 @@ class one_batch_net(nn.Module):
             G_cur_type = tf.zeros((shape_input_tmp[0] * shape_input_tmp[1], parameters.filter_neuron[-1]), device=device)
             for nei_type_idx in range(parameters.N_types_all_frame):
                 nei_type_idx_cur_type = (NEI_TYPE_Reshape_tf_cur_cur_type.reshape(-1,) == parameters.type_index_all_frame[nei_type_idx]).nonzero().reshape(-1,)
+                if (nei_type_idx_cur_type.nelement() == 0):
+                    continue
                 SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice_cur_nei_type = tf.index_select(
                     SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.reshape(
                         SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice.shape[0] *

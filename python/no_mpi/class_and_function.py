@@ -438,11 +438,14 @@ class one_batch_net(nn.Module):
         SYM_COORD_DZ_Reshape_tf_cur_Reshape = tf.reshape(data_cur[11], SYM_COORD_Reshape_tf_cur_Reshape.shape)
         NEI_IDX_Reshape_tf_cur = tf.reshape(data_cur[6], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
         NEI_TYPE_Reshape_tf_cur = tf.reshape(data_cur[13], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max))
-        #NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[6]), data_cur[4][0], parameters.SEL_A_max, 3))
+        COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[0], (len(data_cur[0]), parameters.N_Atoms_max, 3))
+        NEI_COORD_Reshape_tf_cur = tf.reshape(data_cur[7], (len(data_cur[7]), data_cur[4][0], parameters.SEL_A_max, 3))
         E_cur_batch = tf.zeros(len(SYM_COORD_Reshape_tf_cur), device = device)
         E_cur_batch_atom_wise = tf.zeros((len(data_cur[1]), data_cur[4][0]), device=device).reshape(-1, )
         ###DO NOT forget to multiply -1 for F!!!
         F_cur_batch = tf.zeros((len(SYM_COORD_Reshape_tf_cur), data_cur[4][0], 3), device=device)
+        virial_cur_batch = tf.zeros((len(data_cur[0]), 9), device=device)
+        virial_cur_batch_atom_wise = tf.zeros((len(data_cur[0]), data_cur[4][0], 9), device=device).reshape(len(data_cur[0]) * data_cur[4][0], -1)
         std_ = tf.zeros((1, parameters.N_types_all_frame, 4), device = device)
         avg_ = tf.zeros((1, parameters.N_types_all_frame, 4), device = device)
         for type_idx in range(parameters.N_types_all_frame):
@@ -623,6 +626,36 @@ class one_batch_net(nn.Module):
             F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), parameters.SEL_A_max, 3).narrow(1, 0, data_cur[4][0])
             F_cur_batch = F_cur_batch + F_cur_batch_as_center_atom + F_cur_batch_as_nei_atom
 
+            ##Start to calculate virial of the system
+            shape_coord_tmp = COORD_Reshape_tf_cur_Reshape.shape
+            COORD_Reshape_tf_cur_Reshape_cur_type = tf.index_select(COORD_Reshape_tf_cur_Reshape.reshape(shape_coord_tmp[0] * shape_coord_tmp[1], shape_coord_tmp[2]), 0, type_idx_cur_type)
+            shape_nei_coord_tmp = NEI_COORD_Reshape_tf_cur.shape
+            NEI_COORD_Reshape_tf_cur_cur_type = tf.index_select(NEI_COORD_Reshape_tf_cur.reshape(shape_nei_coord_tmp[0] * shape_nei_coord_tmp[1], shape_nei_coord_tmp[2], shape_nei_coord_tmp[3]), 0, type_idx_cur_type)
+            shape_coord_cur_type_tmp = COORD_Reshape_tf_cur_Reshape_cur_type.shape
+            rij_cur_type = NEI_COORD_Reshape_tf_cur_cur_type - tf.reshape(COORD_Reshape_tf_cur_Reshape_cur_type, (shape_coord_cur_type_tmp[0], 1, shape_coord_cur_type_tmp[1]))
+            virial_0_0_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 0, 1)
+            virial_0_1_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 0, 1)
+            virial_0_2_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 0, 1)
+            virial_1_0_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 1, 1)
+            virial_1_1_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 1, 1)
+            virial_1_2_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 1, 1)
+            virial_2_0_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 2, 1)
+            virial_2_1_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 2, 1)
+            virial_2_2_cur_type = (-1) * D_E_D_SYM_cur_type * SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type * rij_cur_type.narrow(2, 2, 1)
+            virial_0_0_cur_type = tf.sum(tf.sum(virial_0_0_cur_type, dim=1), dim=1)
+            virial_0_1_cur_type = tf.sum(tf.sum(virial_0_1_cur_type, dim=1), dim=1)
+            virial_0_2_cur_type = tf.sum(tf.sum(virial_0_2_cur_type, dim=1), dim=1)
+            virial_1_0_cur_type = tf.sum(tf.sum(virial_1_0_cur_type, dim=1), dim=1)
+            virial_1_1_cur_type = tf.sum(tf.sum(virial_1_1_cur_type, dim=1), dim=1)
+            virial_1_2_cur_type = tf.sum(tf.sum(virial_1_2_cur_type, dim=1), dim=1)
+            virial_2_0_cur_type = tf.sum(tf.sum(virial_2_0_cur_type, dim=1), dim=1)
+            virial_2_1_cur_type = tf.sum(tf.sum(virial_2_1_cur_type, dim=1), dim=1)
+            virial_2_2_cur_type = tf.sum(tf.sum(virial_2_2_cur_type, dim=1), dim=1)
+            virial_02_02_cur_type = (-1) * tf.cat((virial_0_0_cur_type, virial_0_1_cur_type, virial_0_2_cur_type, virial_1_0_cur_type, virial_1_1_cur_type, virial_1_2_cur_type, virial_2_0_cur_type, virial_2_1_cur_type, virial_2_2_cur_type)).reshape(9, len(virial_2_2_cur_type))
+            virial_cur_batch_atom_wise.scatter_add_(0, type_idx_cur_type.expand(9, len(type_idx_cur_type)).transpose(0, 1), virial_02_02_cur_type.transpose(0, 1))
+            1
+
+
 
         """
         for frame_idx in range(len(SYM_COORD_Reshape_tf_cur)):
@@ -740,10 +773,14 @@ class one_batch_net(nn.Module):
             """
         F_cur_batch *= -1.0
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
+        virial_cur_batch_atom_wise = tf.reshape(virial_cur_batch_atom_wise, (len(data_cur[0]), data_cur[4][0], 9))
+        virial_cur_batch = tf.sum(virial_cur_batch_atom_wise.transpose(1,2), dim=2)
+        print(virial_cur_batch)
         #use_std_avg = True
         return E_cur_batch, F_cur_batch, std_, avg_
 
     def forward_fitting_only(self, data_cur, parameters, std, avg, use_std_avg, device):
+        """Currently virial is not supported for this function."""
         SYM_COORD_Reshape_tf_cur = data_cur[1]
         N_ATOMS_tf_cur = data_cur[4]
         SYM_COORD_Reshape_tf_cur_Reshape = tf.reshape(data_cur[1], \
@@ -887,9 +924,9 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
         tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
-        #tf.nn.init.constant_(m.weight,0.02)
+        #tf.nn.init.constant_(m.weight,0.021)
         #m.bias.data.normal_(mean = 0, std = 1.0)
-        #tf.nn.init.constant_(m.bias, -0.01)
+        #tf.nn.init.constant_(m.bias, -0.021)
 
 
 def make_dot(var, params):

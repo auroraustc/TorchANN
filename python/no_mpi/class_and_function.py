@@ -775,9 +775,9 @@ class one_batch_net(nn.Module):
         E_cur_batch = tf.sum(E_cur_batch_atom_wise.reshape(len(data_cur[1]), data_cur[4][0]), dim=1)
         virial_cur_batch_atom_wise = tf.reshape(virial_cur_batch_atom_wise, (len(data_cur[0]), data_cur[4][0], 9))
         virial_cur_batch = tf.sum(virial_cur_batch_atom_wise.transpose(1,2), dim=2)
-        print(virial_cur_batch)
+        #print(virial_cur_batch)
         #use_std_avg = True
-        return E_cur_batch, F_cur_batch, std_, avg_
+        return E_cur_batch, F_cur_batch, std_, avg_, virial_cur_batch
 
     def forward_fitting_only(self, data_cur, parameters, std, avg, use_std_avg, device):
         """Currently virial is not supported for this function."""

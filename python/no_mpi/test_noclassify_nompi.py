@@ -15,7 +15,6 @@ from ctypes import *
 from class_and_function import *
 from torch.utils.cpp_extension import load
 
-
 default_dtype = tf.float64
 tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
@@ -162,13 +161,17 @@ if (True):
                 ###Adam
                 # correct
                 if (parameters.sym_coord_type == 1):
-                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
-                                                                               use_std_avg, device,
-                                                                               comput_descrpt_and_deriv)
+                    E_cur_batch, F_cur_batch, std, avg, virial_cur_batch = ONE_BATCH_NET.forward(data_cur, parameters,
+                                                                                                 std, avg,
+                                                                                                 use_std_avg, device,
+                                                                                                 comput_descrpt_and_deriv)
                 elif (parameters.sym_coord_type == 2):
-                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
-                                                                                            avg,
-                                                                                            use_std_avg, device)
+                    E_cur_batch, F_cur_batch, std, avg, virial_cur_batch = ONE_BATCH_NET.forward_fitting_only(data_cur,
+                                                                                                              parameters,
+                                                                                                              std,
+                                                                                                              avg,
+                                                                                                              use_std_avg,
+                                                                                                              device)
                 shape_tmp = std.shape
                 std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)

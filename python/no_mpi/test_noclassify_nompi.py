@@ -210,12 +210,12 @@ if (True):
                 if (True):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.sum(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
+                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./TEST_LOSS.OUT", "a")
                         print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % ( \
-                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.sum(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
+                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                         file = f_out)
                         f_out.close()

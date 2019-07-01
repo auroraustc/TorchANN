@@ -242,7 +242,7 @@ if (True):
                 if ((batch_idx  == 0 and epoch % (parameters.output_epoch) == 0) or ((epoch == parameters.stop_epoch - 1) and (batch_idx == 0))):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.sum(data_cur[12].double()),
+                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()),
                         tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())),
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
@@ -250,7 +250,7 @@ if (True):
                         print(
                             "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                                 epoch, batch_idx,
-                                tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.sum(data_cur[12].double()),
+                                tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()),
                                 tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())),
                                 END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), file=f_out)
                         f_out.close()

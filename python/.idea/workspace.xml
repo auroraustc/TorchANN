@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" afterDir="false" />
@@ -24,14 +28,14 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.41029307">
+    <splitter split-orientation="horizontal" split-proportion="0.66506314">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
+          <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2670">
-                  <caret line="190" selection-start-line="190" selection-end-line="190" />
+                <state relative-caret-position="1920">
+                  <caret line="228" column="48" selection-start-line="228" selection-start-column="48" selection-end-line="228" selection-end-column="48" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -39,13 +43,25 @@
               </provider>
             </entry>
           </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="13">
-                  <caret line="651" column="77" selection-start-line="651" selection-start-column="77" selection-end-line="651" selection-end-column="77" />
+                <state relative-caret-position="240">
+                  <caret line="192" column="108" selection-start-line="192" selection-start-column="108" selection-end-line="192" selection-end-column="108" />
                   <folding>
-                    <element signature="e#0#18#0" expanded="true" />
+                    <element signature="e#47#65#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="-1066">
+                  <caret line="113" column="91" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="113" selection-end-column="91" />
+                  <folding>
+                    <element signature="e#47#65#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -67,8 +83,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="239">
-                  <caret line="782" column="63" selection-start-line="782" selection-start-column="63" selection-end-line="782" selection-end-column="63" />
+                <state relative-caret-position="319">
+                  <caret line="777" column="8" selection-start-line="777" selection-start-column="8" selection-end-line="777" selection-end-column="8" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -89,9 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>view</find>
-      <find>to(</find>
-      <find>torch</find>
       <find>tanh</find>
       <find>size</find>
       <find>requri</find>
@@ -115,10 +128,13 @@
       <find>n_atoms</find>
       <find>dist</find>
       <find>data_cur</find>
-      <find>parameters</find>
       <find>sel_a_max</find>
       <find>pred</find>
       <find>0.0017</find>
+      <find>data_cur[4]</find>
+      <find>parameters</find>
+      <find>N_Atoms</find>
+      <find>[4][0]</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -138,9 +154,9 @@
         <option value="$PROJECT_DIR$/use_horovod/class_and_function.py" />
         <option value="$PROJECT_DIR$/mpi4py/class_and_function.py" />
         <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi_algotest.py" />
-        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
+        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
       </list>
     </option>
@@ -179,7 +195,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tests/test_very_small" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../tests/AuP-verify/from_test" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
@@ -226,7 +242,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/test_very_small" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/AuP-verify/from_test" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -516,11 +532,13 @@
       <workItem from="1561952565696" duration="169000" />
       <workItem from="1561952989786" duration="172000" />
       <workItem from="1561953305011" duration="115000" />
+      <workItem from="1561962363085" duration="1277000" />
+      <workItem from="1561963788733" duration="6172000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="377873000" />
+    <option name="totallyTimeSpent" value="385322000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -532,15 +550,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="-4" width="1855" height="1084" extended-state="6" />
+    <frame x="64" y="-4" width="1857" height="1085" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22664456" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.08070757" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.35474005" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.35474005" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.35270134" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -623,7 +641,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>118</line>
+          <line>119</line>
           <option name="timeStamp" value="147" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -668,17 +686,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>197</line>
+          <line>199</line>
           <option name="timeStamp" value="189" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>204</line>
+          <line>206</line>
           <option name="timeStamp" value="190" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py</url>
-          <line>201</line>
+          <line>203</line>
           <option name="timeStamp" value="191" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -721,25 +739,55 @@
           <line>776</line>
           <option name="timeStamp" value="206" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py</url>
+          <line>114</line>
+          <option name="timeStamp" value="207" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py</url>
+          <line>161</line>
+          <option name="timeStamp" value="208" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>620</line>
+          <option name="timeStamp" value="213" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py</url>
+          <line>111</line>
+          <option name="timeStamp" value="214" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>426</line>
+          <option name="timeStamp" value="215" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>552</line>
+          <option name="timeStamp" value="217" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>539</line>
+          <option name="timeStamp" value="218" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="D_E_D_SYM_cur_type" language="Python" />
-        <watch expression="SYM_COORD_DX_Reshape_tf_cur_Reshape_cur_type" language="Python" />
-        <watch expression="SYM_COORD_DY_Reshape_tf_cur_Reshape_cur_type" language="Python" />
-        <watch expression="SYM_COORD_DZ_Reshape_tf_cur_Reshape_cur_type" language="Python" />
-        <watch expression="COORD_Reshape_tf_cur_Reshape_cur_type" language="Python" />
-        <watch expression="NEI_COORD_Reshape_tf_cur_cur_type" language="Python" />
-        <watch expression="rij_cur_type" language="Python" />
-        <watch expression="NEI_COORD_Reshape_tf_cur_cur_type[0]-COORD_Reshape_tf_cur_Reshape_cur_type[0]" language="Python" />
-        <watch expression="rij_cur_type.narrow(2, 1,1)" language="Python" />
-        <watch expression="tf.sum(virial_0_0_cur_type)" language="Python" />
-        <watch expression="virial_02_02_cur_type" language="Python" />
-        <watch expression="type_idx_cur_type" language="Python" />
-        <watch expression="virial_cur_batch_atom_wise" language="Python" />
-        <watch expression="tf.sum(virial_cur_batch_atom_wise.transpose(0,1), dim=1)" language="Python" />
-        <watch expression="virial_cur_batch" language="Python" />
+        <watch expression="data_cur[1]" language="Python" />
+        <watch expression="data_cur[9]" language="Python" />
+        <watch expression="G_cur_type" language="Python" />
+        <watch expression="RG_cur_type" language="Python" />
+        <watch expression="E_tot_cur_type" language="Python" />
+        <watch expression="SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice_cur_nei_type" language="Python" />
+        <watch expression="SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice" language="Python" />
+        <watch expression="nei_type_idx_cur_type" language="Python" />
+        <watch expression="tf.sum(NEI_TYPE_Reshape_tf_cur_cur_type[0]==79)" language="Python" />
+        <watch expression="data_cur[12]" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -747,6 +795,7 @@
     <SUITE FILE_PATH="coverage/python$train_noclassfy_lbfgs.coverage" NAME="train Coverage Results" MODIFIED="1556546167468" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small" />
     <SUITE FILE_PATH="coverage/python$train_noclassfy.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556977385299" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassify.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557065297001" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
+    <SUITE FILE_PATH="coverage/python$predict_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1561970025126" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/AuP-verify/from_test" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_.coverage" NAME="train_noclassify_ Coverage Results" MODIFIED="1557061152708" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_nompi_algotest.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557306937759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556530755659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small4+4" />
@@ -757,52 +806,52 @@
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>virial_cur_batch</expression-string>
+        <expression-string>data_cur[12]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>tf.sum(virial_cur_batch_atom_wise.transpose(0,1), dim=1)</expression-string>
+        <expression-string>data_cur[13]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>tf.sum(virial_cur_batch_atom_wise, dim=1)</expression-string>
+        <expression-string>tf.sum(NEI_TYPE_Reshape_tf_cur_cur_type[0]==79)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>virial_cur_batch_atom_wise</expression-string>
+        <expression-string>NEI_TYPE_Reshape_tf_cur_cur_type[0]==79</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>type_idx_cur_type</expression-string>
+        <expression-string>NEI_TYPE_Reshape_tf_cur_cur_type[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>virial_02_02_cur_type</expression-string>
+        <expression-string>NEI_TYPE_Reshape_tf_cur_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>tf.sum(virial_0_0_cur_type)</expression-string>
+        <expression-string>nei_type_idx_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>tf.sum(F_as_center_atom_curtype_x)</expression-string>
+        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>F_as_center_atom_curtype_x</expression-string>
+        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type_slice_cur_nei_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>virial_0_0_cur_type</expression-string>
+        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -864,10 +913,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1905">
+          <caret line="135" column="9" selection-start-line="135" selection-start-column="9" selection-end-line="135" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2142">
-          <caret line="231" column="17" lean-forward="true" selection-start-line="231" selection-start-column="17" selection-end-line="231" selection-end-column="17" />
+        <state relative-caret-position="-1066">
+          <caret line="113" column="91" lean-forward="true" selection-start-line="113" selection-start-column="4" selection-end-line="113" selection-end-column="91" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
           </folding>
@@ -876,37 +932,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="101" column="102" selection-start-line="101" selection-start-column="102" selection-end-line="101" selection-end-column="102" />
+        <state relative-caret-position="240">
+          <caret line="192" column="108" selection-start-line="192" selection-start-column="108" selection-end-line="192" selection-end-column="108" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="777" column="8" selection-start-line="777" selection-start-column="8" selection-end-line="777" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2670">
-          <caret line="190" selection-start-line="190" selection-end-line="190" />
+        <state relative-caret-position="1920">
+          <caret line="228" column="48" selection-start-line="228" selection-start-column="48" selection-end-line="228" selection-end-column="48" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
-          <caret line="135" column="9" selection-start-line="135" selection-start-column="9" selection-end-line="135" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="782" column="63" selection-start-line="782" selection-start-column="63" selection-end-line="782" selection-end-column="63" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

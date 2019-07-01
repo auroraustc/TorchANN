@@ -111,6 +111,7 @@ elif (parameters_from_file.SEL_A_max > parameters_from_bin.SEL_A_max):
     print("|       PERFORMANCE MIGHT NOT BE GOOD!        |")
     print("-----------------------------------------------")
     NEI_IDX_Reshape_tf = NEI_IDX_Reshape_tf.reshape((parameters_from_file.Nframes_tot, parameters_from_file.N_Atoms_max, parameters_from_file.SEL_A_max)).narrow(2, 0, parameters_from_bin.SEL_A_max).reshape((parameters_from_file.Nframes_tot, -1))
+    NEI_IDX_Reshape_tf[NEI_IDX_Reshape_tf>=parameters.SEL_A_max] = parameters.SEL_A_max - 1
     NEI_COORD_Reshape_tf = NEI_COORD_Reshape_tf.reshape((parameters_from_file.Nframes_tot, parameters_from_file.N_Atoms_max, parameters_from_file.SEL_A_max, 3)).narrow(2, 0, parameters_from_bin.SEL_A_max).reshape((parameters_from_file.Nframes_tot, -1))
     NEI_TYPE_Reshape_tf = NEI_TYPE_Reshape_tf.reshape((parameters_from_file.Nframes_tot, parameters_from_file.N_Atoms_max, parameters_from_file.SEL_A_max)).narrow(2, 0, parameters_from_bin.SEL_A_max).reshape((parameters_from_file.Nframes_tot, -1))
 
@@ -211,7 +212,7 @@ if (True):
                         print("Epoch: %-10d, Frame: %-10d, E: %10.6f eV/atom, maxF: %10.6f eV/A, time: %10.3f s\nForce:" % ( \
                            epoch, batch_idx, E_cur_batch, tf.max(F_cur_batch),
                            END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), file = f_out)
-                        np.savetxt(f_out, F_cur_batch.data.to(tf.device('cpu')).numpy().reshape(3, -1), fmt="%10.6f")
+                        np.savetxt(f_out, F_cur_batch.data.to(tf.device('cpu')).numpy().reshape(-1, 3), fmt="%10.6f")
                         f_out.close()
                     START_BATCH_USER_TIMER = time.time()
                 ###Adam end

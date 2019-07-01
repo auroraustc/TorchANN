@@ -653,7 +653,7 @@ class one_batch_net(nn.Module):
             virial_2_2_cur_type = tf.sum(tf.sum(virial_2_2_cur_type, dim=1), dim=1)
             virial_02_02_cur_type = (-1) * tf.cat((virial_0_0_cur_type, virial_0_1_cur_type, virial_0_2_cur_type, virial_1_0_cur_type, virial_1_1_cur_type, virial_1_2_cur_type, virial_2_0_cur_type, virial_2_1_cur_type, virial_2_2_cur_type)).reshape(9, len(virial_2_2_cur_type))
             virial_cur_batch_atom_wise.scatter_add_(0, type_idx_cur_type.expand(9, len(type_idx_cur_type)).transpose(0, 1), virial_02_02_cur_type.transpose(0, 1))
-            1
+
 
 
 

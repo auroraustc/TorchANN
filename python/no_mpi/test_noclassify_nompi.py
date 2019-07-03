@@ -118,7 +118,7 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
 TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = 1, shuffle = False)
 
-CRITERION = nn.MSELoss(reduction = "sum")
+CRITERION = nn.MSELoss(reduction = 'none')
 #LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
@@ -192,30 +192,32 @@ if (True):
                 """
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
-                loss_cur_batch = pref_e * loss_E_cur_batch / tf.sum(
-                    data_cur[12].double()) + pref_f * loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())
+                #loss_cur_batch = pref_e * loss_E_cur_batch / tf.sum(
+                #    data_cur[12].double()) + pref_f * loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())
+                loss_cur_batch = pref_e * tf.mean(loss_E_cur_batch) + pref_f * tf.mean(loss_F_cur_batch)
                 #OPTIMIZER2.zero_grad()
                 #loss_cur_batch.backward()
                 #OPTIMIZER2.step()
                 # correct end
                 ###Adam end
 
+
                 END_BATCH_TIMER = time.time()
 
                 TEST_maxlossF = tf.max(F_cur_batch-data_cur[3])
-                TEST_lossF = tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double()))
+                TEST_lossF = tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].double()))
                 TEST_maxlossF_percentage = tf.max((F_cur_batch-data_cur[3])[((F_cur_batch-data_cur[3]) >= TEST_lossF)] / (data_cur[3][((F_cur_batch-data_cur[3]) >= TEST_lossF)])) * 100
 
                 ###Adam print
                 if (True):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
+                        epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./TEST_LOSS.OUT", "a")
                         print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % ( \
-                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()), tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())), TEST_maxlossF , TEST_maxlossF_percentage,
+                           epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                         file = f_out)
                         f_out.close()

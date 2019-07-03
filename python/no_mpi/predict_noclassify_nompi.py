@@ -216,6 +216,8 @@ if (True):
                            epoch, batch_idx, E_cur_batch, tf.max(F_cur_batch),
                            END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), file = f_out)
                         np.savetxt(f_out, F_cur_batch.data.to(tf.device('cpu')).numpy().reshape(-1, 3), fmt="%10.6f")
+                        print("Stress:", file = f_out)
+                        np.savetxt(f_out, virial_cur_batch.data.to(tf.device('cpu')).numpy().reshape(-1, 3), fmt="%10.6f")
                         f_out.close()
                     START_BATCH_USER_TIMER = time.time()
                 ###Adam end

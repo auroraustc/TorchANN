@@ -139,7 +139,7 @@ OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 
 
-CRITERION = nn.MSELoss(reduction = "sum")
+CRITERION = nn.MSELoss(reduction = 'none')
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
@@ -228,8 +228,9 @@ if (True):
                     f_out.close()
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
-                loss_cur_batch = pref_e * loss_E_cur_batch / tf.sum(
-                    data_cur[12].double()) + pref_f * loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())
+                #loss_cur_batch = pref_e * loss_E_cur_batch / tf.sum(
+                #    data_cur[12].double()) + pref_f * loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())
+                loss_cur_batch = pref_e * tf.mean(loss_E_cur_batch) + pref_f * tf.mean(loss_F_cur_batch)
                 OPTIMIZER2.zero_grad()
                 loss_cur_batch.backward()
                 OPTIMIZER2.step()
@@ -242,16 +243,16 @@ if (True):
                 if ((batch_idx  == 0 and epoch % (parameters.output_epoch) == 0) or ((epoch == parameters.stop_epoch - 1) and (batch_idx == 0))):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()),
-                        tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())),
+                        epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()),
+                        tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].double())),
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./LOSS.OUT", "a")
                         print(
                             "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
                                 epoch, batch_idx,
-                                tf.sqrt(loss_E_cur_batch / len(E_cur_batch)) / tf.mean(data_cur[12].double()),
-                                tf.sqrt(loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())),
+                                tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()),
+                                tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].double())),
                                 END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), file=f_out)
                         f_out.close()
                     START_BATCH_USER_TIMER = time.time()

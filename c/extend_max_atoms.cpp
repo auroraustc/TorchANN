@@ -74,7 +74,7 @@ int extend_max_atoms_cur_frame(frame_info_struct * frame_info_cur, parameters_in
         {
             force_ext[i][j] = 0.0;
         }
-        type_ext[i] = -1;
+        type_ext[i] = frame_info_cur->type[0];
     }
 
     for (i = 0; i <= N_Atoms_cur - 1; i++)

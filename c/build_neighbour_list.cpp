@@ -286,7 +286,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     dist_info_struct dummy;
     atom_info_struct dummy_atom;
     dummy_atom.coord[0] = 9999; dummy_atom.coord[1] = 9999; dummy_atom.coord[2] = 9999;
-    dummy_atom.index = parameters_info->SEL_A_max - 1;
+    dummy_atom.index = 0;//parameters_info->SEL_A_max - 1;
     dummy.atom_info = &dummy_atom;
     dummy.dist = 9999;
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
@@ -411,10 +411,10 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         neighbour_list_cur_atom->index_neighbours[i] = (b_tmp[i]->atom_info->index);
         neighbour_list_cur_atom->dist_neighbours[i] = (b_tmp[i]->dist);
         /*New add.*/
-        if (neighbour_list_cur_atom->dist_neighbours[i] >= 9998.0)
-        {
-            neighbour_list_cur_atom->type[i] = -1;
-        }
+        //if (neighbour_list_cur_atom->dist_neighbours[i] >= 9998.0)
+        //{
+        //    neighbour_list_cur_atom->type[i] = 0;
+        //}
     }
     /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)

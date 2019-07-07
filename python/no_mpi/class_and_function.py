@@ -450,7 +450,8 @@ class one_batch_net(nn.Module):
         avg_ = tf.zeros((1, parameters.N_types_all_frame, 4), device = device)
         for type_idx in range(parameters.N_types_all_frame):
             F_cur_batch_as_center_atom = tf.zeros((len(data_cur[1]) * data_cur[4][0], 3), device = device)
-            F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * parameters.SEL_A_max, 3), device=device)
+            #F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * parameters.SEL_A_max, 3), device=device)
+            F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * max(data_cur[4][0], parameters.SEL_A_max), 3), device=device)
             type_idx_cur_type = (data_cur[5]==parameters.type_index_all_frame[type_idx]).nonzero()
             if (type_idx_cur_type.nelement() == 0):
                 continue
@@ -623,7 +624,7 @@ class one_batch_net(nn.Module):
                 len(F_as_nei_atom_curtype_x) * parameters.SEL_A_max, 3))
 
             F_cur_batch_as_center_atom = F_cur_batch_as_center_atom.reshape(len(data_cur[1]), data_cur[4][0], 3)
-            F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), parameters.SEL_A_max, 3).narrow(1, 0, data_cur[4][0])
+            F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), max(data_cur[4][0], parameters.SEL_A_max), 3).narrow(1, 0, data_cur[4][0])
             F_cur_batch = F_cur_batch + F_cur_batch_as_center_atom + F_cur_batch_as_nei_atom
 
             ##Start to calculate virial of the system

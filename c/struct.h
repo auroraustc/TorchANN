@@ -80,6 +80,7 @@ typedef struct parameters_info_struct_
 	int * type_index_all_frame;//type_index_all_frame[0..N_types_all_frame - 1]
 	int N_Atoms_max;
 	int SEL_A_max;
+	int * SEL_A_ELE;
 	int Nframes_tot;
 	int sym_coord_type;
 	int N_sym_coord;//Not used for DeePMD type

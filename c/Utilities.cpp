@@ -653,5 +653,40 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
 
 }
 
+int cart_to_frac(double * cart, double box[3][3], double * frac)
+{
+    double a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
+    double denominator = (a1 * b2 * c3 + b1 * c2 * a3 + c1 * a2 * b3 - c1 * b2 * a3 - b1 * a2 * c2 - a1 * c2 * b3);
+    if (denominator == 0)
+    {
+        return 1;//Two or more box vectors are parallel.
+    }
+    /*Don't forget the tranpose in the reverse-matrix formula!*/
+    double prefact = 1.0 / denominator;
+    double rev_a1 = prefact * (b2 * c3 - c2 * b3);
+    double rev_b1 = prefact * (c1 * b3 - b1 * c3);
+    double rev_c1 = prefact * (b1 * c2 - c1 * b2);
+    double rev_a2 = prefact * (c2 * a3 - a2 * c3);
+    double rev_b2 = prefact * (a1 * c3 - c1 * a3);
+    double rev_c2 = prefact * (c1 * a2 - a1 * c2);
+    double rev_a3 = prefact * (a2 * b3 - b2 * a3);
+    double rev_b3 = prefact * (b1 * a3 - a1 * b3);
+    double rev_c3 = prefact * (a1 * b2 - b1 * a2);
+    double x = cart[0], y = cart[1], z = cart[2];
+    *frac = rev_a1 * x + rev_b1 * y + rev_c1 * z;
+    *(frac + 1) = rev_a2 * x + rev_b2 * y + rev_c2 * z;
+    *(frac + 2) = rev_a3 * x + rev_b3 * y + rev_c3 * z;
+    return 0;
+}
+int frac_to_cart(double * cart, double box[3][3], double * frac)
+{
+    double a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
+    double x_ = frac[0], y_ = frac[1], z_ = frac[2];
+    *cart = a1 * x_ + b1 * y_ + c1 * z_;
+    *(cart + 1) = a2 * x_ + b2 * y_ + c2 * z_;
+    *(cart + 2) = a3 * x_ + b3 * y_ + c3 * z_;
+    return 0;
+}
+
 
 

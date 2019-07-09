@@ -86,6 +86,14 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     {
         parameters_info->SEL_A_max = PARAMS.get<int>("SEL_A_max");
     }
+    std::vector<int> SEL_A_ELE = as_vector<int>(PARAMS, "SEL_A_ele");
+    parameters_info->SEL_A_ele = (int *)calloc(SEL_A_ELE.size(), sizeof(int));
+    for (i = 0; i <= SEL_A_ELE.size() - 1; i++)
+    {
+        parameters_info->SEL_A_ele[i] = SEL_A_ELE[i];
+    }
+    parameters_info->N_types_all_frame = SEL_A_ELE.size();//For temp use. Just to record the size of SEL_A_ele array. It should be exactly equal to the number of types of elements in the training set. If this number is different from the count_types function, then an error will occur.
+
     if ((PARAMS.count("Nframes_tot") != 0) && (parameters_info->Nframes_tot == 0))
     {
         parameters_info->Nframes_tot = PARAMS.get<int>("Nframes_tot");

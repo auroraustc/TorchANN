@@ -44,6 +44,7 @@ typedef struct frame_info_struct_
 	double ** force;//force[0..N_Atoms-1][0..2]
 	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
 	int max_N_neighbours;//max number of neighbour atoms in this frame
+	int * max_N_neighbours_ele;//max number of neighbour atoms (classified by element type) in this frame
 } frame_info_struct;
 
 /*Atom info for one atom, including index, coordinate and force*/
@@ -80,7 +81,8 @@ typedef struct parameters_info_struct_
 	int * type_index_all_frame;//type_index_all_frame[0..N_types_all_frame - 1]
 	int N_Atoms_max;
 	int SEL_A_max;
-	int * SEL_A_ELE;
+	int * SEL_A_ele;
+	int * SEL_A_ele_max;
 	int Nframes_tot;
 	int sym_coord_type;
 	int N_sym_coord;//Not used for DeePMD type

@@ -275,6 +275,7 @@ int main()
         free(frame_info[i].force);
         free(frame_info[i].neighbour_list);
         free(frame_info[i].type);
+        free(frame_info[i].max_N_neighbours_ele);
     }
     free(frame_info);
         /*sym_coord*/
@@ -294,6 +295,8 @@ int main()
     }
     free_sym_coord(sym_coord_, sym_coord_type, parameters_info);*/
         /*parameters_info*/
+    free(parameters_info->SEL_A_ele);
+    free(parameters_info->SEL_A_ele_max);
     free(parameters_info->filter_neuron);
     free(parameters_info->fitting_neuron);
     free(parameters_info->type_index_all_frame);

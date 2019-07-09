@@ -58,6 +58,7 @@ int main()
     sym_coord_LASP_struct * sym_coord_LASP = NULL;
     int Nframes_tot;
     int max_N_neighbours_all_frame = -1;
+    int * max_N_neighbours_ele_all_frame = NULL;
     int SEL_A_max;
     int N_types_all_frame = 0;
     int * type_index_all_frame = NULL;//type_index_all_frame[0..N_types_all_frame - 1]. For exampe, we have 3 elements, 6(C), 29(Cu), 1(H), then ...[0]=6, ...[1]=29, ...[2]=1.
@@ -72,59 +73,46 @@ int main()
     read_system_flag = read_system(&frame_info, &Nframes_tot);
     if (read_system_flag != 0) 
     {
-        printf("Error when reading raw data: read_flag = %d\n", read_system_flag);
+        printf("!!Error when reading raw data: read_flag = %d\n", read_system_flag);
         return error_code;
     }
-    printf("No error when reading raw data.\n");
+    printf("**No error when reading raw data.**\n");
     parameters_info->Nframes_tot = Nframes_tot;
     error_code ++;
 
     read_parameters_info_flag = read_parameters(frame_info, parameters_info, "PARAMS.json");
     if (read_parameters_info_flag != 0)
     {
-        printf("Error when reading input parameters: read_parameters_info_flag = %d\n", read_parameters_info_flag);
+        printf("!!Error when reading input parameters: read_parameters_info_flag = %d\n", read_parameters_info_flag);
         return error_code;
     }
-    printf("No error when reading parameters.\n");
+    printf("**No error when reading parameters.**\n");
     error_code ++;
 
     /*Make the number of atoms in each frame aligned to parameters_info->N_Atoms_max by adding dummy atoms*/
     extend_max_atoms_flag = extend_max_atoms(frame_info, parameters_info);
     if (extend_max_atoms_flag != 0)
     {
-        printf("Error when extending each frame: extend_max_atoms_flag = %d\n", extend_max_atoms_flag);
+        printf("!!Error when extending each frame: extend_max_atoms_flag = %d\n", extend_max_atoms_flag);
         return error_code;
     }
-    printf("No error when extending each frame.\n");
+    printf("**No error when extending each frame.**\n");
     error_code ++;
 
-    build_neighbour_list_flag1 = build_neighbour_list(frame_info, Nframes_tot, parameters_info, 1);
-    if (build_neighbour_list_flag1 != 0)
-    {
-        printf("Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag1);
-        return error_code;
-    }
-    printf("No error when building neighbour list flag1.\n");
-    error_code ++;
-    printf_d("Check from main(): neighbour list number check:\n");
-    for (i = 0; i <= Nframes_tot - 1; i++)
-    {
-        if (frame_info[i].max_N_neighbours >= max_N_neighbours_all_frame) max_N_neighbours_all_frame = frame_info[i].max_N_neighbours;
-        printf_d("max neighbour atoms of frame %d: %d\n", i + 1, frame_info[i].max_N_neighbours);
-        printf_d("In this frame the number of neighbour atoms of 2nd atom is %d\n", frame_info[i].neighbour_list[1].N_neighbours);
-    }
-    SEL_A_max = 50 * (max_N_neighbours_all_frame / 50 + 1);
-    printf("Max number of N_neighbour is %d. SEL_A would be %d\n", max_N_neighbours_all_frame, SEL_A_max);
-    
 
     count_types_flag = count_types(frame_info, Nframes_tot, &N_types_all_frame, &type_index_all_frame);
     if (count_types_flag != 0)
     {
-        printf("Error when counting types: count_types_flag = %d\n", count_types_flag);
+        printf("!!Error when counting types: count_types_flag = %d\n", count_types_flag);
         return error_code;
     }
-    printf_d("No error when counting types.\n");
+    printf_d("**No error when counting types.**\n");
     error_code ++;
+    if (N_types_all_frame != parameters_info->N_types_all_frame)
+    {
+        printf("!!Error: Number of SEL_As in the SEL_A_ele parameter is different from the number of types in the training set! You need to provide exactly one SEL_A for each element!\n");
+        return error_code;
+    }
     printf_d("Check from main(): types: \n");
     for (i = 0; i <= Nframes_tot - 1; i++)
     {
@@ -143,16 +131,102 @@ int main()
         free(parameters_info->type_index_all_frame);
     }
     parameters_info->type_index_all_frame = type_index_all_frame;
+
+
+    build_neighbour_list_flag1 = build_neighbour_list(frame_info, Nframes_tot, parameters_info, 1);
+    if (build_neighbour_list_flag1 != 0)
+    {
+        printf("!!Error when building neighbour list: build_neighbour_list_flag1 = %d\n", build_neighbour_list_flag1);
+        return error_code;
+    }
+    printf("**No error when building neighbour list flag1.**\n");
+    error_code ++;
+    // printf_d("Check from main(): neighbour list number check:\n");
+    // for (i = 0; i <= Nframes_tot - 1; i++)
+    // {
+    //     if (frame_info[i].max_N_neighbours >= max_N_neighbours_all_frame) max_N_neighbours_all_frame = frame_info[i].max_N_neighbours;
+    //     printf_d("max neighbour atoms of frame %d: %d\n", i + 1, frame_info[i].max_N_neighbours);
+    //     printf_d("In this frame the number of neighbour atoms of 2nd atom is %d\n", frame_info[i].neighbour_list[1].N_neighbours);
+    // }
+    max_N_neighbours_ele_all_frame = (int *)calloc(parameters_info->N_types_all_frame, sizeof(int));
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        max_N_neighbours_ele_all_frame[i] = -1;
+    }
+    for (i = 0; i <= Nframes_tot - 1; i++)
+    {
+        if (frame_info[i].max_N_neighbours >= max_N_neighbours_all_frame) 
+        {
+            max_N_neighbours_all_frame = frame_info[i].max_N_neighbours;
+        }
+        for (j = 0; j <= parameters_info->N_types_all_frame - 1; j++)
+        {
+            if (frame_info[i].max_N_neighbours_ele[j] >= max_N_neighbours_ele_all_frame[j])
+            {
+                max_N_neighbours_ele_all_frame[j] = frame_info[i].max_N_neighbours_ele[j];
+            }
+        }
+        for (j = 0; j <= parameters_info->N_types_all_frame - 1; j++)
+        {
+            if (parameters_info->SEL_A_ele[j] < max_N_neighbours_ele_all_frame[j])
+            {
+                printf("WARNING: frame %d: SEL_A is too small for type %d (type_idx %d)\n", i, parameters_info->type_index_all_frame[j], j);
+            }
+        }
+    }
+    SEL_A_max = 50 * (max_N_neighbours_all_frame / 50 + 1);
+    SEL_A_max = 0;
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        SEL_A_max += parameters_info->SEL_A_ele[i];
+    }
+    //printf("Max number of N_neighbour is %d. SEL_A would be %d\n", max_N_neighbours_all_frame, SEL_A_max);
+    printf("Max number of N_neighbour for each type is :");
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        printf(" %d", max_N_neighbours_ele_all_frame[i]);
+    }
+    printf("\n");
     parameters_info->SEL_A_max = SEL_A_max;
+    parameters_info->SEL_A_ele_max = max_N_neighbours_ele_all_frame;
+    //free(max_N_neighbours_ele_all_frame);
+
+    // count_types_flag = count_types(frame_info, Nframes_tot, &N_types_all_frame, &type_index_all_frame);
+    // if (count_types_flag != 0)
+    // {
+    //     printf("Error when counting types: count_types_flag = %d\n", count_types_flag);
+    //     return error_code;
+    // }
+    // printf_d("No error when counting types.\n");
+    // error_code ++;
+    // printf_d("Check from main(): types: \n");
+    // for (i = 0; i <= Nframes_tot - 1; i++)
+    // {
+    //     printf_d("N_types of frame %d is %d\n", i + 1, frame_info[i].N_types);
+    // }
+    // printf_d("N_types_all_frame is %d\n", N_types_all_frame);
+    // printf_d("type_index_all_frame is :\n");
+    // for (i = 0; i <= N_types_all_frame - 1; i++)
+    // {
+    //     printf_d("%d ", type_index_all_frame[i]);
+    // }
+    // printf_d("\n");
+    // parameters_info->N_types_all_frame = N_types_all_frame;
+    // if (parameters_info->type_index_all_frame != NULL)
+    // {
+    //     free(parameters_info->type_index_all_frame);
+    // }
+    // parameters_info->type_index_all_frame = type_index_all_frame;
+    
 
 
     build_neighbour_list_flag2 = build_neighbour_list(frame_info, Nframes_tot, parameters_info, 2);
     if (build_neighbour_list_flag2 != 0)
     {
-        printf("Error when building neighbour list: build_neighbour_list_flag2 = %d\n", build_neighbour_list_flag2);
+        printf("!!Error when building neighbour list: build_neighbour_list_flag2 = %d\n", build_neighbour_list_flag2);
         return error_code;
     }
-    printf_d("No error when building neighbour list flag2.\n");
+    printf_d("**No error when building neighbour list flag2.**\n");
     error_code ++;
     printf_d("Check from main(): neighbour list of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
@@ -243,7 +317,7 @@ int main()
     save_to_file_flag = save_to_file_partial(frame_info, parameters_info, (void *)sym_coord_DeePMD);
     if (save_to_file_flag != 0)
     {
-        printf("Error when saving to files: save_to_file_flag = %d\n", save_to_file_flag);
+        printf("!!Error when saving to files: save_to_file_flag = %d\n", save_to_file_flag);
         return error_code;
     }
     printf_d("No error when saving to file.\n");
@@ -275,6 +349,7 @@ int main()
         free(frame_info[i].force);
         free(frame_info[i].neighbour_list);
         free(frame_info[i].type);
+        free(frame_info[i].max_N_neighbours_ele);
     }
     free(frame_info);
         /*sym_coord*/
@@ -294,6 +369,8 @@ int main()
     }
     free_sym_coord(sym_coord_, sym_coord_type, parameters_info);*/
         /*parameters_info*/
+    free(parameters_info->SEL_A_ele);
+    free(parameters_info->SEL_A_ele_max);
     free(parameters_info->filter_neuron);
     free(parameters_info->fitting_neuron);
     free(parameters_info->type_index_all_frame);

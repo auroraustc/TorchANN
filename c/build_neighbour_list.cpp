@@ -425,7 +425,8 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         {
             dist_info[index_tmp_dist].atom_info = &(system_info_expanded->atom_info[i]);
             dist_info[index_tmp_dist].dist = dist;
-            index_tmp_dist ++;
+            if (index == 0) printf("index: %d\n",dist_info[index_tmp_dist].atom_info->index);
+            index_tmp_dist ++;            
         }
     }
     
@@ -506,7 +507,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         b_tmp[i] = &(dist_info[i]);
     }
     //quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, parameters_info->SEL_A_max - 1, parameters_info->SEL_A_max);
-    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, SEL_A_max_tmp - 1, parameters_info->SEL_A_max);
+    quick_sort_dist_cur_atom(&a_tmp, &b_tmp, 0, SEL_A_max_tmp - 1, SEL_A_max_tmp);
     #ifdef DEBUG_BUILD
     printf_d("Check if sorted.\n");
     int flag_sort = 1;
@@ -580,8 +581,8 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     {
         int nei_type_idx = -1;
         int nei_type = frame_info_cur->type[(b_tmp[i]->atom_info->index)%(frame_info_cur->N_Atoms)];
-        /*Deal with nei_type_idx == -1 situation*/
-        if (nei_type_idx == -1)
+        /*Deal with nei_type == -1 situation*/
+        if (nei_type == -1)
         {
             for (j = 0; j <= parameters_info->N_types_all_frame - 1; j++)
             {
@@ -615,6 +616,26 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         neighbour_list_cur_atom->dist_neighbours[nei_idx_pointer[nei_type_idx]] = (b_tmp[i]->dist);
         nei_idx_pointer[nei_type_idx]++;
     }
+    for (i = 0; i <= parameters_info->N_types_all_frame - 1; i++)
+    {
+        if (nei_idx_pointer[i] < nei_idx_bound[i])
+        {
+            int nei_type_idx = i;
+            int nei_type = parameters_info->type_index_all_frame[nei_type_idx];
+            while (nei_idx_pointer[i] <= nei_idx_bound[i] - 1)
+            {
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]] = (double *)calloc(3, sizeof(double));
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][0] = 9999.0;
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][1] = 9999.0;
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][2] = 9999.0;
+                neighbour_list_cur_atom->type[nei_idx_pointer[nei_type_idx]] = nei_type;
+                neighbour_list_cur_atom->index_neighbours[nei_idx_pointer[nei_type_idx]] = 0;
+                neighbour_list_cur_atom->dist_neighbours[nei_idx_pointer[nei_type_idx]] = 9999.0;
+                nei_idx_pointer[nei_type_idx]++;
+            }
+        }
+    }
+
     free(nei_idx_pointer);
     free(nei_idx_bound);
     //corrupted size vs. prev_size NOT solved

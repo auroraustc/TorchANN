@@ -451,7 +451,8 @@ class one_batch_net(nn.Module):
         for type_idx in range(parameters.N_types_all_frame):
             F_cur_batch_as_center_atom = tf.zeros((len(data_cur[1]) * data_cur[4][0], 3), device = device)
             #F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * parameters.SEL_A_max, 3), device=device)
-            F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * max(data_cur[4][0], parameters.SEL_A_max), 3), device=device)
+            #F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * max(data_cur[4][0], parameters.SEL_A_max), 3), device=device)
+            F_cur_batch_as_nei_atom = tf.zeros((len(data_cur[1]) * data_cur[4][0], 3), device=device)
             type_idx_cur_type = (data_cur[5]==parameters.type_index_all_frame[type_idx]).nonzero()
             if (type_idx_cur_type.nelement() == 0):
                 continue
@@ -617,14 +618,22 @@ class one_batch_net(nn.Module):
             F_as_nei_xyz_atom_cur_type = tf.cat(
                 (F_as_nei_atom_curtype_x, F_as_nei_atom_curtype_y, F_as_nei_atom_curtype_z), dim=1).reshape(
                 len(F_as_nei_atom_curtype_x), 3, parameters.SEL_A_max).transpose(1, 2)  # shape=(N_Atoms_cur_type, SEL_A_max, 3)
-            F_cur_batch_as_nei_atom.scatter_add_(0, (
-                        NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * parameters.SEL_A_max).reshape(-1,
+            """F_cur_batch_as_nei_atom.scatter_add_(0, (
+                        NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * max(data_cur[4][0], parameters.SEL_A_max)).reshape(-1,
                                                                                                              1).expand(
+                len(F_as_nei_atom_curtype_x) * parameters.SEL_A_max, 3), F_as_nei_xyz_atom_cur_type.reshape(
+                len(F_as_nei_atom_curtype_x) * parameters.SEL_A_max, 3))"""
+            F_cur_batch_as_nei_atom.scatter_add_(0, (
+                    NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * data_cur[4][0]).reshape(-1,
+                                                                                                   1).expand(
                 len(F_as_nei_atom_curtype_x) * parameters.SEL_A_max, 3), F_as_nei_xyz_atom_cur_type.reshape(
                 len(F_as_nei_atom_curtype_x) * parameters.SEL_A_max, 3))
 
             F_cur_batch_as_center_atom = F_cur_batch_as_center_atom.reshape(len(data_cur[1]), data_cur[4][0], 3)
-            F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), max(data_cur[4][0], parameters.SEL_A_max), 3).narrow(1, 0, data_cur[4][0])
+            #F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]), max(data_cur[4][0], parameters.SEL_A_max), 3).narrow(1, 0, data_cur[4][0])
+            F_cur_batch_as_nei_atom = F_cur_batch_as_nei_atom.reshape(len(data_cur[1]),
+                                                                      data_cur[4][0],
+                                                                      3).narrow(1, 0, data_cur[4][0])
             F_cur_batch = F_cur_batch + F_cur_batch_as_center_atom + F_cur_batch_as_nei_atom
 
             ##Start to calculate virial of the system
@@ -925,9 +934,9 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
         tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
-        #tf.nn.init.constant_(m.weight,0.021)
+        #tf.nn.init.constant_(m.weight,0.017)
         #m.bias.data.normal_(mean = 0, std = 1.0)
-        #tf.nn.init.constant_(m.bias, -0.021)
+        #tf.nn.init.constant_(m.bias, -0.017)
 
 
 def make_dot(var, params):

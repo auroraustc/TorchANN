@@ -425,7 +425,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         {
             dist_info[index_tmp_dist].atom_info = &(system_info_expanded->atom_info[i]);
             dist_info[index_tmp_dist].dist = dist;
-            if (index == 0) printf("index: %d\n",dist_info[index_tmp_dist].atom_info->index);
+            //if (index == 0) printf("index: %d\n",dist_info[index_tmp_dist].atom_info->index);
             index_tmp_dist ++;            
         }
     }

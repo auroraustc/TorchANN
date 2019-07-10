@@ -20,6 +20,7 @@ tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = tf.device('cpu')
+torch.set_printoptions(edgeitems=9999)
 
 if (device != tf.device('cpu')):
     print("cuDNN version: ", tf.backends.cudnn.version())

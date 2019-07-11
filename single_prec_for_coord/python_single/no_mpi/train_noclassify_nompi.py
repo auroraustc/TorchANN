@@ -71,11 +71,12 @@ N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters, default_
 print("Data pre-processing complete. Building net work.\n")
 
 mean_init=np.zeros(parameters.N_types_all_frame)
-A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot)
+A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot).double()
 for type_idx in range(parameters.N_types_all_frame):
     A[type_idx] = tf.sum(TYPE_Reshape_tf == parameters.type_index_all_frame[type_idx], dim=1)
-A = A.transpose(0,1).type(default_dtype).numpy()
-B = ENERGY_tf.type(default_dtype).numpy()
+A = A.transpose(0,1).numpy()
+B = ENERGY_tf.double().numpy()
+print(A.shape, B.shape)
 mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
 ##all data norm

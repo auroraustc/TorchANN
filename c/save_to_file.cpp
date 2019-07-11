@@ -131,6 +131,56 @@ int save_to_file_partial(frame_info_struct * frame_info, parameters_info_struct 
     return 0;
 }
 
+int save_to_file_coord_only(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord)
+{
+    int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    int save_to_file_parameters(parameters_info_struct * parameters_info);
+    int save_to_file_type_and_N_Atoms(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    /*int save_to_file_sym_coord(void * sym_coord, parameters_info_struct * parameters_info);*/
+    int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+    //int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * parameters_info);
+
+    int ef_flag, p_flag, sc_flag, tna_flag, c_flag, nei_flag;
+
+    ef_flag = save_to_file_energy_and_force(frame_info, parameters_info);
+    if (ef_flag != 0)
+    {
+        return ef_flag;
+    }
+
+    p_flag = save_to_file_parameters(parameters_info);
+    if (p_flag != 0)
+    {
+        return p_flag;
+    }
+
+    tna_flag = save_to_file_type_and_N_Atoms(frame_info, parameters_info);
+    if (tna_flag != 0)
+    {
+        return tna_flag;
+    }
+
+    /*sc_flag = save_to_file_sym_coord(sym_coord, parameters_info);
+    if (sc_flag != 0)
+    {
+        return sc_flag;
+    }*/
+
+    c_flag = save_to_file_coord(frame_info, parameters_info);
+    if (c_flag != 0)
+    {
+        return c_flag;
+    }
+
+    // nei_flag = save_to_file_nei(frame_info, parameters_info);
+    // if (nei_flag != 0)
+    // {
+    //     return nei_flag;
+    // }
+
+    return 0;
+}
+
 int save_to_file_predict(frame_info_struct * frame_info, parameters_info_struct * parameters_info, void * sym_coord)
 {
     /*int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_info_struct * parameters_info);*/
@@ -231,6 +281,13 @@ int save_to_file_parameters(parameters_info_struct * parameters_info)
 
     fprintf(fp_parameters, "    \"N_Atoms_max\": %d,\n", parameters_info->N_Atoms_max);
     fprintf(fp_parameters, "    \"SEL_A_max\": %d,\n", parameters_info->SEL_A_max);
+    fprintf(fp_parameters, "    \"SEL_A_ele\": [\n");
+    for (i = 0; i <= parameters_info->N_types_all_frame - 2; i++)
+    {
+        fprintf(fp_parameters, "        %d,\n", parameters_info->SEL_A_ele[i]);
+    }
+    fprintf(fp_parameters, "        %d\n", parameters_info->SEL_A_ele[i]);
+    fprintf(fp_parameters, "    ],\n");
     fprintf(fp_parameters, "    \"Nframes_tot\": %d,\n", parameters_info->Nframes_tot);
     fprintf(fp_parameters, "    \"sym_coord_type\": %d,\n", parameters_info->sym_coord_type);
     fprintf(fp_parameters, "    \"N_sym_coord\": %d,\n", parameters_info->N_sym_coord);

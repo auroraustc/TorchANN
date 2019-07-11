@@ -93,6 +93,10 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
         parameters_info->SEL_A_ele[i] = SEL_A_ELE[i];
     }
     parameters_info->N_types_all_frame = SEL_A_ELE.size();//For temp use. Just to record the size of SEL_A_ele array. It should be exactly equal to the number of types of elements in the training set. If this number is different from the count_types function, then an error will occur.
+    for (i = 0; i <= SEL_A_ELE.size() - 1; i++)
+    {
+        parameters_info->SEL_A_max += SEL_A_ELE[i];
+    }
 
     if ((PARAMS.count("Nframes_tot") != 0) && (parameters_info->Nframes_tot == 0))
     {
@@ -103,6 +107,10 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     {
         printf("sym_coord_type %d not supported!\n", parameters_info->sym_coord_type);
         return 22;
+    }
+    if (parameters_info->sym_coord_type == 1)
+    {
+        parameters_info->N_sym_coord = 4 * parameters_info->SEL_A_max;
     }
     if (PARAMS.count("N_sym_coord") != 0)
     {

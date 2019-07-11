@@ -53,16 +53,16 @@ int extend_max_atoms_cur_frame(frame_info_struct * frame_info_cur, parameters_in
     int i, j, k;
     int N_Atoms_max = parameters_info->N_Atoms_max;
     int N_Atoms_cur = frame_info_cur->N_Atoms;
-    double ** coord_ext = (double **)calloc(N_Atoms_max, sizeof(double *));
-    double ** force_ext = (double **)calloc(N_Atoms_max, sizeof(double *));
+    float ** coord_ext = (float **)calloc(N_Atoms_max, sizeof(float *));
+    float ** force_ext = (float **)calloc(N_Atoms_max, sizeof(float *));
     int * type_ext = (int *)calloc(N_Atoms_max, sizeof(int));
-    double interval = (double)(int)(parameters_info->cutoff_max + 1) * 100;
-    double radius = (N_Atoms_max - N_Atoms_cur) * interval + 100000;
+    float interval = (float)(int)(parameters_info->cutoff_max + 1) * 100;
+    float radius = (N_Atoms_max - N_Atoms_cur) * interval + 100000;
 
     for (i = 0; i <= N_Atoms_max - 1; i++)
     {
-        coord_ext[i] = (double *)calloc(3, sizeof(double));
-        force_ext[i] = (double *)calloc(3, sizeof(double));
+        coord_ext[i] = (float *)calloc(3, sizeof(float));
+        force_ext[i] = (float *)calloc(3, sizeof(float));
     }
 
     for (i = 0; i <= N_Atoms_cur - 1; i++)
@@ -102,15 +102,15 @@ int extend_max_atoms_cur_frame(frame_info_struct * frame_info_cur, parameters_in
 
 int wrap_atoms_cur_frame(frame_info_struct * frame_info_struct)
 {
-    int cart_to_frac(double * cart, double box[3][3], double * frac);
-    int frac_to_cart(double * cart, double box[3][3], double * frac);
+    int cart_to_frac(float * cart, float box[3][3], float * frac);
+    int frac_to_cart(float * cart, float box[3][3], float * frac);
 
-    double ** coord_frac;
+    float ** coord_frac;
     int i, j, k;
-    coord_frac = (double **)calloc(frame_info_struct->N_Atoms_ori, sizeof(double *));
+    coord_frac = (float **)calloc(frame_info_struct->N_Atoms_ori, sizeof(float *));
     for (i = 0; i <= frame_info_struct->N_Atoms_ori - 1; i++)
     {
-        coord_frac[i] = (double *)calloc(3, sizeof(double));
+        coord_frac[i] = (float *)calloc(3, sizeof(float));
     }
 
     for (i = 0; i <= frame_info_struct->N_Atoms_ori - 1; i++)

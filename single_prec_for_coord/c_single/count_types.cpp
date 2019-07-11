@@ -9,12 +9,12 @@ typedef struct frame_info_struct_
 [N]	int index;
 [N]	int N_Atoms;
 [Y] int N_types;
-[N]	double box[3][3];
+[N]	float box[3][3];
 [N]	int * type;//type[0..N_Atoms-1]
-[N]	double ** coord;//coord[0..N_Atoms-1][0..2]
-[N]	double energy;
+[N]	float ** coord;//coord[0..N_Atoms-1][0..2]
+[N]	float energy;
 [N]	int no_force;
-[N]	double ** force;//force[0..N_Atoms-1][0..2]
+[N]	float ** force;//force[0..N_Atoms-1][0..2]
 [N]	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
 }
 

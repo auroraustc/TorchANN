@@ -12,25 +12,25 @@ typedef struct frame_info_struct_
 [N]	int index;
 [N]	int N_Atoms;
 [N] int N_types;
-[N]	double box[3][3];
+[N]	float box[3][3];
 [N]	int * type;//type[0..N_Atoms-1]
-[N]	double ** coord;//coord[0..N_Atoms-1][0..2]
-[N]	double energy;
+[N]	float ** coord;//coord[0..N_Atoms-1][0..2]
+[N]	float energy;
 [N]	int no_force;
-[N]	double ** force;//force[0..N_Atoms-1][0..2]
+[N]	float ** force;//force[0..N_Atoms-1][0..2]
 [Y]	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
 }
 at s1:
 typedef struct neighbour_list_struct_
 {
 [Y]	int index;//atom index
-[Y]	double cutoff_1;
-[Y]	double cutoff_2;
-[Y]	double cutoff_3;
-[Y]	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
+[Y]	float cutoff_1;
+[Y]	float cutoff_2;
+[Y]	float cutoff_3;
+[Y]	float cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
 [Y]	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
-[N]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max][0..2]
-[N]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max][0..2]
+[N]	float ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max][0..2]
+[N]	float ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max][0..2]
 [N]	int * type;//type[0..N_neighbours]
 }
 
@@ -38,13 +38,13 @@ at s2:
 typedef struct neighbour_list_struct_
 {
 [Y]	int index;//atom index
-[Y]	double cutoff_1;
-[Y]	double cutoff_2;
-[Y]	double cutoff_3;
-[Y]	double cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
+[Y]	float cutoff_1;
+[Y]	float cutoff_2;
+[Y]	float cutoff_3;
+[Y]	float cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
 [Y]	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
-[Y]	double ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max - 1][0..2]
-[Y]	double ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max - 1][0..2]
+[Y]	float ** coord_neighbours;//coord_neighbour[0..0..SEL_A_max - 1][0..2]
+[Y]	float ** force_neighbours;//Just in case; force_neighbours[0..0..SEL_A_max - 1][0..2]
 [Y]	int * type;//type[0..N_neighbours]
 }
 
@@ -91,7 +91,7 @@ int build_neighbour_list_one_frame_v0(frame_info_struct * frame_info_cur, parame
 {
     int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
     int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
-    double fastpow2(double number, int dummy);
+    float fastpow2(float number, int dummy);
 
     int i, j, k;
     int max_num_N_nei_one_frame = -1;
@@ -104,13 +104,13 @@ int build_neighbour_list_one_frame_v0(frame_info_struct * frame_info_cur, parame
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         if (frame_info_cur->index != DEBUG_FRAME) break;
-        printf_d("%c %lf %lf %lf\n", system_info_expanded->type[i] + 65, system_info_expanded->atom_info[i].coord[0], system_info_expanded->atom_info[i].coord[1],system_info_expanded->atom_info[i].coord[2]);
+        printf_d("%c %f %f %f\n", system_info_expanded->type[i] + 65, system_info_expanded->atom_info[i].coord[0], system_info_expanded->atom_info[i].coord[1],system_info_expanded->atom_info[i].coord[2]);
     }
     if (frame_info_cur->index == DEBUG_FRAME) printf_d("Origin:\n");
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         if (frame_info_cur->index != DEBUG_FRAME) break;
-        printf_d("%c %lf %lf %lf\n", frame_info_cur->type[i] + 65, frame_info_cur->coord[i][0], frame_info_cur->coord[i][1], frame_info_cur->coord[i][2]);
+        printf_d("%c %f %f %f\n", frame_info_cur->type[i] + 65, frame_info_cur->coord[i][0], frame_info_cur->coord[i][1], frame_info_cur->coord[i][2]);
     }
 
     if (step == 2) goto s2;
@@ -127,7 +127,7 @@ s1:
         neighbour_list_cur[i].cutoff_max = parameters_info->cutoff_max;
         for (j = 0; j <= system_info_expanded->N_Atoms - 1; j++)
         {
-            double dist_ij;
+            float dist_ij;
             dist_ij = sqrt(fastpow2(frame_info_cur->coord[i][0] - system_info_expanded->atom_info[j].coord[0], 2) + fastpow2(frame_info_cur->coord[i][1] - system_info_expanded->atom_info[j].coord[1], 2) + fastpow2(frame_info_cur->coord[i][2] - system_info_expanded->atom_info[j].coord[2], 2));
             if (dist_ij <= neighbour_list_cur[i].cutoff_max) N_nei++;
         }
@@ -148,7 +148,7 @@ s1:
 
 s2:
     i = 0;
-    double ** dist_ij_cur_frame;
+    float ** dist_ij_cur_frame;
     //#pragma omp parallel for
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
@@ -175,7 +175,7 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
 {
     int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
     int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info);
-    double fastpow2(double number, int dummy);
+    float fastpow2(float number, int dummy);
 
     int i, j, k;
     int max_num_N_nei_one_frame = -1;
@@ -189,13 +189,13 @@ int build_neighbour_list_one_frame(frame_info_struct * frame_info_cur, parameter
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
         if (frame_info_cur->index != DEBUG_FRAME) break;
-        printf_d("%c %lf %lf %lf\n", system_info_expanded->type[i] + 65, system_info_expanded->atom_info[i].coord[0], system_info_expanded->atom_info[i].coord[1],system_info_expanded->atom_info[i].coord[2]);
+        printf_d("%c %f %f %f\n", system_info_expanded->type[i] + 65, system_info_expanded->atom_info[i].coord[0], system_info_expanded->atom_info[i].coord[1],system_info_expanded->atom_info[i].coord[2]);
     }
     if (frame_info_cur->index == DEBUG_FRAME) printf_d("Origin:\n");
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
         if (frame_info_cur->index != DEBUG_FRAME) break;
-        printf_d("%c %lf %lf %lf\n", frame_info_cur->type[i] + 65, frame_info_cur->coord[i][0], frame_info_cur->coord[i][1], frame_info_cur->coord[i][2]);
+        printf_d("%c %f %f %f\n", frame_info_cur->type[i] + 65, frame_info_cur->coord[i][0], frame_info_cur->coord[i][1], frame_info_cur->coord[i][2]);
     }
 
     if (step == 2) goto s2;
@@ -216,7 +216,7 @@ s1:
         for (j = 0; j <= system_info_expanded->N_Atoms - 1; j++)
         {
             /*j is the index for neighbour atom.*/
-            double dist_ij;
+            float dist_ij;
             dist_ij = sqrt(fastpow2(frame_info_cur->coord[i][0] - system_info_expanded->atom_info[j].coord[0], 2) + fastpow2(frame_info_cur->coord[i][1] - system_info_expanded->atom_info[j].coord[1], 2) + fastpow2(frame_info_cur->coord[i][2] - system_info_expanded->atom_info[j].coord[2], 2));
             //if (dist_ij <= neighbour_list_cur[i].cutoff_max) N_nei++;
             if (dist_ij <= neighbour_list_cur[i].cutoff_max)
@@ -267,7 +267,7 @@ s1:
 
 s2:
     i = 0;
-    double ** dist_ij_cur_frame;
+    float ** dist_ij_cur_frame;
     //#pragma omp parallel for
     for (i = 0; i <= frame_info_cur->N_Atoms - 1; i++)
     {
@@ -292,12 +292,12 @@ s2:
 
 int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
 {
-    double fastpow2(double number, int dummy);
+    float fastpow2(float number, int dummy);
     
     int i, j, k, l;
     int tmpi1;
-    double cutoff_max;
-    double box_vec_a, box_vec_b, box_vec_c;
+    float cutoff_max;
+    float box_vec_a, box_vec_b, box_vec_c;
     int expand_a_period;
     int expand_b_period;
     int expand_c_period;
@@ -376,7 +376,7 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
 int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour_list_struct * neighbour_list_cur_atom, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
 {
     void quick_sort_dist_cur_atom(dist_info_struct *** a_tmp_, dist_info_struct *** b_tmp_, int start, int end, int tot_num);
-    double fastpow2(double number, int dummy);
+    float fastpow2(float number, int dummy);
 
     int i, j, k;
     int index = neighbour_list_cur_atom->index;
@@ -419,7 +419,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     dummy.dist = 9999;
     for (i = 0; i <= system_info_expanded->N_Atoms - 1; i++)
     {
-        double dist;
+        float dist;
         dist = sqrt(fastpow2(frame_info_cur->coord[index][0] - system_info_expanded->atom_info[i].coord[0] , 2) + fastpow2(frame_info_cur->coord[index][1] - system_info_expanded->atom_info[i].coord[1], 2) + fastpow2(frame_info_cur->coord[index][2] - system_info_expanded->atom_info[i].coord[2], 2));
         if ((dist > 1E-6)&&(dist <= parameters_info->cutoff_max)&&(frame_info_cur->type[index] != -1))
         {
@@ -539,11 +539,11 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     neighbour_list_cur_atom->coord_neighbours = (float **)calloc(parameters_info->SEL_A_max, sizeof(float *));
     neighbour_list_cur_atom->type = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
     neighbour_list_cur_atom->index_neighbours = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
-    neighbour_list_cur_atom->dist_neighbours = (double *)calloc(parameters_info->SEL_A_max, sizeof(double));
+    neighbour_list_cur_atom->dist_neighbours = (float *)calloc(parameters_info->SEL_A_max, sizeof(float));
     // /*for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)*/
     // for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     // {
-    //     neighbour_list_cur_atom->coord_neighbours[i] = (double *)calloc(3, sizeof(double));
+    //     neighbour_list_cur_atom->coord_neighbours[i] = (float *)calloc(3, sizeof(float));
     //     /*neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i + 1]->atom_info->index)%(frame_info_cur->N_Atoms)];*/
     //     neighbour_list_cur_atom->type[i] = frame_info_cur->type[(b_tmp[i]->atom_info->index)%(frame_info_cur->N_Atoms)];
     //     if (neighbour_list_cur_atom->type[i] == -1)

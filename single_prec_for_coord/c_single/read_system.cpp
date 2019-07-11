@@ -11,12 +11,12 @@ typedef struct frame_info_struct_
 [Y]	int index;
 [Y]	int N_Atoms;
 [N] int N_types;
-[Y]	double box[3][3];
+[Y]	float box[3][3];
 [Y]	int * type;//type[0..N_Atoms-1]
-[Y]	double ** coord;//coord[0..N_Atoms-1][0..2]
-[Y]	double energy;
+[Y]	float ** coord;//coord[0..N_Atoms-1][0..2]
+[Y]	float energy;
 [Y]	int no_force;
-[Y]	double ** force;//force[0..N_Atoms-1][0..2]
+[Y]	float ** force;//force[0..N_Atoms-1][0..2]
 [N]	neighbour_list_struct * neighbour_list;//neighbour_list[0..N_Atoms-1], neighbour list for each atom
 }
 
@@ -61,7 +61,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	int tot_lines_box, tot_lines_energy, tot_lines_type;//These three numbers should be equal to Nframes_tot
 	int tot_lines_coord, tot_lines_force;//These two numbers should be equal to Nframes_tot
 	int Nframes_tot, N_Atoms, N_Atoms_this_frame;
-	double tmpd1;
+	float tmpd1;
 	char * tmp_coord = (char *) calloc(100000 * 3, sizeof(char));
 	char * tmp_force = (char *) calloc(100000 * 3, sizeof(char));
 	char * tmp_type = (char *) calloc(100000 , sizeof(char));
@@ -89,14 +89,14 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	tot_lines_box = 0;
 	while (!feof(fp_box))
 	{
-		if (fscanf(fp_box, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+		if (fscanf(fp_box, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 		tot_lines_box++;
 	}
 	printf_d("tot_lines_box: %d\n", tot_lines_box);
 	tot_lines_energy = 0;
 	while (!feof(fp_energy))
 	{
-		if (fscanf(fp_energy, "%lf", &tmpd1) < 1) break;
+		if (fscanf(fp_energy, "%f", &tmpd1) < 1) break;
 		tot_lines_energy ++;
 	}
 	printf_d("tot_lines_energy: %d\n", tot_lines_energy);
@@ -122,7 +122,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	tot_lines_coord = 0;
 	while (!feof(fp_coord))
 	{
-		if (fscanf(fp_coord, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+		if (fscanf(fp_coord, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 		tot_lines_coord++;
 	}
 	printf_d("tot_lines_coord: %d\n", tot_lines_coord);
@@ -132,7 +132,7 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 		tot_lines_force = 0;
 		while ((!feof(fp_force)))
 		{
-			if (fscanf(fp_force, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+			if (fscanf(fp_force, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 			tot_lines_force++;
 		}
 		printf_d("tot_lines_force: %d\n", tot_lines_force);
@@ -155,10 +155,10 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	/*Read in box and energy info*/
 	for (i = 0; i <= Nframes_tot - 1; i++)
 	{
-		fscanf(fp_box, "%lf%lf%lf%lf%lf%lf%lf%lf%lf", &frame_info[i].box[0][0], &frame_info[i].box[0][1], &frame_info[i].box[0][2], &frame_info[i].box[1][0], &frame_info[i].box[1][1], &frame_info[i].box[1][2], &frame_info[i].box[2][0], &frame_info[i].box[2][1], &frame_info[i].box[2][2]);
+		fscanf(fp_box, "%f%f%f%f%f%f%f%f%f", &frame_info[i].box[0][0], &frame_info[i].box[0][1], &frame_info[i].box[0][2], &frame_info[i].box[1][0], &frame_info[i].box[1][1], &frame_info[i].box[1][2], &frame_info[i].box[2][0], &frame_info[i].box[2][1], &frame_info[i].box[2][2]);
 		printf_d("frame %d ", i + 1);
 		printf_d("box:  %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf ", frame_info[i].box[0][0], frame_info[i].box[0][1], frame_info[i].box[0][2], frame_info[i].box[1][0], frame_info[i].box[1][1], frame_info[i].box[1][2], frame_info[i].box[2][0], frame_info[i].box[2][1], frame_info[i].box[2][2]);
-		fscanf(fp_energy, "%lf", &frame_info[i].energy);
+		fscanf(fp_energy, "%f", &frame_info[i].energy);
 		printf_d("energy:  %.3lf eV\n", frame_info[i].energy);
 	}
 	fclose(fp_box);fclose(fp_energy);
@@ -210,12 +210,12 @@ int read_system(frame_info_struct ** frame_info_, int * Nframes_tot_)
 			}
 		}
 		/*Parse tmp_coord, tmp_force and tmp_type according to N_Atoms_this_frame and save the data in frame_info[i].*/
-		frame_info[i].coord = (double **)calloc(N_Atoms_this_frame, sizeof(double *));
-		frame_info[i].force = (double **)calloc(N_Atoms_this_frame, sizeof(double *));
+		frame_info[i].coord = (float **)calloc(N_Atoms_this_frame, sizeof(float *));
+		frame_info[i].force = (float **)calloc(N_Atoms_this_frame, sizeof(float *));
 		for (j = 0; j <= N_Atoms_this_frame - 1; j ++)
 		{
-			frame_info[i].coord[j] = (double *)calloc(3, sizeof(double));
-			frame_info[i].force[j] = (double *)calloc(3, sizeof(double));
+			frame_info[i].coord[j] = (float *)calloc(3, sizeof(float));
+			frame_info[i].force[j] = (float *)calloc(3, sizeof(float));
 		}
 		frame_info[i].type = (int *)calloc(N_Atoms_this_frame, sizeof(int));
 		strcpy(tmp_coord_cpy, tmp_coord);
@@ -254,7 +254,7 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	int tot_lines_box, tot_lines_energy, tot_lines_type;//These three numbers should be equal to Nframes_tot
 	int tot_lines_coord, tot_lines_force;//These two numbers should be equal to Nframes_tot
 	int Nframes_tot, N_Atoms, N_Atoms_this_frame;
-	double tmpd1;
+	float tmpd1;
 	char * tmp_coord = (char *) calloc(100000 * 3, sizeof(char));
 	char * tmp_force = (char *) calloc(100000 * 3, sizeof(char));
 	char * tmp_type = (char *) calloc(100000 , sizeof(char));
@@ -285,14 +285,14 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	tot_lines_box = 0;
 	while (!feof(fp_box))
 	{
-		if (fscanf(fp_box, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+		if (fscanf(fp_box, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 		tot_lines_box++;
 	}
 	printf_d("tot_lines_box: %d\n", tot_lines_box);
 	/*tot_lines_energy = 0;
 	while (!feof(fp_energy))
 	{
-		if (fscanf(fp_energy, "%lf", &tmpd1) < 1) break;
+		if (fscanf(fp_energy, "%f", &tmpd1) < 1) break;
 		tot_lines_energy ++;
 	}
 	printf_d("tot_lines_energy: %d\n", tot_lines_energy);*/
@@ -321,7 +321,7 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	tot_lines_coord = 0;
 	while (!feof(fp_coord))
 	{
-		if (fscanf(fp_coord, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+		if (fscanf(fp_coord, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 		tot_lines_coord++;
 	}
 	printf_d("tot_lines_coord: %d\n", tot_lines_coord);
@@ -331,7 +331,7 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 		tot_lines_force = 0;
 		while ((!feof(fp_force)))
 		{
-			if (fscanf(fp_force, "%lf%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
+			if (fscanf(fp_force, "%f%*[^\n]%c", &tmpd1, &tmpc1) < 2) break;
 			tot_lines_force++;
 		}
 		printf_d("tot_lines_force: %d\n", tot_lines_force);
@@ -356,10 +356,10 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 	/*Read in box and energy info*/
 	for (i = 0; i <= Nframes_tot - 1; i++)
 	{
-		fscanf(fp_box, "%lf%lf%lf%lf%lf%lf%lf%lf%lf", &frame_info[i].box[0][0], &frame_info[i].box[0][1], &frame_info[i].box[0][2], &frame_info[i].box[1][0], &frame_info[i].box[1][1], &frame_info[i].box[1][2], &frame_info[i].box[2][0], &frame_info[i].box[2][1], &frame_info[i].box[2][2]);
+		fscanf(fp_box, "%f%f%f%f%f%f%f%f%f", &frame_info[i].box[0][0], &frame_info[i].box[0][1], &frame_info[i].box[0][2], &frame_info[i].box[1][0], &frame_info[i].box[1][1], &frame_info[i].box[1][2], &frame_info[i].box[2][0], &frame_info[i].box[2][1], &frame_info[i].box[2][2]);
 		printf_d("frame %d ", i + 1);
 		printf_d("box:  %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf %.3lf ", frame_info[i].box[0][0], frame_info[i].box[0][1], frame_info[i].box[0][2], frame_info[i].box[1][0], frame_info[i].box[1][1], frame_info[i].box[1][2], frame_info[i].box[2][0], frame_info[i].box[2][1], frame_info[i].box[2][2]);
-		/*fscanf(fp_energy, "%lf", &frame_info[i].energy);
+		/*fscanf(fp_energy, "%f", &frame_info[i].energy);
 		printf_d("energy:  %.3lf eV\n", frame_info[i].energy);*/
 	}
 	fclose(fp_box);/*fclose(fp_energy);*/
@@ -411,12 +411,12 @@ int read_system_predict(frame_info_struct ** frame_info_, int * Nframes_tot_)
 			}
 		}
 		/*Parse tmp_coord, tmp_force and tmp_type according to N_Atoms_this_frame and save the data in frame_info[i].*/
-		frame_info[i].coord = (double **)calloc(N_Atoms_this_frame, sizeof(double *));
-		frame_info[i].force = (double **)calloc(N_Atoms_this_frame, sizeof(double *));
+		frame_info[i].coord = (float **)calloc(N_Atoms_this_frame, sizeof(float *));
+		frame_info[i].force = (float **)calloc(N_Atoms_this_frame, sizeof(float *));
 		for (j = 0; j <= N_Atoms_this_frame - 1; j ++)
 		{
-			frame_info[i].coord[j] = (double *)calloc(3, sizeof(double));
-			frame_info[i].force[j] = (double *)calloc(3, sizeof(double));
+			frame_info[i].coord[j] = (float *)calloc(3, sizeof(float));
+			frame_info[i].force[j] = (float *)calloc(3, sizeof(float));
 		}
 		frame_info[i].type = (int *)calloc(N_Atoms_this_frame, sizeof(int));
 		strcpy(tmp_coord_cpy, tmp_coord);
@@ -478,8 +478,8 @@ int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_
 	printf_d("Coord check:\n");
 	while (token_coord != NULL)
 	{
-		sscanf(token_coord, "%lf", &(frame_info->coord[i/3][i%3]));
-		printf_d("%lf ", frame_info->coord[i/3][i%3]);
+		sscanf(token_coord, "%f", &(frame_info->coord[i/3][i%3]));
+		printf_d("%f ", frame_info->coord[i/3][i%3]);
 		i++;
 		if (i%3 == 0) printf_d("\n");
 		token_coord = strtok(NULL, " \n");
@@ -489,8 +489,8 @@ int parse_coord_force_type(char * coord, char * force, char * type, int N_Atoms_
 	printf_d("Force check:\n");
 	while (token_force != NULL)
 	{
-		sscanf(token_force, "%lf", &(frame_info->force[i/3][i%3]));
-		printf_d("%lf ", frame_info->force[i/3][i%3]);
+		sscanf(token_force, "%f", &(frame_info->force[i/3][i%3]));
+		printf_d("%f ", frame_info->force[i/3][i%3]);
 		i++;
 		if (i%3 == 0) printf_d("\n");
 		token_force = strtok(NULL, " \n");
@@ -525,7 +525,7 @@ void check_bin(int Nframes_tot)
 		printf_d("box vector %d: ", i + 1);
 		for (j = 0; j <= 2; j++)
 		{
-			printf_d("%lf ", frame_info[r].box[i][j]);
+			printf_d("%f ", frame_info[r].box[i][j]);
 		}
 		printf_d("\n");
 	}

@@ -45,13 +45,13 @@ int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_in
         case 1:
         {
             error_code = convert_coord_DeePMD(frame_info, Nframes_tot, parameters_info, sym_coord);
-            printf_d("Check d: %lf\n", ((sym_coord_DeePMD_struct **)sym_coord)[0][0].d_to_center_x[0][0]);
+            printf_d("Check d: %f\n", ((sym_coord_DeePMD_struct **)sym_coord)[0][0].d_to_center_x[0][0]);
             break;
         }
         case 2:
         {
             error_code = convert_coord_LASP(frame_info, Nframes_tot, parameters_info, sym_coord);
-            //printf_d("Check d: %lf\n", ((sym_coord_LASP_struct **)sym_coord)[0][0].d_to_center_x[0][0]);
+            //printf_d("Check d: %f\n", ((sym_coord_LASP_struct **)sym_coord)[0][0].d_to_center_x[0][0]);
             break;
         }
         default:
@@ -68,8 +68,8 @@ int convert_coord(frame_info_struct * frame_info, int Nframes_tot, parameters_in
 
 int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parameters_info_struct * parameters_info, void ** sym_coord)
 {
-    double s_r(double r_ij, parameters_info_struct * parameters_info);
-    double fastpow2(double number, int dummy);
+    float s_r(float r_ij, parameters_info_struct * parameters_info);
+    float fastpow2(float number, int dummy);
 
     int i, j, k, l;
     sym_coord_DeePMD_struct * sym_coord_DeePMD;
@@ -81,16 +81,16 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
         sym_coord_DeePMD[i].N_Atoms = frame_info[i].N_Atoms;
         sym_coord_DeePMD[i].SEL_A = parameters_info->SEL_A_max;
         sym_coord_DeePMD[i].type = frame_info[i].type;
-        sym_coord_DeePMD[i].coord_converted = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
-        sym_coord_DeePMD[i].d_to_center_x = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
-        sym_coord_DeePMD[i].d_to_center_y = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
-        sym_coord_DeePMD[i].d_to_center_z = (double **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(double *));
+        sym_coord_DeePMD[i].coord_converted = (float **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(float *));
+        sym_coord_DeePMD[i].d_to_center_x = (float **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(float *));
+        sym_coord_DeePMD[i].d_to_center_y = (float **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(float *));
+        sym_coord_DeePMD[i].d_to_center_z = (float **)calloc(sym_coord_DeePMD[i].N_Atoms, sizeof(float *));
         for (j = 0; j <= sym_coord_DeePMD[i].N_Atoms - 1; j++)
         {
-            sym_coord_DeePMD[i].coord_converted[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
-            sym_coord_DeePMD[i].d_to_center_x[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
-            sym_coord_DeePMD[i].d_to_center_y[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
-            sym_coord_DeePMD[i].d_to_center_z[j] = (double *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(double));
+            sym_coord_DeePMD[i].coord_converted[j] = (float *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(float));
+            sym_coord_DeePMD[i].d_to_center_x[j] = (float *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(float));
+            sym_coord_DeePMD[i].d_to_center_y[j] = (float *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(float));
+            sym_coord_DeePMD[i].d_to_center_z[j] = (float *)calloc(4 * sym_coord_DeePMD[i].SEL_A, sizeof(float));
         }
     }
     int zero_count = 0;
@@ -101,11 +101,11 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
         {
             for (k = 0; k <= sym_coord_DeePMD[i].SEL_A - 1; k++)//k and l loop = SEL_A * 4 coordinates for each atom in one frame. k is also the loop of neighbour list of this atom
             {
-                double four_coord[4];
-                double r_ij;
-                double atom_coord[3];
-                double nei_coord[3];
-                double r_ji_coord[3];
+                float four_coord[4];
+                float r_ij;
+                float atom_coord[3];
+                float nei_coord[3];
+                float r_ji_coord[3];
                 atom_coord[0] = frame_info[i].coord[j][0]; atom_coord[1] = frame_info[i].coord[j][1]; atom_coord[2] = frame_info[i].coord[j][2];
                 nei_coord[0] = frame_info[i].neighbour_list[j].coord_neighbours[k][0]; nei_coord[1] = frame_info[i].neighbour_list[j].coord_neighbours[k][1]; nei_coord[2] = frame_info[i].neighbour_list[j].coord_neighbours[k][2];
                 r_ji_coord[0] = nei_coord[0] - atom_coord[0]; r_ji_coord[1] = nei_coord[1] - atom_coord[1]; r_ji_coord[2] = nei_coord[2] - atom_coord[2];
@@ -118,8 +118,8 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                     sym_coord_DeePMD[i].coord_converted[j][idx_sym] = four_coord[l];
                 }
                 /*Calculate d sym_coord / d center_atom*/
-                double rcs = parameters_info->cutoff_1;
-                double rc = parameters_info->cutoff_2;
+                float rcs = parameters_info->cutoff_1;
+                float rc = parameters_info->cutoff_2;
                 
                 if (r_ij >= rc)
                 {
@@ -167,15 +167,15 @@ int convert_coord_DeePMD(frame_info_struct * frame_info, int Nframes_tot, parame
                     sym_coord_DeePMD[i].d_to_center_z[j][4 * k + 2] = 2.0 * r_ji_coord[1] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij);
                     sym_coord_DeePMD[i].d_to_center_z[j][4 * k + 3] = 2.0 * r_ji_coord[2] * r_ji_coord[2] / (r_ij * r_ij * r_ij * r_ij) - 1.0 / (r_ij * r_ij);
                 }
-                /*printf_d("sym_coord_DeePMD[%d].d_to_center_x[%d][0] = %lf\n", i, j, sym_coord_DeePMD[i].d_to_center_x[j][0]);*/
+                /*printf_d("sym_coord_DeePMD[%d].d_to_center_x[%d][0] = %f\n", i, j, sym_coord_DeePMD[i].d_to_center_x[j][0]);*/
             }
         }
     }
     printf_d("zero_count d: %d\n", zero_count);
 
     *((sym_coord_DeePMD_struct **)sym_coord) = sym_coord_DeePMD;
-    printf_d("Check d0: %lf\n", (*((sym_coord_DeePMD_struct **)sym_coord))[0].d_to_center_x[0][0]);
-    printf_d("Check d1: %lf\n", sym_coord_DeePMD[0].d_to_center_x[0][0]);
+    printf_d("Check d0: %f\n", (*((sym_coord_DeePMD_struct **)sym_coord))[0].d_to_center_x[0][0]);
+    printf_d("Check d1: %f\n", sym_coord_DeePMD[0].d_to_center_x[0][0]);
     return 0;
 }
 
@@ -183,18 +183,18 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
 {
     int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, parameters_info_struct * parameters_info);
     int find_index_int(int target, int * array, int array_length);
-    double fastpow2(double number, int dummy);
-    double fastpown(double number, int power);
-    double R_sup_n(double r_ij, double n, double r_c);
+    float fastpow2(float number, int dummy);
+    float fastpown(float number, int power);
+    float R_sup_n(float r_ij, float n, float r_c);
     int compare_Nei_type(int N_neighb_atom, int * current_type, int * params_type);
-    std::complex<double> Y_LM(double * coord_ij, int L, int m);
-    std::complex<double> d_Y_LM_d_theta(double * coord_ij, int L, int m);
-    std::complex<double> d_Y_LM_d_phi(double * coord_ij, int L, int m);
-    double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k);
-    double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, double * coord_l);
-    double d_R_sup_n_d_r(double r_ij, double n, double r_c);
-    int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * result);
-    int d_cos_dihedral_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * coord_l, double * result);
+    std::complex<float> Y_LM(float * coord_ij, int L, int m);
+    std::complex<float> d_Y_LM_d_theta(float * coord_ij, int L, int m);
+    std::complex<float> d_Y_LM_d_phi(float * coord_ij, int L, int m);
+    float cos_bond_angle(float * coord_i, float * coord_j, float * coord_k);
+    float cos_dihedral_angle(float * coord_i, float * coord_j, float * coord_k, float * coord_l);
+    float d_R_sup_n_d_r(float r_ij, float n, float r_c);
+    int d_cos_bond_angle_d_coord(float * coord_i, float * coord_j, float * coord_k, float * result);
+    int d_cos_dihedral_angle_d_coord(float * coord_i, float * coord_j, float * coord_k, float * coord_l, float * result);
 
     sym_coord_LASP_struct * sym_coord_LASP;
     int i, j, k, l, x, y, z, t, M;
@@ -243,23 +243,23 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
         sym_coord_LASP[i].N_Atoms = frame_info->N_Atoms;
         sym_coord_LASP[i].SEL_A = N_PTSD_tot;
         sym_coord_LASP[i].N_PTSDs = N_PTSD_tot;
-        sym_coord_LASP[i].coord_converted = (double **)calloc(parameters_info->N_Atoms_max, sizeof(double *));
+        sym_coord_LASP[i].coord_converted = (float **)calloc(parameters_info->N_Atoms_max, sizeof(float *));
         sym_coord_LASP[i].idx_nei = (int ***)calloc(parameters_info->N_Atoms_max, sizeof(int **));
-        sym_coord_LASP[i].d_x = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
-        sym_coord_LASP[i].d_y = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
-        sym_coord_LASP[i].d_z = (double ***)calloc(parameters_info->N_Atoms_max, sizeof(double **));
+        sym_coord_LASP[i].d_x = (float ***)calloc(parameters_info->N_Atoms_max, sizeof(float **));
+        sym_coord_LASP[i].d_y = (float ***)calloc(parameters_info->N_Atoms_max, sizeof(float **));
+        sym_coord_LASP[i].d_z = (float ***)calloc(parameters_info->N_Atoms_max, sizeof(float **));
         for (j = 0; j <= parameters_info->N_Atoms_max - 1; j++)
         {
-            sym_coord_LASP[i].coord_converted[j] = (double *)calloc(N_PTSD_tot, sizeof(double));
+            sym_coord_LASP[i].coord_converted[j] = (float *)calloc(N_PTSD_tot, sizeof(float));
             sym_coord_LASP[i].idx_nei[j] = (int **)calloc(parameters_info->N_sym_coord, sizeof(int *));
-            sym_coord_LASP[i].d_x[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
-            sym_coord_LASP[i].d_y[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
-            sym_coord_LASP[i].d_z[j] = (double **)calloc(parameters_info->N_sym_coord, sizeof(double *));
+            sym_coord_LASP[i].d_x[j] = (float **)calloc(parameters_info->N_sym_coord, sizeof(float *));
+            sym_coord_LASP[i].d_y[j] = (float **)calloc(parameters_info->N_sym_coord, sizeof(float *));
+            sym_coord_LASP[i].d_z[j] = (float **)calloc(parameters_info->N_sym_coord, sizeof(float *));
             for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
             {
-                sym_coord_LASP[i].d_x[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
-                sym_coord_LASP[i].d_y[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
-                sym_coord_LASP[i].d_z[j][k] = (double *)calloc(parameters_info->N_Atoms_max, sizeof(double));
+                sym_coord_LASP[i].d_x[j][k] = (float *)calloc(parameters_info->N_Atoms_max, sizeof(float));
+                sym_coord_LASP[i].d_y[j][k] = (float *)calloc(parameters_info->N_Atoms_max, sizeof(float));
+                sym_coord_LASP[i].d_z[j][k] = (float *)calloc(parameters_info->N_Atoms_max, sizeof(float));
             }
             //printf_d("i, j: %d %d\n", i, j);
         }
@@ -292,10 +292,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                     /*In addition to r_c, the parameters stored in params_array follows this order:
                     S1: (int)n
                     S2: (int)L, (int)n
-                    S3: (int)n, (int)m, (int)zeta, (double)lambda
-                    S4: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
+                    S3: (int)n, (int)m, (int)zeta, (float)lambda
+                    S4: (int)n, (int)m, (int)p, (int)zeta, (float)lambda
                     S5: (int)L, (int)n, (int)m, (int)p
-                    S6: (int)n, (int)m, (int)p, (int)zeta, (double)lambda
+                    S6: (int)n, (int)m, (int)p, (int)zeta, (float)lambda
                     Note: the S3/S4 are S4/S3 on the paper Chem. Sci. 2018. 9. 8644-8655 
                     */
                     //printf_d("i, j, k, l, ii, N_params: %d %d %d %d %d %d\n", i, j, k, l, ii, N_params_ii_k_l);
@@ -304,10 +304,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 0:
                         {
                             int nb1;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
-                            double n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
@@ -321,8 +321,8 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 {
                                     continue;
                                 }
-                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
                                     break;
@@ -340,7 +340,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result;
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n", 1, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n", 1, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             // int tmpp;
                             // if (i == 0)
@@ -349,11 +349,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             //     {
                             //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
                             //         {
-                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %f\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
                             //         }                                    
                             //     }
                             // }
-                            //printf_d("r_c: %.2lf, S1: %lf\n", r_c, result);
+                            //printf_d("r_c: %.2lf, S1: %f\n", r_c, result);
                             N_PTSD_count_idx++;                            
                             break;
                         }
@@ -361,35 +361,35 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1;
                             int M;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int L = (int)(parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0]);
-                            double n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
+                            float n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
-                            double derivative_prefactor = 0;
+                            float derivative_prefactor = 0;
                             int idx_i = j;
                             for (M = -L; M <= L; M++)
                             {
-                                std::complex<double> result_inner = (0., 0.);
+                                std::complex<float> result_inner = (0., 0.);
                                 int d_idx;
-                                std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));//dx,dy,dz
+                                std::complex<float> * derivative_tmp = (std::complex<float> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<float>));//dx,dy,dz
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
                                     int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
                                     int current_type[1]= {frame_info[i].neighbour_list[j].type[nb1]};
-                                    std::complex<double> R_Y;
-                                    std::complex<double> YLM;
-                                    double R;
+                                    std::complex<float> R_Y;
+                                    std::complex<float> YLM;
+                                    float R;
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
                                     }
-                                    double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                    double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
-                                    double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
+                                    float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                    float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                    float coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
                                     if (r_ij > r_c)
                                     {
                                         break;
@@ -405,27 +405,27 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                     /*Calculate \partial RYLM / \partial x,y,z*/
                                     /*+= dR/dr * dr/dxi * Y_LM + R * (dY_LM/dtheta * dtheta/dxi + dY_LM/dphi * dphi/dxi)*/
                                     /*First, I need to calculate all damn d_angle/d_x,y,z*/
-                                    double d_r_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
-                                    double d_r_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
-                                    double d_r_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
-                                    double d_r_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
-                                    double d_r_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
-                                    double d_r_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
-                                    double d_theta_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
-                                    double d_theta_d_x_j = 0.0 - d_theta_d_x_i;
-                                    double d_theta_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
-                                    double d_theta_d_y_j = 0.0 - d_theta_d_y_i;
-                                    double d_theta_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
-                                    double d_theta_d_z_j = 0.0 - d_theta_d_z_i;
-                                    double d_phi_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
-                                    double d_phi_d_x_j = 0.0 - d_phi_d_x_i;
-                                    double d_phi_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
-                                    double d_phi_d_y_j = 0.0 - d_phi_d_y_i;
-                                    double d_phi_d_z_i = 0.0;
-                                    double d_phi_d_z_j = 0.0;
-                                    std::complex<double> D_YLM_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
-                                    std::complex<double> D_YLM_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
-                                    double D_R_D_r = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    float d_r_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    float d_r_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    float d_r_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    float d_r_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    float d_r_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    float d_r_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    float d_theta_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                    float d_theta_d_x_j = 0.0 - d_theta_d_x_i;
+                                    float d_theta_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                    float d_theta_d_y_j = 0.0 - d_theta_d_y_i;
+                                    float d_theta_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
+                                    float d_theta_d_z_j = 0.0 - d_theta_d_z_i;
+                                    float d_phi_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                    float d_phi_d_x_j = 0.0 - d_phi_d_x_i;
+                                    float d_phi_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                    float d_phi_d_y_j = 0.0 - d_phi_d_y_i;
+                                    float d_phi_d_z_i = 0.0;
+                                    float d_phi_d_z_j = 0.0;
+                                    std::complex<float> D_YLM_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
+                                    std::complex<float> D_YLM_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
+                                    float D_R_D_r = d_R_sup_n_d_r(r_ij, n, r_c);
                                     //d to x
                                     derivative_tmp[idx_i] += D_R_D_r * d_r_d_x_i * YLM + R * (D_YLM_D_THETA * d_theta_d_x_i + D_YLM_D_PHI * d_phi_d_x_i);
                                     derivative_tmp[idx_j] += D_R_D_r * d_r_d_x_j * YLM + R * (D_YLM_D_THETA * d_theta_d_x_j + D_YLM_D_PHI * d_phi_d_x_j);
@@ -452,7 +452,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n", 2, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n", 2, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             if (result <= 1E-8 )
                             {
@@ -470,7 +470,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             // {
                             //     for (tmpp = 21; tmpp <= 23; tmpp++)
                             //     {
-                            //         if (sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][tmpp] >= (double)1E-15)
+                            //         if (sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][tmpp] >= (float)1E-15)
                             //         {
                             //             printf_d("Frame %d atom %d PTSD %d type %d d_y for atom %d: %.16e, prefactor: %.6lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][tmpp], derivative_prefactor);
                             //         }                                    
@@ -489,10 +489,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 2:
                         {
                             int nb1, nb2;
-                            double n, m, zeta, lambda;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float n, m, zeta, lambda;
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
@@ -501,11 +501,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
                             lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
                             int idx_i = j;
-                            double prefac_2 = fastpown(2, (int)(1 - zeta));
+                            float prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
                                     break;
@@ -513,41 +513,41 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
                                     int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
-                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                    float * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
                                     int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
                                     int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
                                     }
-                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    float r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
                                     if (r_ik > r_c)
                                     {
                                         break;
                                     }
-                                    double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
-                                    double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
-                                    double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
-                                    double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                    float cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
+                                    float d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    float d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    float d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                    float d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
 
-                                    double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
-                                    double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
-                                    double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
-                                    double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                    float d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    float d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    float d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                    float d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
                                     
-                                    double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
-                                    double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
-                                    double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
-                                    double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                    float d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    float d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    float d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                    float d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
                                     
-                                    double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
-                                    double zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
-                                    double d_cos_theta_d_coord[9];
-                                    double R_n_r_ij = R_sup_n(r_ij, n, r_c);
-                                    double R_m_r_ik = R_sup_n(r_ik, m, r_c);
-                                    double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
-                                    double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                    float d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
+                                    float zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
+                                    float d_cos_theta_d_coord[9];
+                                    float R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                    float R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                    float d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    float d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
 
                                     d_cos_bond_angle_d_coord(coord_i, coord_j, coord_k, d_cos_theta_d_coord);
 
@@ -568,7 +568,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n", 3, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n", 3, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             // int tmpp;
                             // if (i == 0)
@@ -577,7 +577,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             //     {
                             //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
                             //         {
-                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %f\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
                             //         }                                    
                             //     }
                             // }
@@ -587,10 +587,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 3:
                         {
                             int nb1, nb2;
-                            double n, m, p, zeta, lambda;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float n, m, p, zeta, lambda;
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
@@ -600,11 +600,11 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             zeta = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
                             lambda = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[4];
                             int idx_i = j;
-                            double prefac_2 = fastpown(2, (int)(1 - zeta));
+                            float prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
                                     break;
@@ -612,50 +612,50 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
                                     int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
-                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                    float * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
                                     int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
                                     int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                     if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                     {
                                         continue;
                                     }
-                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    float r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
                                     if (r_ik > r_c)
                                     {
                                         break;
                                     }
-                                    double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
-                                    double cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
-                                    double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
-                                    double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
-                                    double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
-                                    double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
-                                    double d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
-                                    double d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
+                                    float r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
+                                    float cos_theta = cos_bond_angle(coord_i, coord_j, coord_k);
+                                    float d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                    float d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                    float d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                    float d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                    float d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
+                                    float d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
 
-                                    double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
-                                    double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
-                                    double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
-                                    double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
-                                    double d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
-                                    double d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
+                                    float d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                    float d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                    float d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                    float d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                    float d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
+                                    float d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
                                     
-                                    double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
-                                    double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
-                                    double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
-                                    double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
-                                    double d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
-                                    double d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
+                                    float d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                    float d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                    float d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                    float d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                    float d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
+                                    float d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
                                     
-                                    double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
-                                    double zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
-                                    double d_cos_theta_d_coord[9];
-                                    double R_n_r_ij = R_sup_n(r_ij, n, r_c);
-                                    double R_m_r_ik = R_sup_n(r_ik, m, r_c);
-                                    double R_p_r_jk = R_sup_n(r_jk, p, r_c);
-                                    double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
-                                    double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
-                                    double d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
+                                    float d_zeta_prefac = zeta * fastpown(1 + lambda * cos_theta, (int)(zeta - 1));
+                                    float zeta_prefac = fastpown((1 + lambda * cos_theta), (int)zeta);
+                                    float d_cos_theta_d_coord[9];
+                                    float R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                    float R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                    float R_p_r_jk = R_sup_n(r_jk, p, r_c);
+                                    float d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                    float d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                    float d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
 
                                     d_cos_bond_angle_d_coord(coord_i, coord_j, coord_k, d_cos_theta_d_coord);
 
@@ -676,7 +676,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * fastpown(2, (int)(1 - zeta));
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n",4, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n",4, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             // int tmpp;
                             // if (i == 0)
@@ -685,7 +685,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             //     {
                             //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
                             //         {
-                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %f\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
                             //         }                                    
                             //     }
                             // }
@@ -696,10 +696,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         {
                             int nb1, nb2;
                             int L, M;
-                            double n, m, p;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float n, m, p;
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             int * params_type = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].neigh_type_array;
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
@@ -708,16 +708,16 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
                             p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[3];
                             int idx_i = j;
-                            double derivative_prefactor = 0; 
+                            float derivative_prefactor = 0; 
                             for (M = - L; M <= L; M++)
                             {
-                                std::complex<double> result_inner = (0., 0.);
+                                std::complex<float> result_inner = (0., 0.);
                                 int d_idx;
-                                std::complex<double> * derivative_tmp = (std::complex<double> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<double>));
+                                std::complex<float> * derivative_tmp = (std::complex<float> *)calloc(3 * parameters_info->N_Atoms_max, sizeof(std::complex<float>));
                                 for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                                 {
-                                    double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                    double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                    float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                    float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                     if (r_ij > r_c)
                                     {
                                         break;
@@ -727,83 +727,83 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
                                         int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                         int current_type[2] = {frame_info[i].neighbour_list[j].type[nb1], frame_info[i].neighbour_list[j].type[nb2]};
-                                        double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                        float * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
                                         if (compare_Nei_type(N_nei, current_type, params_type) == 0)
                                         {
                                             continue;
                                         }
-                                        double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                        float r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
                                         if (r_ik > r_c)
                                         {
                                             break;
                                         }
-                                        double r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
-                                        double coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
-                                        double coord_ik[3] = {coord_i[0] - coord_k[0], coord_i[1] - coord_k[1], coord_i[2] - coord_k[2]};
-                                        std::complex<double> R_Y;
-                                        std::complex<double> Y_LM_IJ = Y_LM(coord_ij, L, M);
-                                        std::complex<double> Y_LM_IK = Y_LM(coord_ik, L, M);
-                                        double R_n_r_ij = R_sup_n(r_ij, n, r_c);
-                                        double R_m_r_ik = R_sup_n(r_ik, m, r_c);
-                                        double R_p_r_jk = R_sup_n(r_jk, p, r_c);
+                                        float r_jk = sqrt(fastpow2(coord_j[0] - coord_k[0], 2) + fastpow2(coord_j[1] - coord_k[1], 2) + fastpow2(coord_j[2] - coord_k[2], 2));
+                                        float coord_ij[3] = {coord_i[0] - coord_j[0], coord_i[1] - coord_j[1], coord_i[2] - coord_j[2]};
+                                        float coord_ik[3] = {coord_i[0] - coord_k[0], coord_i[1] - coord_k[1], coord_i[2] - coord_k[2]};
+                                        std::complex<float> R_Y;
+                                        std::complex<float> Y_LM_IJ = Y_LM(coord_ij, L, M);
+                                        std::complex<float> Y_LM_IK = Y_LM(coord_ik, L, M);
+                                        float R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                        float R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                        float R_p_r_jk = R_sup_n(r_jk, p, r_c);
                                         R_Y = Y_LM_IJ + Y_LM_IK;
                                         R_Y = R_Y * R_n_r_ij * R_m_r_ik * R_p_r_jk;
                                         result_inner += R_Y;
                                         /*For derivative*/
-                                        double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
-                                        double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
-                                        double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
-                                        double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
-                                        double d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
-                                        double d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
+                                        float d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                        float d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                        float d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                        float d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                        float d_r_jk_d_x_j = (coord_j[0] - coord_k[0]) / r_jk;
+                                        float d_r_jk_d_x_k = (coord_k[0] - coord_j[0]) / r_jk;
 
-                                        double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
-                                        double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
-                                        double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
-                                        double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
-                                        double d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
-                                        double d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
+                                        float d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                        float d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                        float d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                        float d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                        float d_r_jk_d_y_j = (coord_j[1] - coord_k[1]) / r_jk;
+                                        float d_r_jk_d_y_k = (coord_k[1] - coord_j[1]) / r_jk;
                                     
-                                        double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
-                                        double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
-                                        double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
-                                        double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
-                                        double d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
-                                        double d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
+                                        float d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                        float d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                        float d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                        float d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                        float d_r_jk_d_z_j = (coord_j[2] - coord_k[2]) / r_jk;
+                                        float d_r_jk_d_z_k = (coord_k[2] - coord_j[2]) / r_jk;
 
-                                        double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
-                                        double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
-                                        double d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
+                                        float d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                        float d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                        float d_R_d_r_jk = d_R_sup_n_d_r(r_jk, p, r_c);
 
-                                        double d_theta_ij_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
-                                        double d_theta_ij_d_x_j = 0.0 - d_theta_ij_d_x_i;
-                                        double d_theta_ij_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
-                                        double d_theta_ij_d_y_j = 0.0 - d_theta_ij_d_y_i;
-                                        double d_theta_ij_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
-                                        double d_theta_ij_d_z_j = 0.0 - d_theta_ij_d_z_i;
-                                        double d_phi_ij_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
-                                        double d_phi_ij_d_x_j = 0.0 - d_phi_ij_d_x_i;
-                                        double d_phi_ij_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
-                                        double d_phi_ij_d_y_j = 0.0 - d_phi_ij_d_y_i;
-                                        double d_phi_ij_d_z_i = 0.0;
-                                        double d_phi_ij_d_z_j = 0.0;
-                                        std::complex<double> D_YLM_IJ_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
-                                        std::complex<double> D_YLM_IJ_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
+                                        float d_theta_ij_d_x_i = (coord_ij[0]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                        float d_theta_ij_d_x_j = 0.0 - d_theta_ij_d_x_i;
+                                        float d_theta_ij_d_y_i = (coord_ij[1]) * (coord_ij[2]) / (fastpown(r_ij, 3) * sqrt(1.0 - fastpow2(coord_ij[2], 2) / (fastpow2(r_ij, 2))));
+                                        float d_theta_ij_d_y_j = 0.0 - d_theta_ij_d_y_i;
+                                        float d_theta_ij_d_z_i = 0.0 - (1.0 / r_ij - fastpow2(coord_ij[2], 2) / fastpown(r_ij, 3)) / (1.0 - fastpow2(coord_ij[2], 2) / fastpow2(r_ij, 2));
+                                        float d_theta_ij_d_z_j = 0.0 - d_theta_ij_d_z_i;
+                                        float d_phi_ij_d_x_i = 0.0 - (coord_ij[1]) / ((fastpow2(coord_ij[0], 2)) * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                        float d_phi_ij_d_x_j = 0.0 - d_phi_ij_d_x_i;
+                                        float d_phi_ij_d_y_i = 1.0 / (coord_ij[0] * (1 + fastpow2(coord_ij[1] / coord_ij[0], 2)));
+                                        float d_phi_ij_d_y_j = 0.0 - d_phi_ij_d_y_i;
+                                        float d_phi_ij_d_z_i = 0.0;
+                                        float d_phi_ij_d_z_j = 0.0;
+                                        std::complex<float> D_YLM_IJ_D_THETA = d_Y_LM_d_theta(coord_ij, L, M);
+                                        std::complex<float> D_YLM_IJ_D_PHI = d_Y_LM_d_phi(coord_ij, L, M);
 
-                                        double d_theta_ik_d_x_i = (coord_ik[0]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
-                                        double d_theta_ik_d_x_k = 0.0 - d_theta_ik_d_x_i;
-                                        double d_theta_ik_d_y_i = (coord_ik[1]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
-                                        double d_theta_ik_d_y_k = 0.0 - d_theta_ik_d_y_i;
-                                        double d_theta_ik_d_z_i = 0.0 - (1.0 / r_ik - fastpow2(coord_ik[2], 2) / fastpown(r_ik, 3)) / (1.0 - fastpow2(coord_ik[2], 2) / fastpow2(r_ik, 2));
-                                        double d_theta_ik_d_z_k = 0.0 - d_theta_ik_d_z_i;
-                                        double d_phi_ik_d_x_i = 0.0 - (coord_ik[1]) / ((fastpow2(coord_ik[0], 2)) * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
-                                        double d_phi_ik_d_x_k = 0.0 - d_phi_ik_d_x_i;
-                                        double d_phi_ik_d_y_i = 1.0 / (coord_ik[0] * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
-                                        double d_phi_ik_d_y_k = 0.0 - d_phi_ik_d_y_i;
-                                        double d_phi_ik_d_z_i = 0.0;
-                                        double d_phi_ik_d_z_k = 0.0;
-                                        std::complex<double> D_YLM_IK_D_THETA = d_Y_LM_d_theta(coord_ik, L, M);
-                                        std::complex<double> D_YLM_IK_D_PHI = d_Y_LM_d_phi(coord_ik, L, M);
+                                        float d_theta_ik_d_x_i = (coord_ik[0]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
+                                        float d_theta_ik_d_x_k = 0.0 - d_theta_ik_d_x_i;
+                                        float d_theta_ik_d_y_i = (coord_ik[1]) * (coord_ik[2]) / (fastpown(r_ik, 3) * sqrt(1.0 - fastpow2(coord_ik[2], 2) / (fastpow2(r_ik, 2))));
+                                        float d_theta_ik_d_y_k = 0.0 - d_theta_ik_d_y_i;
+                                        float d_theta_ik_d_z_i = 0.0 - (1.0 / r_ik - fastpow2(coord_ik[2], 2) / fastpown(r_ik, 3)) / (1.0 - fastpow2(coord_ik[2], 2) / fastpow2(r_ik, 2));
+                                        float d_theta_ik_d_z_k = 0.0 - d_theta_ik_d_z_i;
+                                        float d_phi_ik_d_x_i = 0.0 - (coord_ik[1]) / ((fastpow2(coord_ik[0], 2)) * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
+                                        float d_phi_ik_d_x_k = 0.0 - d_phi_ik_d_x_i;
+                                        float d_phi_ik_d_y_i = 1.0 / (coord_ik[0] * (1 + fastpow2(coord_ik[1] / coord_ik[0], 2)));
+                                        float d_phi_ik_d_y_k = 0.0 - d_phi_ik_d_y_i;
+                                        float d_phi_ik_d_z_i = 0.0;
+                                        float d_phi_ik_d_z_k = 0.0;
+                                        std::complex<float> D_YLM_IK_D_THETA = d_Y_LM_d_theta(coord_ik, L, M);
+                                        std::complex<float> D_YLM_IK_D_PHI = d_Y_LM_d_phi(coord_ik, L, M);
 
                                         //d to x
                                         derivative_tmp[idx_i] += d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik * R_p_r_jk *(Y_LM_IJ + Y_LM_IK) + R_n_r_ij * d_R_d_r_ik * d_r_ij_d_x_i * R_p_r_jk * (Y_LM_IJ + Y_LM_IK) + R_n_r_ij * R_m_r_ik * R_p_r_jk * (D_YLM_IJ_D_THETA * d_theta_ij_d_x_i + D_YLM_IJ_D_PHI * d_phi_ij_d_x_i + D_YLM_IK_D_THETA * d_phi_ik_d_x_i + D_YLM_IK_D_PHI * d_phi_ik_d_x_i);
@@ -838,7 +838,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = sqrt(result);
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n", 5, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n", 5, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             if (result <= 1E-8 )
                             {
@@ -875,10 +875,10 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                         case 5:
                         {
                             int nb1, nb2, nb3;
-                            double n, m, p, zeta, lambda;
-                            double * coord_i = frame_info[i].coord[j];
-                            double result = 0;
-                            double r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
+                            float n, m, p, zeta, lambda;
+                            float * coord_i = frame_info[i].coord[j];
+                            float result = 0;
+                            float r_c = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].cutoff_radius;
                             n = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[0];
                             m = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[1];
                             p = parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][k][l].params_array[2];
@@ -888,27 +888,27 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             int N_body = parameters_PTSDs_info->PTSD_N_body_type[k];
                             int N_nei = N_body - 1;
                             int idx_i = j;
-                            double prefac_2 = fastpown(2, (int)(1 - zeta));
+                            float prefac_2 = fastpown(2, (int)(1 - zeta));
                             for (nb1 = 0; nb1 <= parameters_info->SEL_A_max - 1; nb1++)
                             {
-                                double * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
-                                double r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
+                                float * coord_j = frame_info[i].neighbour_list[j].coord_neighbours[nb1];
+                                float r_ij = sqrt(fastpow2(coord_i[0] - coord_j[0], 2) + fastpow2(coord_i[1] - coord_j[1], 2) + fastpow2(coord_i[2] - coord_j[2], 2));
                                 if (r_ij > r_c)
                                 {
                                     break;
                                 }
                                 for (nb2 = nb1 + 1; nb2 <= parameters_info->SEL_A_max - 1; nb2++)
                                 {
-                                    double * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
-                                    double r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
+                                    float * coord_k = frame_info[i].neighbour_list[j].coord_neighbours[nb2];
+                                    float r_ik = sqrt(fastpow2(coord_i[0] - coord_k[0], 2) + fastpow2(coord_i[1] - coord_k[1], 2) + fastpow2(coord_i[2] - coord_k[2], 2));
                                     if (r_ik > r_c)
                                     {
                                         break;
                                     }
                                     for (nb3 = nb2 + 1; nb3 <= parameters_info->SEL_A_max - 1; nb3++)
                                     {
-                                        double * coord_l = frame_info[i].neighbour_list[j].coord_neighbours[nb3];
-                                        double r_il = sqrt(fastpow2(coord_i[0] - coord_l[0], 2) + fastpow2(coord_i[1] - coord_l[1], 2) + fastpow2(coord_i[2] - coord_l[2], 2));
+                                        float * coord_l = frame_info[i].neighbour_list[j].coord_neighbours[nb3];
+                                        float r_il = sqrt(fastpow2(coord_i[0] - coord_l[0], 2) + fastpow2(coord_i[1] - coord_l[1], 2) + fastpow2(coord_i[2] - coord_l[2], 2));
                                         if (r_il > r_c)
                                         {
                                             break;
@@ -917,43 +917,43 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         int idx_j = frame_info[i].neighbour_list[j].index_neighbours[nb1];
                                         int idx_k = frame_info[i].neighbour_list[j].index_neighbours[nb2];
                                         int idx_l = frame_info[i].neighbour_list[j].index_neighbours[nb3];
-                                        double cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
+                                        float cos_delta = cos_dihedral_angle(coord_i, coord_j, coord_k, coord_l);
                                         if (cos_delta > 998)//Three atoms are on one line;
                                         {
                                             continue;
                                         }
-                                        double d_cos_delta_d_coord[12];
+                                        float d_cos_delta_d_coord[12];
                                         d_cos_dihedral_angle_d_coord(coord_i, coord_j, coord_k, coord_l, d_cos_delta_d_coord);
                                         
-                                        double d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
-                                        double d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
-                                        double d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
-                                        double d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
-                                        double d_r_il_d_x_i = (coord_i[0] - coord_l[0]) / r_il;
-                                        double d_r_il_d_x_l = (coord_l[0] - coord_i[0]) / r_il;
+                                        float d_r_ij_d_x_i = (coord_i[0] - coord_j[0]) / r_ij;
+                                        float d_r_ij_d_x_j = (coord_j[0] - coord_i[0]) / r_ij;
+                                        float d_r_ik_d_x_i = (coord_i[0] - coord_k[0]) / r_ik;
+                                        float d_r_ik_d_x_k = (coord_k[0] - coord_i[0]) / r_ik;
+                                        float d_r_il_d_x_i = (coord_i[0] - coord_l[0]) / r_il;
+                                        float d_r_il_d_x_l = (coord_l[0] - coord_i[0]) / r_il;
 
-                                        double d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
-                                        double d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
-                                        double d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
-                                        double d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
-                                        double d_r_il_d_y_i = (coord_i[1] - coord_l[1]) / r_il;
-                                        double d_r_il_d_y_l = (coord_l[1] - coord_i[1]) / r_il;
+                                        float d_r_ij_d_y_i = (coord_i[1] - coord_j[1]) / r_ij;
+                                        float d_r_ij_d_y_j = (coord_j[1] - coord_i[1]) / r_ij;
+                                        float d_r_ik_d_y_i = (coord_i[1] - coord_k[1]) / r_ik;
+                                        float d_r_ik_d_y_k = (coord_k[1] - coord_i[1]) / r_ik;
+                                        float d_r_il_d_y_i = (coord_i[1] - coord_l[1]) / r_il;
+                                        float d_r_il_d_y_l = (coord_l[1] - coord_i[1]) / r_il;
                                         
-                                        double d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
-                                        double d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
-                                        double d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
-                                        double d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
-                                        double d_r_il_d_z_i = (coord_i[2] - coord_l[2]) / r_il;
-                                        double d_r_il_d_z_l = (coord_l[2] - coord_i[2]) / r_il;
+                                        float d_r_ij_d_z_i = (coord_i[2] - coord_j[2]) / r_ij;
+                                        float d_r_ij_d_z_j = (coord_j[2] - coord_i[2]) / r_ij;
+                                        float d_r_ik_d_z_i = (coord_i[2] - coord_k[2]) / r_ik;
+                                        float d_r_ik_d_z_k = (coord_k[2] - coord_i[2]) / r_ik;
+                                        float d_r_il_d_z_i = (coord_i[2] - coord_l[2]) / r_il;
+                                        float d_r_il_d_z_l = (coord_l[2] - coord_i[2]) / r_il;
                                         
-                                        double d_zeta_prefac = zeta * fastpown(1 + lambda * cos_delta, (int)(zeta - 1));
-                                        double zeta_prefac = fastpown((1 + lambda * cos_delta), (int)zeta);
-                                        double R_n_r_ij = R_sup_n(r_ij, n, r_c);
-                                        double R_m_r_ik = R_sup_n(r_ik, m, r_c);
-                                        double R_p_r_il = R_sup_n(r_il, p, r_c);
-                                        double d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
-                                        double d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
-                                        double d_R_d_r_il = d_R_sup_n_d_r(r_il, p, r_c);
+                                        float d_zeta_prefac = zeta * fastpown(1 + lambda * cos_delta, (int)(zeta - 1));
+                                        float zeta_prefac = fastpown((1 + lambda * cos_delta), (int)zeta);
+                                        float R_n_r_ij = R_sup_n(r_ij, n, r_c);
+                                        float R_m_r_ik = R_sup_n(r_ik, m, r_c);
+                                        float R_p_r_il = R_sup_n(r_il, p, r_c);
+                                        float d_R_d_r_ij = d_R_sup_n_d_r(r_ij, n, r_c);
+                                        float d_R_d_r_ik = d_R_sup_n_d_r(r_ik, m, r_c);
+                                        float d_R_d_r_il = d_R_sup_n_d_r(r_il, p, r_c);
 
                                         sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][idx_i] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[0] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_x_i * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_x_i * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_x_i;
                                         sym_coord_LASP[i].d_y[j][N_PTSD_count_idx][idx_i] += prefac_2 * d_zeta_prefac * lambda * d_cos_delta_d_coord[1] * R_n_r_ij * R_m_r_ik * R_p_r_il + zeta_prefac * d_R_d_r_ij * d_r_ij_d_y_i * R_m_r_ik * R_p_r_il + zeta_prefac * R_n_r_ij * d_R_d_r_ik * d_r_ik_d_y_i * R_p_r_il + zeta_prefac * R_n_r_ij * R_m_r_ik * d_R_d_r_il * d_r_il_d_y_i;
@@ -971,7 +971,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                                         result += (zeta_prefac * R_n_r_ij * R_m_r_ik * R_p_r_il);
                                         if (result != result)
                                         {
-                                            printf_d("%lf %lf %lf %lf\n", zeta_prefac, R_n_r_ij, R_m_r_ik, R_p_r_il);
+                                            printf_d("%f %f %f %f\n", zeta_prefac, R_n_r_ij, R_m_r_ik, R_p_r_il);
                                         }
                                     }
                                 }
@@ -979,7 +979,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] = result * prefac_2;
                             // if (sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx] != sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx])
                             // {
-                            //     printf("%d, %lf\n",6, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
+                            //     printf("%d, %f\n",6, sym_coord_LASP[i].coord_converted[j][N_PTSD_count_idx]);
                             // }
                             // int tmpp;
                             // if (i == 0)
@@ -988,7 +988,7 @@ int convert_coord_LASP(frame_info_struct * frame_info, int Nframes_tot, paramete
                             //     {
                             //         if (sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp] >= 1E-8)
                             //         {
-                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %lf\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
+                            //             printf_d("Frame %d atom %d PTSD %d type %d d_x for atom %d: %f\n", i, j, N_PTSD_count_idx, k, tmpp, sym_coord_LASP[i].d_x[j][N_PTSD_count_idx][tmpp]);
                             //         }                                    
                             //     }
                             // }
@@ -1038,7 +1038,7 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
 {
     int calc_N_neigh_inter(int K, int N);
     int find_index_int(int target, int * array, int array_length);
-    /*double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_);*/
+    /*float **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_);*/
 
     const int MAX_NUM_ELEMENTS = 172;//the number of elements will not exceed 172 at 2019
     const int MAX_N_CUTOFF_RADIUS = (int)1000;// No more than 1000 data.
@@ -1087,16 +1087,16 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
         }
     }
     
-    /*parameters_PTSDs_info->cutoff_radius = (double ***)calloc(N_TYPES_ALL_FRAME, sizeof(double **));
+    /*parameters_PTSDs_info->cutoff_radius = (float ***)calloc(N_TYPES_ALL_FRAME, sizeof(float **));
     for (i = 0; i <= N_TYPES_ALL_FRAME - 1; i++)
     {
-        parameters_PTSDs_info->cutoff_radius[i] = (double **)calloc(parameters_PTSDs_info->N_PTSD_types, sizeof(double *));
+        parameters_PTSDs_info->cutoff_radius[i] = (float **)calloc(parameters_PTSDs_info->N_PTSD_types, sizeof(float *));
     }
     for (i = 0; i <= N_TYPES_ALL_FRAME - 1; i++)
     {
         for (j = 0; j <= parameters_PTSDs_info->N_PTSD_types - 1; j++)
         {
-            parameters_PTSDs_info->cutoff_radius[i][j] = (double *)calloc(parameters_PTSDs_info->N_cutoff_radius[i][j], sizeof(double));
+            parameters_PTSDs_info->cutoff_radius[i][j] = (float *)calloc(parameters_PTSDs_info->N_cutoff_radius[i][j], sizeof(float));
         }
     }*/
 
@@ -1164,19 +1164,19 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 int N_body_this_type_PTSD = parameters_PTSDs_info->PTSD_N_body_type[jj];
                 int N_neighb_atom = N_body_this_type_PTSD - 1;
                 int N_params_this_type = parameters_PTSDs_info->PTSD_N_params[jj];
-                double cutoff_this_line;
+                float cutoff_this_line;
                 int * neighb_atom_array = (int *)calloc(N_neighb_atom, sizeof(int));
-                double * params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));//The last two elements are Gmin and Gmax
+                float * params_array = (float *)calloc(N_params_this_type + 2, sizeof(float));//The last two elements are Gmin and Gmax
                 parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].PTSD_type = PTSD_type;
                 parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].PTSD_N_body_type = N_body_this_type_PTSD;
                 parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].N_params = N_params_this_type;
                 parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].neigh_type_array = (int *)calloc(N_neighb_atom, sizeof(int));
-                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array = (double *)calloc(N_params_this_type + 2, sizeof(double));
+                parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array = (float *)calloc(N_params_this_type + 2, sizeof(float));
                 /*The data in one line should be arranged as:*/
                 /*{at least 0 spaces}[cutoff]{spaces}{N_neighb_atom integers}{spaces}{N_params_this_type parameters}{spaces}{Gmin and Gmax}{at least 1 char}[\n]*/
 
                 tmp_token = strtok(tmp_line, " ");
-                if (sscanf(tmp_token, "%lf", &cutoff_this_line) != 1 )
+                if (sscanf(tmp_token, "%f", &cutoff_this_line) != 1 )
                 {
                     printf("Format within one block is incorrect. Make sure there are no comment or empty lines mixed with data lines!\nReading stops at center atom type %d PTSD type %d\n", center_type, PTSD_type);
                     return 33;
@@ -1193,14 +1193,14 @@ int read_LASP_parameters(parameters_PTSDs_info_struct * parameters_PTSDs_info, p
                 for (k = 0; k <= N_params_this_type - 1; k++)//read in all the parameters of this type of PTSD
                 {
                     tmp_token = strtok(NULL, " ");
-                    sscanf(tmp_token, "%lf", &(params_array[k]));
+                    sscanf(tmp_token, "%f", &(params_array[k]));
                     //printf_d("     %6d  ", (int)params_array[k]);
                     parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }
                 for (k = N_params_this_type; k <= N_params_this_type + 1; k++)//read in Gmin and Gmax
                 {
                     tmp_token = strtok(NULL, " ");
-                    sscanf(tmp_token, "%lf", &(params_array[k]));
+                    sscanf(tmp_token, "%f", &(params_array[k]));
                     //printf_d("      %21.15E", params_array[k]);
                     parameters_PTSDs_info->parameters_PTSDs_info_one_line[ii][jj][cutoff_radius_pointer].params_array[k] = params_array[k];
                 }

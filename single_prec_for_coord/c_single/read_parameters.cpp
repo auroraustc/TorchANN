@@ -48,10 +48,10 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     fclose(tmp);
     boost::property_tree::read_json<boost::property_tree::ptree>(filename, PARAMS);
 
-    parameters_info->cutoff_1 = PARAMS.get<double>("cutoff_1");
-    parameters_info->cutoff_2 = PARAMS.get<double>("cutoff_2");
-    parameters_info->cutoff_3 = PARAMS.get<double>("cutoff_3");
-    parameters_info->cutoff_max = PARAMS.get<double>("cutoff_max");
+    parameters_info->cutoff_1 = PARAMS.get<float>("cutoff_1");
+    parameters_info->cutoff_2 = PARAMS.get<float>("cutoff_2");
+    parameters_info->cutoff_3 = PARAMS.get<float>("cutoff_3");
+    parameters_info->cutoff_max = PARAMS.get<float>("cutoff_max");
     if (PARAMS.count("N_types_all_frame") != 0)
     {
         parameters_info->N_types_all_frame = PARAMS.get<int>("N_types_all_frame");
@@ -152,14 +152,14 @@ int read_parameters(frame_info_struct * frame_info, parameters_info_struct * par
     {
         parameters_info->fitting_neuron[i] = FITTING_NEURON[i];
     }
-    parameters_info->start_lr = PARAMS.get<double>("start_lr");
+    parameters_info->start_lr = PARAMS.get<float>("start_lr");
     parameters_info->decay_steps = -1;
     parameters_info->decay_epoch = PARAMS.get<int>("decay_epoch");
-    parameters_info->decay_rate = PARAMS.get<double>("decay_rate");
-    parameters_info->start_pref_e = PARAMS.get<double>("start_pref_e");
-    parameters_info->limit_pref_e = PARAMS.get<double>("limit_pref_e");
-    parameters_info->start_pref_f = PARAMS.get<double>("start_pref_f");
-    parameters_info->limit_pref_f = PARAMS.get<double>("limit_pref_f");
+    parameters_info->decay_rate = PARAMS.get<float>("decay_rate");
+    parameters_info->start_pref_e = PARAMS.get<float>("start_pref_e");
+    parameters_info->limit_pref_e = PARAMS.get<float>("limit_pref_e");
+    parameters_info->start_pref_f = PARAMS.get<float>("start_pref_f");
+    parameters_info->limit_pref_f = PARAMS.get<float>("limit_pref_f");
     parameters_info->check_step = PARAMS.get<int>("check_step");
     parameters_info->check_batch = -1;
     parameters_info->check_epoch = -1;

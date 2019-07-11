@@ -1,6 +1,0 @@
-#Make sure libANN.so exists in the ../c/ directory.
-#If libANN.so has not been built, execute "make lib" in the ../c/ directory.
-mkdir build
-cd build
-cmake -DCMAKE_PREFIX_PATH=/path/to/libtorch ..
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path/to/libANN.so

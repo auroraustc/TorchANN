@@ -26,24 +26,24 @@ Utilities functions.
 #define PI 3.141592653589793238462643383279
 
 
-double s_r(double r_ij, parameters_info_struct * parameters_info)
+float s_r(float r_ij, parameters_info_struct * parameters_info)
 {
-    double result;
-    double rc = parameters_info->cutoff_2;
-    double rcs = parameters_info->cutoff_1;
+    float result;
+    float rc = parameters_info->cutoff_2;
+    float rcs = parameters_info->cutoff_1;
     result = (r_ij >= rc) ? 0 : ((r_ij >= rcs) ? 1 / r_ij * (0.5 * cos((r_ij - rcs) / (rc - rcs) * PI) + 0.5) : 1 / r_ij);
     return result;
 }
 
-double fastpow2(double number, int dummy)
+float fastpow2(float number, int dummy)
 {
     return number * number;
 }
 
-double fastpown(double number, int power)
+float fastpown(float number, int power)
 {
     int i;
-    double result = 1;
+    float result = 1;
     int N = power;
     if (power == 0)
     {
@@ -68,41 +68,41 @@ double fastpown(double number, int power)
     
 }
 
-double f_c(double r_ij, double r_c)
+float f_c(float r_ij, float r_c)
 {
-    double result;
-    double rc = r_c;
+    float result;
+    float rc = r_c;
     result = (r_ij <= rc) ? 0.5 * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) : 0;
     return result;
 }
 
-double d_f_c_d_r(double r_ij, double r_c)
+float d_f_c_d_r(float r_ij, float r_c)
 {
-    double result;
-    double rc = r_c;
+    float result;
+    float rc = r_c;
     result = (r_ij <= rc) ? (-3.0 / cosh(1 - r_ij / rc) / cosh(1 - r_ij / rc) * tanh(1 - r_ij / rc) * tanh(1 - r_ij / rc) / 2.0 / rc ) : (0);
     return result;
 }
 
-double R_sup_n(double r_ij, double n, double r_c)
+float R_sup_n(float r_ij, float n, float r_c)
 {
-    double f_c(double r_ij, double r_c);
+    float f_c(float r_ij, float r_c);
 
-    double result;
+    float result;
     return fastpown(r_ij, (int)n) * f_c(r_ij, r_c);
 }
 
-double d_R_sup_n_d_r(double r_ij, double n, double r_c)
+float d_R_sup_n_d_r(float r_ij, float n, float r_c)
 {
-    double f_c(double r_ij, double r_c);
-    double d_f_c_d_r(double r_ij, double r_c);
-    double result;
+    float f_c(float r_ij, float r_c);
+    float d_f_c_d_r(float r_ij, float r_c);
+    float result;
 
     result = n * fastpown(r_ij, (int)(n - 1)) * f_c(r_ij, r_c) + fastpown(r_ij, (int)n) * d_f_c_d_r(r_ij, r_c);
     return result;
 }
 
-double factorial(int n)
+float factorial(int n)
 {
     if (n < 0)
     {
@@ -112,9 +112,9 @@ double factorial(int n)
     return ((n == 0)||(n == 1)) ? 1 : factorial(n - 1) * n;
 }
 
-/*double P_LM(double x, int l, int m)
+/*float P_LM(float x, int l, int m)
 {
-    double factorial(int n);
+    float factorial(int n);
 
     if (m < 0)
     {
@@ -225,45 +225,45 @@ double factorial(int n)
     }
 }*/
 
-/*double complex Y_LM(double * r_ij, int l, int m)//here r_ij is a vector
+/*float complex Y_LM(float * r_ij, int l, int m)//here r_ij is a vector
 {
-    double P_LM(double cos_theta, int l, int m);
-    double factorial(int n);
+    float P_LM(float cos_theta, int l, int m);
+    float factorial(int n);
 
-    double complex result;
-    double theta, phi;
-    double r = sqrt(r_ij[0] * r_ij[0] + r_ij[1] * r_ij[1] + r_ij[2] * r_ij[2]);
+    float complex result;
+    float theta, phi;
+    float r = sqrt(r_ij[0] * r_ij[0] + r_ij[1] * r_ij[1] + r_ij[2] * r_ij[2]);
     theta = acos(r_ij[2] / r);
     phi = atan(r_ij[1] / r_ij[0]);
     result = sqrt((2 * l + 1) / (4 * PI) * factorial(l - m) / factorial(l + m)) * P_LM(cos(theta), l, m) * cexp(m * phi * I);
     return result;
 }*/
-
-double Y_LM_r(double * coord_ij, int L, int m)//here L is n of the boost::math::spherical_harmonics
+#ifdef LASP
+float Y_LM_r(float * coord_ij, int L, int m)//here L is n of the boost::math::spherical_harmonics
 {
-    double theta, phi;
-    double r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
-    double result_r;
+    float theta, phi;
+    float r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
+    float result_r;
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
     result_r = boost::math::spherical_harmonic_r(L, m, theta, phi);
     return result_r;
 }
-double Y_LM_i(double * coord_ij, int L, int m)//here L is n of the boost::math::spherical_harmonics
+float Y_LM_i(float * coord_ij, int L, int m)//here L is n of the boost::math::spherical_harmonics
 {
-    double theta, phi;
-    double r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
-    double result_i;
+    float theta, phi;
+    float r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
+    float result_i;
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
     result_i = boost::math::spherical_harmonic_i(L, m, theta, phi);
     return result_i;
 }
-std::complex<double> Y_LM(double * coord_ij, int L, int m)
+std::complex<float> Y_LM(float * coord_ij, int L, int m)
 {
-    double theta, phi;
-    double r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
-    std::complex<double> result;
+    float theta, phi;
+    float r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
+    std::complex<float> result;
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
     if (phi < 0)
@@ -274,12 +274,12 @@ std::complex<double> Y_LM(double * coord_ij, int L, int m)
     result = boost::math::spherical_harmonic(L, m, theta, phi);
     return result;
 }
-std::complex<double> d_Y_LM_d_theta(double * coord_ij, int L, int m)
+std::complex<float> d_Y_LM_d_theta(float * coord_ij, int L, int m)
 {
-    double theta, phi;
-    double r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
-    std::complex<double> result;
-    std::complex<double> I(0.0, 1.0);
+    float theta, phi;
+    float r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
+    std::complex<float> result;
+    std::complex<float> I(0.0, 1.0);
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
     if (phi < 0)
@@ -287,15 +287,15 @@ std::complex<double> d_Y_LM_d_theta(double * coord_ij, int L, int m)
         phi += (2 * PI);
     }
     /*\partial Y/\partial \theta = m * cot(\theta) * Y_LM(\theta, \phi) + \sqrt((L-m) * (L + m + 1)) * exp(- I * \phi) * Y_L(M+1)(\theta, \phi)*/
-    result = m * tan((double)PI / 2.0 - theta) * boost::math::spherical_harmonic(L, m, theta, phi) + sqrt((L-m) * (L + m + 1)) * exp(-I * phi) * boost::math::spherical_harmonic(L, m + 1, theta, phi);
+    result = m * tan((float)PI / 2.0 - theta) * boost::math::spherical_harmonic(L, m, theta, phi) + sqrt((L-m) * (L + m + 1)) * exp(-I * phi) * boost::math::spherical_harmonic(L, m + 1, theta, phi);
     return result;
 }
-std::complex<double> d_Y_LM_d_phi(double * coord_ij, int L, int m)
+std::complex<float> d_Y_LM_d_phi(float * coord_ij, int L, int m)
 {
-    double theta, phi;
-    double r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
-    std::complex<double> result;
-    std::complex<double> I(0.0, 1.0);
+    float theta, phi;
+    float r = sqrt(coord_ij[0] * coord_ij[0] + coord_ij[1] * coord_ij[1] + coord_ij[2] * coord_ij[2]);
+    std::complex<float> result;
+    std::complex<float> I(0.0, 1.0);
     theta = acos(coord_ij[2] / r);
     phi = atan(coord_ij[1] / coord_ij[0]);
     if (phi < 0)
@@ -303,17 +303,17 @@ std::complex<double> d_Y_LM_d_phi(double * coord_ij, int L, int m)
         phi += (2 * PI);
     }
     /*\partial Y/\partial \phi = I * m * Y_LM(\theta, \phi)*/
-    result = I * (double)m * boost::math::spherical_harmonic(L, m, theta, phi);
+    result = I * (float)m * boost::math::spherical_harmonic(L, m, theta, phi);
     return result;
 }
 
-double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k)//centered at i
+float cos_bond_angle(float * coord_i, float * coord_j, float * coord_k)//centered at i
 {
-    double coord_ji[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
-    double coord_ki[3];
-    double norm_ji, norm_ki;//norm = (x^2 + y^2 + z^2)
-    double dot_jiki = 0;
-    double result = 0;
+    float coord_ji[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
+    float coord_ki[3];
+    float norm_ji, norm_ki;//norm = (x^2 + y^2 + z^2)
+    float dot_jiki = 0;
+    float result = 0;
     int i, j, k;
     norm_ji =0; norm_ki = 0;
     for (i = 0; i <= 2; i++)
@@ -328,16 +328,16 @@ double cos_bond_angle(double * coord_i, double * coord_j, double * coord_k)//cen
     result = dot_jiki / sqrt(norm_ji * norm_ki);
     return result;
 }
-int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * result)
+int d_cos_bond_angle_d_coord(float * coord_i, float * coord_j, float * coord_k, float * result)
 {
-    double fastpown(double number, int power);
+    float fastpown(float number, int power);
 
-    double coord_ji[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
-    double coord_ki[3];
-    double norm_ji = 0;
-    double norm_ki = 0;//norm = (x^2 + y^2 + z^2)
-    double dot_jiki = 0;
-    //double result = 0;
+    float coord_ji[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
+    float coord_ki[3];
+    float norm_ji = 0;
+    float norm_ki = 0;//norm = (x^2 + y^2 + z^2)
+    float dot_jiki = 0;
+    //float result = 0;
     int i, j, k;
     //norm_ji =0; norm_ki = 0;
     for (i = 0; i <= 2; i++)
@@ -348,8 +348,8 @@ int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_
         norm_ki += (coord_ki[i] * coord_ki[i]);
         dot_jiki += (coord_ji[i] * coord_ki[i]);
     }
-    double dist_ji = sqrt(norm_ji);
-    double dist_ki = sqrt(norm_ki);
+    float dist_ji = sqrt(norm_ji);
+    float dist_ki = sqrt(norm_ki);
     /*dxi, yi, zi, xj, yj, zj, xk, yk, zk*/
     result[0] = (- coord_ji[0] - coord_ki[0]) / (dist_ji * dist_ki) - (dot_jiki * (- 2 * coord_ki[0] * norm_ji - 2 * coord_ji[0] * norm_ki)) / ( 2 * fastpown((dist_ji * dist_ki), 3));
     result[1] = (- coord_ji[1] - coord_ki[1]) / (dist_ji * dist_ki) - (dot_jiki * (- 2 * coord_ki[1] * norm_ji - 2 * coord_ji[1] * norm_ki)) / ( 2 * fastpown((dist_ji * dist_ki), 3));
@@ -365,28 +365,28 @@ int d_cos_bond_angle_d_coord(double * coord_i, double * coord_j, double * coord_
 }
 
 
-int cross_prod(double * vec1, double * vec2, double * vec_result)
+int cross_prod(float * vec1, float * vec2, float * vec_result)
 {
     vec_result[0] = (vec1[1] * vec2[2] - vec1[2] * vec2[1]);
     vec_result[1] = (vec1[2] * vec2[0] - vec1[0] * vec2[2]);
     vec_result[2] = (vec1[0] * vec2[1] - vec1[1] * vec2[0]);
     return 0;
 }
-double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, double * coord_l)//centered at i and j, plane_ijk and plane_ijl
+float cos_dihedral_angle(float * coord_i, float * coord_j, float * coord_k, float * coord_l)//centered at i and j, plane_ijk and plane_ijl
 {
-    int cross_prod(double * vec1, double * vec2, double * vec_result);
+    int cross_prod(float * vec1, float * vec2, float * vec_result);
 
     /*Use coord_ki, ji to calculate norm_vec of plane_kij = ji \times ki; Use coord_ij, lj to calculate norm_vec of plane_ijl = ij \times lj*/
-    double coord_ki[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
-    double coord_ji[3];
-    double coord_ij[3];
-    double coord_lj[3];
-    double norm_vec_kij[3];
-    double norm_vec_ijl[3];
-    double norm_norm_vec_kij = 0;//norm = (x^2 + y^2 + z^2)
-    double norm_norm_vec_ijl = 0;
-    double dot_kij_ijl = 0;
-    double result;
+    float coord_ki[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
+    float coord_ji[3];
+    float coord_ij[3];
+    float coord_lj[3];
+    float norm_vec_kij[3];
+    float norm_vec_ijl[3];
+    float norm_norm_vec_kij = 0;//norm = (x^2 + y^2 + z^2)
+    float norm_norm_vec_ijl = 0;
+    float dot_kij_ijl = 0;
+    float result;
     int error_code;
     int i, j, k;
     for (i = 0; i <= 2; i++)
@@ -408,30 +408,30 @@ double cos_dihedral_angle(double * coord_i, double * coord_j, double * coord_k, 
     {
         return 999;
     }
-    result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((double)-1.0);
+    result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((float)-1.0);
     return result;
 }
 
-int d_cos_dihedral_angle_d_coord(double * coord_i, double * coord_j, double * coord_k, double * coord_l, double * result)//centered at i and j, plane_ijk and plane_ijl
+int d_cos_dihedral_angle_d_coord(float * coord_i, float * coord_j, float * coord_k, float * coord_l, float * result)//centered at i and j, plane_ijk and plane_ijl
 {
-    int cross_prod(double * vec1, double * vec2, double * vec_result);
+    int cross_prod(float * vec1, float * vec2, float * vec_result);
 
     /*Use coord_ki, ji to calculate norm_vec of plane_kij = ji \times ki; Use coord_ij, lj to calculate norm_vec of plane_ijl = ij \times lj*/
-    double coord_ki[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
-    double coord_ji[3];
-    double coord_ij[3];
-    double coord_lj[3];
-    double norm_vec_kij[3];
-    double norm_vec_ijl[3];
-    double norm_norm_vec_kij = 0;//norm = (x^2 + y^2 + z^2)
-    double norm_norm_vec_ijl = 0;
-    double dot_kij_ijl = 0;
-    double xi, yi, zi, xj, yj, zj, xk, yk, zk, xl, yl, zl;
+    float coord_ki[3];// In DeePMD type sym_coord, r_ji means r_(j - i). Here we keep the same.
+    float coord_ji[3];
+    float coord_ij[3];
+    float coord_lj[3];
+    float norm_vec_kij[3];
+    float norm_vec_ijl[3];
+    float norm_norm_vec_kij = 0;//norm = (x^2 + y^2 + z^2)
+    float norm_norm_vec_ijl = 0;
+    float dot_kij_ijl = 0;
+    float xi, yi, zi, xj, yj, zj, xk, yk, zk, xl, yl, zl;
     xi = coord_i[0]; yi = coord_i[1]; zi=coord_i[2];
     xj = coord_j[0]; yj = coord_j[1]; zj=coord_j[2];
     xk = coord_k[0]; yk = coord_k[1]; zk=coord_k[2];
     xl = coord_l[0]; yl = coord_l[1]; zl=coord_l[2];
-    //double result;
+    //float result;
     int error_code;
     int i, j, k;
     for (i = 0; i <= 2; i++)
@@ -462,7 +462,7 @@ int d_cos_dihedral_angle_d_coord(double * coord_i, double * coord_j, double * co
     result[9] = -((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(2*(-yi+yj)*(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl))+2*(zi-zj)*((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl)))*(-((-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk))*(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl)))-((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk))*((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl))-(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk))*(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl))))/(2.*pow((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)),1.5))+(-((-yi+yj)*(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk)))-(zi-zj)*((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk)))/sqrt((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)));
     result[10] = -((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(2*(xi-xj)*(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl))+2*(-zi+zj)*(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl)))*(-((-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk))*(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl)))-((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk))*((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl))-(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk))*(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl))))/(2.*pow((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)),1.5))+(-((xi-xj)*(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk)))-(-zi+zj)*(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk)))/sqrt((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)));
     result[11] = -((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(2*(-xi+xj)*((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl))+2*(yi-yj)*(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl)))*(-((-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk))*(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl)))-((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk))*((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl))-(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk))*(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl))))/(2.*pow((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)),1.5))+(-((-xi+xj)*((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk)))-(yi-yj)*(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk)))/sqrt((pow(-((-xi+xk)*(-yi+yj))+(-xi+xj)*(-yi+yk),2)+pow((-xi+xk)*(-zi+zj)+(xi-xj)*(-zi+zk),2)+pow(-((-yi+yk)*(-zi+zj))+(-yi+yj)*(-zi+zk),2))*(pow(-((-xj+xl)*(yi-yj))+(xi-xj)*(-yj+yl),2)+pow((-xj+xl)*(zi-zj)+(-xi+xj)*(-zj+zl),2)+pow(-((-yj+yl)*(zi-zj))+(yi-yj)*(-zj+zl),2)));
-    //result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((double)-1.0);
+    //result = dot_kij_ijl / sqrt(norm_norm_vec_kij * norm_norm_vec_ijl) * ((float)-1.0);
     return 0;
 }
 
@@ -546,35 +546,35 @@ int find_index_int(int target, int * array, int array_length)
     return index;
 }
 
-double **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_)
+float **** calloc_params_LASP(int dim1, int dim2, int ** dim3_, int ** dim4_)
 {
     int N_types_all_frame = dim1;
     int N_PTSD_types = dim2;
     int ** N_cutoff_radius = dim3_;
     int ** N_neigh_inter = dim4_;
     int i, j, k, l;
-    double **** result = NULL;
-    result = (double ****)calloc(dim1, sizeof(double ***));
+    float **** result = NULL;
+    result = (float ****)calloc(dim1, sizeof(float ***));
     for (i = 0; i <= dim1 - 1; i++)
     {
-        result[i] = (double ***)calloc(dim2, sizeof(double **));
+        result[i] = (float ***)calloc(dim2, sizeof(float **));
         for (j = 0 ; j <= dim2 - 1; j++)
         {
-            result[i][j] = (double **)calloc(N_cutoff_radius[i][j], sizeof(double *));
+            result[i][j] = (float **)calloc(N_cutoff_radius[i][j], sizeof(float *));
             for (k = 0; k <= N_cutoff_radius[i][j] - 1; k++)
             {
-                result[i][j][k] = (double *)calloc(N_neigh_inter[i][j], sizeof(double));
+                result[i][j][k] = (float *)calloc(N_neigh_inter[i][j], sizeof(float));
             }
         }
     }
     return result;
 }
 
-int free_params_LASP(double **** target, int dim1, int dim2, int ** dim3_, int ** dim4_)
+int free_params_LASP(float **** target, int dim1, int dim2, int ** dim3_, int ** dim4_)
 {
     return 1;
 }
-
+#endif
 int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info)
 {
     switch (sym_coord_type)
@@ -653,35 +653,35 @@ int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct
 
 }
 
-int cart_to_frac(double * cart, double box[3][3], double * frac)
+int cart_to_frac(float * cart, float box[3][3], float * frac)
 {
-    double a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
-    double denominator = (a1 * b2 * c3 + b1 * c2 * a3 + c1 * a2 * b3 - c1 * b2 * a3 - b1 * a2 * c2 - a1 * c2 * b3);
+    float a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
+    float denominator = (a1 * b2 * c3 + b1 * c2 * a3 + c1 * a2 * b3 - c1 * b2 * a3 - b1 * a2 * c2 - a1 * c2 * b3);
     if (denominator == 0)
     {
         return 1;//Two or more box vectors are parallel.
     }
     /*Don't forget the tranpose in the reverse-matrix formula!*/
-    double prefact = 1.0 / denominator;
-    double rev_a1 = prefact * (b2 * c3 - c2 * b3);
-    double rev_b1 = prefact * (c1 * b3 - b1 * c3);
-    double rev_c1 = prefact * (b1 * c2 - c1 * b2);
-    double rev_a2 = prefact * (c2 * a3 - a2 * c3);
-    double rev_b2 = prefact * (a1 * c3 - c1 * a3);
-    double rev_c2 = prefact * (c1 * a2 - a1 * c2);
-    double rev_a3 = prefact * (a2 * b3 - b2 * a3);
-    double rev_b3 = prefact * (b1 * a3 - a1 * b3);
-    double rev_c3 = prefact * (a1 * b2 - b1 * a2);
-    double x = cart[0], y = cart[1], z = cart[2];
+    float prefact = 1.0 / denominator;
+    float rev_a1 = prefact * (b2 * c3 - c2 * b3);
+    float rev_b1 = prefact * (c1 * b3 - b1 * c3);
+    float rev_c1 = prefact * (b1 * c2 - c1 * b2);
+    float rev_a2 = prefact * (c2 * a3 - a2 * c3);
+    float rev_b2 = prefact * (a1 * c3 - c1 * a3);
+    float rev_c2 = prefact * (c1 * a2 - a1 * c2);
+    float rev_a3 = prefact * (a2 * b3 - b2 * a3);
+    float rev_b3 = prefact * (b1 * a3 - a1 * b3);
+    float rev_c3 = prefact * (a1 * b2 - b1 * a2);
+    float x = cart[0], y = cart[1], z = cart[2];
     *frac = rev_a1 * x + rev_b1 * y + rev_c1 * z;
     *(frac + 1) = rev_a2 * x + rev_b2 * y + rev_c2 * z;
     *(frac + 2) = rev_a3 * x + rev_b3 * y + rev_c3 * z;
     return 0;
 }
-int frac_to_cart(double * cart, double box[3][3], double * frac)
+int frac_to_cart(float * cart, float box[3][3], float * frac)
 {
-    double a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
-    double x_ = frac[0], y_ = frac[1], z_ = frac[2];
+    float a1 = box[0][0], a2 = box[0][1], a3 = box[0][2], b1 = box[1][0], b2 = box[1][1], b3 = box[1][2], c1 = box[2][0], c2 = box[2][1], c3 = box[2][2];
+    float x_ = frac[0], y_ = frac[1], z_ = frac[2];
     *cart = a1 * x_ + b1 * y_ + c1 * z_;
     *(cart + 1) = a2 * x_ + b2 * y_ + c2 * z_;
     *(cart + 2) = a3 * x_ + b3 * y_ + c3 * z_;

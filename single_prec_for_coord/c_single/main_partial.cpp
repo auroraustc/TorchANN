@@ -42,7 +42,7 @@ int main()
     /*int free_sym_coord(void * sym_coord_, int sym_coord_type, parameters_info_struct * parameters_info);*/
     
     struct timeval start_main, end_main;
-    double t_main;//Unit: ms
+    float t_main;//Unit: ms
 
     int error_code = 1;
     int read_system_flag;

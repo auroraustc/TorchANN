@@ -190,7 +190,7 @@ int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_inf
     fp_energy = fopen("./ENERGY.BIN", "wb");
     for (i = 0; i <= parameters_info->Nframes_tot - 1; i++)
     {
-        fwrite(&(frame_info[i].energy), sizeof(double), 1, fp_energy);
+        fwrite(&(frame_info[i].energy), sizeof(float), 1, fp_energy);
     }
     fclose(fp_energy);
 
@@ -199,7 +199,7 @@ int save_to_file_energy_and_force(frame_info_struct * frame_info, parameters_inf
     {
         for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
-            fwrite(frame_info[i].force[j], sizeof(double), 3, fp_force);
+            fwrite(frame_info[i].force[j], sizeof(float), 3, fp_force);
         }
     }
     fclose(fp_force);
@@ -375,7 +375,7 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_DeePMD[i].coord_converted[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+            fwrite(sym_coord_DeePMD[i].coord_converted[j], sizeof(float), parameters_info->SEL_A_max * 4, fp_sym_coord);
         }
     }
     fclose(fp_sym_coord);
@@ -385,7 +385,7 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_DeePMD[i].d_to_center_x[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+            fwrite(sym_coord_DeePMD[i].d_to_center_x[j], sizeof(float), parameters_info->SEL_A_max * 4, fp_sym_coord);
         }
     }
     fclose(fp_sym_coord);
@@ -394,7 +394,7 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_DeePMD[i].d_to_center_y[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+            fwrite(sym_coord_DeePMD[i].d_to_center_y[j], sizeof(float), parameters_info->SEL_A_max * 4, fp_sym_coord);
         }
     }
     fclose(fp_sym_coord);
@@ -403,7 +403,7 @@ int save_to_file_sym_coord_DeePMD(void * sym_coord, parameters_info_struct * par
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_DeePMD[i].d_to_center_z[j], sizeof(double), parameters_info->SEL_A_max * 4, fp_sym_coord);
+            fwrite(sym_coord_DeePMD[i].d_to_center_z[j], sizeof(float), parameters_info->SEL_A_max * 4, fp_sym_coord);
         }
     }
     fclose(fp_sym_coord);
@@ -441,7 +441,7 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
     {
         for (j = 0; j <= N_Atoms_array[i] - 1; j++)
         {
-            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(double), parameters_info->N_sym_coord, fp_sym_coord);
+            fwrite(sym_coord_LASP[i].coord_converted[j], sizeof(float), parameters_info->N_sym_coord, fp_sym_coord);
         }
     }
     fclose(fp_sym_coord);
@@ -454,7 +454,7 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
         {
             for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
             {
-                fwrite(sym_coord_LASP[i].d_x[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+                fwrite(sym_coord_LASP[i].d_x[j][k], sizeof(float), N_Atoms_array[i], fp_sym_coord);
             }
         }
     }
@@ -466,7 +466,7 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
         {
             for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
             {
-                fwrite(sym_coord_LASP[i].d_y[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+                fwrite(sym_coord_LASP[i].d_y[j][k], sizeof(float), N_Atoms_array[i], fp_sym_coord);
             }
         }
     }
@@ -478,7 +478,7 @@ int save_to_file_sym_coord_LASP(void * sym_coord, parameters_info_struct * param
         {
             for (k = 0; k <= parameters_info->N_sym_coord - 1; k++)
             {
-                fwrite(sym_coord_LASP[i].d_z[j][k], sizeof(double), N_Atoms_array[i], fp_sym_coord);
+                fwrite(sym_coord_LASP[i].d_z[j][k], sizeof(float), N_Atoms_array[i], fp_sym_coord);
             }
         }
     }
@@ -519,7 +519,7 @@ int check_sym_coord_from_bin_DeePMD(parameters_info_struct * parameters_info)
     FILE * fp_sym_coord;
     FILE * fp_N_Atoms;
     int * N_Atoms_array = (int *)calloc(parameters_info->Nframes_tot, sizeof(int));
-    double * sym_coord_DeePMD;
+    float * sym_coord_DeePMD;
     int tot_atoms = 0;
     int offset = 0;
     int i, j, k;
@@ -532,9 +532,9 @@ int check_sym_coord_from_bin_DeePMD(parameters_info_struct * parameters_info)
     {
         tot_atoms += N_Atoms_array[i];
     }
-    sym_coord_DeePMD = (double *)calloc(tot_atoms * parameters_info->SEL_A_max * 4, sizeof(double));
+    sym_coord_DeePMD = (float *)calloc(tot_atoms * parameters_info->SEL_A_max * 4, sizeof(float));
     fp_sym_coord = fopen("./SYM_COORD.BIN", "rb");
-    fread(sym_coord_DeePMD, sizeof(double), tot_atoms * parameters_info->SEL_A_max * 4, fp_sym_coord);
+    fread(sym_coord_DeePMD, sizeof(float), tot_atoms * parameters_info->SEL_A_max * 4, fp_sym_coord);
     fclose(fp_sym_coord);
 
     printf_d("Check sym_coord from bin file of atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
@@ -570,7 +570,7 @@ int save_to_file_coord(frame_info_struct * frame_info, parameters_info_struct * 
     {
         for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
-            fwrite((frame_info[i].coord[j]), sizeof(double), 3, fp_coord);
+            fwrite((frame_info[i].coord[j]), sizeof(float), 3, fp_coord);
         }
     }
     fclose(fp_coord);
@@ -624,7 +624,7 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
     {
         for (j = 0; j <= frame_info[i].N_Atoms - 1; j++)
         {
-            fwrite(frame_info[i].neighbour_list[j].dist_neighbours, sizeof(double), parameters_info->SEL_A_max, fp_nei_dist);
+            fwrite(frame_info[i].neighbour_list[j].dist_neighbours, sizeof(float), parameters_info->SEL_A_max, fp_nei_dist);
         }
     }
     fclose(fp_nei_dist);

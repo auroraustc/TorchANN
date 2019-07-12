@@ -1,0 +1,9 @@
+Number of frames in total: 2
+**No error when reading raw data.**
+N_Atoms: 6
+N_Atoms: 6
+WARNING: num_fitting_layer   3 is not equal to the number of layers defined in fitting_neuron   4 !
+**No error when reading parameters.**
+**No error when extending each frame.**
+**No error when counting types.**
+!!Error: Number of SEL_As in the SEL_A_ele parameter is different from the number of types in the training set! You need to provide exactly one SEL_A for each element!

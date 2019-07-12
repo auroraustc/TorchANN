@@ -1,0 +1,139 @@
+cuDNN version:  7401
+Number of GPUs:  1
+Using /tmp/torch_extensions as PyTorch extensions root...
+Detected CUDA files, patching ldflags
+Emitting ninja build file /tmp/torch_extensions/test_from_cpp/build.ninja...
+Building extension module test_from_cpp...
+ninja: no work to do.
+Loading extension module test_from_cpp...
+All parameters:
+>>> cutoff_1: 7.700000e+00
+>>> cutoff_2: 8.000000e+00
+>>> cutoff_3: 0.000000e+00
+>>> cutoff_max: 8.000000e+00
+>>> N_types_all_frame:  2
+>>> type_index_all_frame: [15, 79]
+>>> N_Atoms_max: 16
+>>> SEL_A_max: 301
+>>> Nframes_tot:  1
+>>> sym_coord_type:  1
+>>> N_sym_coord: 1204
+>>> batch_size:  1
+>>> stop_epoch:  1
+>>> num_filter_layer:  3
+>>> filter_neuron: [46, 87, 29]
+>>> axis_neuron: 13
+>>> num_fitting_layer:  4
+>>> fitting_neuron: [278, 112, 51, 96]
+>>> start_lr: 5.000000e-04
+>>> (Not used)decay_steps: -1
+>>> decay_epoch:  1
+>>> decay_rate: 9.500000e-01
+>>> start_pref_e: 1.000000e+00
+>>> limit_pref_e: 1.000000e+00
+>>> start_pref_f: 1.000000e+04
+>>> limit_pref_f: 1.000000e+00
+>>> check_step: 1000
+>>> output_epoch: 10
+>>> save_epoch: 10
+
+Total number of frames:  1
+Number of atoms aligned:  16
+COORD_Reshape: shape =  (1, 48)
+FORCE_Reshape: shape =  (1, 48)
+TYPE_Reshape: shape =  (1, 16)
+NEI_IDX_Reshape: shape =  (1, 4816)
+NEI_COORD_Reshape: shape =  (1, 14448)
+NEI_TYPE_Reshape: shape =  (4816,)
+Data pre-processing complete. Building net work.
+
+one_batch_net(
+  (batch_norm): BatchNorm1d(16, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (filter_input): ModuleList(
+    (0): ModuleList(
+      (0): Linear(in_features=1, out_features=46, bias=True)
+      (1): Linear(in_features=1, out_features=46, bias=True)
+    )
+    (1): ModuleList(
+      (0): Linear(in_features=1, out_features=46, bias=True)
+      (1): Linear(in_features=1, out_features=46, bias=True)
+    )
+  )
+  (filter_hidden): ModuleList(
+    (0): ModuleList(
+      (0): ModuleList(
+        (0): Linear(in_features=46, out_features=87, bias=True)
+        (1): Linear(in_features=87, out_features=29, bias=True)
+      )
+      (1): ModuleList(
+        (0): Linear(in_features=46, out_features=87, bias=True)
+        (1): Linear(in_features=87, out_features=29, bias=True)
+      )
+    )
+    (1): ModuleList(
+      (0): ModuleList(
+        (0): Linear(in_features=46, out_features=87, bias=True)
+        (1): Linear(in_features=87, out_features=29, bias=True)
+      )
+      (1): ModuleList(
+        (0): Linear(in_features=46, out_features=87, bias=True)
+        (1): Linear(in_features=87, out_features=29, bias=True)
+      )
+    )
+  )
+  (fitting_input): ModuleList(
+    (0): Linear(in_features=377, out_features=278, bias=True)
+    (1): Linear(in_features=377, out_features=278, bias=True)
+  )
+  (fitting_hidden): ModuleList(
+    (0): ModuleList(
+      (0): Linear(in_features=278, out_features=112, bias=True)
+      (1): Linear(in_features=112, out_features=51, bias=True)
+      (2): Linear(in_features=51, out_features=96, bias=True)
+    )
+    (1): ModuleList(
+      (0): Linear(in_features=278, out_features=112, bias=True)
+      (1): Linear(in_features=112, out_features=51, bias=True)
+      (2): Linear(in_features=51, out_features=96, bias=True)
+    )
+  )
+  (fitting_out): ModuleList(
+    (0): Linear(in_features=96, out_features=1, bias=True)
+    (1): Linear(in_features=96, out_features=1, bias=True)
+  )
+)
+Number of parameters in the net: 321332
+Start training using device:  cuda , count:  1
+LR update: lr = 0.000500
+Force check:
+ tensor([[ 7.7988598222e-03, -1.2858787678e-02, -2.2720618355e-04,
+          3.2930497252e-04,  5.7851648490e-03, -3.5297023528e-05,
+         -8.5172129340e-03, -5.6592725423e-03,  4.8423466846e-03,
+          3.0711885990e-03,  1.3015551220e-03,  1.1062327205e-02,
+          5.7622001362e-03, -2.0161325642e-03, -5.5864695780e-04,
+         -1.0422955309e-02, -4.8925060455e-03, -5.8545587703e-03,
+         -5.8906995783e-04, -9.2003758468e-03,  5.2214747869e-03,
+          1.6351233977e-03,  5.9648351164e-03, -2.0280696373e-03,
+         -2.8246448152e-03,  7.3720080668e-03, -3.4970124016e-03,
+          4.5248035104e-03, -4.1256572652e-03, -9.8058112257e-04,
+         -8.0276983494e-03, -4.2884617950e-03, -4.3431790657e-03,
+          1.1803245034e-02,  4.9903098357e-03, -4.5546357968e-03,
+         -1.3634883651e-04,  1.2123319328e-02, -7.3917970266e-03,
+          2.6979161419e-03, -3.5762083793e-03,  6.9527665583e-04,
+          1.5454942249e-03, -1.3344563639e-03,  3.9595448123e-03,
+         -8.6502056374e-03,  1.0414666162e-02,  3.6900138409e-03]],
+       device='cuda:0')
+Additional parameters check:
+ std:
+ tensor([[[0.0850862741, 0.0538603853, 0.0538603853, 0.0538603853],
+         [0.0834543338, 0.0531116876, 0.0531116876, 0.0531116876]]],
+       device='cuda:0') 
+avg:
+ tensor([[[0.0383390749, 0.0000000000, 0.0000000000, 0.0000000000],
+         [0.0388335690, 0.0000000000, 0.0000000000, 0.0000000000]]],
+       device='cuda:0') 
+use_std_avg True
+Epoch: 0         , Batch: 0         , lossE:   3.737016 eV/atom, lossF:   0.378474 eV/A, time:      0.035 s
+Rank 0: Model saved to ./freeze_model.pytorch
+Training complete. Time elapsed:      0.039 s
+

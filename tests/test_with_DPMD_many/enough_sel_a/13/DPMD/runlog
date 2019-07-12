@@ -1,0 +1,644 @@
+2019-07-12 22:33:23.280206: I tensorflow/core/platform/cpu_feature_guard.cc:140] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2019-07-12 22:33:23.312870: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:898] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-07-12 22:33:23.313122: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1356] Found device 0 with properties: 
+name: GeForce GTX TITAN major: 3 minor: 5 memoryClockRate(GHz): 0.98
+pciBusID: 0000:01:00.0
+totalMemory: 5.94GiB freeMemory: 5.43GiB
+2019-07-12 22:33:23.313137: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2019-07-12 22:33:23.490451: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-07-12 22:33:23.490491: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
+2019-07-12 22:33:23.490497: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
+2019-07-12 22:33:23.490580: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5223 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN, pci bus id: 0000:01:00.0, compute capability: 3.5)
+# DEEPMD:  _____               _____   __  __  _____           _     _  _   
+# DEEPMD: |  __ \             |  __ \ |  \/  ||  __ \         | |   (_)| |  
+# DEEPMD: | |  | |  ___   ___ | |__) || \  / || |  | | ______ | | __ _ | |_ 
+# DEEPMD: | |  | | / _ \ / _ \|  ___/ | |\/| || |  | ||______|| |/ /| || __|
+# DEEPMD: | |__| ||  __/|  __/| |     | |  | || |__| |        |   < | || |_ 
+# DEEPMD: |_____/  \___| \___||_|     |_|  |_||_____/         |_|\_\|_| \__|
+# DEEPMD: 
+# DEEPMD: Please read and cite:
+# DEEPMD: Wang, Zhang, Han and E, Comput.Phys.Comm. 228, 178-184 (2018)
+# DEEPMD: 
+# DEEPMD: ---Summary of the training---------------------------------------
+# DEEPMD: installed to:       /home/aurora/Softwares/deepmd
+# DEEPMD: source :            v0.12.1
+# DEEPMD: source brach:       master
+# DEEPMD: source commit:      5caff7d
+# DEEPMD: source commit at:   2018-12-06 11:03:13 +0800
+# DEEPMD: build float prec:   double
+# DEEPMD: build with tf inc:  /home/aurora/Softwares/tensorflow-1.8/include
+# DEEPMD: build with tf lib:  /home/aurora/Softwares/tensorflow-1.8/lib/libtensorflow_cc.so
+# DEEPMD:                     /home/aurora/Softwares/tensorflow-1.8/lib/libtensorflow_framework.so
+# DEEPMD: running on:         aurora-System-Product-Name
+# DEEPMD: gpu per node:       None
+# DEEPMD: num_inter_threads:  1
+# DEEPMD: num_intra_threads:  1
+# DEEPMD: -----------------------------------------------------------------
+# DEEPMD: 
+# DEEPMD: ---Summary of DataSystem-----------------------------------------
+# DEEPMD: find 1 system(s):
+# DEEPMD:                                     system  natoms  bch_sz  n_bch
+# DEEPMD:                                   systems/       8       2      1
+# DEEPMD: -----------------------------------------------------------------
+# DEEPMD: 
+2019-07-12 22:33:23.500101: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2019-07-12 22:33:23.500130: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-07-12 22:33:23.500136: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
+2019-07-12 22:33:23.500141: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
+2019-07-12 22:33:23.500189: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5223 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN, pci bus id: 0000:01:00.0, compute capability: 3.5)
+mesh: [array([0, 0, 0, 2, 2, 3], dtype=int32)]
+descrpt_deriv.shape: (2, 49920)
+d_all: [[0. 0. 0. ... 0. 0. 0.]
+ [0. 0. 0. ... 0. 0. 0.]] (2, 16640)
+Start, end 0 0
+dd: []
+deriv_debug_cur_type: []
+ddr: []
+dda: []
+from inside:sumr, suma, sumn, sumr2, suma2 0.0 0.0 0 0.0 0.0
+Start, end 0 16640
+dd: [[0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]]
+deriv_debug_cur_type: [[0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]
+ [0. 0. 0. 0.]]
+ddr: [[0.]
+ [0.]
+ [0.]
+ ...
+ [0.]
+ [0.]
+ [0.]]
+dda: [[0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]
+ ...
+ [0. 0. 0.]
+ [0. 0. 0.]
+ [0. 0. 0.]]
+from inside:sumr, suma, sumn, sumr2, suma2 119.41968767662743 8.881784197001252e-16 8320 27.523366792322705 9.174455597440899
+sumr, suma, sumn, sumr2, suma2 first: [[0.0, 119.41968767662743]] [[0.0, 8.881784197001252e-16]] [[0, 8320]] [[0.0, 27.523366792322705]] [[0.0, 9.174455597440899]]
+sumr, suma, sumn, sumr2, suma2: [  0.         119.41968768] [0.0000000e+00 8.8817842e-16] [   0 8320] [ 0.         27.52336679] [0.        9.1744556]
+ntypes: 2
+dstdunit: [nan, nan, nan, nan]
+davgunit: [nan, 0, 0, 0]
+ntypes: 2
+dstdunit: [0.05569631002125325, 0.033206911781691335, 0.033206911781691335, 0.033206911781691335]
+davgunit: [0.01435332784574849, 0, 0, 0]
+# DEEPMD: computed coord/descrpt stats
+sys_tynatom [[0. 8.]]
+sys_ener [-21.479056]
+Energy_shift: [ 0.       -2.684882]
+# DEEPMD: computed energy bias
+dstd: [[       nan        nan        nan ...        nan        nan        nan]
+ [0.05569631 0.03320691 0.03320691 ... 0.03320691 0.03320691 0.03320691]]
+# DEEPMD: built lr
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg -2.684882
+bias_energy_e [ 0.       -2.684882]
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg -2.684882
+bias_energy_e [ 0.       -2.684882]
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 100 1 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 29 100 b:stddev 1.0 bavg 0.0
+DS_LAYER: w:stddev 1.0 outputs_size: 87 29 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 87 279 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 279 165 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 165 100 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 100 81 b:stddev 1.0 bavg 0.0
+ONE_LAYER: w:stddev 1.0 outputs_size: 81 1 b:stddev 1.0 bavg -2.684882
+bias_energy_e [ 0.       -2.684882]
+dddddddddddddddddddd
+0
+# DEEPMD: built network
+(1, 100)
+(1, 100)
+(100, 29)
+(1, 29)
+(29, 87)
+(1, 87)
+(1, 100)
+(1, 100)
+(100, 29)
+(1, 29)
+(29, 87)
+(1, 87)
+(87, 279)
+(279,)
+(279, 165)
+(165,)
+(165, 100)
+(100,)
+(100, 81)
+(81,)
+(81, 1)
+(1,)
+(1, 100)
+(1, 100)
+(100, 29)
+(1, 29)
+(29, 87)
+(1, 87)
+(1, 100)
+(1, 100)
+(100, 29)
+(1, 29)
+(29, 87)
+(1, 87)
+(87, 279)
+(279,)
+(279, 165)
+(165,)
+(165, 100)
+(100,)
+(100, 81)
+(81,)
+(81, 1)
+(1,)
+total number of trainable variables:  214186
+# DEEPMD: built training
+2019-07-12 22:33:25.820111: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1435] Adding visible gpu devices: 0
+2019-07-12 22:33:25.820153: I tensorflow/core/common_runtime/gpu/gpu_device.cc:923] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-07-12 22:33:25.820159: I tensorflow/core/common_runtime/gpu/gpu_device.cc:929]      0 
+2019-07-12 22:33:25.820164: I tensorflow/core/common_runtime/gpu/gpu_device.cc:942] 0:   N 
+2019-07-12 22:33:25.820212: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1053] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 5223 MB memory) -> physical GPU (device: 0, name: GeForce GTX TITAN, pci bus id: 0000:01:00.0, compute capability: 3.5)
+# DEEPMD: initialize model from scratch
+# DEEPMD: start training at lr 5.00e-04 (== 5.00e-04), final lr will be 5.00e-04
+Check from c std:1.000000
+Check from c std:1.000000
+Check from c std:-nan
+force_hat_reshape: [[-0.00060362509691795814 -0.00046317369657233149 0.0022342371488376631 -0.00082578962264658062 -0.0001946308050561005 0.003482553762243512 0.0015856585865802381 -0.0024250121698042582][-0.00357052189128884 0.00075432983729564946 0.0019668093794233243 0.0034925457054078143 0.00030934834141481816 0.00015783857922814802 1.4440101439377647e-05 -0.00034580799808569125][0.000689110673460176 -0.001916869951725848 -0.00085040478067590893 0.00042804498622907387 -0.0036745881703191857 -2.370926696456584e-05 -0.0001589869469080307 -6.1796704594496859e-05]]
+l2_force_loss:[0.0080855609300982036]
+Check from c std:-nan
+force_hat_reshape: [[-0.00060362509691795814 -0.00046317369657233149 0.0022342371488376631 -0.00082578962264658062 -0.0001946308050561005 0.003482553762243512 0.0015856585865802381 -0.0024250121698042582 -0.00357052189128884 0.00075432983729564946 0.0019668093794233243 0.0034925457054078143 0.00030934834141481816 0.00015783857922814802 1.4440101439377647e-05 -0.00034580799808569125][0.000689110673460176 -0.001916869951725848 -0.00085040478067590893 0.00042804498622907387 -0.0036745881703191857 -2.370926696456584e-05 -0.0001589869469080307 -6.1796704594496859e-05 -0.00028324709606502337 -0.00050832210122518293 0.0021808246598772419 0.00031932478794419151 0.0011426910947993534 -0.0022672527980892769 0.00039029301794972656 0.00031638012916441994][0.0026847571151262591 -0.00064718716481754906 -6.763636798525473e-07 -0.0037520416450651673 -0.00050017982178119573 -0.0008959138262013129 -0.0035429400307731935 0.00083198361495034109 -0.00016094898861443733 0.003567307582460255 -0.00019664284960851391 0.00010210148784530841 0.0020200312064772752 8.5655511428022631e-05 4.6885679117041059e-06 -0.00089068609001338934]]
+l2_force_loss:[0.024327352155703794]
+Check l2_l_bch from optimizer[57.697898794602878]
+2019-07-12 22:33:27.291856: I tensorflow/stream_executor/dso_loader.cc:152] successfully opened CUDA library libcupti.so.9.0 locally
+Check from c std:-nan
+force_hat_reshape: [[-0.00060362509691795814 -0.00046317369657233149 0.0022342371488376631 -0.00082578962264658062 -0.0001946308050561005 0.003482553762243512 0.0015856585865802381 -0.0024250121698042582 -0.00357052189128884 0.00075432983729564946 0.0019668093794233243 0.0034925457054078143 0.00030934834141481816 0.00015783857922814802 1.4440101439377647e-05 -0.00034580799808569125][0.000689110673460176 -0.001916869951725848 -0.00085040478067590893 0.00042804498622907387 -0.0036745881703191857 -2.370926696456584e-05 -0.0001589869469080307 -6.1796704594496859e-05 -0.00028324709606502337 -0.00050832210122518293 0.0021808246598772419 0.00031932478794419151 0.0011426910947993534 -0.0022672527980892769 0.00039029301794972656 0.00031638012916441994][0.0026847571151262591 -0.00064718716481754906 -6.763636798525473e-07 -0.0037520416450651673 -0.00050017982178119573 -0.0008959138262013129 -0.0035429400307731935 0.00083198361495034109 -0.00016094898861443733 0.003567307582460255 -0.00019664284960851391 0.00010210148784530841 0.0020200312064772752 8.5655511428022631e-05 4.6885679117041059e-06 -0.00089068609001338934]]
+Check from c std:-nan
+force_hat_reshape: [[-0.00063387040111712544 -0.00021456337480348615 0.00170262549714017 -0.00069645684672972326 -0.0005742992946863206 0.0026531355855935672 0.0014645132419654771 -0.0020384328750295412][-0.0027771928704352312 0.00070387000038017765 0.00161033655946437 0.0027313548799353894 0.00026166414626864975 0.00036541414877839666 2.6737138943477426e-05 -0.00037971794571911121][0.00047070739192075031 -0.0014311761919946842 -0.00068410005130012472 0.00074492347429681394 -0.0028408093924719253 -3.5902143748221554e-05 -0.00036408602994098368 -6.467464671076011e-05]]
+l2_force_loss:[0.0080986648620780376]
+Check from c std:-nan
+force_hat_reshape: [[-0.00063387040111712544 -0.00021456337480348615 0.00170262549714017 -0.00069645684672972326 -0.0005742992946863206 0.0026531355855935672 0.0014645132419654771 -0.0020384328750295412 -0.0027771928704352312 0.00070387000038017765 0.00161033655946437 0.0027313548799353894 0.00026166414626864975 0.00036541414877839666 2.6737138943477426e-05 -0.00037971794571911121][0.00047070739192075031 -0.0014311761919946842 -0.00068410005130012472 0.00074492347429681394 -0.0028408093924719253 -3.5902143748221554e-05 -0.00036408602994098368 -6.467464671076011e-05 -0.00037089853824783848 -0.00037741792691082171 0.0017528988658005366 0.0002414330732324141 0.00088001858547974551 -0.0018165751227567342 0.00039147484720795055 0.00023932481423297045][0.00213508422917643 -0.000593542088809234 -8.46374445909386e-05 -0.0028591419892369362 -0.00035857105667178138 -0.00082698710709005574 -0.0028164476935397596 0.00081958045782584525 -3.394132222378397e-05 0.0027787624119264272 -0.00014416252569109564 0.00019709320733687845 0.0015645093682978891 1.4685831153739574e-05 6.5471937660037975e-06 -0.000739090069667851]]
+l2_force_loss:[0.024338557541264082]
+Check l2_l_bch from optimizer[55.218207617397411]
+# DEEPMD: batch       1 training time 0.74 s, testing time 0.28 s
+# DEEPMD: saved checkpoint model.ckpt
+Start L-BFGS
+0
+# DEEPMD: finished training
+# DEEPMD: wall time: 2.282 s
+/home/aurora/PycharmProjects/deepmd_analysis/deepmd_test/bin/../lib/deepmd/Model.py:888: RuntimeWarning: invalid value encountered in double_scalars
+  davgunit = [sumr[type_i]/sumn[type_i], 0, 0, 0]
+/home/aurora/PycharmProjects/deepmd_analysis/deepmd_test/bin/../lib/deepmd/Model.py:848: RuntimeWarning: invalid value encountered in double_scalars
+  return np.sqrt(sumv2/sumn - np.multiply(sumv/sumn, sumv/sumn))

@@ -231,7 +231,7 @@ int main()
     printf_d("Check from main(): neighbour list of frame %d atom %d:\n", DEBUG_FRAME, DEBUG_ATOM);
     for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
     {
-        printf_d("atom idx %d type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].index_neighbours[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
+        printf_d("atom idx %d type %d coord %.3lf %.3lf %.3lf\n", frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].index_neighbours[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].type[i], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 0], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 1], frame_info[DEBUG_FRAME].neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 2]);
     }
 
     /*sym_coord_type = parameters_info->sym_coord_type;
@@ -338,7 +338,7 @@ int main()
             free(frame_info[i].force[j]);
             for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
             {
-                free(frame_info[i].neighbour_list[j].coord_neighbours[k]);
+                //free(frame_info[i].neighbour_list[j].coord_neighbours[k]);
             }
             free(frame_info[i].neighbour_list[j].coord_neighbours);
             free(frame_info[i].neighbour_list[j].type);

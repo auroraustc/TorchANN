@@ -1,2 +1,0 @@
-model_checkpoint_path: "/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/tests/test_with_DPMD_many/enough_sel_a/2/DPMD/model.ckpt"
-all_model_checkpoint_paths: "/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/tests/test_with_DPMD_many/enough_sel_a/2/DPMD/model.ckpt"

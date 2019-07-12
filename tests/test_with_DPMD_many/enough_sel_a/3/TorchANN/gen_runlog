@@ -1,8 +1,7 @@
-Number of frames in total: 3
+Number of frames in total: 2
 **No error when reading raw data.**
-N_Atoms: 72
-N_Atoms: 72
-N_Atoms: 72
+N_Atoms: 138
+N_Atoms: 138
 WARNING: num_fitting_layer   3 is not equal to the number of layers defined in fitting_neuron   4 !
 **No error when reading parameters.**
 **No error when extending each frame.**
@@ -10,64 +9,49 @@ WARNING: num_fitting_layer   3 is not equal to the number of layers defined in f
 Check from main(): types: 
 N_types of frame 1 is 2
 N_types of frame 2 is 2
-N_types of frame 3 is 2
 N_types_all_frame is 2
 type_index_all_frame is :
 15 79 
 **No error when building neighbour list flag1.**
-Max number of N_neighbour for each type is : 55 85
+Max number of N_neighbour for each type is : 38 108
 **No error when building neighbour list flag2.**
 Check from main(): neighbour list of frame 0 atom 0:
-atom idx 2 type 15 coord 2.678 5.129 21.494
-atom idx 7 type 15 coord 1.410 2.407 20.139
-atom idx 12 type 15 coord 0.726 4.176 21.652
-atom idx 5 type 15 coord 2.585 2.969 21.891
-atom idx 8 type 15 coord -0.654 6.116 20.480
-atom idx 14 type 15 coord 3.857 4.665 17.822
-atom idx 1 type 15 coord 3.299 7.028 19.876
-atom idx 15 type 15 coord 2.943 3.325 16.378
-atom idx 10 type 15 coord 3.200 1.451 17.551
-atom idx 3 type 15 coord -1.634 5.617 22.289
-atom idx 4 type 15 coord 5.212 6.432 21.513
-atom idx 9 type 15 coord 2.259 8.889 20.458
-atom idx 16 type 15 coord -2.160 2.401 18.368
-atom idx 13 type 15 coord -2.558 4.427 17.701
-atom idx 17 type 15 coord 2.079 -0.113 20.033
-atom idx 17 type 15 coord -2.246 7.379 20.033
-atom idx 13 type 15 coord 6.093 4.427 17.701
-atom idx 9 type 15 coord -2.067 1.397 20.458
-atom idx 6 type 15 coord 2.519 0.267 22.122
-atom idx 11 type 15 coord 0.979 8.742 16.844
-atom idx 6 type 15 coord -1.806 7.759 22.122
-atom idx 16 type 15 coord 6.491 2.401 18.368
-atom idx 16 type 15 coord 2.165 9.894 18.368
-atom idx 17 type 15 coord 6.405 7.379 20.033
-atom idx 10 type 15 coord -1.126 8.944 17.551
-atom idx 1 type 15 coord -1.026 -0.465 19.876
-atom idx 11 type 15 coord 5.305 1.250 16.844
-atom idx 4 type 15 coord -3.439 6.432 21.513
-atom idx 9 type 15 coord 6.585 1.397 20.458
-atom idx 4 type 15 coord 0.886 -1.061 21.513
-atom idx 3 type 15 coord 7.017 5.617 22.289
-atom idx 8 type 15 coord 3.672 -1.377 20.480
-atom idx 6 type 15 coord 6.845 7.759 22.122
-atom idx 8 type 15 coord 7.997 6.116 20.480
-atom idx 11 type 15 coord -3.347 1.250 16.844
-atom idx 14 type 15 coord -4.794 4.665 17.822
-atom idx 7 type 15 coord 5.736 9.900 20.139
-atom idx 3 type 15 coord 2.692 -1.875 22.289
-atom idx 7 type 15 coord -2.915 9.900 20.139
-atom idx 5 type 15 coord -1.740 10.462 21.891
-atom idx 1 type 15 coord -5.352 7.028 19.876
-atom idx 13 type 15 coord 1.768 11.919 17.701
-atom idx 10 type 15 coord 7.526 8.944 17.551
-atom idx 15 type 15 coord -1.382 10.817 16.378
-atom idx 1 type 15 coord 7.625 -0.465 19.876
-atom idx 2 type 15 coord -5.973 5.129 21.494
-atom idx 2 type 15 coord -1.647 -2.363 21.494
-atom idx 13 type 15 coord 1.768 -3.065 17.701
-atom idx 14 type 15 coord -0.468 -2.828 17.822
-atom idx 12 type 15 coord 9.377 4.176 21.652
+atom idx 1 type 15 coord 1.410 5.322 23.354
+atom idx 8 type 15 coord -0.353 8.318 23.736
+atom idx 31 type 15 coord -2.140 5.369 23.537
+atom idx 7 type 15 coord -2.046 9.324 22.590
+atom idx 2 type 15 coord 3.191 6.409 22.408
+atom idx 9 type 15 coord 1.416 9.467 22.833
+atom idx 22 type 15 coord 1.307 3.234 22.163
+atom idx 28 type 15 coord -2.397 3.322 22.675
+atom idx 6 type 15 coord -4.052 6.360 22.889
+atom idx 29 type 15 coord -0.486 2.377 23.421
+atom idx 10 type 15 coord 3.115 8.366 23.811
+atom idx 14 type 15 coord -3.878 8.415 23.718
+atom idx 3 type 15 coord 4.740 5.373 23.684
+atom idx 23 type 15 coord 2.945 2.256 23.499
+atom idx 16 type 15 coord -2.207 11.295 23.736
+atom idx 30 type 15 coord 1.283 11.405 24.030
+atom idx 27 type 15 coord -4.068 2.447 23.999
+atom idx 5 type 15 coord -5.815 5.433 23.963
+atom idx 24 type 15 coord 4.807 3.277 22.812
+atom idx 11 type 15 coord 4.804 9.539 22.911
+atom idx 17 type 15 coord -0.446 12.429 22.934
+atom idx 20 type 15 coord -0.611 0.315 22.563
+atom idx 13 type 15 coord -5.717 9.378 22.716
+atom idx 26 type 15 coord -5.890 3.388 22.993
+atom idx 4 type 15 coord 6.507 6.453 22.792
+atom idx 18 type 15 coord 2.914 12.541 22.959
+atom idx 15 type 15 coord -3.976 12.336 22.449
+atom idx 15 type 15 coord 3.024 0.212 22.449
+atom idx 18 type 15 coord -4.086 0.417 22.959
+atom idx 4 type 15 coord -7.493 6.453 22.792
+atom idx 21 type 15 coord 1.245 -0.666 23.555
+atom idx 12 type 15 coord 6.569 8.453 23.892
+atom idx 19 type 15 coord -2.240 -0.556 23.894
+atom idx 19 type 15 coord 4.760 11.568 23.894
+atom idx 21 type 15 coord -5.755 11.458 23.555
+atom idx 12 type 15 coord -7.431 8.453 23.892
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
@@ -279,56 +263,84 @@ atom idx 0 type 15 coord 9999.000 9999.000 9999.000
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
 atom idx 0 type 15 coord 9999.000 9999.000 9999.000
-atom idx 37 type 79 coord 3.692 3.334 19.803
-atom idx 51 type 79 coord 0.115 4.915 17.815
-atom idx 49 type 79 coord 2.231 6.725 17.624
-atom idx 64 type 79 coord 0.119 2.029 17.614
-atom idx 41 type 79 coord -1.263 2.961 21.935
-atom idx 47 type 79 coord -2.507 4.777 20.037
-atom idx 60 type 79 coord 0.014 8.345 20.680
-atom idx 47 type 79 coord 6.144 4.777 20.037
-atom idx 45 type 79 coord 5.149 6.916 17.805
-atom idx 60 type 79 coord 4.340 0.852 20.680
-atom idx 53 type 79 coord 0.304 6.747 15.478
-atom idx 67 type 79 coord -1.419 3.992 15.698
-atom idx 68 type 79 coord 2.219 5.060 14.522
-atom idx 45 type 79 coord 0.823 -0.576 17.805
-atom idx 42 type 79 coord 0.676 2.691 14.542
-atom idx 39 type 79 coord 4.760 5.849 15.144
-atom idx 54 type 79 coord 2.136 0.487 15.549
-atom idx 45 type 79 coord -3.503 6.916 17.805
-atom idx 55 type 79 coord 3.044 8.147 15.140
-atom idx 62 type 79 coord 4.650 2.675 14.865
-atom idx 64 type 79 coord 4.444 9.522 17.614
-atom idx 41 type 79 coord 7.388 2.961 21.935
-atom idx 41 type 79 coord 3.063 10.454 21.935
-atom idx 54 type 79 coord -2.189 7.980 15.549
-atom idx 55 type 79 coord -1.282 0.655 15.140
-atom idx 37 type 79 coord -0.633 10.826 19.803
-atom idx 37 type 79 coord -4.959 3.334 19.803
-atom idx 49 type 79 coord -2.095 -0.768 17.624
-atom idx 67 type 79 coord 7.232 3.992 15.698
-atom idx 63 type 79 coord -1.320 5.573 13.508
-atom idx 60 type 79 coord -4.311 0.852 20.680
-atom idx 54 type 79 coord 6.462 7.980 15.549
-atom idx 47 type 79 coord 1.818 -2.715 20.037
-atom idx 39 type 79 coord -3.891 5.849 15.144
-atom idx 51 type 79 coord 8.766 4.915 17.815
-atom idx 53 type 79 coord 4.630 -0.745 15.478
-atom idx 70 type 79 coord 2.776 2.591 12.657
-atom idx 49 type 79 coord 6.557 -0.768 17.624
-atom idx 62 type 79 coord 0.324 10.167 14.865
-atom idx 71 type 79 coord -1.885 2.716 13.173
-atom idx 43 type 79 coord 4.242 4.945 12.508
-atom idx 62 type 79 coord -4.002 2.675 14.865
-atom idx 44 type 79 coord 0.990 4.665 12.064
-atom idx 47 type 79 coord 1.818 12.270 20.037
-atom idx 39 type 79 coord 0.435 -1.644 15.144
-atom idx 58 type 79 coord 0.065 7.863 12.846
-atom idx 64 type 79 coord 8.770 2.029 17.614
-atom idx 51 type 79 coord 4.440 -2.577 17.815
-atom idx 56 type 79 coord 2.797 7.392 12.401
-atom idx 64 type 79 coord -4.207 9.522 17.614
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 0 type 15 coord 9999.000 9999.000 9999.000
+atom idx 60 type 79 coord 0.109 6.845 20.257
+atom idx 133 type 79 coord 2.456 4.649 20.461
+atom idx 75 type 79 coord -1.310 9.465 20.277
+atom idx 117 type 79 coord -1.001 4.659 18.829
+atom idx 57 type 79 coord -2.379 7.015 18.885
+atom idx 136 type 79 coord 1.627 9.609 20.447
+atom idx 63 type 79 coord 3.544 7.206 20.153
+atom idx 114 type 79 coord -2.885 3.145 20.402
+atom idx 69 type 79 coord -4.616 6.783 20.691
+atom idx 61 type 79 coord 1.745 6.075 18.156
+atom idx 78 type 79 coord 0.253 8.660 18.115
+atom idx 120 type 79 coord 1.250 3.107 18.449
+atom idx 129 type 79 coord -4.245 4.888 18.664
+atom idx 102 type 79 coord 1.770 1.345 20.454
+atom idx 72 type 79 coord -3.764 9.326 18.677
+atom idx 58 type 79 coord -0.726 6.424 16.498
+atom idx 115 type 79 coord -1.547 2.022 18.256
+atom idx 96 type 79 coord 3.226 9.009 18.124
+atom idx 87 type 79 coord -3.141 11.633 20.280
+atom idx 137 type 79 coord 4.780 9.740 20.534
+atom idx 132 type 79 coord -0.400 12.528 20.523
+atom idx 123 type 79 coord 3.960 3.996 18.136
+atom idx 66 type 79 coord 5.210 3.298 20.523
+atom idx 134 type 79 coord -5.905 3.242 20.584
+atom idx 90 type 79 coord -1.478 11.258 18.056
+atom idx 99 type 79 coord -0.748 0.046 20.201
+atom idx 84 type 79 coord -6.063 9.334 20.376
+atom idx 93 type 79 coord 1.298 11.487 18.314
+atom idx 73 type 79 coord -2.108 8.808 16.372
+atom idx 130 type 79 coord -2.638 4.121 16.387
+atom idx 118 type 79 coord 0.254 3.914 16.032
+atom idx 70 type 79 coord -5.866 7.179 18.308
+atom idx 67 type 79 coord 6.352 6.810 20.424
+atom idx 76 type 79 coord 1.798 7.903 15.988
+atom idx 135 type 79 coord 2.458 12.614 20.627
+atom idx 64 type 79 coord 4.969 6.621 17.738
+atom idx 71 type 79 coord -3.945 6.705 16.320
+atom idx 111 type 79 coord -4.682 2.151 18.298
+atom idx 121 type 79 coord 3.033 5.344 15.900
+atom idx 135 type 79 coord -4.542 0.489 20.627
+atom idx 67 type 79 coord -7.648 6.810 20.424
+atom idx 91 type 79 coord 0.155 10.445 15.949
+atom idx 105 type 79 coord 3.371 1.277 17.989
+atom idx 103 type 79 coord 0.530 1.193 16.594
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
+atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 atom idx 0 type 79 coord 9999.000 9999.000 9999.000
@@ -551,5 +563,5 @@ atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 atom idx 0 type 79 coord 9999.000 9999.000 9999.000
 No error when saving to file.
-Time profiling: main(): 0.175 s
+Time profiling: main(): 0.254 s
 ***Modify the ALL_PARAMS.json before training!***

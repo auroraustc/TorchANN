@@ -1,9 +1,10 @@
-Number of frames in total: 4
+Number of frames in total: 5
 **No error when reading raw data.**
-N_Atoms: 31
-N_Atoms: 31
-N_Atoms: 31
-N_Atoms: 31
+N_Atoms: 8
+N_Atoms: 8
+N_Atoms: 8
+N_Atoms: 8
+N_Atoms: 8
 WARNING: num_fitting_layer   3 is not equal to the number of layers defined in fitting_neuron   4 !
 **No error when reading parameters.**
 **No error when extending each frame.**

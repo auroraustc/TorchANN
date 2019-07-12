@@ -159,7 +159,7 @@ s2:
         printf_d("Neighbour list of atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
         for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
         {
-            printf_d("atom type %d coord %.3lf %.3lf %.3lf \n", frame_info_cur->neighbour_list[DEBUG_ATOM].type[i], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
+            printf_d("atom type %d coord %.3lf %.3lf %.3lf \n", frame_info_cur->neighbour_list[DEBUG_ATOM].type[i], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 0], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 1], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 2]);
         }
     }
     if (parameters_info->sym_coord_type == 1)
@@ -278,7 +278,7 @@ s2:
         printf_d("Neighbour list of atom %d of frame %d:\n", DEBUG_ATOM, DEBUG_FRAME);
         for (i = 0; i <= parameters_info->SEL_A_max - 1; i++)
         {
-            printf_d("atom type %d coord %.3lf %.3lf %.3lf \n", frame_info_cur->neighbour_list[DEBUG_ATOM].type[i], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][0], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][1], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i][2]);
+            printf_d("atom type %d coord %.3lf %.3lf %.3lf \n", frame_info_cur->neighbour_list[DEBUG_ATOM].type[i], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 0], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 1], frame_info_cur->neighbour_list[DEBUG_ATOM].coord_neighbours[i * 3 + 2]);
         }
     }
     if (parameters_info->sym_coord_type == 1)
@@ -536,7 +536,7 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
     #endif
 
     /*Choose the first SEL_A_max atoms to be the neighbour list atoms(excluding self)*/
-    neighbour_list_cur_atom->coord_neighbours = (float **)calloc(parameters_info->SEL_A_max, sizeof(float *));
+    neighbour_list_cur_atom->coord_neighbours = (float *)calloc(parameters_info->SEL_A_max * 3, sizeof(float ));
     neighbour_list_cur_atom->type = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
     neighbour_list_cur_atom->index_neighbours = (int *)calloc(parameters_info->SEL_A_max, sizeof(int));
     neighbour_list_cur_atom->dist_neighbours = (float *)calloc(parameters_info->SEL_A_max, sizeof(float));
@@ -607,10 +607,10 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
         {
             continue;
         }
-        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]] = (float *)calloc(3, sizeof(float));
-        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][0] = (float)(b_tmp[i]->atom_info->coord[0]);
-        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][1] = (float)(b_tmp[i]->atom_info->coord[1]);
-        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][2] = (float)(b_tmp[i]->atom_info->coord[2]);
+        //neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]] = (float *)calloc(3, sizeof(float));
+        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 0] = (float)(b_tmp[i]->atom_info->coord[0]);
+        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 1] = (float)(b_tmp[i]->atom_info->coord[1]);
+        neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 2] = (float)(b_tmp[i]->atom_info->coord[2]);
         neighbour_list_cur_atom->type[nei_idx_pointer[nei_type_idx]] = nei_type;
         neighbour_list_cur_atom->index_neighbours[nei_idx_pointer[nei_type_idx]] = (b_tmp[i]->atom_info->index);
         neighbour_list_cur_atom->dist_neighbours[nei_idx_pointer[nei_type_idx]] = (b_tmp[i]->dist);
@@ -624,10 +624,10 @@ int build_neighbour_coord_cur_atom(frame_info_struct * frame_info_cur, neighbour
             int nei_type = parameters_info->type_index_all_frame[nei_type_idx];
             while (nei_idx_pointer[i] <= nei_idx_bound[i] - 1)
             {
-                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]] = (float *)calloc(3, sizeof(float));
-                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][0] = 9999.0;
-                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][1] = 9999.0;
-                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]][2] = 9999.0;
+                //neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx]] = (float *)calloc(3, sizeof(float));
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 0] = 9999.0;
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 1] = 9999.0;
+                neighbour_list_cur_atom->coord_neighbours[nei_idx_pointer[nei_type_idx] * 3 + 2] = 9999.0;
                 neighbour_list_cur_atom->type[nei_idx_pointer[nei_type_idx]] = nei_type;
                 neighbour_list_cur_atom->index_neighbours[nei_idx_pointer[nei_type_idx]] = 0;
                 neighbour_list_cur_atom->dist_neighbours[nei_idx_pointer[nei_type_idx]] = 9999.0;

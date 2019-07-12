@@ -602,7 +602,7 @@ int save_to_file_nei(frame_info_struct * frame_info, parameters_info_struct * pa
         {
             for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
             {
-                fwrite(frame_info[i].neighbour_list[j].coord_neighbours[k], sizeof(float), 3, fp_nei_coord);
+                fwrite(&(frame_info[i].neighbour_list[j].coord_neighbours[k * 3 + 0]), sizeof(float), 3, fp_nei_coord);
             }
         }
     }

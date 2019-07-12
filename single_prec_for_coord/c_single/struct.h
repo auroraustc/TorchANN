@@ -21,7 +21,7 @@ typedef struct neighbour_list_struct_
 	float cutoff_max;//cutoff_1 min, cutoff_max max. Four cutoffs just in case.
 	/*For DeePMD, cutoff_max = cutoff_2 = rc, cutoff_1 = rcs*/
 	int N_neighbours;//number of neighbour atoms within cutoff raduis cutoff_max
-	float ** coord_neighbours;//coord_neighbour[0..SEL_A_max - 1][0..2]
+	float * coord_neighbours;//coord_neighbour[0..SEL_A_max - 1][0..2]
 	float ** force_neighbours;//Just in case; force_neighbours[0..SEL_A_max - 1][0..2]
 	//atom_info_struct * atom_info;
 	int * type;//type[0..SEL_A_max - 1], type = all_types[0] for atoms with r_c > cutoff_max

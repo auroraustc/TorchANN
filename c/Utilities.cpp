@@ -688,5 +688,10 @@ int frac_to_cart(double * cart, double box[3][3], double * frac)
     return 0;
 }
 
+double max(double a, double b)
+{
+    return (a >= b ? a : b);
+}
+
 
 

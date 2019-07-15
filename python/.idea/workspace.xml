@@ -5,22 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../c/Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/Utilities.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/main_partial.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/main_partial.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/ALL_PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_1/PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/LASP_H2O_small_4/ALL_PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_1g/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_1g/ALL_PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_2/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_2/ALL_PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/ALL_PARAMS.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/box.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/box.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/coord.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/coord.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/energy.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/energy.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/force.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/force.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small/type.raw" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small/type.raw" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_very_small2/ALL_PARAMS.json" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_very_small2/ALL_PARAMS.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/Utilities.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/build_neighbour_list.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/main_partial.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/main_partial.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/class_and_function.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../tests/test_with_DPMD_many/copy_test_data.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_with_DPMD_many/copy_test_data.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -32,14 +29,14 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.621843">
+    <splitter split-orientation="horizontal" split-proportion="0.32296494">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="252">
-                  <caret line="136" column="60" lean-forward="true" selection-start-line="136" selection-start-column="60" selection-end-line="136" selection-end-column="60" />
+                <state relative-caret-position="330">
+                  <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
                   <folding>
                     <element signature="e#47#65#0" expanded="true" />
                   </folding>
@@ -92,8 +89,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="310">
-                  <caret line="938" column="9" selection-start-line="938" selection-start-column="9" selection-end-line="938" selection-end-column="9" />
+                <state relative-caret-position="-501">
+                  <caret line="533" column="23" lean-forward="true" selection-start-line="533" selection-start-column="23" selection-end-line="533" selection-end-column="23" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -114,7 +111,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>item</find>
       <find>200</find>
       <find>-1</find>
       <find>initw</find>
@@ -144,6 +140,7 @@
       <find>0.021</find>
       <find>max</find>
       <find>max(</find>
+      <find>shuffle</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -166,12 +163,12 @@
         <option value="$PROJECT_DIR$/no_mpi/main.py" />
         <option value="$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py" />
-        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
         <option value="$PROJECT_DIR$/no_mpi/class_and_function.py" />
+        <option value="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="65" />
     <option name="y" value="24" />
     <option name="width" value="1855" />
@@ -252,7 +249,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/test_very_small" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../../../../.. /aurora/Documents/Study/Machine_Learning/DeePMD_torch/tests/test_with_DPMD_many/enough_sel_a/47/TorchANN" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -592,11 +589,26 @@
       <workItem from="1562765501617" duration="1173000" />
       <workItem from="1562767254716" duration="141000" />
       <workItem from="1562767544432" duration="330000" />
+      <workItem from="1562948576026" duration="1171000" />
+      <workItem from="1562955168849" duration="206000" />
+      <workItem from="1562955818713" duration="39000" />
+      <workItem from="1562956083128" duration="1006000" />
+      <workItem from="1563001394471" duration="3274000" />
+      <workItem from="1563008475956" duration="2629000" />
+      <workItem from="1563011452446" duration="629000" />
+      <workItem from="1563012753399" duration="156000" />
+      <workItem from="1563012986604" duration="3486000" />
+      <workItem from="1563024764341" duration="230000" />
+      <workItem from="1563025265281" duration="214000" />
+      <workItem from="1563025489162" duration="332000" />
+      <workItem from="1563025831541" duration="105000" />
+      <workItem from="1563025982401" duration="9000" />
+      <workItem from="1563173356081" duration="4965000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="409498000" />
+    <option name="totallyTimeSpent" value="427949000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -608,16 +620,15 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="65" y="24" width="1855" height="1056" extended-state="0" />
-    <editor active="true" />
+    <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1901603" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16473189" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.35466945" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.35257083" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.35257083" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.25498426" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32925585" />
@@ -625,7 +636,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32415903" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.3231899" />
       <window_info anchor="bottom" id="Python Console" order="12" weight="0.3253389" />
       <window_info anchor="bottom" id="Concurrent Activities Diagram" order="13" weight="0.32925585" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -783,11 +794,6 @@
           <option name="timeStamp" value="215" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py</url>
-          <line>214</line>
-          <option name="timeStamp" value="225" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
           <line>462</line>
           <option name="timeStamp" value="229" />
@@ -827,17 +833,48 @@
           <line>585</line>
           <option name="timeStamp" value="237" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>545</line>
+          <option name="timeStamp" value="238" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>549</line>
+          <option name="timeStamp" value="239" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>560</line>
+          <option name="timeStamp" value="240" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>568</line>
+          <option name="timeStamp" value="241" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>565</line>
+          <option name="timeStamp" value="242" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/no_mpi/class_and_function.py</url>
+          <line>458</line>
+          <option name="timeStamp" value="243" />
+        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="E_cur_batch" language="Python" />
-        <watch expression="F_cur_batch" language="Python" />
-        <watch expression="type_idx_cur_type" language="Python" />
-        <watch expression="type_idx_cur_type" language="Python" />
-        <watch expression="(NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * parameters.SEL_A_max)[0]" language="Python" />
-        <watch expression="offset_array_frame" language="Python" />
-        <watch expression="parameters.SEL_A_max" language="Python" />
+        <watch expression="SYM_COORD_Reshape_tf_cur" language="Python" />
+        <watch expression="E_cur_batch_atom_wise" language="Python" />
+        <watch expression="std_cur_type" language="Python" />
+        <watch expression="G_cur_type_cur_nei_type[0]" language="Python" />
+        <watch expression="G_cur_type" language="Python" />
+        <watch expression="RG_cur_type[0]" language="Python" />
+        <watch expression="GRRG_cur_type[0]" language="Python" />
+        <watch expression="(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)[0]" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -849,59 +886,59 @@
     <SUITE FILE_PATH="coverage/python$train_noclassify_.coverage" NAME="train_noclassify_ Coverage Results" MODIFIED="1557061152708" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_nompi_algotest.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557306937759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556530755659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small4+4" />
-    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1562767557454" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_very_small" />
+    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1563174793492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_with_DPMD_many_single/insufficient_sel_a_for_all/46//TorchANN" />
     <SUITE FILE_PATH="coverage/python$test_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1562133075671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/AuP-verify/from_test" />
     <SUITE FILE_PATH="coverage/python$train_noclassfy_mpi4py.coverage" NAME="train_noclassfy_mpi4py Coverage Results" MODIFIED="1557045506427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>parameters.SEL_A_max</expression-string>
+        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>offset_array_frame</expression-string>
+        <expression-string>RG_cur_type[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>(NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * parameters.SEL_A_max)[0]</expression-string>
+        <expression-string>RG_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>NEI_IDX_Reshape_tf_cur_cur_type + offset_array_frame * parameters.SEL_A_max</expression-string>
+        <expression-string>G_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>type_idx_cur_type</expression-string>
+        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type[100]</expression-string>
+        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2)</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type[200]</expression-string>
+        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2)[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type</expression-string>
+        <expression-string>G_cur_type[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur_Reshape_cur_type[0]</expression-string>
+        <expression-string>GRRG_cur_type[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>SYM_COORD_Reshape_tf_cur</expression-string>
+        <expression-string>G_cur_type_cur_nei_type[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -994,22 +1031,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
+    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="938" column="9" selection-start-line="938" selection-start-column="9" selection-end-line="938" selection-end-column="9" />
+        <state relative-caret-position="330">
+          <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#47#65#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
+    <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="136" column="60" lean-forward="true" selection-start-line="136" selection-start-column="60" selection-end-line="136" selection-end-column="60" />
+        <state relative-caret-position="-501">
+          <caret line="533" column="23" lean-forward="true" selection-start-line="533" selection-start-column="23" selection-end-line="533" selection-end-column="23" />
           <folding>
-            <element signature="e#47#65#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -263,7 +263,7 @@ f=open("./n_types","w")
 print(len(np.unique(np.loadtxt("./DPMD/systems/type.raw"))),file=f)
 f.close()
 '
-n_types=`grep N_types TorchANN/PARAMS.json | sed 's/[^0-9]//g'`
+n_types=`cat n_types`
 
 if [ "$j" == "enough_sel_a" ];then
 sel_a_1=$(rand 250 300)
@@ -379,11 +379,7 @@ TORCH=TORCH.astype(np.float64)
 np.save("F_D", DPMD)
 np.save("F_T", TORCH)
 
-TORCH_ARRANGE=np.ndarray(DPMD.shape, dtype=DPMD.dtype)
-for i in range((DPMD.shape)[0]):
- for j in range((DPMD.shape)[0]):
-  if (np.abs((DPMD[i][0][0]-TORCH[j][0][0])/DPMD[i][0][0]) <= 0.001):
-   TORCH_ARRANGE[i]=TORCH[j]
+TORCH_ARRANGE=TORCH
 
 DIFF=((DPMD-TORCH_ARRANGE)**2)**0.5
 MAX_MIN=np.ndarray(2, dtype=DPMD.dtype)

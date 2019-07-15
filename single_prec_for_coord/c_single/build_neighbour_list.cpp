@@ -293,6 +293,7 @@ s2:
 int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expanded_struct * system_info_expanded, parameters_info_struct * parameters_info)
 {
     float fastpow2(float number, int dummy);
+    float max(float a, float b);
     
     int i, j, k, l;
     int tmpi1;
@@ -301,6 +302,9 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
     int expand_a_period;
     int expand_b_period;
     int expand_c_period;
+    int expand_a_period_[4];
+    int expand_b_period_[4];
+    int expand_c_period_[4];
     int * expand_a_array;
     int * expand_b_array;
     int * expand_c_array;
@@ -315,6 +319,15 @@ int expand_system_one_frame(frame_info_struct * frame_info_cur, system_info_expa
     expand_a_period = ceil(cutoff_max / box_vec_a);
     expand_b_period = ceil(cutoff_max / box_vec_b);
     expand_c_period = ceil(cutoff_max / box_vec_c);
+    expand_a_period_[0] = ceil(cutoff_max / abs(frame_info_cur->box[0][0]));expand_a_period_[1] = ceil(cutoff_max / abs(frame_info_cur->box[0][1]));expand_a_period_[2] = ceil(cutoff_max / abs(frame_info_cur->box[0][2]));
+    expand_a_period_[3] = max(max(expand_a_period_[0], expand_a_period_[1]), expand_a_period_[2]);
+    expand_b_period_[0] = ceil(cutoff_max / abs(frame_info_cur->box[1][0]));expand_b_period_[1] = ceil(cutoff_max / abs(frame_info_cur->box[1][1]));expand_b_period_[2] = ceil(cutoff_max / abs(frame_info_cur->box[1][2]));
+    expand_b_period_[3] = max(max(expand_b_period_[0], expand_b_period_[1]), expand_b_period_[2]);
+    expand_c_period_[0] = ceil(cutoff_max / abs(frame_info_cur->box[2][0]));expand_c_period_[1] = ceil(cutoff_max / abs(frame_info_cur->box[2][1]));expand_c_period_[2] = ceil(cutoff_max / abs(frame_info_cur->box[2][2]));
+    expand_c_period_[3] = max(max(expand_c_period_[0], expand_c_period_[1]), expand_c_period_[2]);
+    expand_a_period = max(ceil(cutoff_max / box_vec_a), expand_a_period_[3]) + 1;
+    expand_b_period = max(ceil(cutoff_max / box_vec_b), expand_b_period_[3]) + 1;
+    expand_c_period = max(ceil(cutoff_max / box_vec_c), expand_c_period_[3]) + 1;
     printf_d("expand x, y, z is: %d %d %d\n", expand_a_period, expand_b_period, expand_c_period);
     expand_a_array = (int *)calloc(expand_a_period * 2 + 1, sizeof(int));
     expand_b_array = (int *)calloc(expand_b_period * 2 + 1, sizeof(int));

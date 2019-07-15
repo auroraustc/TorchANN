@@ -20,7 +20,7 @@ tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = tf.device('cpu')
-torch.set_printoptions(edgeitems=9999)
+#torch.set_printoptions(edgeitems=9999)
 
 if (device != tf.device('cpu')):
     print("cuDNN version: ", tf.backends.cudnn.version())
@@ -45,9 +45,9 @@ if(True):
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 script_path = sys.path[0]
 if (device != tf.device('cpu')):
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
 else:
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
 print("All parameters:")

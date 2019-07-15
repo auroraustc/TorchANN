@@ -688,5 +688,10 @@ int frac_to_cart(float * cart, float box[3][3], float * frac)
     return 0;
 }
 
+float max(float a, float b)
+{
+    return (a >= b ? a : b);
+}
+
 
 

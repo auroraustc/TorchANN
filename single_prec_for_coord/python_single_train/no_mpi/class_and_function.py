@@ -934,9 +934,9 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         #print("m.bias:", m.bias.data)
         tf.nn.init.xavier_normal_(m.weight, gain = 0.707106781186547524400844362104849039284835937688)
-        #tf.nn.init.constant_(m.weight,0.017)
+        #tf.nn.init.constant_(m.weight,0.0123456789)
         #m.bias.data.normal_(mean = 0, std = 1.0)
-        #tf.nn.init.constant_(m.bias, -0.017)
+        #tf.nn.init.constant_(m.bias, -0.0198765432)
 
 
 def make_dot(var, params):

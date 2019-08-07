@@ -10,6 +10,7 @@ Use torch to train NN potential
 2. [pyTorch](https://pytorch.org/get-started/locally/) (necessary: Torch v1.x; optional: Torchvision)
 3. [ninja](https://pypi.org/project/ninja/)
 4. C++ compiler which supports c11 standard (icpc 2018 and gcc 4.9.4 tested)
+ ***(Note: The C++ code compiled by g++-7.4.0 is much slower and much more memory-consuming than g++4.9.4. Still do not know why...)***
 
 ***Below are not requested at present but on the road map.***
 1. [horovod](https://github.com/horovod/horovod)(Optional, future)

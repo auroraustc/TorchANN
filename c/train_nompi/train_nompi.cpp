@@ -27,7 +27,7 @@ int main()
 {
     int test();
     int test_2();
-
+    
     int read_parameters(frame_info_struct * frame_info, parameters_info_struct * parameters_info, char * filename);
     int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_struct * parameters_info);
 
@@ -38,7 +38,7 @@ int main()
     input_bin_files_struct input_bin_files;
 
     test();
-    read_parameters_flag = read_parameters(NULL, parameters_info, "./ALL_PARAMSS.json");
+    read_parameters_flag = read_parameters(NULL, parameters_info, "ALL_PARAMS.json");
     if (read_parameters_flag != 0)
     {
         printf("Error when reading input parameters: read_parameters_info_flag = %d\n", read_parameters_flag);
@@ -55,24 +55,26 @@ int main()
     printf("No error when reading binary files.\n");
 #ifdef DEBUG_MAIN
     printf("Check tensors:\n");
-    std::cout << input_bin_files.COORD.size(0) << std::endl;
-    std::cout << input_bin_files.SYM_COORD.size(0) << std::endl;
-    std::cout << input_bin_files.ENERGY.size(0) << std::endl;
-    std::cout << input_bin_files.FORCE.size(0) << std::endl;
-    std::cout << input_bin_files.N_ATOMS.size(0) << std::endl;
-    std::cout << input_bin_files.TYPE.size(0) << std::endl;
-    std::cout << input_bin_files.NEI_IDX.size(0) << std::endl;
-    std::cout << input_bin_files.NEI_COORD.size(0) << std::endl;
-    std::cout << input_bin_files.FRAME_IDX.size(0) << std::endl;
-    std::cout << input_bin_files.SYM_COORD_DX.size(0) << std::endl;
-    std::cout << input_bin_files.SYM_COORD_DY.size(0) << std::endl;
-    std::cout << input_bin_files.SYM_COORD_DZ.size(0) << std::endl;
-    std::cout << input_bin_files.N_ATOMS_ORI.size(0) << std::endl;
-    std::cout << input_bin_files.NEI_TYPE.size(0) << std::endl;
+    std::cout << "COORD " <<  input_bin_files.COORD.size(0) << std::endl;
+    // std::cout << input_bin_files.SYM_COORD.size(0) << std::endl;
+    std::cout << "Energy " << input_bin_files.ENERGY.size(0) << std::endl;
+    std::cout << "FORCE " << input_bin_files.FORCE.size(0) << std::endl;
+    std::cout << "N_ATOMS " <<  input_bin_files.N_ATOMS.size(0) << std::endl;
+    std::cout << "TYPE " <<  input_bin_files.TYPE.size(0) << std::endl;
+    std::cout << "NEI_IDX " <<  input_bin_files.NEI_IDX.size(0) << std::endl;
+    std::cout << "NEI_COORD " <<  input_bin_files.NEI_COORD.size(0) << std::endl;
+    std::cout << "FRAME_IDX " <<  input_bin_files.FRAME_IDX.size(0) << std::endl;
+    // std::cout << input_bin_files.SYM_COORD_DX.size(0) << std::endl;
+    // std::cout << input_bin_files.SYM_COORD_DY.size(0) << std::endl;
+    // std::cout << input_bin_files.SYM_COORD_DZ.size(0) << std::endl;
+    std::cout << "N_ATOMS_ORI " <<  input_bin_files.N_ATOMS_ORI.size(0) << std::endl;
+    std::cout << "NEI_TYPE " <<  input_bin_files.NEI_TYPE.size(0) << std::endl;
 #endif
-    std::cout << parameters_info->N_Atoms_max << std::endl;
-    std::cout << torch::eq(torch::reshape(input_bin_files.TYPE, {1, parameters_info->N_Atoms_max}), 1).nonzero() << std::endl;
+    std::cout << "N_ATOMS_MAX " <<  parameters_info->N_Atoms_max << std::endl;
+    std::cout << torch::eq(torch::reshape(input_bin_files.TYPE, {-1, parameters_info->N_Atoms_max}), 79).nonzero() << std::endl;
 
+
+    test_2();
     /*free all the data*/
         /*parameters*/
     free(parameters_info->filter_neuron);

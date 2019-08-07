@@ -3,6 +3,9 @@ project(train_nompi)
 
 find_package(Torch REQUIRED)
 
+#Define c++ compiler here
+SET(CMAKE_CXX_COMPILER "mpicxx")
+
 add_definitions(${CXX_SRCs})
 SET(CXX_SRCs "${CMAKE_SOURCE_DIR}/train_nompi.cpp ${CMAKE_SOURCE_DIR}/train_nompi_Utilities.cpp")
 
@@ -16,7 +19,7 @@ SET(DEBUG_FLAGS    "-g")
 
 #Change ADDITIONAL_FLAGS here
 add_definitions(${ADDITIONAL_FLAGS})
-SET(ADDITIONAL_FLAGS "-fopenmp")
+SET(ADDITIONAL_FLAGS "-fopenmp -cxx=g++")
 
 add_definitions(${ADDITIONAL_LIBS})
 add_definitions(${libANN_PATH})

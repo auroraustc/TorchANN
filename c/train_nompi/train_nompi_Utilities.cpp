@@ -6,9 +6,14 @@ Utilities functions for training.
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string>
 #include <tuple>
 #include <torch/torch.h>
 #include "struct_train_nompi.h"
+/*#include "mpi.h"
+#include "boost/mpi.hpp"
+#include <boost/serialization/utility.hpp>*/
+
 
 
 int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_struct * parameters_info)
@@ -27,7 +32,7 @@ int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_str
         input_bin_files->COORD = torch::from_file("./COORD.BIN", true, parameters_info->Nframes_tot * parameters_info->N_Atoms_max * 3, torch::TensorOptions().dtype(torch::kFloat64));
     }
 
-    fp_tmp = fopen("./SYM_COORD.BIN", "rb");
+    /*fp_tmp = fopen("./SYM_COORD.BIN", "rb");
     if (fp_tmp == NULL)
     {
         printf("SYM_COORD.BIN does not exist!\n");
@@ -37,7 +42,7 @@ int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_str
     {
         fclose(fp_tmp);
         input_bin_files->SYM_COORD = torch::from_file("./SYM_COORD.BIN", true, parameters_info->Nframes_tot * parameters_info->N_Atoms_max * parameters_info->N_sym_coord, torch::TensorOptions().dtype(torch::kFloat64));
-    }
+    }*/
 
     fp_tmp = fopen("./ENERGY.BIN", "rb");
     if (fp_tmp == NULL)
@@ -124,7 +129,7 @@ int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_str
     // }
     input_bin_files->FRAME_IDX = torch::arange(parameters_info->Nframes_tot, torch::TensorOptions().dtype(torch::kInt));
 
-    fp_tmp = fopen("./SYM_COORD_DX.BIN", "rb");
+    /*fp_tmp = fopen("./SYM_COORD_DX.BIN", "rb");
     if (fp_tmp == NULL)
     {
         printf("SYM_COORD_DX.BIN does not exist!\n");
@@ -158,7 +163,7 @@ int read_bin_files(input_bin_files_struct * input_bin_files, parameters_info_str
     {
         fclose(fp_tmp);
         input_bin_files->SYM_COORD_DZ = torch::from_file("./SYM_COORD_DZ.BIN", true, parameters_info->Nframes_tot * parameters_info->N_Atoms_max * parameters_info->N_sym_coord, torch::TensorOptions().dtype(torch::kFloat64));
-    }
+    }*/
 
     fp_tmp = fopen("./N_ATOMS_ORI.BIN", "rb");
     if (fp_tmp == NULL)
@@ -201,6 +206,8 @@ int test()
     const int HIDDEN = 128;
     FILE * fp_tmp_file = NULL;
     int file_flag = 0;
+
+    printf("***Start test()***\n");
 
     torch::Device device(torch::kCPU);
     if (torch::cuda::is_available())
@@ -289,8 +296,8 @@ int test()
         std::cout << "coord:" << COORD.sizes() << std::endl << "energy:" << ENERGY.sizes() << std::endl;
     }
 
-    std::cout << sizeof(torch::nn::Linear) << std::endl;
-    torch::Tensor aa = torch::randn({128,128});
+    std::cout << "sizeof(torch::nn::Linear): " << sizeof(torch::nn::Linear) << std::endl;
+    torch::Tensor aa = torch::randn({128,parameters_info->fitting_neuron[0]});
     aa = aa.to(torch::kFloat64);
     torch::set_default_dtype(aa.dtype());
     aa = aa.to(device);
@@ -299,11 +306,10 @@ int test()
  
     for (const auto& pair : model.named_parameters()) 
     {
-        std::cout << pair.key() << ": " << pair.value().sizes() << std::endl;
+        std::cout << "pair.key: " << pair.key() << ": " << pair.value().sizes() << std::endl;
     }  
-    std::cout << model.forward(aa) << std::endl;
-    printf("%f\n", aa.accessor<double, 2>()[0][0]);
-
+    std::cout << "model.forward(aa) " << model.forward(aa).size(0) << std::endl;
+    printf("%f\n", device == torch::Device(torch::kCPU) ? aa.accessor<double, 2>()[0][0] : (aa = aa.to(torch::Device(torch::kCPU)),aa.accessor<double, 2>()[0][0]));
 
     /*free all the data*/
         /*parameters*/
@@ -312,14 +318,51 @@ int test()
     free(parameters_info->type_index_all_frame);
     free(parameters_info); 
 
+    printf("***End test()***\n");
+
     return 0;
 }
 
 int test_2()
 {
+
+    printf("***Start test_2()***\n");
     std::cout << sizeof(torch::nn::Linear) << std::endl;
     //one_batch_net model = nullptr;
+    printf("***End test_2()***\n");
     return 0;
 }
+
+/*int test_3()
+{
+    printf("***Start test_3()***");
+    boost::mpi::environment env;
+    boost::mpi::communicator world;
+#define MSG_LEN 100000
+    std::vector<int> sendbuf(MSG_LEN, 1), recvbuf(MSG_LEN);
+    MPI_Comm comm=world;
+    if (world.rank() ==0)
+    {
+        boost::mpi::packed_oarchive oa(comm);
+        oa << sendbuf;
+        auto sendptr = const_cast<void *>(oa.address());
+        int sendsize = static_cast<int>(oa.size());
+        MPI_Send(&sendsize, 1, MPI_INT, 1, 0, comm);
+        MPI_Send(sendptr, sendsize, MPI_PACKED, 1, 0, comm);
+    }
+    else if (world.rank() == 1)
+    {
+        boost::mpi::packed_iarchive ia(comm);
+        int recvsize;
+        MPI_Recv(&recvsize, 1, MPI_INT, 0, 0, comm, MPI_STATUS_IGNORE);
+        ia.resize(recvsize);
+        auto recvptr = ia.address();
+        MPI_Recv(recvptr, recvsize, MPI_PACKED, 0, 0, comm, MPI_STATUS_IGNORE);
+        ia >> recvbuf;
+        std::cout << "Data received: " << recvbuf[0] << "," << recvbuf[1] << "..." << std::endl;
+    }
+    printf("***End test_3()***");
+    return 0;
+}*/
 
 

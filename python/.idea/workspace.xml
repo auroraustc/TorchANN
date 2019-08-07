@@ -5,19 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="71522a87-5b25-45bd-9955-c07567ede6cf" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../c/Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/Utilities.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/build_neighbour_list.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/main_partial.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/main_partial.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../c/struct.h" beforeDir="false" afterPath="$PROJECT_DIR$/../c/struct.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/train_nompi/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../c/train_nompi/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/train_nompi/train_nompi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/train_nompi/train_nompi.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../c/train_nompi/train_nompi_Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../c/train_nompi/train_nompi_Utilities.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/Utilities.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/Utilities.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/build_neighbour_list.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/build_neighbour_list.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/c_single/main_partial.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/c_single/main_partial.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/class_and_function.py" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/class_and_function.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py" beforeDir="false" afterPath="$PROJECT_DIR$/../single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tests/test_with_DPMD_many/copy_test_data.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../tests/test_with_DPMD_many/copy_test_data.sh" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -29,55 +22,17 @@
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train Coverage Results" MODIFIED="1555048392503" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.32296494">
+    <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
+            <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
+                <state relative-caret-position="171">
+                  <caret line="643" selection-start-line="643" selection-end-line="643" />
                   <folding>
-                    <element signature="e#47#65#0" expanded="true" />
+                    <element signature="e#0#18#0" expanded="true" />
                   </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2760">
-                  <caret line="196" column="104" selection-start-line="196" selection-start-column="16" selection-end-line="196" selection-end-column="104" />
-                  <folding>
-                    <element signature="e#47#65#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2385">
-                  <caret line="171" column="61" selection-start-line="171" selection-start-column="61" selection-end-line="171" selection-end-column="61" />
-                  <folding>
-                    <element signature="e#47#65#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/no_mpi/main.py">
-              <provider selected="true" editor-type-id="text-editor" />
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1905">
-                  <caret line="135" column="9" selection-start-line="135" selection-start-column="9" selection-end-line="135" selection-end-column="9" />
                 </state>
               </provider>
             </entry>
@@ -85,12 +40,12 @@
         </leaf>
       </split-first>
       <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+        <leaf>
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-501">
-                  <caret line="533" column="23" lean-forward="true" selection-start-line="533" selection-start-column="23" selection-end-line="533" selection-end-column="23" />
+                <state relative-caret-position="171">
+                  <caret line="643" selection-start-line="643" selection-end-line="643" />
                   <folding>
                     <element signature="e#0#18#0" expanded="true" />
                   </folding>
@@ -170,9 +125,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="65" />
-    <option name="y" value="24" />
+    <option name="y" value="-4" />
     <option name="width" value="1855" />
-    <option name="height" value="1056" />
+    <option name="height" value="1084" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -180,7 +135,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -197,6 +151,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -249,7 +204,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../../../../../.. /aurora/Documents/Study/Machine_Learning/DeePMD_torch/tests/test_with_DPMD_many/enough_sel_a/47/TorchANN" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../tests/test_with_DPMD_many/insufficient_sel_a_for_all/1/TorchANN" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
@@ -604,11 +559,14 @@
       <workItem from="1563025831541" duration="105000" />
       <workItem from="1563025982401" duration="9000" />
       <workItem from="1563173356081" duration="4965000" />
+      <workItem from="1563200267787" duration="263000" />
+      <workItem from="1563263728337" duration="685000" />
+      <workItem from="1565162034256" duration="188000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="427949000" />
+    <option name="totallyTimeSpent" value="429085000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -622,13 +580,13 @@
   <component name="ToolWindowManager">
     <frame x="65" y="24" width="1855" height="1056" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16473189" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2968491" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3291536" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.35257083" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.25498426" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.25484198" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32925585" />
@@ -867,14 +825,8 @@
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
-        <watch expression="SYM_COORD_Reshape_tf_cur" language="Python" />
-        <watch expression="E_cur_batch_atom_wise" language="Python" />
-        <watch expression="std_cur_type" language="Python" />
-        <watch expression="G_cur_type_cur_nei_type[0]" language="Python" />
-        <watch expression="G_cur_type" language="Python" />
-        <watch expression="RG_cur_type[0]" language="Python" />
-        <watch expression="GRRG_cur_type[0]" language="Python" />
-        <watch expression="(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)[0]" language="Python" />
+        <watch expression="NEI_IDX_Reshape_tf_cur_cur_type" language="Python" />
+        <watch expression="NEI_COORD_Reshape_tf_cur_cur_type[3]" language="Python" />
       </configuration>
     </watches-manager>
   </component>
@@ -886,19 +838,39 @@
     <SUITE FILE_PATH="coverage/python$train_noclassify_.coverage" NAME="train_noclassify_ Coverage Results" MODIFIED="1557061152708" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
     <SUITE FILE_PATH="coverage/python$train_noclassify_nompi_algotest.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1557306937759" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small2" />
     <SUITE FILE_PATH="coverage/python$train.coverage" NAME="train_noclassfy Coverage Results" MODIFIED="1556530755659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_very_small4+4" />
-    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1563174793492" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_with_DPMD_many_single/insufficient_sel_a_for_all/46//TorchANN" />
+    <SUITE FILE_PATH="coverage/python$train_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1563264183164" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/test_with_DPMD_many/insufficient_sel_a_for_all/1/TorchANN" />
     <SUITE FILE_PATH="coverage/python$test_noclassify_nompi.coverage" NAME="train_noclassify_nompi Coverage Results" MODIFIED="1562133075671" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../tests/AuP-verify/from_test" />
     <SUITE FILE_PATH="coverage/python$train_noclassfy_mpi4py.coverage" NAME="train_noclassfy_mpi4py Coverage Results" MODIFIED="1557045506427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/../test_1g" />
   </component>
   <component name="debuggerHistoryManager">
     <expressions id="watch">
       <expression>
-        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)[0]</expression-string>
+        <expression-string>NEI_COORD_Reshape_tf_cur_cur_type[3]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>RG_cur_type[0]</expression-string>
+        <expression-string>NEI_COORD_Reshape_tf_cur_cur_type</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>NEI_IDX_Reshape_tf_cur_cur_type</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>E_cur_batch_atom_wise</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>GRRG_cur_type</expression-string>
+        <language-id>Python</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>E_cur_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -913,32 +885,12 @@
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)</expression-string>
+        <expression-string>G_cur_type_cur_nei_type</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
       <expression>
-        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2)</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type).transpose(1, 2)[0]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>G_cur_type[0]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>GRRG_cur_type[0]</expression-string>
-        <language-id>Python</language-id>
-        <evaluation-mode>EXPRESSION</evaluation-mode>
-      </expression>
-      <expression>
-        <expression-string>G_cur_type_cur_nei_type[0]</expression-string>
+        <expression-string>(SYM_COORD_Reshape_tf_cur_Reshape_cur_type)[0]</expression-string>
         <language-id>Python</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
@@ -1001,9 +953,19 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/TEST_LOSS.OUT" />
+    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="849">
+          <caret line="204" selection-start-line="204" selection-end-line="204" />
+          <folding>
+            <element signature="e#47#65#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/test_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2760">
+        <state relative-caret-position="871">
           <caret line="196" column="104" selection-start-line="196" selection-start-column="16" selection-end-line="196" selection-end-column="104" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
@@ -1013,7 +975,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/predict_noclassify_nompi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2385">
+        <state relative-caret-position="871">
           <caret line="171" column="61" selection-start-line="171" selection-start-column="61" selection-end-line="171" selection-end-column="61" />
           <folding>
             <element signature="e#47#65#0" expanded="true" />
@@ -1026,25 +988,15 @@
     </entry>
     <entry file="file:///usr/local/lib/python3.5/dist-packages/torch/autograd/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1905">
+        <state relative-caret-position="871">
           <caret line="135" column="9" selection-start-line="135" selection-start-column="9" selection-end-line="135" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/no_mpi/train_noclassify_nompi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="1" selection-start-line="22" selection-start-column="1" selection-end-line="22" selection-end-column="1" />
-          <folding>
-            <element signature="e#47#65#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/no_mpi/class_and_function.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-501">
-          <caret line="533" column="23" lean-forward="true" selection-start-line="533" selection-start-column="23" selection-end-line="533" selection-end-column="23" />
+        <state relative-caret-position="171">
+          <caret line="643" selection-start-line="643" selection-end-line="643" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

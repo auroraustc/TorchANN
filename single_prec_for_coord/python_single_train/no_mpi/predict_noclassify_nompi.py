@@ -15,7 +15,7 @@ from ctypes import *
 from class_and_function import *
 from torch.utils.cpp_extension import load
 
-default_dtype = tf.float64
+default_dtype = tf.float32
 tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -38,9 +38,9 @@ FREEZE_MODEL = tf.load("./freeze_model.pytorch", map_location=device)
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 script_path = sys.path[0]
 if (device != tf.device('cpu')):
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
 else:
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters_from_bin = FREEZE_MODEL['parameters']
 parameters_from_file = Parameters()
 read_parameters_flag = read_parameters(parameters_from_file)

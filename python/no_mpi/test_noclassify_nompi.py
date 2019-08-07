@@ -204,7 +204,7 @@ if (True):
 
                 END_BATCH_TIMER = time.time()
 
-                TEST_maxlossF = tf.max(F_cur_batch-data_cur[3])
+                TEST_maxlossF = tf.max(tf.abs((F_cur_batch-data_cur[3]))
                 TEST_lossF = tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].double()))
                 TEST_maxlossF_percentage = tf.max((F_cur_batch-data_cur[3])[((F_cur_batch-data_cur[3]) >= TEST_lossF)] / (data_cur[3][((F_cur_batch-data_cur[3]) >= TEST_lossF)])) * 100
 

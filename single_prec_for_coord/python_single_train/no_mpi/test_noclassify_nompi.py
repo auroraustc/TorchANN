@@ -15,7 +15,7 @@ from ctypes import *
 from class_and_function import *
 from torch.utils.cpp_extension import load
 
-default_dtype = tf.float64
+default_dtype = tf.float32
 tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -38,9 +38,9 @@ FREEZE_MODEL = tf.load("./freeze_model.pytorch", map_location=device)
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
 script_path = sys.path[0]
 if (device != tf.device('cpu')):
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
 else:
-    comput_descrpt_and_deriv = load(name="test_from_cpp", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters_from_bin = FREEZE_MODEL['parameters']
 parameters_from_file = Parameters()
 read_parameters_flag = read_parameters(parameters_from_file)
@@ -204,20 +204,20 @@ if (True):
 
                 END_BATCH_TIMER = time.time()
 
-                TEST_maxlossF = tf.max(F_cur_batch-data_cur[3])
-                TEST_lossF = tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].double()))
+                TEST_maxlossF = tf.max(tf.abs(F_cur_batch-data_cur[3]))
+                TEST_lossF = tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].type(default_dtype)))
                 TEST_maxlossF_percentage = tf.max((F_cur_batch-data_cur[3])[((F_cur_batch-data_cur[3]) >= TEST_lossF)] / (data_cur[3][((F_cur_batch-data_cur[3]) >= TEST_lossF)])) * 100
 
                 ###Adam print
                 if (True):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % (
-                        epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
+                        epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].type(default_dtype)), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
                     END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./TEST_LOSS.OUT", "a")
                         print("Epoch: %-10d, Frame: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, maxlossF: %10.6f eV/A, maxlossF: %10.6f%%, time: %10.3f s" % ( \
-                           epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].double()), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
+                           epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].type(default_dtype)), TEST_lossF, TEST_maxlossF , TEST_maxlossF_percentage,
                         END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
                         file = f_out)
                         f_out.close()

@@ -40,7 +40,7 @@ script_path = sys.path[0]
 if (device != tf.device('cpu')):
     comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
 else:
-    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c_single/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters_from_bin = FREEZE_MODEL['parameters']
 parameters_from_file = Parameters()
 read_parameters_flag = read_parameters(parameters_from_file)

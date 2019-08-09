@@ -262,10 +262,10 @@ int main()
         {
             free(frame_info[i].coord[j]);
             free(frame_info[i].force[j]);
-            for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
+            /*for (k = 0; k <= parameters_info->SEL_A_max - 1; k++)
             {
                 free(frame_info[i].neighbour_list[j].coord_neighbours[k]);
-            }
+            }*/
             free(frame_info[i].neighbour_list[j].coord_neighbours);
             free(frame_info[i].neighbour_list[j].type);
             free(frame_info[i].neighbour_list[j].index_neighbours);

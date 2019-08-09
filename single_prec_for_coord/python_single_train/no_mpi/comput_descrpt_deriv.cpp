@@ -22,7 +22,7 @@ Compute descriptors and derivatives.
 
 torch::Tensor test_from_cpp()
 {
-    torch::Tensor tmp = torch::ones({3, 3}, torch::TensorOptions().dtype(torch::kFloat64));
+    torch::Tensor tmp = torch::ones({3, 3}, torch::TensorOptions().dtype(torch::kFloat32));
     std::cout << tmp << std::endl;
     return tmp;
 }
@@ -32,10 +32,10 @@ std::vector<torch::Tensor> calc_descrpt_and_deriv_DPMD(torch::Tensor COORD, torc
     float s_r(float r_ij, parameters_info_struct * parameters_info);
     float fastpow2(float number, int dummy);
 
-    torch::Tensor SYM_COORD_DPMD_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat64));
-    torch::Tensor SYM_COORD_DPMD_DX_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat64));
-    torch::Tensor SYM_COORD_DPMD_DY_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat64));
-    torch::Tensor SYM_COORD_DPMD_DZ_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat64));
+    torch::Tensor SYM_COORD_DPMD_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat32));
+    torch::Tensor SYM_COORD_DPMD_DX_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat32));
+    torch::Tensor SYM_COORD_DPMD_DY_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat32));
+    torch::Tensor SYM_COORD_DPMD_DZ_RESHAPE = torch::zeros({Nframes_tot, N_Atoms_max, SEL_A_max * 4}, torch::TensorOptions().dtype(torch::kFloat32));
 
     torch::Tensor SYM_COORD_DPMD;
     torch::Tensor SYM_COORD_DPMD_DX;

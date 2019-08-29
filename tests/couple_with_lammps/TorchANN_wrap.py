@@ -320,7 +320,25 @@ while 1:
     
   #energy,forces,virial = vasprun_read()
   energy, forces, virial = torchannrun_read()
-
+  os.system("cat coord.raw >> coord_all.raw")
+  os.system("cat box.raw >> box_all.raw")
+  os.system("cat type.raw >> type_all.raw")
+  energy_np = np.ndarray(1)
+  energy_np[0] = energy
+  f_energy_all = open("energy_all.raw", "a")
+  np.savetxt(f_energy_all, energy_np, fmt="%10.6f")
+  f_energy_all.close()
+  forces_np = np.array(forces).reshape(1, -1)
+  print(forces_np.shape)
+  f_force_all = open("force_all.raw", "a")
+  np.savetxt(f_force_all, forces_np, fmt="%10.6f")
+  f_force_all.close()
+  virial_np = np.array(virial).reshape(1, -1)
+  f_virial_all = open("virial_all.raw", "a")
+  print(virial_np.reshape(-1,))
+  np.savetxt(f_virial_all, virial_np, fmt="%10.6f")
+  f_virial_all.close()
+  
   # convert VASP kilobars to bars
 
   for i,value in enumerate(virial): virial[i] *= 1000.0

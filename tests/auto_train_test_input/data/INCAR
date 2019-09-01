@@ -1,0 +1,17 @@
+NELMIN = 5
+NELMDL = -5
+SIGMA = 0.1
+EDIFF = 5e-6
+EDIFFG = -1e-2
+ISIF = 2
+ALGO = Fast
+GGA = PE
+NSW = 0
+ISMEAR = 0
+ISYM = 0
+#ENCUT = 450
+LREAL = Auto
+LWAVE = .FALSE.
+LCHARG = .FALSE.
+#ISPIN = 2
+ 

@@ -1,0 +1,6 @@
+-------------------------------------------------------------------------------
+NOTE: This example select lammps to run MD, thus please read the README in the
+"couple_with_lammps" directory.
+...
+"Pre-requests: MESSAGE pack of lammps and CSlib in lammps/lib/message directory"
+...

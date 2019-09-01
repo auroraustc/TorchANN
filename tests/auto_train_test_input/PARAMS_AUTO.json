@@ -1,0 +1,16 @@
+{
+    "total_loop": 2,
+    "explore_method": 1,
+    "dft_method": 1,
+    "explore_ratio": 0.5,
+    "dft_ratio": 0.2,
+    "data_path": "./data",
+    "t_generate": "/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/c_single/GENERATE_P",
+    "t_train": "/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py",
+    "t_predict": "/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/predict_noclassify_nompi.py",
+    "t_input": "PARAMS.json",
+    "lammps_exe": "~/Softwares/lammps-7Aug19/install/bin/lmp_intel_cpu_intelmpi",
+    "lammps_input": "in.client.W",
+    "lammps_data_name": "data.W",
+    "vasp_exe": "vasp_std_544"
+}

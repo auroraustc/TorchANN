@@ -32,7 +32,7 @@ Parameters in the PARAMS_AUTO.json:
 	Absolute path of the training script.
 	e.g.: /home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py
 
-"t_predict" = "string"
+"t_predict" = "[string]"
 	Absolute path of the predict script
 	e.g.: /home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/predict_noclassify_nompi.py
 

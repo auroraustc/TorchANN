@@ -1,0 +1,60 @@
+-----------------------------------------------------------------------------------------
+Parameters:
+-----------------------------------------------------------------------------------------
+"total_loop" = "[int]"
+	Total number of loops of train->explore->DFT
+
+"explore_method" = "[int]" 
+	1 for lammps MD, 2 for lasp SSW
+
+"dft_method" = "[int]" 
+	1 for VASP
+
+"explore_ratio" = "[float]" 
+	How many structures will be used to perform explore step.
+	0 < [float] < 1
+
+"dft_ratio" = "[float]" 
+	How many explored structures will be chosen to perform DFT and add to training set
+	0 < [float] < 1
+
+"t_generate" = "[string]"
+	Absolute path of GENERATE_P.
+	e.g.: /home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/c_single/GENERATE_P
+
+"t_train" = "[string]"
+	Absolute path of the training script.
+	e.g.: /home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/train_noclassify_nompi.py
+
+"t_predict" = "string"
+	Absolute path of the predict script
+	e.g.: /home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/predict_noclassify_nompi.py
+
+"data_path" = "[string]"
+	Relative path of the directory which contains input files required by TorchANN(training and predicting), LAMMPS/LASP and VASP 
+	e.g.: ./data
+
+"t_input" = "[string]"
+	PARAMS.json requried by TorchANN. auto_train.py will find this file in "data_path"
+	e.g.: PARAMS.json
+	
+"lammps_exe" = "[string]"
+	Command to run LAMMPS or absolute path of the execuatable of LAMMPS.
+	e.g.: ~/Softwares/lammps-7Aug19/install/bin/lmp_intel_cpu_intelmpi
+
+"lammps_input" = "[string]"
+	LAMMPS input file. auto_train.py will find this file in "data_path"
+	e.g.: in.client.W
+
+"lammps_data_name" = "[string]"
+	The name of the coordinate file define in "lammps_input" by the 'read_data' command. auto_train.py will create this file for LAMMPS run.
+	e.g.: data.W
+
+"lasp_exe" = "[string]"
+	(Not finished yet)Command to run LASP or absolute path of LASP.
+	e.g.: lasp
+
+"vasp_exe" = "[string]"
+	Command to run VASP or absolute path of VASP.
+	e.g.: vasp_std
+	e.g.: mpirun -n 2 vasp_std

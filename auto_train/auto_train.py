@@ -221,6 +221,102 @@ def raw_to_poscar():
 
     POSCAR_F.close()
 
+"""
+Selected data will be saved as *_sel_exp.raw
+Make sure the working dir has been changed to EXPLORE_DIR before call this function
+"""
+def select_data_for_explore(auto_train_parameters):
+
+    tmp_frame = np.loadtxt("energy_all_dataset.raw")
+    tot_frame = len(tmp_frame)
+    sel_frame = math.ceil(tot_frame * auto_train_parameters.explore_ratio)
+    explore_systems_idx = random.sample(range(tot_frame), sel_frame)
+
+    box_raw_from_data_f = open("box_all_dataset.raw", "rt")
+    coord_raw_from_data_f = open("coord_all_dataset.raw", "rt")
+    force_raw_from_data_f = open("force_all_dataset.raw", "rt")
+    energy_raw_from_data_f = open("energy_all_dataset.raw", "rt")
+    type_raw_from_data_f = open("type_all_dataset.raw", "rt")
+
+    box_raw_from_data = box_raw_from_data_f.readlines()
+    coord_raw_from_data = coord_raw_from_data_f.readlines()
+    force_raw_from_data = force_raw_from_data_f.readlines()
+    energy_raw_from_data = energy_raw_from_data_f.readlines()
+    type_raw_from_data = type_raw_from_data_f.readlines()
+
+    box_raw_from_data_f.close()
+    coord_raw_from_data_f.close()
+    force_raw_from_data_f.close()
+    energy_raw_from_data_f.close()
+    type_raw_from_data_f.close()
+
+    box = open("box_sel_exp.raw", "wt")
+    coord = open("coord_sel_exp.raw", "wt")
+    force = open("force_sel_exp.raw", "wt")
+    energy = open("energy_sel_exp.raw", "wt")
+    type = open("type_sel_exp.raw", "wt")
+
+    for i in range(sel_frame):
+        #CMD = "mkdir " + int_to_str(i)
+        #os.system(CMD)
+        #os.system("cp freeze_model.pytorch" + " " + int_to_str(i))
+        #os.system("cp PARAMS.json" + " " + int_to_str(i))
+        #os.chdir(int_to_str(i))
+
+        box.write(box_raw_from_data[explore_systems_idx[i]])
+        coord.write(coord_raw_from_data[explore_systems_idx[i]])
+        force.write(force_raw_from_data[explore_systems_idx[i]])
+        energy.write(energy_raw_from_data[explore_systems_idx[i]])
+        type.write(type_raw_from_data[explore_systems_idx[i]])
+
+        #os.chdir("../")
+
+    box.close()
+    coord.close()
+    force.close()
+    energy.close()
+    type.close()
+
+    return sel_frame
+
+"""
+Selected data will be saved as *_sel_dft.raw
+Make sure the working dir has been changed to DFT_DIR before call this function
+"""
+def select_data_for_dft(auto_train_parameters):
+    tmp_frame_DFT = np.loadtxt("energy_all_exp.raw")
+    tot_frame_DFT = len(tmp_frame_DFT)
+    sel_frame_DFT = math.ceil(tot_frame_DFT * auto_train_parameters.dft_ratio)
+    dft_systems_idx = random.sample(range(tot_frame_DFT), sel_frame_DFT)
+
+    box_raw_from_data_f = open("box_all_exp.raw")
+    coord_raw_from_data_f = open("coord_all_exp.raw")
+    type_raw_from_data_f = open("type_all_exp.raw")
+
+    box_raw_from_data = box_raw_from_data_f.readlines()
+    coord_raw_from_data = coord_raw_from_data_f.readlines()
+    type_raw_from_data = type_raw_from_data_f.readlines()
+
+    box_raw_from_data_f.close()
+    coord_raw_from_data_f.close()
+    type_raw_from_data_f.close()
+
+    box = open("box_sel_dft.raw", "wt")
+    coord = open("coord_sel_dft.raw", "wt")
+    type = open("type_sel_dft.raw", "wt")
+
+    for i in range(sel_frame_DFT):
+        box.write(box_raw_from_data[dft_systems_idx[i]])
+        coord.write(coord_raw_from_data[dft_systems_idx[i]])
+        type.write(type_raw_from_data[dft_systems_idx[i]])
+    box.close()
+    coord.close()
+    type.close()
+
+    return sel_frame_DFT
+
+
+
 
 """One loop: train->explore->dft"""
 def one_loop(loop_idx, auto_train_parameters):
@@ -250,10 +346,10 @@ def one_loop(loop_idx, auto_train_parameters):
         CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + "freeze_model.pytorch" + " " + DATASET_DIR +\
             "/freeze_model.pytorch.ckpt.cont"
         os.system(CMD)
-    tmp_frame = np.loadtxt(DATASET_DIR + "/energy.raw")
-    tot_frame = len(tmp_frame)
-    sel_frame = math.ceil(tot_frame * auto_train_parameters.explore_ratio)
-    explore_systems_idx = random.sample(range(tot_frame), sel_frame)
+    #tmp_frame = np.loadtxt(DATASET_DIR + "/energy.raw")
+    #tot_frame = len(tmp_frame)
+    #sel_frame = math.ceil(tot_frame * auto_train_parameters.explore_ratio)
+    #explore_systems_idx = random.sample(range(tot_frame), sel_frame)
     CMD = "cp " + auto_train_parameters.data_path + "/" + auto_train_parameters.t_input + " " + DATASET_DIR
     os.system(CMD)
     """Start train"""
@@ -272,29 +368,45 @@ def one_loop(loop_idx, auto_train_parameters):
     os.system("cp " + DATASET_DIR + "/PARAMS.json" + "  " + EXPLORE_DIR)
 
     """Select data"""
-    for i in ["coord.raw", "type.raw", "energy.raw", "box.raw", "force.raw"]:
-        CMD = "cp " + DATASET_DIR + "/" + i + " " + EXPLORE_DIR
+    for i in ["coord", "type", "energy", "box", "force"]:
+        CMD = "cp " + DATASET_DIR + "/" + i + ".raw" + " " + EXPLORE_DIR + "/" + i + "_all_dataset.raw"
         os.system(CMD)
 
-    box_raw_from_data_f = open(DATASET_DIR + "/box.raw", "rt")
-    coord_raw_from_data_f = open(DATASET_DIR + "/coord.raw", "rt")
-    force_raw_from_data_f = open(DATASET_DIR + "/force.raw", "rt")
-    energy_raw_from_data_f = open(DATASET_DIR + "/energy.raw", "rt")
-    type_raw_from_data_f = open(DATASET_DIR + "/type.raw", "rt")
-
-    box_raw_from_data = box_raw_from_data_f.readlines()
-    coord_raw_from_data = coord_raw_from_data_f.readlines()
-    force_raw_from_data = force_raw_from_data_f.readlines()
-    energy_raw_from_data = energy_raw_from_data_f.readlines()
-    type_raw_from_data = type_raw_from_data_f.readlines()
-
-    box_raw_from_data_f.close()
-    coord_raw_from_data_f.close()
-    force_raw_from_data_f.close()
-    energy_raw_from_data_f.close()
-    type_raw_from_data_f.close()
+    # box_raw_from_data_f = open(DATASET_DIR + "/box.raw", "rt")
+    # coord_raw_from_data_f = open(DATASET_DIR + "/coord.raw", "rt")
+    # force_raw_from_data_f = open(DATASET_DIR + "/force.raw", "rt")
+    # energy_raw_from_data_f = open(DATASET_DIR + "/energy.raw", "rt")
+    # type_raw_from_data_f = open(DATASET_DIR + "/type.raw", "rt")
+    #
+    # box_raw_from_data = box_raw_from_data_f.readlines()
+    # coord_raw_from_data = coord_raw_from_data_f.readlines()
+    # force_raw_from_data = force_raw_from_data_f.readlines()
+    # energy_raw_from_data = energy_raw_from_data_f.readlines()
+    # type_raw_from_data = type_raw_from_data_f.readlines()
+    #
+    # box_raw_from_data_f.close()
+    # coord_raw_from_data_f.close()
+    # force_raw_from_data_f.close()
+    # energy_raw_from_data_f.close()
+    # type_raw_from_data_f.close()
 
     os.chdir(EXPLORE_DIR)
+    """Selected frames will be saved to *_sel_exp.raw"""
+    sel_frame = select_data_for_explore(auto_train_parameters)
+
+    box_sel_f = open("box_sel_exp.raw", "rt")
+    coord_sel_f = open("coord_sel_exp.raw", "rt")
+    force_sel_f = open("force_sel_exp.raw", "rt")
+    energy_sel_f = open("energy_sel_exp.raw", "rt")
+    type_sel_f = open("type_sel_exp.raw", "rt")
+
+    box_from_sel = box_sel_f.readlines()
+    coord_from_sel = coord_sel_f.readlines()
+    force_from_sel = force_sel_f.readlines()
+    energy_from_sel = energy_sel_f.readlines()
+    type_from_sel = type_sel_f.readlines()
+
+
     for i in range(sel_frame):
         CMD = "mkdir " + int_to_str(i)
         os.system(CMD)
@@ -303,19 +415,19 @@ def one_loop(loop_idx, auto_train_parameters):
         os.chdir(int_to_str(i))
 
         box = open("box.raw", "wt")
-        box.write(box_raw_from_data[explore_systems_idx[i]])
+        box.write(box_from_sel[i])
         box.close()
         coord = open("coord.raw", "wt")
-        coord.write(coord_raw_from_data[explore_systems_idx[i]])
+        coord.write(coord_from_sel[i])
         coord.close()
         force = open("force.raw", "wt")
-        force.write(force_raw_from_data[explore_systems_idx[i]])
+        force.write(force_from_sel[i])
         force.close()
         energy = open("energy.raw", "wt")
-        energy.write(energy_raw_from_data[explore_systems_idx[i]])
+        energy.write(energy_from_sel[i])
         energy.close()
         type = open("type.raw", "wt")
-        type.write(type_raw_from_data[explore_systems_idx[i]])
+        type.write(type_from_sel[i])
         type.close()
 
         os.chdir("../")
@@ -379,33 +491,35 @@ def one_loop(loop_idx, auto_train_parameters):
 
 
     """Select data for DFT"""
-    tmp_frame_DFT = np.loadtxt("energy_all_exp.raw")
-    tot_frame_DFT = len(tmp_frame_DFT)
-    sel_frame_DFT = math.ceil(tot_frame_DFT * auto_train_parameters.dft_ratio)
-    dft_systems_idx = random.sample(range(tot_frame_DFT), sel_frame_DFT)
+    # tmp_frame_DFT = np.loadtxt("energy_all_exp.raw")
+    # tot_frame_DFT = len(tmp_frame_DFT)
+    # sel_frame_DFT = math.ceil(tot_frame_DFT * auto_train_parameters.dft_ratio)
+    # dft_systems_idx = random.sample(range(tot_frame_DFT), sel_frame_DFT)
+    #
+    # box_raw_from_data_f = open("box_all_exp.raw")
+    # coord_raw_from_data_f = open("coord_all_exp.raw")
+    # type_raw_from_data_f = open("type_all_exp.raw")
+    #
+    # box_raw_from_data = box_raw_from_data_f.readlines()
+    # coord_raw_from_data = coord_raw_from_data_f.readlines()
+    # type_raw_from_data = type_raw_from_data_f.readlines()
+    #
+    # box_raw_from_data_f.close()
+    # coord_raw_from_data_f.close()
+    # type_raw_from_data_f.close()
+    #
+    # box = open("box.raw", "wt")
+    # coord = open("coord.raw", "wt")
+    # type = open("type.raw", "wt")
+    # for i in range(sel_frame_DFT):
+    #     box.write(box_raw_from_data[dft_systems_idx[i]])
+    #     coord.write(coord_raw_from_data[dft_systems_idx[i]])
+    #     type.write(type_raw_from_data[dft_systems_idx[i]])
+    # box.close()
+    # coord.close()
+    # type.close()
 
-    box_raw_from_data_f = open("box_all_exp.raw")
-    coord_raw_from_data_f = open("coord_all_exp.raw")
-    type_raw_from_data_f = open("type_all_exp.raw")
-
-    box_raw_from_data = box_raw_from_data_f.readlines()
-    coord_raw_from_data = coord_raw_from_data_f.readlines()
-    type_raw_from_data = type_raw_from_data_f.readlines()
-
-    box_raw_from_data_f.close()
-    coord_raw_from_data_f.close()
-    type_raw_from_data_f.close()
-
-    box = open("box.raw", "wt")
-    coord = open("coord.raw", "wt")
-    type = open("type.raw", "wt")
-    for i in range(sel_frame_DFT):
-        box.write(box_raw_from_data[dft_systems_idx[i]])
-        coord.write(coord_raw_from_data[dft_systems_idx[i]])
-        type.write(type_raw_from_data[dft_systems_idx[i]])
-    box.close()
-    coord.close()
-    type.close()
+    sel_frame_DFT = select_data_for_dft(auto_train_parameters)
 
     os.chdir("../")
     for i in range(sel_frame_DFT):
@@ -419,16 +533,24 @@ def one_loop(loop_idx, auto_train_parameters):
         os.system(CMD)
     os.chdir(DFT_DIR)
 
+    box_sel_f = open("box_sel_dft.raw", "rt")
+    coord_sel_f = open("coord_sel_dft.raw", "rt")
+    type_sel_f = open("type_sel_dft.raw", "rt")
+
+    box_from_sel = box_sel_f.readlines()
+    coord_from_sel = coord_sel_f.readlines()
+    type_from_sel = type_sel_f.readlines()
+
     for i in range(sel_frame_DFT):
         os.chdir(int_to_str(i))
         box = open("box.raw", "wt")
-        box.write(box_raw_from_data[dft_systems_idx[i]])
+        box.write(box_from_sel[i])
         box.close()
         coord = open("coord.raw", "wt")
-        coord.write(coord_raw_from_data[dft_systems_idx[i]])
+        coord.write(coord_from_sel[i])
         coord.close()
         type = open("type.raw", "wt")
-        type.write(type_raw_from_data[dft_systems_idx[i]])
+        type.write(type_from_sel[i])
         type.close()
         os.chdir("../")
 

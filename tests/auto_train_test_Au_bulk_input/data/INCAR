@@ -1,8 +1,8 @@
 SYSTEM = Au_111_TEST
 
-ENCUT = 550
+ENCUT = 450
 
-PREC = Accurate
+PREC = Normal
 ISTART = 0
 ICHARG = 2
 ISPIN = 1

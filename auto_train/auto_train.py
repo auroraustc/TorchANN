@@ -29,7 +29,6 @@ DFT_DIR_PREFIX = "DFT_"
 SCRIPTS_PATH = "../"
 
 
-
 class auto_train_parameters():
     def __init__(self):
         total_loop = 1
@@ -101,19 +100,6 @@ class auto_train_parameters():
             exit()
         INPUT_FILE.close()
 
-"""Command to run lammps"""
-class run_lammps():
-    def __init__(self):
-        CMD1 = LAMMPS_EXE + LAMMPS_COMMAND + LEFT_ARROW + LAMMPS_INPUT + BACKGROUND_SYMBOL
-        CMD2 = PYTHON2 + TORCHAN_LAMMPS_WRAPER
-        CMD3 = WAIT
-        CMD = CMD1 + ";" + CMD2 + ";" + CMD3
-
-    def execuate(self):
-        os.system(self.CMD)
-
-    def printcmd(self):
-        print(self.CMD)
 
 class run_lasp():
     def __init__(self):
@@ -125,6 +111,7 @@ class run_lasp():
 
     def printcmd(self):
         print(self.CMD)
+
 
 """Copy file to dest. file and dest are strings"""
 class cp_file():
@@ -140,11 +127,13 @@ class cp_file():
     def printcmd(self):
         print(self.CMD)
 
+
 def int_to_str(INT):
     STR_TMP = []
     STR_TMP += ("%d" % INT)
     STR = ''.join(str(element) for element in STR_TMP)
     return STR
+
 
 def raw_to_lammps():
     box = np.loadtxt("box.raw", dtype=np.float)
@@ -186,6 +175,7 @@ def raw_to_lammps():
                                                         coord[i][0], coord[i][1], coord[i][2]))
 
     lammps_data_f.close()
+    return
 
 
 """Convert raw to POSCAR. The elements will arange in ascending order, so make sure the element sequence in POTCAR
@@ -215,11 +205,116 @@ def raw_to_poscar():
         for j in range(len(coord_tmp)):
             POSCAR_F.write(" %10.6f %10.6f %10.6f \n" % (coord_tmp[j][0], coord_tmp[j][1], coord_tmp[j][2]))
 
-
-
-
-
     POSCAR_F.close()
+    return
+
+
+"""
+Command to copy checkpoint file of TorchANN.
+When calling this function, make sure your current working directory is the directory which PARAMS_AUTO.json exists.
+"""
+def copy_checkpoint_TorchANN(loop_idx, DATASET_DIR_PREFIX):
+    CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + "freeze_model.pytorch" + " " + \
+          DATASET_DIR_PREFIX + int_to_str(loop_idx) + "/freeze_model.pytorch.ckpt.cont"
+    os.system(CMD)
+    return
+
+
+"""
+Command to copy input parameters of TorchANN
+When calling this function, make sure your current working directory is the directory which PARAMS_AUTO.json exists.
+"""
+def copy_input_TorchANN(auto_train_parameters, DATASET_DIR):
+    CMD = "cp " + auto_train_parameters.data_path + "/" + auto_train_parameters.t_input + " " + DATASET_DIR
+    os.system(CMD)
+    return
+
+
+"""
+Command to run TorchANN
+When calling this function, make sure your current working directory is DATASET_DIR.
+This function should save all the training set in the DATASET_DIR/*.raw
+"""
+def run_TorchANN_dataset(auto_train_parameters):
+    CMD1 = TORCHANN_CPP_EXE + " 2>&1 > runlog_g "
+    CMD2 = TORCHANN_TRAIN + " 2>&1 > runlog_t "
+    CMD = CMD1 + ";" + CMD2
+    os.system(CMD)
+    return
+
+
+"""
+Command to run lammps
+When calling this function, make sure your current working directory is EXPLORE_DIR/i/, i=1,2,3,...
+This function should save all the explored structures in the EXPLORE_DIR/*_all_exp.raw
+"""
+# class run_lammps():
+#     def __init__(self):
+#         CMD1 = LAMMPS_EXE + LAMMPS_COMMAND + LEFT_ARROW + LAMMPS_INPUT + BACKGROUND_SYMBOL
+#         CMD2 = PYTHON2 + TORCHAN_LAMMPS_WRAPER
+#         CMD3 = WAIT
+#         CMD = CMD1 + ";" + CMD2 + ";" + CMD3
+#
+#     def execuate(self):
+#         os.system(self.CMD)
+#
+#     def printcmd(self):
+#         print(self.CMD)
+def run_lammps_explore(auto_train_parameters):
+    CMD = "cp ../../data/" + auto_train_parameters.lammps_input + "  ./"
+    os.system(CMD)
+    raw_to_lammps()
+    CMD = "cp " + SCRIPTS_PATH + "/TorchANN_wrap_python2.py " + " ./"
+    os.system(CMD)
+    CMD1 = TORCHANN_CPP_EXE
+    CMD2 = TORCHANN_PREDICT
+    CMD3 = CMD1 + ";" + CMD2
+    with open("torchanncmd.txt", "wt") as f:
+        f.write(CMD3)
+        f.close()
+
+    """Run lammps"""
+    CMD1 = LAMMPS_EXE + " -v mode file < " + auto_train_parameters.lammps_input + " " + BACKGROUND_SYMBOL
+    CMD2 = PYTHON2 + " TorchANN_wrap_python2.py file"
+    CMD3 = WAIT
+    CMD = CMD1 + " \n " + CMD2 + " \n " + CMD3
+    with open("run.sh", "wt") as f:
+        f.write(CMD)
+    os.system("bash run.sh")
+
+    """cat all frames together"""
+    os.system("cat ./coord_all.raw >> ../coord_all_exp.raw")
+    os.system("cat ./force_all.raw >> ../force_all_exp.raw")
+    os.system("cat ./box_all.raw >> ../box_all_exp.raw")
+    os.system("cat ./type_all.raw >> ../type_all_exp.raw")
+    os.system("cat ./energy_all.raw >> ../energy_all_exp.raw")
+
+    return
+
+
+"""
+Command to run lammps
+When calling this function, make sure your current working directory is DFT_DIR/i/, i=1,2,3,...
+This function should save calculated energy, force in the DFT_DIR/*_sel_dft.raw
+"""
+def run_vasp_dft(auto_train_parameters):
+    raw_to_poscar()
+    os.system(VASP_EXE)
+    """Extract energy and force"""
+    os.system("grep free\ \ energy\ \ \ T OUTCAR | awk '{print $5}' > energy.raw")
+    type = np.loadtxt("type.raw", dtype=np.int)
+    natoms = len(type) + 2
+    natoms_str = str(natoms)
+    CMD1 = "grep TOTAL-FORCE OUTCAR -A" + natoms_str + " "
+    CMD2 = " | sed '/^\ -/d' | sed '/POS/d' | awk '{print $4,$5,$6}' >force.raw "
+    CMD = CMD1 + CMD2
+    os.system(CMD)
+    CMD = "sed -i ':a;N;s/\\n/\ /g;ta' force.raw"
+    os.system(CMD)
+    os.system("cat energy.raw >> ../energy_sel_dft.raw")
+    os.system("cat force.raw >> ../force_sel_dft.raw")
+    return
+
 
 """
 Selected data will be saved as *_sel_exp.raw
@@ -257,11 +352,11 @@ def select_data_for_explore(auto_train_parameters):
     type = open("type_sel_exp.raw", "wt")
 
     for i in range(sel_frame):
-        #CMD = "mkdir " + int_to_str(i)
-        #os.system(CMD)
-        #os.system("cp freeze_model.pytorch" + " " + int_to_str(i))
-        #os.system("cp PARAMS.json" + " " + int_to_str(i))
-        #os.chdir(int_to_str(i))
+        # CMD = "mkdir " + int_to_str(i)
+        # os.system(CMD)
+        # os.system("cp freeze_model.pytorch" + " " + int_to_str(i))
+        # os.system("cp PARAMS.json" + " " + int_to_str(i))
+        # os.chdir(int_to_str(i))
 
         box.write(box_raw_from_data[explore_systems_idx[i]])
         coord.write(coord_raw_from_data[explore_systems_idx[i]])
@@ -278,6 +373,7 @@ def select_data_for_explore(auto_train_parameters):
     type.close()
 
     return sel_frame
+
 
 """
 Selected data will be saved as *_sel_dft.raw
@@ -316,14 +412,12 @@ def select_data_for_dft(auto_train_parameters):
     return sel_frame_DFT
 
 
-
-
 """One loop: train->explore->dft"""
 def one_loop(loop_idx, auto_train_parameters):
 
     LOG_f = open("auto_train.log", "at")
     LOG_f.write("Auto training loop %4d\n" % loop_idx)
-    #LOG_f.close()
+    # LOG_f.close()
 
     DIR_SUFFIX = int_to_str(loop_idx)
     DATASET_DIR = DATASET_DIR_PREFIX + DIR_SUFFIX
@@ -334,35 +428,43 @@ def one_loop(loop_idx, auto_train_parameters):
     os.system("mkdir " + DFT_DIR)
 
     """Move necessary files into DATASET_DIR"""
+    """The initial input for training should be provided as five .raws: """
+    """coord.raw, type.raw, energy.raw, box.raw and force.raw"""
     if (loop_idx == 0):
         CMD = "cp " + auto_train_parameters.data_path + "/*.raw " + DATASET_DIR
         os.system(CMD)
     else:
-        for i in ["coord.raw", "type.raw", "energy.raw", "box.raw", "force.raw"]:
-            CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + i + " " + DATASET_DIR
+        for i in ["coord", "type", "energy", "box", "force"]:
+            CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + i + ".raw " + " " + DATASET_DIR
             os.system(CMD)
-            CMD = "cat " + DFT_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + i + " >> " + DATASET_DIR + "/" + i
+            CMD1 = "cat " + DFT_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + i + "_sel_dft.raw " + " >> "
+            CMD2= DATASET_DIR + "/" + i + ".raw"
+            CMD = CMD1 + CMD2
             os.system(CMD)
-        CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + "freeze_model.pytorch" + " " + DATASET_DIR +\
-            "/freeze_model.pytorch.ckpt.cont"
-        os.system(CMD)
-    #tmp_frame = np.loadtxt(DATASET_DIR + "/energy.raw")
-    #tot_frame = len(tmp_frame)
-    #sel_frame = math.ceil(tot_frame * auto_train_parameters.explore_ratio)
-    #explore_systems_idx = random.sample(range(tot_frame), sel_frame)
-    CMD = "cp " + auto_train_parameters.data_path + "/" + auto_train_parameters.t_input + " " + DATASET_DIR
-    os.system(CMD)
+        # CMD = "cp " + DATASET_DIR_PREFIX + int_to_str(loop_idx - 1) + "/" + "freeze_model.pytorch" + " " + DATASET_DIR +\
+        #     "/freeze_model.pytorch.ckpt.cont"
+        # os.system(CMD)
+        copy_checkpoint_TorchANN(loop_idx, DATASET_DIR_PREFIX)
+    # tmp_frame = np.loadtxt(DATASET_DIR + "/energy.raw")
+    # tot_frame = len(tmp_frame)
+    # sel_frame = math.ceil(tot_frame * auto_train_parameters.explore_ratio)
+    # explore_systems_idx = random.sample(range(tot_frame), sel_frame)
+    # CMD = "cp " + auto_train_parameters.data_path + "/" + auto_train_parameters.t_input + " " + DATASET_DIR
+    # os.system(CMD)
+    copy_input_TorchANN(auto_train_parameters, DATASET_DIR)
     """Start train"""
 
-    #LOG_f = open("auto_train.log", "at")
+    # LOG_f = open("auto_train.log", "at")
     LOG_f.write("1/3 of %4d: Training...\n" % loop_idx)
-    #LOG_f.close()
+    # LOG_f.close()
 
     os.chdir(DATASET_DIR)
-    CMD1 = TORCHANN_CPP_EXE + " 2>&1 > runlog_g "
-    CMD2 = TORCHANN_TRAIN + " 2>&1 > runlog_t "
-    CMD = CMD1 + ";" + CMD2
-    os.system(CMD)
+    # CMD1 = TORCHANN_CPP_EXE + " 2>&1 > runlog_g "
+    # CMD2 = TORCHANN_TRAIN + " 2>&1 > runlog_t "
+    # CMD = CMD1 + ";" + CMD2
+    # os.system(CMD)
+    run_TorchANN_dataset(auto_train_parameters)
+
     os.chdir("../")#DATASET_DIR
     os.system("cp " + DATASET_DIR + "/freeze_model.pytorch" + "  " + EXPLORE_DIR)
     os.system("cp " + DATASET_DIR + "/PARAMS.json" + "  " + EXPLORE_DIR)
@@ -412,7 +514,8 @@ def one_loop(loop_idx, auto_train_parameters):
         os.system(CMD)
         os.system("cp freeze_model.pytorch" + " " + int_to_str(i))
         os.system("cp PARAMS.json" + " " + int_to_str(i))
-        os.chdir(int_to_str(i))
+
+        os.chdir(int_to_str(i)) # Now in directory EXPLORE_DIR/i
 
         box = open("box.raw", "wt")
         box.write(box_from_sel[i])
@@ -430,55 +533,56 @@ def one_loop(loop_idx, auto_train_parameters):
         type.write(type_from_sel[i])
         type.close()
 
-        os.chdir("../")
+        os.chdir("../") # Now in directory EXPLORE_DIR
 
     """Run explore in dir 0..sel_frame - 1"""
 
-    #LOG_f = open("auto_train.log", "at")
+    # LOG_f = open("auto_train.log", "at")
     LOG_f.write("2/3 of %4d: Exploring...\n" % loop_idx)
-    #LOG_f.close()
+    # LOG_f.close()
 
     for i in range(sel_frame):
-        os.chdir(int_to_str(i))
+        os.chdir(int_to_str(i)) # Now in directory EXPLORE_DIR/i
 
         if (auto_train_parameters.explore_method == 1): #LAMMPS
-            CMD = "cp ../../data/" + auto_train_parameters.lammps_input + "  ./"
-            os.system(CMD)
-            """Convert data to lammps type"""
-            raw_to_lammps()
-            CMD = "cp " + SCRIPTS_PATH + "/TorchANN_wrap_python2.py " + " ./"
-            os.system(CMD)
-            CMD1 = TORCHANN_CPP_EXE
-            CMD2 = TORCHANN_PREDICT
-            CMD3 = CMD1 + ";" + CMD2
-            with open("torchanncmd.txt","wt") as f:
-                f.write(CMD3)
-                f.close()
+            # CMD = "cp ../../data/" + auto_train_parameters.lammps_input + "  ./"
+            # os.system(CMD)
+            # """Convert data to lammps type"""
+            # raw_to_lammps()
+            # CMD = "cp " + SCRIPTS_PATH + "/TorchANN_wrap_python2.py " + " ./"
+            # os.system(CMD)
+            # CMD1 = TORCHANN_CPP_EXE
+            # CMD2 = TORCHANN_PREDICT
+            # CMD3 = CMD1 + ";" + CMD2
+            # with open("torchanncmd.txt","wt") as f:
+            #     f.write(CMD3)
+            #     f.close()
+            #
+            # """Run lammps"""
+            # CMD1 = LAMMPS_EXE + " -v mode file < " + auto_train_parameters.lammps_input + " " + BACKGROUND_SYMBOL
+            # CMD2 = PYTHON2 + " TorchANN_wrap_python2.py file"
+            # CMD3 = WAIT
+            # CMD = CMD1 + " \n " + CMD2 + " \n " + CMD3
+            # with open("run.sh", "wt") as f:
+            #     f.write(CMD)
+            # os.system("bash run.sh")
+            run_lammps_explore(auto_train_parameters)
 
-            """Run lammps"""
-            CMD1 = LAMMPS_EXE + " -v mode file < " + auto_train_parameters.lammps_input + " " + BACKGROUND_SYMBOL
-            CMD2 = PYTHON2 + " TorchANN_wrap_python2.py file"
-            CMD3 = WAIT
-            CMD = CMD1 + " \n " + CMD2 + " \n " + CMD3
-            with open("run.sh", "wt") as f:
-                f.write(CMD)
-            os.system("bash run.sh")
+        os.chdir("../") # Now in directory EXPLORE_DIR
 
-        os.chdir("../")
+    #"""cat all frames together"""
+    # for i in range(sel_frame):
+    #     os.chdir(int_to_str(i))
+    #
+    #     os.system("cat ./coord_all.raw >> ../coord_all_exp.raw")
+    #     os.system("cat ./force_all.raw >> ../force_all_exp.raw")
+    #     os.system("cat ./box_all.raw >> ../box_all_exp.raw")
+    #     os.system("cat ./type_all.raw >> ../type_all_exp.raw")
+    #     os.system("cat ./energy_all.raw >> ../energy_all_exp.raw")
+    #
+    #     os.chdir("../")
 
-    """cat all frames together"""
-    for i in range(sel_frame):
-        os.chdir(int_to_str(i))
-
-        os.system("cat ./coord_all.raw >> ../coord_all_exp.raw")
-        os.system("cat ./force_all.raw >> ../force_all_exp.raw")
-        os.system("cat ./box_all.raw >> ../box_all_exp.raw")
-        os.system("cat ./type_all.raw >> ../type_all_exp.raw")
-        os.system("cat ./energy_all.raw >> ../energy_all_exp.raw")
-
-        os.chdir("../")
-
-    os.chdir("../") #EXPLORE_DIR
+    os.chdir("../") # Now in directory ./
 
     os.chdir(DFT_DIR)
 
@@ -521,7 +625,7 @@ def one_loop(loop_idx, auto_train_parameters):
 
     sel_frame_DFT = select_data_for_dft(auto_train_parameters)
 
-    os.chdir("../")
+    os.chdir("../") # Now in directory ./
     for i in range(sel_frame_DFT):
         CMD = "mkdir " + DFT_DIR + "/" + int_to_str(i)
         os.system(CMD)
@@ -542,7 +646,9 @@ def one_loop(loop_idx, auto_train_parameters):
     type_from_sel = type_sel_f.readlines()
 
     for i in range(sel_frame_DFT):
-        os.chdir(int_to_str(i))
+
+        os.chdir(int_to_str(i)) # Now in directory DFT_DIR/i
+
         box = open("box.raw", "wt")
         box.write(box_from_sel[i])
         box.close()
@@ -552,7 +658,8 @@ def one_loop(loop_idx, auto_train_parameters):
         type = open("type.raw", "wt")
         type.write(type_from_sel[i])
         type.close()
-        os.chdir("../")
+
+        os.chdir("../") # Now in directory DFT_DIR
 
 
 
@@ -560,34 +667,24 @@ def one_loop(loop_idx, auto_train_parameters):
 
     """Perform DFT calculation"""
 
-    #LOG_f = open("auto_train.log", "at")
+    # LOG_f = open("auto_train.log", "at")
     LOG_f.write("3/3 of %4d: DFT...\n" % loop_idx)
     LOG_f.close()
 
     for i in range(sel_frame_DFT):
-        os.chdir(int_to_str(i))
-        raw_to_poscar()
-        os.system(VASP_EXE)
-        """Extract energy and force"""
-        os.system("grep free\ \ energy\ \ \ T OUTCAR | awk '{print $5}' > energy.raw")
-        type = np.loadtxt("type.raw", dtype=np.int)
-        natoms = len(type) + 2
-        natoms_str = str(natoms)
-        CMD1 = "grep TOTAL-FORCE OUTCAR -A" + natoms_str + " "
-        CMD2 = " | sed '/^\ -/d' | sed '/POS/d' | awk '{print $4,$5,$6}' >force.raw "
-        CMD = CMD1 + CMD2
-        os.system(CMD)
-        CMD = "sed -i ':a;N;s/\\n/\ /g;ta' force.raw"
-        os.system(CMD)
-        os.system("cat energy.raw >> ../energy.raw")
-        os.system("cat force.raw >> ../force.raw")
-        os.chdir("../")
+
+        os.chdir(int_to_str(i)) # Now in directory DFT_DIR/i
+
+        if (auto_train_parameters.dft_method == 1):
+            run_vasp_dft(auto_train_parameters)
+
+        os.chdir("../") # Now in directory DFT_DIR
 
 
 
 
 
-    os.chdir("../")  # DFT_DIR
+    os.chdir("../")  # Now in directory ./
 
     return
 

@@ -3,6 +3,7 @@
 #---Provide any necessary defination here ---------------------------
 exec_g=EXEC_G
 exec_p=EXEC_P
+exec_gp="bash ./torchanncmd.txt"
 #nprocs=1
 #machinefile=./machinefile
 
@@ -67,8 +68,9 @@ awk '{print $1}' coord.raw > energy.raw
 
 #---Run the executable file here ------------------------------------
 #if [ "$1" == "T" ]; then \rm -f CHGCAR WAVECAR;fi 
-$exec_g > runlog_g
-$exec_p 
+#$exec_g > runlog_g
+#$exec_p 
+$exec_gp
 cat coord.raw >> coord_all.raw
 cat box.raw >> box_all.raw
 cat type.raw >> type_all.raw
@@ -121,7 +123,7 @@ box=np.loadtxt("./box.raw")
 box=box.reshape(-1, 3)
 volume=np.abs(np.dot(np.cross(box[0], box[1]),box[2]))
 stress=np.loadtxt("./stress_tmp")
-f_stress_all=open("stress_all.raw", "a")
+f_stress_all=open("virial_all.raw", "a")
 np.savetxt(f_stress_all, stress.reshape(1, -1), fmt="%10.6f")
 f_stress_all.close()
 stress=stress/volume

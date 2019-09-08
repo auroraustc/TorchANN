@@ -16,6 +16,8 @@ LAMMPS_COMMAND = " -v mode file "
 LAMMPS_INPUT = " in.clint.W "
 LAMMPS_DATA = " data.W "
 LASP_EXE = " lasp "
+LASP_INPUT = "lasp.in"
+LASP_DATA = "lasp.str"
 VASP_EXE = " vasp_gpu_544 "
 BACKGROUND_SYMBOL = " & "
 LEFT_ARROW = " < "
@@ -45,6 +47,8 @@ class auto_train_parameters():
         lammps_input = "in.clint.W"
         lammps_data_name = "data.W"
         lasp_exe = "lasp"
+        lasp_input = "lasp.in"
+        lasp_data_name = "lasp.str"
         vasp_exe = "vasp_std"
 
     def __str__(self):
@@ -65,6 +69,8 @@ class auto_train_parameters():
             str_ += (">>> lammps_data_name: %s\n" % self.lammps_data_name)
         elif (self.explore_method == 2):
             str_ += (">>> lasp_exe: %s\n" % self.lasp_exe)
+            str_ += (">>> lasp_input: %s\n" % self.lasp_input)
+            str_ += (">>> lasp_data_name: %s\n" % self.lasp_data_name)
         if (self.dft_method == 1):
             str_ += (">>> vasp_exe: %s\n" % self.vasp_exe)
 
@@ -90,6 +96,8 @@ class auto_train_parameters():
             self.lammps_data_name = INPUT_DATA['lammps_data_name']
         elif (self.explore_method == 2):
             self.lasp_exe = INPUT_DATA['lasp_exe']
+            self.lasp_input = INPUT_DATA['lasp_input']
+            self.lasp_data_name = INPUT_DATA['lasp_data_name']
         else:
             print("explore_method not supported!")
             exit()
@@ -175,6 +183,67 @@ def raw_to_lammps():
                                                         coord[i][0], coord[i][1], coord[i][2]))
 
     lammps_data_f.close()
+    return
+
+
+def get_angle(a, b):
+    norma = np.sqrt(np.sum(np.square(a)))
+    normb = np.sqrt(np.sum(np.square(b)))
+    cosab = np.dot(a,b)/norma/normb
+    angleab = np.arccos(cosab) / np.pi * 180
+    return angleab
+
+
+def get_atom_name(num):
+    ele_symbol_list = ['H', 'He', 'Li', 'Be', 'B ', 'C ', 'N ', 'O ', 'F ', 'Ne', \
+                       'Na', 'Mg', 'Al', 'Si', 'P ', 'S ', 'Cl', 'Ar', 'K ', 'Ca', \
+                       'Sc', 'Ti', 'V ', 'Cr', 'Mn', 'Fe', 'Co', 'Ni', 'Cu', 'Zn', \
+                       'Ga', 'Ge', 'As', 'Se', 'Br', 'Kr', 'Rb', 'Sr', \
+                       'Y ', 'Zr', 'Nb', 'Mo', 'Tc', 'Ru', 'Rh', 'Pd', 'Ag', 'Cd', \
+                       'In', 'Sn', 'Sb', 'Te', 'I ', 'Xe', \
+                       'Cs', 'Ba', 'La', 'Ce', 'Pr', 'Nd', 'Pm', \
+                       'Sm', 'Eu', 'Gd', \
+                       'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu', \
+                       'Hf', 'Ta', 'W ', 'Re', 'Os', 'Ir', 'Pt', 'Au', 'Hg', \
+                       'Tl', 'Pb', 'Bi', 'Po', 'At', 'Rn']
+    ele_num_list = [x + 1 for x in range(86)]
+    ele_dict = dict(zip(ele_num_list, ele_symbol_list))
+    return ele_dict[num]
+
+def raw_to_lasp():
+    box = np.loadtxt("box.raw", dtype=np.float)
+    coord = np.loadtxt("coord.raw", dtype=np.float)
+    type = np.loadtxt("type.raw", dtype=np.int)
+    type_unique = np.array(list(set(type)))
+    type_unique.sort()
+    natoms = len(type)
+    ntypes = len(type_unique)
+    box = box.reshape(3, 3)
+    coord = coord.reshape(-1, 3)
+
+    lx = np.sqrt(np.sum(np.square(box[0])))
+    ly = np.sqrt(np.sum(np.square(box[1])))
+    lz = np.sqrt(np.sum(np.square(box[2])))
+    alpha = get_angle(box[1], box[2])
+    beta = get_angle(box[0], box[1])
+    gamma = get_angle(box[0], box[1])
+
+    lasp_data_f = open(LASP_DATA, "wt")
+
+    lasp_data_f.write("!BIOSYM archive 3\n")
+    lasp_data_f.write("PBC=ON\n")
+    lasp_data_f.write("Material Studio CAR format file\n")
+    lasp_data_f.write("!DATE     Sep 08 10:57:38 2019\n")
+    lasp_data_f.write("PBC%10.4f%10.4f%10.4f%10.4f%10.4f%10.4f\n" % (lx, ly, lz, alpha, beta, gamma))
+    for i in range(natoms):
+        lasp_data_f.write("%2s%16.9f%16.9f%16.9f%5s%2d%8s%8s%7.3f\n" % \
+                          (get_atom_name(type[i]), coord[i][0], coord[i][1], coord[i][2], "XXXX", 1, "xx", \
+                           get_atom_name(type[i]), 0.0))
+
+    lasp_data_f.write("end\nend\n")
+
+    lasp_data_f.close()
+
     return
 
 
@@ -293,7 +362,42 @@ def run_lammps_explore(auto_train_parameters):
 
 
 """
-Command to run lammps
+Command to run LASP
+When calling this function, make sure your current working directory is EXPLORE_DIR/i/, i=1,2,3,...
+This function should save all the explored structures in the EXPLORE_DIR/*_all_exp.raw
+"""
+def run_lasp_explore(auto_train_parameters):
+    CMD = "cp ../../data/" + auto_train_parameters.lasp_input + "  ./lasp.in"
+    os.system(CMD)
+    raw_to_lasp()
+    CMD = "cp " + SCRIPTS_PATH + "/lasp.external.sh " + " ./"
+    os.system(CMD)
+    CMD1 = TORCHANN_CPP_EXE
+    CMD2 = TORCHANN_PREDICT
+    CMD3 = CMD1 + ";" + CMD2
+    with open("torchanncmd.txt", "wt") as f:
+        f.write(CMD3)
+        f.close()
+
+    """Run lammps"""
+    CMD1 = LASP_EXE
+    CMD = CMD1
+    with open("run.sh", "wt") as f:
+        f.write(CMD)
+    os.system("bash run.sh")
+
+    """cat all frames together"""
+    os.system("cat ./coord_all.raw >> ../coord_all_exp.raw")
+    os.system("cat ./force_all.raw >> ../force_all_exp.raw")
+    os.system("cat ./box_all.raw >> ../box_all_exp.raw")
+    os.system("cat ./type_all.raw >> ../type_all_exp.raw")
+    os.system("cat ./energy_all.raw >> ../energy_all_exp.raw")
+
+    return
+
+
+"""
+Command to run VASP
 When calling this function, make sure your current working directory is DFT_DIR/i/, i=1,2,3,...
 This function should save calculated energy, force in the DFT_DIR/*_sel_dft.raw
 """
@@ -567,6 +671,8 @@ def one_loop(loop_idx, auto_train_parameters):
             #     f.write(CMD)
             # os.system("bash run.sh")
             run_lammps_explore(auto_train_parameters)
+        else:
+            run_lasp_explore(auto_train_parameters)
 
         os.chdir("../") # Now in directory EXPLORE_DIR
 
@@ -697,6 +803,8 @@ def main():
     global LAMMPS_INPUT
     global LAMMPS_DATA
     global LASP_EXE
+    global LASP_INPUT
+    global LASP_DATA
     global SCRIPTS_PATH
     global VASP_EXE
 
@@ -710,11 +818,13 @@ def main():
     if (auto_train_parameters_in.explore_method == 1):
         EXP_TYPE = "LAMMPS"
         LAMMPS_EXE = auto_train_parameters_in.lammps_exe
-        LAMMPS_INPUT = "" + auto_train_parameters_in.data_path + auto_train_parameters_in.lammps_input + " "
+        LAMMPS_INPUT = "" + auto_train_parameters_in.data_path + "/" + auto_train_parameters_in.lammps_input + " "
         LAMMPS_DATA = auto_train_parameters_in.lammps_data_name
-    elif (auto_train_parameters_in.explore_method == 1):
+    elif (auto_train_parameters_in.explore_method == 2):
         EXP_TYPE = "LASP-SSW"
         LASP_EXE = auto_train_parameters_in.lasp_exe
+        LASP_INPUT = "" + auto_train_parameters_in.data_path + "/" + auto_train_parameters_in.lasp_input + " "
+        LASP_DATA = auto_train_parameters_in.lasp_data_name
     if (auto_train_parameters_in.dft_method == 1):
         DFT_TYPE = "VASP"
     print("Selected exploration type: %s\n" % EXP_TYPE)

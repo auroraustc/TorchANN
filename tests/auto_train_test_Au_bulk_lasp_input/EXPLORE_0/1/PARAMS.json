@@ -1,0 +1,42 @@
+{
+    "cutoff_1": 7.700,
+    "cutoff_2": 8.000,
+    "cutoff_3": 0.000,
+    "cutoff_max": 8.000,
+    "SEL_A_ele":[300],
+    "sym_coord_type": 1,
+    "batch_size": 32,
+    "stop_epoch": 1000,
+    "num_filter_layer": 3,
+    "filter_neuron": [
+        16,
+        32,
+        128
+    ],
+    "axis_neuron": 4,
+    "num_fitting_layer": 5,
+    "fitting_neuron": [
+        256,
+        192,
+        128,
+        64,
+        32
+    ],
+    "start_lr": 4.0000000000e-04,
+    "decay_steps": 1,
+    "decay_epoch": 10000,
+    "decay_rate": 9.5000000000e-01,
+    "start_pref_e": 1.0000000000e-00,
+    "limit_pref_e": 1.0000000000e+00,
+    "start_pref_f": 1.0000000000e+03,
+    "limit_pref_f": 1.0000000000e+00,
+    "check_step": 5000,
+    "check_batch": -1,
+    "check_epoch": -1,
+    "output_step": -1,
+    "output_batch": -1,
+    "output_epoch": 1000,
+    "save_step": -1,
+    "save_batch": -1,
+    "save_epoch": 7000
+}

@@ -1,0 +1,1 @@
+/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/c_single/GENERATE_P;/home/aurora/Documents/Study/Machine_Learning/DeePMD_torch/single_prec_for_coord/python_single_train/no_mpi/predict_noclassify_nompi.py

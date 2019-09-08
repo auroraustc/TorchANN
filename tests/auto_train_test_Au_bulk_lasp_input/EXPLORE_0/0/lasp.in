@@ -1,0 +1,29 @@
+
+potential external
+
+explore_type ssw
+Ewaldflag    0
+
+
+
+
+
+Run_type 5   #    15 for SSW with varaible cell, 5 for fixed cell
+SSW.Crystal_extra_step  T
+
+SSW.SSWsteps  10     # 0 single point
+                    # 1 stru opt
+                    # > 1  SSW global opt
+
+SSW.quick_setting             1
+#SSW.ftol 0.5
+SSW.Temp 500
+# output
+SSW.output T
+SSW.printevery T
+SSW.ftol      0.0100
+%block fixatom  
+# 1  50
+%endblock fixatom
+
+

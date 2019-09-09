@@ -10,15 +10,17 @@ import torch.optim as optim
 import os
 import gc
 import time
+import sys
 from ctypes import *
 from class_and_function import *
+from torch.utils.cpp_extension import load
 
-
-default_dtype = tf.float64
+default_dtype = tf.float32
 tf.set_default_dtype(default_dtype)
 tf.set_printoptions(precision=10)
 device = tf.device('cuda' if torch.cuda.is_available() else 'cpu')
 #device = tf.device('cpu')
+#torch.set_printoptions(edgeitems=9999)
 
 if (device != tf.device('cpu')):
     print("cuDNN version: ", tf.backends.cudnn.version())
@@ -27,6 +29,8 @@ if (device != tf.device('cpu')):
     MULTIPLIER = tf.cuda.device_count()
 else:
     MULTIPLIER = 1
+
+MULTIPLIER = 1
 #if (hvd.rank() == 0):
 if (True):
     f_out = open("./LOSS.OUT", "w")
@@ -41,6 +45,11 @@ if(True):
 
 
 """Load coordinates, sym_coordinates, energy, force, type, n_atoms and parameters"""
+script_path = sys.path[0]
+if (device != tf.device('cpu')):
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cu"], verbose=True)
+else:
+    comput_descrpt_and_deriv = load(name="test_from_cpp_single", sources=[script_path + "/comput_descrpt_deriv.cpp", script_path + "/../../c_single/Utilities.cpp"], verbose=True, extra_cflags=["-fopenmp", "-O2"])
 parameters = Parameters()
 read_parameters_flag = read_parameters(parameters)
 print("All parameters:")
@@ -56,7 +65,7 @@ if (read_parameters_flag != 0):
 
 COORD_Reshape_tf, SYM_COORD_Reshape_tf, ENERGY_tf, FORCE_Reshape_tf, N_ATOMS_tf, TYPE_Reshape_tf, NEI_IDX_Reshape_tf, \
 NEI_COORD_Reshape_tf, FRAME_IDX_tf, SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
-N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf = read_and_init_bin_file(parameters, default_dtype=default_dtype)
+N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf= read_and_init_bin_file(parameters, default_dtype=default_dtype)
 
 """Now all the needed information has been stored in the COORD_Reshape, SYM_COORD_Reshape, 
    ENERGY and FORCE_Reshape array."""
@@ -64,11 +73,12 @@ N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf = read_and_init_bin_file(parameters, default
 print("Data pre-processing complete. Building net work.\n")
 
 mean_init=np.zeros(parameters.N_types_all_frame)
-A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot)
+A = tf.zeros(parameters.N_types_all_frame, parameters.Nframes_tot).double()
 for type_idx in range(parameters.N_types_all_frame):
     A[type_idx] = tf.sum(TYPE_Reshape_tf == parameters.type_index_all_frame[type_idx], dim=1)
 A = A.transpose(0,1).numpy()
-B = ENERGY_tf.numpy()
+B = ENERGY_tf.double().numpy()
+print(A.shape, B.shape)
 mean_init = np.linalg.lstsq(A,B,rcond=-1)[0]
 
 ##all data norm
@@ -106,7 +116,7 @@ if (os.path.isfile("./freeze_model.pytorch.ckpt.cont")):
 
 ONE_BATCH_NET = ONE_BATCH_NET.to(device)
 TOTAL_NUM_PARAMS = sum(p.numel() for p in ONE_BATCH_NET.parameters() if p.requires_grad)
-if (tf.cuda.device_count() > 1):
+if (False): #(tf.cuda.device_count() > 1):
     ONE_BATCH_NET = nn.DataParallel(ONE_BATCH_NET)
 print(ONE_BATCH_NET)
 print("Number of parameters in the net: %d"%TOTAL_NUM_PARAMS)
@@ -122,19 +132,19 @@ DATA_SET = tf.utils.data.TensorDataset(COORD_Reshape_tf, SYM_COORD_Reshape_tf, E
                                        TYPE_Reshape_tf, NEI_IDX_Reshape_tf, NEI_COORD_Reshape_tf, FRAME_IDX_tf, \
                                        SYM_COORD_DX_Reshape_tf, SYM_COORD_DY_Reshape_tf, SYM_COORD_DZ_Reshape_tf, \
                                        N_ATOMS_ORI_tf, NEI_TYPE_Reshape_tf)#0..13
-TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = True)
-#OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16)#, betas=(0.9,0.999), weight_decay=5E-4)
-OPTIMIZER2 = optim.Adadelta(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0))
+TRAIN_LOADER = tf.utils.data.DataLoader(DATA_SET, batch_size = parameters.batch_size * (MULTIPLIER), shuffle = False)
+OPTIMIZER2 = optim.Adam(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), eps = 1E-16, weight_decay=5E-5 * MULTIPLIER)
+OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr * np.sqrt(1.0 + 0.0), line_search_fn='strong_wolfe')
 
 """
 ###DO NOT use LBFGS. LBFGS is horrible on such kind of optimizations
 ###Adam works also horribly. So it is better to use Adadelta
-###Now adam works excellent if applied init_weights
+###Now adam works OK if applied init_weights
 OPTIMIZER = optim.LBFGS(ONE_BATCH_NET.parameters(), lr = parameters.start_lr)
 """
 
 
-CRITERION = nn.MSELoss(reduction = "mean")
+CRITERION = nn.MSELoss(reduction = 'none')
 LR_SCHEDULER = tf.optim.lr_scheduler.ExponentialLR(OPTIMIZER2, parameters.decay_rate)
 START_TRAIN_TIMER = time.time()
 STEP_CUR = 0
@@ -176,6 +186,8 @@ if (True):
                 f_out.close()
 
         for batch_idx, data_cur in enumerate(TRAIN_LOADER):
+            #1,9,10,11
+            #data_cur[1], data_cur[9], data_cur[10], data_cur[11] = comput_descrpt_and_deriv.calc_descrpt_and_deriv_DPMD(data_cur[0], data_cur[7], data_cur[6], len(data_cur[0]), parameters.N_Atoms_max, parameters.SEL_A_max, parameters.cutoff_1, parameters.cutoff_2)[0:4]
             for i in range(len(data_cur)):
                 data_cur[i] = data_cur[i].to(device)
             START_BATCH_TIMER = time.time()
@@ -190,13 +202,18 @@ if (True):
 
                 ###Adam
                 # correct
-                if (parameters.sym_coord_type == 1):
-                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward(data_cur, parameters, std, avg,
-                                                                               use_std_avg, device)
+                """if (parameters.sym_coord_type == 1):
+                    E_cur_batch, F_cur_batch, std, avg, virial_cur_batch = ONE_BATCH_NET.forward(data_cur, parameters,
+                                                                                                 std, avg,
+                                                                                                 use_std_avg, device,
+                                                                                                 comput_descrpt_and_deriv)
                 elif (parameters.sym_coord_type == 2):
-                    E_cur_batch, F_cur_batch, std, avg = ONE_BATCH_NET.forward_fitting_only(data_cur, parameters, std,
-                                                                                            avg,
-                                                                                            use_std_avg, device)
+                    E_cur_batch, F_cur_batch, std, avg, virial_cur_batch = ONE_BATCH_NET.forward_fitting_only(data_cur,
+                                                                                                              parameters,
+                                                                                                              std,
+                                                                                                              avg,
+                                                                                                              use_std_avg,
+                                                                                                              device)
                 shape_tmp = std.shape
                 std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
                 avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER, shape_tmp[1] * shape_tmp[2]).reshape(shape_tmp)
@@ -214,14 +231,65 @@ if (True):
                     print("Force check:\n", F_cur_batch.data.data, file=f_out)
                     print("Additional parameters check:\n", "std:\n",  std, "\navg:\n", avg, "\nuse_std_avg", use_std_avg, file=f_out)
                     f_out.close()
+
                 loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
 
-                loss_cur_batch = pref_e * loss_E_cur_batch + pref_f * loss_F_cur_batch
+                #loss_cur_batch = pref_e * loss_E_cur_batch / tf.sum(
+                #    data_cur[12].double()) + pref_f * loss_F_cur_batch / 3.0 / tf.sum(data_cur[12].double())
+                loss_cur_batch = pref_e * tf.mean(loss_E_cur_batch) + pref_f * tf.mean(loss_F_cur_batch)
                 OPTIMIZER2.zero_grad()
                 loss_cur_batch.backward()
-                OPTIMIZER2.step()
+                OPTIMIZER2.step()"""
                 # correct end
                 ###Adam end
+
+                ###L-BFGS Start
+                F_cur_batch = 1
+                def closure():
+                    global std
+                    global avg
+                    global use_std_avg
+                    global loss_E_cur_batch
+                    global loss_F_cur_batch
+                    global F_cur_batch
+                    OPTIMIZER.zero_grad()
+                    if (parameters.sym_coord_type == 1):
+                        E_cur_batch, F_cur_batch, std, avg, virial_cur_batch = ONE_BATCH_NET.forward(data_cur,
+                                                                                                     parameters,
+                                                                                                     std, avg,
+                                                                                                     use_std_avg,
+                                                                                                     device,
+                                                                                                     comput_descrpt_and_deriv)
+
+                    shape_tmp = std.shape
+                    std = std[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER,
+                                                                                shape_tmp[1] * shape_tmp[2]).reshape(
+                        shape_tmp)
+                    avg = avg[0].reshape(1, shape_tmp[1] * shape_tmp[2]).expand(MULTIPLIER,
+                                                                                shape_tmp[1] * shape_tmp[2]).reshape(
+                        shape_tmp)
+                    use_std_avg = True
+                    loss_E_cur_batch = CRITERION(E_cur_batch, data_cur[2])
+                    F_cur_batch = tf.reshape(F_cur_batch, (len(data_cur[6]), data_cur[4][0] * 3))
+                    loss_F_cur_batch = tf.zeros(1, device=device)
+                    loss_F_cur_batch = CRITERION(F_cur_batch, data_cur[3])
+                    loss_cur_batch = pref_e * tf.mean(loss_E_cur_batch) + pref_f * tf.mean(loss_F_cur_batch)
+                    loss_cur_batch.backward()
+                    return loss_cur_batch
+
+                OPTIMIZER.step(closure)
+
+                if ((STEP_CUR % (parameters.check_step // MULTIPLIER) == 0)):
+                    print("Force check:\n", F_cur_batch.data)
+                    print("Additional parameters check:\n", "std:\n", std, "\navg:\n", avg, "\nuse_std_avg",
+                          use_std_avg)
+                    f_out = open("./LOSS.OUT", "a")
+                    print("Force check:\n", F_cur_batch.data.data, file=f_out)
+                    print("Additional parameters check:\n", "std:\n", std, "\navg:\n", avg, "\nuse_std_avg",
+                          use_std_avg, file=f_out)
+                    f_out.close()
+
+                ###L-BFGS_end
 
                 END_BATCH_TIMER = time.time()
 
@@ -229,14 +297,17 @@ if (True):
                 if ((batch_idx  == 0 and epoch % (parameters.output_epoch) == 0) or ((epoch == parameters.stop_epoch - 1) and (batch_idx == 0))):
                     END_BATCH_USER_TIMER = time.time()
                     print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
-                        epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
-                    END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
+                        epoch, batch_idx, tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].type(default_dtype)),
+                        tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].type(default_dtype))),
+                        END_BATCH_USER_TIMER - START_BATCH_USER_TIMER))
                     if (True):
                         f_out = open("./LOSS.OUT", "a")
-                        print("Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % ( \
-                           epoch, batch_idx, tf.sqrt(loss_E_cur_batch) / data_cur[4][0].double(), tf.sqrt(loss_F_cur_batch),
-                        END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), \
-                        file = f_out)
+                        print(
+                            "Epoch: %-10d, Batch: %-10d, lossE: %10.6f eV/atom, lossF: %10.6f eV/A, time: %10.3f s" % (
+                                epoch, batch_idx,
+                                tf.mean(tf.sqrt(loss_E_cur_batch) / data_cur[12].type(default_dtype)),
+                                tf.sqrt(tf.sum(loss_F_cur_batch) / 3.0 / tf.sum(data_cur[12].type(default_dtype))),
+                                END_BATCH_USER_TIMER - START_BATCH_USER_TIMER), file=f_out)
                         f_out.close()
                     START_BATCH_USER_TIMER = time.time()
                 ###Adam end

@@ -1,3 +1,5 @@
+***This repo is no longer under maintaining. It has been replaced by a C++ version which is currently under development.***
+
 # TorchANN
 Use torch to train NN potential
 
